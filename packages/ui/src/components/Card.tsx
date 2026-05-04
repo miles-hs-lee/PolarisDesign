@@ -5,16 +5,23 @@ import { cn } from '../lib/cn';
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Render the child element instead of a `<div>` (Radix Slot pattern). */
   asChild?: boolean;
+  /**
+   * Padding variant.
+   * - `bare` (default) — no internal padding. Use when wrapping `CardHeader`/`CardBody`/`CardFooter` for sectioned content.
+   * - `padded` — applies `px-5 py-4` directly. Skip the sub-components for simple single-block cards.
+   */
+  variant?: 'bare' | 'padded';
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ className, asChild, ...props }, ref) => {
+  ({ className, asChild, variant = 'bare', ...props }, ref) => {
     const Comp = asChild ? Slot : 'div';
     return (
       <Comp
         ref={ref}
         className={cn(
           'rounded-polaris-lg border border-surface-border bg-surface-raised shadow-polaris-sm',
+          variant === 'padded' && 'px-5 py-4',
           className
         )}
         {...props}

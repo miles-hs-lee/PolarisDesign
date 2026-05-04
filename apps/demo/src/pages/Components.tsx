@@ -75,6 +75,27 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
   EmptyState,
+  Stack,
+  HStack,
+  VStack,
+  Container,
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  DescriptionList,
+  DescriptionTerm,
+  DescriptionDetails,
 } from '@polaris/ui';
 import {
   Plus,
@@ -94,7 +115,7 @@ import {
   Bell,
   Settings,
   HelpCircle,
-  Inbox,
+  TrendingUp,
 } from 'lucide-react';
 
 type ToastEntry = { id: number; title: string; description?: string; variant: 'info' | 'success' | 'warning' | 'danger' };
@@ -117,7 +138,7 @@ export default function Components() {
       <header className="mb-10 pb-4 border-b border-surface-border">
         <h1 className="text-polaris-heading-lg mb-1">Polaris Components</h1>
         <p className="text-polaris-body-sm text-fg-muted">
-          25개 컴포넌트(Tier 0 + Tier 1 + Tier 2)의 variant·상태·조합을 한 페이지에서 검증
+          30개 컴포넌트(Tier 0 + Tier 1 + Tier 2 + Tier 2.5)의 variant·상태·조합을 한 페이지에서 검증
         </p>
       </header>
 
@@ -618,7 +639,6 @@ export default function Components() {
 
       <Section title="24. EmptyState (Tier 2)">
         <EmptyState
-          icon={<Inbox />}
           title="아직 받은 문서가 없습니다"
           description="결재 요청을 받으면 여기에 표시됩니다. NOVA에게 새 문서 작성을 요청해보세요."
           action={
@@ -629,7 +649,151 @@ export default function Components() {
         />
       </Section>
 
-      <Section title="25. 폴라리스 화면 모방 (조합 검증)">
+      <Section title="25. Stack / HStack / VStack (Tier 2.5)">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card variant="padded">
+            <p className="text-polaris-caption text-fg-muted mb-3">VStack gap=2</p>
+            <VStack gap={2}>
+              <div className="bg-brand-primary-subtle text-brand-primary px-3 py-1.5 rounded-polaris-md text-polaris-body-sm">A</div>
+              <div className="bg-brand-primary-subtle text-brand-primary px-3 py-1.5 rounded-polaris-md text-polaris-body-sm">B</div>
+              <div className="bg-brand-primary-subtle text-brand-primary px-3 py-1.5 rounded-polaris-md text-polaris-body-sm">C</div>
+            </VStack>
+          </Card>
+          <Card variant="padded">
+            <p className="text-polaris-caption text-fg-muted mb-3">HStack gap=3 align=center</p>
+            <HStack gap={3} align="center">
+              <Avatar size="sm"><AvatarFallback>P</AvatarFallback></Avatar>
+              <span className="text-polaris-body-sm">홍길동</span>
+              <Badge variant="success">활성</Badge>
+              <Stack direction="row" gap={1} align="center" className="ml-auto">
+                <Button variant="ghost" size="sm">편집</Button>
+                <Button variant="ghost" size="sm">삭제</Button>
+              </Stack>
+            </HStack>
+          </Card>
+        </div>
+      </Section>
+
+      <Section title="26. Container — 반응형 max-width + padding">
+        <div className="bg-surface-sunken rounded-polaris-md py-4">
+          <Container size="md" className="bg-brand-primary-subtle py-4 rounded-polaris-md text-center">
+            <p className="text-polaris-body-sm">size="md" — max-w-screen-md, mx-auto, px 반응형</p>
+          </Container>
+        </div>
+      </Section>
+
+      <Section title="27. Table primitive + density (Tier 2.5)">
+        <Card>
+          <CardBody>
+            <p className="text-polaris-caption text-fg-muted mb-3">density="compact"</p>
+            <Table density="compact">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>계약명</TableHead>
+                  <TableHead>거래처</TableHead>
+                  <TableHead>상태</TableHead>
+                  <TableHead className="text-right">금액</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="font-medium">2026 Q1 SaaS 라이선스 계약</TableCell>
+                  <TableCell>(주)글로벌IT</TableCell>
+                  <TableCell><Badge variant="success">서명 완료</Badge></TableCell>
+                  <TableCell className="text-right">₩48,000,000</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">컨설팅 협약 2026-A</TableCell>
+                  <TableCell>(주)디지털파트너</TableCell>
+                  <TableCell><Badge variant="warning">결재 대기</Badge></TableCell>
+                  <TableCell className="text-right">₩12,500,000</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">유지보수 갱신</TableCell>
+                  <TableCell>(주)테크솔루션</TableCell>
+                  <TableCell><Badge variant="danger">만료</Badge></TableCell>
+                  <TableCell className="text-right">₩6,000,000</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </CardBody>
+        </Card>
+      </Section>
+
+      <Section title="28. Drawer (Tier 2.5) — side variants">
+        <HStack gap={2} wrap>
+          {(['right', 'left', 'top', 'bottom'] as const).map((side) => (
+            <Drawer key={side}>
+              <DrawerTrigger asChild>
+                <Button variant="outline">{side} 열기</Button>
+              </DrawerTrigger>
+              <DrawerContent side={side}>
+                <DrawerHeader>
+                  <DrawerTitle>Drawer · side="{side}"</DrawerTitle>
+                  <DrawerDescription>Radix Dialog 위에 side variant만 추가한 단순한 패널입니다.</DrawerDescription>
+                </DrawerHeader>
+                <DrawerBody>
+                  <p className="text-polaris-body-sm text-fg-secondary">
+                    테이블 행 inspector, 필터 패널, 모바일 navigation drawer 등에 사용. focus trap·overlay·Esc 닫기는 Dialog와 동일.
+                  </p>
+                </DrawerBody>
+                <DrawerFooter>
+                  <Button variant="outline">취소</Button>
+                  <Button>저장</Button>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+          ))}
+        </HStack>
+      </Section>
+
+      <Section title="29. DescriptionList (Tier 2.5)">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card variant="padded">
+            <h3 className="text-polaris-heading-sm mb-3">layout="inline" (default)</h3>
+            <DescriptionList>
+              <DescriptionTerm>이름</DescriptionTerm>
+              <DescriptionDetails>홍길동</DescriptionDetails>
+              <DescriptionTerm>이메일</DescriptionTerm>
+              <DescriptionDetails>hong@polaris.example</DescriptionDetails>
+              <DescriptionTerm>가입일</DescriptionTerm>
+              <DescriptionDetails>2024-08-15</DescriptionDetails>
+              <DescriptionTerm>상태</DescriptionTerm>
+              <DescriptionDetails><Badge variant="success">활성</Badge></DescriptionDetails>
+            </DescriptionList>
+          </Card>
+          <Card variant="padded">
+            <h3 className="text-polaris-heading-sm mb-3">layout="stacked"</h3>
+            <DescriptionList layout="stacked">
+              <div>
+                <DescriptionTerm>거래처</DescriptionTerm>
+                <DescriptionDetails>(주)글로벌IT 솔루션 컴퍼니 코리아</DescriptionDetails>
+              </div>
+              <div>
+                <DescriptionTerm>설명</DescriptionTerm>
+                <DescriptionDetails>2026년 Q1부터 시작되는 SaaS 라이선스 갱신 계약입니다. 사용자 250명 한도로 1년간 운영.</DescriptionDetails>
+              </div>
+            </DescriptionList>
+          </Card>
+        </div>
+      </Section>
+
+      <Section title="30. EmptyState — 기본 아이콘 + 커스텀 비교">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <EmptyState
+            title="아직 결재 요청이 없습니다"
+            description="새 요청이 도착하면 여기에 표시됩니다."
+          />
+          <EmptyState
+            icon={<TrendingUp />}
+            title="아직 데이터가 충분하지 않습니다"
+            description="최소 7일치 데이터가 있어야 추세를 표시할 수 있습니다."
+            action={<Button variant="outline">샘플 데이터 추가</Button>}
+          />
+        </div>
+      </Section>
+
+      <Section title="31. 폴라리스 화면 모방 (조합 검증)">
         <Card>
           <CardHeader>
             <CardTitle>최근 문서</CardTitle>

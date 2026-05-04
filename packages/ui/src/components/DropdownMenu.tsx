@@ -138,3 +138,70 @@ export const DropdownMenuSubContent = forwardRef<
   />
 ));
 DropdownMenuSubContent.displayName = 'DropdownMenuSubContent';
+
+/**
+ * `DropdownMenuFormItem` — a menu item whose action is a form submit
+ * (typical for Next.js App Router server actions: signOut, deleteSession).
+ *
+ * Race condition this solves: a plain `<DropdownMenuItem>` calls Radix's
+ * close behavior on click, which can unmount the form before the submit
+ * fires. We `event.preventDefault()` the close on Item.onSelect, then
+ * trigger the form submit via the inner button's native click. Radix
+ * receives focus return after submission completes.
+ *
+ * Usage:
+ * ```tsx
+ * <DropdownMenuFormItem
+ *   action={signOut}                   // server action
+ *   destructive
+ *   icon={<LogOut className="h-4 w-4" />}
+ * >
+ *   로그아웃
+ * </DropdownMenuFormItem>
+ * ```
+ */
+export interface DropdownMenuFormItemProps
+  extends Omit<React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Item>, 'onSelect' | 'asChild'> {
+  /** Form action — string URL or server action function. */
+  action: string | ((formData: FormData) => void | Promise<void>);
+  /** HTTP method for string-URL actions. Default: `post`. */
+  method?: 'get' | 'post';
+  /** Render with status-danger color (matches DropdownMenuItem `destructive`). */
+  destructive?: boolean;
+  /** Icon rendered before children. */
+  icon?: React.ReactNode;
+  /** Form className passthrough — rare, mainly for hidden-input wrapping needs. */
+  formClassName?: string;
+}
+
+export const DropdownMenuFormItem = forwardRef<
+  React.ElementRef<typeof DropdownPrimitive.Item>,
+  DropdownMenuFormItemProps
+>(({ className, formClassName, action, method = 'post', destructive, icon, children, ...props }, ref) => (
+  <DropdownPrimitive.Item
+    ref={ref}
+    onSelect={(e) => e.preventDefault()}
+    asChild
+    className={cn(
+      itemBase,
+      destructive && 'text-status-danger data-[highlighted]:bg-status-danger/10 data-[highlighted]:text-status-danger',
+      className
+    )}
+    {...props}
+  >
+    <form
+      action={action as never}
+      method={typeof action === 'string' ? method : undefined}
+      className={cn('m-0 w-full', formClassName)}
+    >
+      <button
+        type="submit"
+        className="flex w-full items-center gap-2 bg-transparent border-0 p-0 text-inherit cursor-pointer text-left font-inherit"
+      >
+        {icon}
+        {children}
+      </button>
+    </form>
+  </DropdownPrimitive.Item>
+));
+DropdownMenuFormItem.displayName = 'DropdownMenuFormItem';

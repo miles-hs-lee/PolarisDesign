@@ -24,6 +24,10 @@ You are working on a Polaris Office web service. Apply these rules without askin
      DropdownMenu, Tooltip, Select, Sidebar, Navbar, PromptChip,
      // Tier 2 — auxiliary UI
      Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
+     // Tier 2.5 — layout / structural
+     Stack, HStack, VStack, Container, Drawer, Table, DescriptionList,
+     // Server-action friendly (Next.js App Router)
+     DropdownMenuFormItem,
      // Toast imperative API (call toast({...}) anywhere; mount <Toaster /> once)
      Toaster, useToast, toast,
    } from '@polaris/ui';

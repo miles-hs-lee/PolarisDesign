@@ -24,3 +24,9 @@ export * from './Alert';
 export * from './Pagination';
 export * from './Breadcrumb';
 export * from './EmptyState';
+// Tier 2.5 (v0.3) — layout + structural
+export * from './Stack';
+export * from './Container';
+export * from './Drawer';
+export * from './Table';
+export * from './DescriptionList';

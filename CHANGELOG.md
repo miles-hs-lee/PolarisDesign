@@ -12,6 +12,65 @@
 
 ---
 
+## [0.3.0] — 2026-05-04
+
+첫 사내 마이그레이션 사이클(Next.js 16 + Tailwind v4)에서 받은 후속 피드백을 반영. Tier 2.5 layout/structural 컴포넌트 + Pagination asChild + Form-aware DropdownMenu + 4건의 docs.
+
+### 추가됨 — Tier 2.5 컴포넌트 5개 (`@polaris/ui` → 30개)
+
+- **Stack / HStack / VStack** — `flex flex-col gap-N` 반복 패턴 제거. `direction`, `gap`, `align`, `justify`, `wrap`, `asChild` props
+- **Container** — `max-w-screen-N mx-auto px 반응형` 패턴 컴포넌트화. `size: sm/md/lg/xl/2xl/full`
+- **Drawer / DrawerHeader / DrawerBody / DrawerFooter / DrawerTitle / DrawerDescription** — Radix Dialog 기반 side-anchored 패널. `side: right (default) / left / top / bottom`. table-row inspector, filter side panel, mobile nav drawer 용
+- **Table / TableHeader / TableBody / TableFooter / TableRow / TableHead / TableCell / TableCaption** — semantic `<table>` primitive + `density: compact/comfortable/relaxed` 축. context로 cell까지 전파
+- **DescriptionList / DescriptionTerm / DescriptionDetails** — semantic `<dl>`. `layout: inline (grid 2-col) / stacked`. 고객/계약 상세 패널 용
+
+### 추가됨 — DropdownMenuFormItem (`@polaris/ui`)
+
+DropdownMenu 안에서 server action을 form submit으로 트리거하는 패턴 — Radix의 close behavior가 form unmount보다 먼저 일어나는 race condition을 컴포넌트로 추상화.
+
+```tsx
+<DropdownMenuFormItem action={signOut} destructive icon={<LogOut />}>
+  로그아웃
+</DropdownMenuFormItem>
+```
+
+### 변경됨 — Pagination asChild
+
+`PaginationItem`/`PaginationPrev`/`PaginationNext`에 `asChild` prop 추가. URL-driven pagination에서 `<Link href={...}>`로 wrap 가능 → Next.js App Router의 RSC + 브라우저 history와 자연스럽게 통합.
+
+```tsx
+<PaginationItem asChild active={n === current}>
+  <Link href={`?page=${n}`}>{n}</Link>
+</PaginationItem>
+```
+
+### 변경됨 — Checkbox `label` / `hint` / `error` props
+
+기존엔 외부 `<label>`로 wrap이 강제됐던 것을 `<Checkbox label="이용 약관에 동의" hint="..." error="..." />`로 통일. Input과 동일한 a11y wiring (`htmlFor`, `aria-describedby`, `aria-invalid`).
+
+### 변경됨 — Card `variant` prop
+
+`variant: 'bare' (default) | 'padded'`. `<Card variant="padded">`이 자동으로 `px-5 py-4` 적용 → CardBody 없이 단순 카드를 한 줄로 작성. 기본값이 `bare`라 기존 코드 호환성 유지.
+
+### 변경됨 — EmptyState 기본 아이콘
+
+`icon` 미지정 시 `<Inbox />` default. `icon={null}`로 명시적 비활성 가능.
+
+### 추가됨 — 문서 5건 (`docs/`)
+
+- **variant-axes.md** — 4가지 variant 의미 축(status/emphasis/brand/domain) 명문화. "통일하지 않는다" 결정 + 각 컴포넌트별 축 매핑
+- **patterns.md** — Toast vs Alert / border vs border-strong / opacity modifier 5가지 헷갈리는 패턴
+- **nextjs-app-router.md** — RSC + Server Actions + Suspense fallback + URL pagination + Drawer inspector + 알려진 한계
+- **migration-checklist.md** — 기존 프로젝트 단계별 마이그레이션 (M0~M7), `polaris-audit` baseline 측정 포함
+- **recipes.md** — 5개 레시피: Form (RHF + zod, 사내 표준), Confirm Dialog, Stat Card, Table+Drawer Inspector, UserMenu+server action signOut
+
+### 데모
+
+- 컴포넌트 카탈로그에 §25-§30 추가 (Stack, Container, Table, Drawer 4-side, DescriptionList 2-layout, EmptyState 기본 아이콘)
+- 30개 컴포넌트로 카운트 갱신
+
+---
+
 ## [0.2.1] — 2026-05-04
 
 ### 수정됨 — focus 링 시각 비대칭
@@ -164,7 +223,8 @@ GitHub Pages에 자동 배포 (https://miles-hs-lee.github.io/PolarisDesign/):
 
 ---
 
-[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/miles-hs-lee/PolarisDesign/releases/tag/v0.1.0
