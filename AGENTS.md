@@ -39,6 +39,14 @@ import {
 import {
   Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
 } from '@polaris/ui/form';
+
+// 에디터 / 도큐먼트 제품(MS Office 스타일 리본 + MD 에디터 등):
+import {
+  Ribbon, RibbonTabs, RibbonTabList, RibbonTab, RibbonContent,
+  RibbonGroup, RibbonSeparator,
+  RibbonButton, RibbonSplitButton,
+  RibbonToggleGroup, RibbonToggleItem,
+} from '@polaris/ui/ribbon';
 ```
 
 native `<button>`, `<input>`, `<textarea>`, `<select>`, `<dialog>`은 **feature 코드에서 금지**. ESLint 룰 `@polaris/prefer-polaris-component`가 차단합니다 (단, `<button type="submit">`는 form-control 패턴이라 허용).

@@ -1,10 +1,24 @@
 # Polaris Design Roadmap
 
-릴리스별 계획. v0.4.1 시점의 사내 피드백을 정리합니다. 우선순위는 ROI 기준 추정 — 사이클 시작 시 재검토.
+릴리스별 계획. 우선순위는 ROI 기준 추정 — 사이클 시작 시 재검토.
 
 ---
 
-## v0.5 — 사용자 검증된 우선순위 (피드백 기반)
+## ✅ v0.5.0 — Ribbon (완료)
+
+에디터 제품군(Office 도큐먼트·MD 에디터·스프레드시트·PDF 도구 등)을 위한 toolbar 패턴. Subpath로 분리(`@polaris/ui/ribbon`)해서 일반 SaaS 사용자는 dep 부담 없음.
+
+추가:
+- `Ribbon`, `RibbonTabs`/`RibbonTabList`/`RibbonTab`/`RibbonContent`
+- `RibbonGroup` (label 옵션) + `RibbonSeparator`
+- `RibbonButton` (size: `sm` icon-only / `md` / `lg` icon-over-label)
+- `RibbonSplitButton` (main + dropdown chevron)
+- `RibbonToggleGroup` / `RibbonToggleItem` (single/multiple selection)
+- 새 dep: `@radix-ui/react-toggle-group`
+
+---
+
+## v0.5.x — 사용자 검증된 우선순위 (피드백 기반)
 
 ### High-impact (사이클 초반에 처리)
 

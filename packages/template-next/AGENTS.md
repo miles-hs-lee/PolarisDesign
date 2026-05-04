@@ -79,6 +79,14 @@ import {
 import {
   Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
 } from '@polaris/ui/form';
+
+// 에디터 / 문서 제품(Office 리본 / MD 에디터 등)을 만들 때만 subpath:
+import {
+  Ribbon, RibbonTabs, RibbonTabList, RibbonTab, RibbonContent,
+  RibbonGroup, RibbonSeparator,
+  RibbonButton, RibbonSplitButton,
+  RibbonToggleGroup, RibbonToggleItem,
+} from '@polaris/ui/ribbon';
 ```
 
 새 컴포넌트가 필요하면 임의로 만들지 말고 사용자에게 보고. 단순 한 번 쓰는 조합은 토큰만 써서 인라인으로 만들어도 됨.

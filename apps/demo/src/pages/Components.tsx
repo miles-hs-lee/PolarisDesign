@@ -116,6 +116,19 @@ import {
   FormDescription,
   FormMessage,
 } from '@polaris/ui/form';
+import {
+  Ribbon,
+  RibbonTabs,
+  RibbonTabList,
+  RibbonTab,
+  RibbonContent,
+  RibbonGroup,
+  RibbonSeparator,
+  RibbonButton,
+  RibbonSplitButton,
+  RibbonToggleGroup,
+  RibbonToggleItem,
+} from '@polaris/ui/ribbon';
 import type { DateRange } from 'react-day-picker';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -139,6 +152,24 @@ import {
   Settings,
   HelpCircle,
   TrendingUp,
+  Clipboard,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+  List,
+  ListOrdered,
+  Link as LinkIcon,
+  Code,
+  Quote,
+  Heading1,
+  Heading2,
+  Highlighter,
+  Type,
 } from 'lucide-react';
 
 type ToastEntry = { id: number; title: string; description?: string; variant: 'info' | 'success' | 'warning' | 'danger' };
@@ -154,6 +185,8 @@ export default function Components() {
   const [pickedDate, setPickedDate] = useState<Date | undefined>();
   const [pickedRange, setPickedRange] = useState<DateRange | undefined>();
   const [cmdOpen, setCmdOpen] = useState(false);
+  const [ribbonAlign, setRibbonAlign] = useState('justify');
+  const [mdMarks, setMdMarks] = useState<string[]>(['bold']);
   const contactForm = useForm<{ name: string; email: string }>({
     resolver: zodResolver(z.object({
       name: z.string().min(2, '2자 이상 입력하세요'),
@@ -171,7 +204,7 @@ export default function Components() {
       <header className="mb-10 pb-4 border-b border-surface-border">
         <h1 className="text-polaris-heading-lg mb-1">Polaris Components</h1>
         <p className="text-polaris-body-sm text-fg-muted">
-          36개 컴포넌트(Tier 0 + Tier 1 + Tier 2 + Tier 2.5 + Tier 3)의 variant·상태·조합을 한 페이지에서 검증
+          37개 컴포넌트(Tier 0 + Tier 1 + Tier 2 + Tier 2.5 + Tier 3 + Tier 4)의 variant·상태·조합을 한 페이지에서 검증
         </p>
       </header>
 
@@ -916,7 +949,133 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="34. 폴라리스 화면 모방 (조합 검증)">
+      <Section title="34. Ribbon — Office 스타일 (subpath: @polaris/ui/ribbon)">
+        <Card>
+          <Ribbon className="!border-0">
+            <RibbonTabs defaultValue="home">
+              <RibbonTabList>
+                <RibbonTab value="home">홈</RibbonTab>
+                <RibbonTab value="insert">삽입</RibbonTab>
+                <RibbonTab value="layout">레이아웃</RibbonTab>
+                <RibbonTab value="review">검토</RibbonTab>
+              </RibbonTabList>
+              <RibbonContent value="home">
+                <RibbonGroup label="붙여넣기">
+                  <RibbonButton size="lg" icon={<Clipboard className="h-5 w-5" />}>붙여넣기</RibbonButton>
+                </RibbonGroup>
+                <RibbonSeparator />
+                <RibbonGroup label="글꼴">
+                  <RibbonToggleGroup
+                    type="multiple"
+                    value={mdMarks}
+                    onValueChange={setMdMarks}
+                  >
+                    <RibbonToggleItem value="bold" tooltip="굵게 (⌘B)" icon={<Bold className="h-4 w-4" />} />
+                    <RibbonToggleItem value="italic" tooltip="기울임 (⌘I)" icon={<Italic className="h-4 w-4" />} />
+                    <RibbonToggleItem value="underline" tooltip="밑줄 (⌘U)" icon={<Underline className="h-4 w-4" />} />
+                    <RibbonToggleItem value="strikethrough" tooltip="취소선" icon={<Strikethrough className="h-4 w-4" />} />
+                  </RibbonToggleGroup>
+                  <RibbonSplitButton
+                    icon={<Type className="h-4 w-4 text-status-danger" />}
+                    tooltip="글자 색"
+                    menuLabel="글자 색 선택"
+                    menu={
+                      <>
+                        <DropdownMenuItem>빨강</DropdownMenuItem>
+                        <DropdownMenuItem>파랑</DropdownMenuItem>
+                        <DropdownMenuItem>녹색</DropdownMenuItem>
+                      </>
+                    }
+                  />
+                  <RibbonSplitButton
+                    icon={<Highlighter className="h-4 w-4 text-status-warning" />}
+                    tooltip="형광펜"
+                    menuLabel="형광펜 색"
+                    menu={
+                      <>
+                        <DropdownMenuItem>노랑</DropdownMenuItem>
+                        <DropdownMenuItem>분홍</DropdownMenuItem>
+                      </>
+                    }
+                  />
+                </RibbonGroup>
+                <RibbonSeparator />
+                <RibbonGroup label="문단">
+                  <RibbonToggleGroup
+                    type="single"
+                    value={ribbonAlign}
+                    onValueChange={(v) => v && setRibbonAlign(v)}
+                  >
+                    <RibbonToggleItem value="left" tooltip="왼쪽 정렬" icon={<AlignLeft className="h-4 w-4" />} />
+                    <RibbonToggleItem value="center" tooltip="가운데 정렬" icon={<AlignCenter className="h-4 w-4" />} />
+                    <RibbonToggleItem value="right" tooltip="오른쪽 정렬" icon={<AlignRight className="h-4 w-4" />} />
+                    <RibbonToggleItem value="justify" tooltip="양쪽 정렬" icon={<AlignJustify className="h-4 w-4" />} />
+                  </RibbonToggleGroup>
+                </RibbonGroup>
+              </RibbonContent>
+              <RibbonContent value="insert">
+                <RibbonGroup label="요소">
+                  <RibbonButton size="lg" icon={<ImageIcon className="h-5 w-5" />}>이미지</RibbonButton>
+                  <RibbonButton size="lg" icon={<FileText className="h-5 w-5" />}>표</RibbonButton>
+                </RibbonGroup>
+              </RibbonContent>
+              <RibbonContent value="layout">
+                <RibbonGroup label="여백">
+                  <RibbonButton tooltip="여백 설정">여백</RibbonButton>
+                </RibbonGroup>
+              </RibbonContent>
+              <RibbonContent value="review">
+                <RibbonGroup label="교정">
+                  <RibbonButton tooltip="맞춤법">맞춤법</RibbonButton>
+                </RibbonGroup>
+              </RibbonContent>
+            </RibbonTabs>
+          </Ribbon>
+        </Card>
+      </Section>
+
+      <Section title="35. Ribbon — 단일 패널 (MD 에디터 케이스)">
+        <Card>
+          <Ribbon className="!border-0">
+            <div className="flex items-center gap-1 px-2 py-1.5">
+              <RibbonGroup>
+                <RibbonToggleGroup
+                  type="multiple"
+                  value={mdMarks}
+                  onValueChange={setMdMarks}
+                >
+                  <RibbonToggleItem value="bold" tooltip="**굵게** (⌘B)" icon={<Bold className="h-4 w-4" />} />
+                  <RibbonToggleItem value="italic" tooltip="*기울임* (⌘I)" icon={<Italic className="h-4 w-4" />} />
+                  <RibbonToggleItem value="strikethrough" tooltip="~~취소선~~" icon={<Strikethrough className="h-4 w-4" />} />
+                  <RibbonToggleItem value="code" tooltip="`코드` (⌘E)" icon={<Code className="h-4 w-4" />} />
+                </RibbonToggleGroup>
+              </RibbonGroup>
+              <RibbonSeparator />
+              <RibbonGroup>
+                <RibbonButton tooltip="# 제목 1" icon={<Heading1 className="h-4 w-4" />} />
+                <RibbonButton tooltip="## 제목 2" icon={<Heading2 className="h-4 w-4" />} />
+              </RibbonGroup>
+              <RibbonSeparator />
+              <RibbonGroup>
+                <RibbonButton tooltip="- 글머리 기호" icon={<List className="h-4 w-4" />} />
+                <RibbonButton tooltip="1. 번호 매기기" icon={<ListOrdered className="h-4 w-4" />} />
+                <RibbonButton tooltip="> 인용문" icon={<Quote className="h-4 w-4" />} />
+              </RibbonGroup>
+              <RibbonSeparator />
+              <RibbonGroup>
+                <RibbonButton tooltip="[링크](url) (⌘K)" icon={<LinkIcon className="h-4 w-4" />} />
+              </RibbonGroup>
+            </div>
+          </Ribbon>
+          <CardBody>
+            <p className="text-polaris-caption text-fg-muted">
+              현재 마크: {mdMarks.length === 0 ? '(없음)' : mdMarks.join(', ')}
+            </p>
+          </CardBody>
+        </Card>
+      </Section>
+
+      <Section title="36. 폴라리스 화면 모방 (조합 검증)">
         <Card>
           <CardHeader>
             <CardTitle>최근 문서</CardTitle>

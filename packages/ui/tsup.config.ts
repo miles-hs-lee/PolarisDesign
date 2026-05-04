@@ -6,6 +6,7 @@ export default defineConfig({
     'src/tokens/index.ts',
     'src/tailwind/index.ts',
     'src/form/index.ts',
+    'src/ribbon/index.ts',
   ],
   format: ['esm', 'cjs'],
   dts: true,
@@ -20,7 +21,12 @@ export default defineConfig({
   // don't need the directive.
   async onSuccess() {
     const fs = await import('node:fs');
-    for (const file of ['dist/index.js', 'dist/index.cjs', 'dist/form/index.js', 'dist/form/index.cjs']) {
+    const targets = [
+      'dist/index.js', 'dist/index.cjs',
+      'dist/form/index.js', 'dist/form/index.cjs',
+      'dist/ribbon/index.js', 'dist/ribbon/index.cjs',
+    ];
+    for (const file of targets) {
       const content = fs.readFileSync(file, 'utf8');
       if (!content.startsWith('"use client"') && !content.startsWith("'use client'")) {
         fs.writeFileSync(file, '"use client";\n' + content);

@@ -8,9 +8,97 @@
 
 ## [Unreleased]
 
-다음 릴리스(v0.5)에 우선 들어갈 항목들 — 자세한 우선순위는 [docs/roadmap.md](docs/roadmap.md) 참고.
+다음 릴리스(v0.5.x)에 들어갈 항목 — [docs/roadmap.md](docs/roadmap.md).
 
 **검증 필요:** v0.4 사용자 보고 — `prefer-polaris-component` lint가 server action `<form action={...}>` 안의 `<button type="submit">`을 일부 케이스에서 flag. v0.2.0 `allowFormSubmit` 수정 후 회귀 테스트는 통과 — 사용자 lint 버전 또는 화이트리스트 미커버 케이스 확인 필요.
+
+---
+
+## [0.5.0] — 2026-05-05
+
+에디터 제품군(Office 도큐먼트·MD 에디터·스프레드시트·PDF 도구 등)을 위한 **Ribbon** 컴포넌트 family. Subpath로 분리해 일반 SaaS 사용자에게는 dep 부담 없음.
+
+### 추가됨 — `@polaris/ui/ribbon` (Tier 4)
+
+```tsx
+import {
+  Ribbon, RibbonTabs, RibbonTabList, RibbonTab, RibbonContent,
+  RibbonGroup, RibbonSeparator,
+  RibbonButton, RibbonSplitButton,
+  RibbonToggleGroup, RibbonToggleItem,
+} from '@polaris/ui/ribbon';
+```
+
+- **`Ribbon`** — 루트 wrapper. surface-raised + bottom border
+- **`RibbonTabs` / `RibbonTabList` / `RibbonTab` / `RibbonContent`** — Office 스타일 탭 (홈·삽입·레이아웃·검토·…). Radix Tabs 기반, 폴라리스 토큰 + 컴팩트 라인 인디케이터
+- **`RibbonGroup`** — vertical 그룹 + 선택적 bottom label ("붙여넣기"·"문단"…)
+- **`RibbonSeparator`** — 그룹 사이 vertical divider
+- **`RibbonButton`** — icon-first button. 3가지 size:
+  - `sm` (default) — icon-only with tooltip (정렬·서식 토글 같은 컴팩트 액션)
+  - `md` — icon + 인라인 라벨
+  - `lg` — icon-over-label (Office의 "붙여넣기" 같은 큰 primary action)
+- **`RibbonSplitButton`** — main action + dropdown chevron (글자색·형광펜처럼 default + 옵션 패턴)
+- **`RibbonToggleGroup` / `RibbonToggleItem`** — Radix `react-toggle-group` 래핑. `type="single"` (정렬) / `type="multiple"` (서식 굵게/기울임) 양쪽
+
+### 사용 예시
+
+**Office 스타일 (탭 + 그룹):**
+```tsx
+<Ribbon>
+  <RibbonTabs defaultValue="home">
+    <RibbonTabList>
+      <RibbonTab value="home">홈</RibbonTab>
+      <RibbonTab value="insert">삽입</RibbonTab>
+    </RibbonTabList>
+    <RibbonContent value="home">
+      <RibbonGroup label="글꼴">
+        <RibbonToggleGroup type="multiple" value={marks} onValueChange={setMarks}>
+          <RibbonToggleItem value="bold" tooltip="굵게 (⌘B)" icon={<Bold />} />
+          <RibbonToggleItem value="italic" tooltip="기울임 (⌘I)" icon={<Italic />} />
+        </RibbonToggleGroup>
+      </RibbonGroup>
+      <RibbonSeparator />
+      <RibbonGroup label="문단">
+        <RibbonToggleGroup type="single" value={align} onValueChange={setAlign}>
+          <RibbonToggleItem value="left" icon={<AlignLeft />} />
+          <RibbonToggleItem value="center" icon={<AlignCenter />} />
+        </RibbonToggleGroup>
+      </RibbonGroup>
+    </RibbonContent>
+  </RibbonTabs>
+</Ribbon>
+```
+
+**MD 에디터 스타일 (탭 없이 단일 패널):**
+```tsx
+<Ribbon>
+  <div className="flex items-center gap-1 px-2 py-1.5">
+    <RibbonGroup>
+      <RibbonToggleGroup type="multiple" value={marks} onValueChange={setMarks}>
+        <RibbonToggleItem value="bold" tooltip="**굵게** (⌘B)" icon={<Bold />} />
+        <RibbonToggleItem value="italic" tooltip="*기울임* (⌘I)" icon={<Italic />} />
+        <RibbonToggleItem value="code" tooltip="`코드` (⌘E)" icon={<Code />} />
+      </RibbonToggleGroup>
+    </RibbonGroup>
+    <RibbonSeparator />
+    <RibbonGroup>
+      <RibbonButton tooltip="# 제목" icon={<Heading1 />} />
+      <RibbonButton tooltip="- 글머리" icon={<List />} />
+    </RibbonGroup>
+  </div>
+</Ribbon>
+```
+
+### 의존성 추가
+
+- `@radix-ui/react-toggle-group@^1.1.1` — ToggleGroup primitive
+
+루트 `@polaris/ui` bundle에는 포함되지 않음 (subpath isolation 검증 — `grep` 0건).
+
+### 데모
+
+- §34 Ribbon — Office 스타일 (탭 + 그룹 + SplitButton)
+- §35 Ribbon — 단일 패널 (MD 에디터 케이스)
 
 ---
 
@@ -375,7 +463,8 @@ GitHub Pages에 자동 배포 (https://miles-hs-lee.github.io/PolarisDesign/):
 
 ---
 
-[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.1...v0.3.0

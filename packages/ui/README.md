@@ -1,6 +1,6 @@
 # @polaris/ui
 
-폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 36개 React 컴포넌트.
+폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 37개 React 컴포넌트.
 
 루트 [README](../../README.md)에 전체 시스템 설명이 있습니다. 이 문서는 패키지 사용법만 다룹니다.
 
@@ -70,7 +70,7 @@ export default {
 | 반경 | `rounded-polaris-sm/md/lg/xl/full` |
 | 그림자 | `shadow-polaris-xs/sm/md/lg` |
 
-## 컴포넌트 (36개)
+## 컴포넌트 (37개)
 
 ```tsx
 import {
@@ -83,8 +83,7 @@ import {
   Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
   // Tier 2.5 (5) — layout / structural
   Stack, HStack, VStack, Container, Drawer, Table, DescriptionList,
-  // Tier 3 (6) — form / date / overlay
-  Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
+  // Tier 3 — date / overlay / command
   Popover, PopoverTrigger, PopoverContent,
   Calendar, DatePicker, DateRangePicker,                          // experimental
   CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem,  // experimental
@@ -98,6 +97,25 @@ import {
 ```
 
 각 컴포넌트의 prop은 IDE에서 JSDoc으로 확인. 시각 사용 예시는 [Storybook](https://miles-hs-lee.github.io/PolarisDesign/storybook/)이나 [데모 페이지](https://miles-hs-lee.github.io/PolarisDesign/#/components).
+
+### Subpath imports — 필요한 사람만
+
+루트 bundle을 가볍게 유지하기 위해 일부 컴포넌트는 별도 subpath로 분리됩니다.
+
+```tsx
+// 폼 (react-hook-form + zod 의존)
+import {
+  Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
+} from '@polaris/ui/form';
+
+// 리본 / 에디터 툴바 (Office 도큐먼트 · MD 에디터 · 스프레드시트 · PDF 등)
+import {
+  Ribbon, RibbonTabs, RibbonTabList, RibbonTab, RibbonContent,
+  RibbonGroup, RibbonSeparator,
+  RibbonButton, RibbonSplitButton,
+  RibbonToggleGroup, RibbonToggleItem,
+} from '@polaris/ui/ribbon';
+```
 
 ### 글로벌 Provider
 

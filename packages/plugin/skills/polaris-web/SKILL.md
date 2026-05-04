@@ -26,8 +26,7 @@ You are working on a Polaris Office web service. Apply these rules without askin
      Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
      // Tier 2.5 — layout / structural
      Stack, HStack, VStack, Container, Drawer, Table, DescriptionList,
-     // Tier 3 — form / date / overlay (Calendar·Command are experimental — APIs may change)
-     Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
+     // Tier 3 — date / overlay / command (Calendar·Command are experimental — APIs may change)
      Popover, PopoverTrigger, PopoverContent,
      Calendar, DatePicker, DateRangePicker,
      CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem,
@@ -38,6 +37,20 @@ You are working on a Polaris Office web service. Apply these rules without askin
    } from '@polaris/ui';
    ```
 2. If a needed component doesn't exist in `@polaris/ui`, build it inline using ONLY Polaris tokens (rule 3). Don't bring in shadcn/Radix/MUI directly.
+
+   **Subpath imports** — keep root barrel light:
+   ```ts
+   // Forms with react-hook-form + zod
+   import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@polaris/ui/form';
+
+   // Editor / document toolbars (Office ribbon, MD editor, spreadsheet, PDF, …)
+   import {
+     Ribbon, RibbonTabs, RibbonTabList, RibbonTab, RibbonContent,
+     RibbonGroup, RibbonSeparator,
+     RibbonButton, RibbonSplitButton,
+     RibbonToggleGroup, RibbonToggleItem,
+   } from '@polaris/ui/ribbon';
+   ```
 3. Native `<button>`, `<input>`, `<textarea>`, `<select>`, `<dialog>` are forbidden in feature code — the lint rule `@polaris/prefer-polaris-component` blocks them. (They're allowed inside `@polaris/ui` itself.)
 
 ### 3. Colors — the most common violation
