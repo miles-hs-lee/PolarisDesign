@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useRef } from 'react';
 import * as DropdownPrimitive from '@radix-ui/react-dropdown-menu';
 import { Check, ChevronRight, Circle } from 'lucide-react';
 import { cn } from '../lib/cn';
@@ -145,9 +145,9 @@ DropdownMenuSubContent.displayName = 'DropdownMenuSubContent';
  *
  * Race condition this solves: a plain `<DropdownMenuItem>` calls Radix's
  * close behavior on click, which can unmount the form before the submit
- * fires. We `event.preventDefault()` the close on Item.onSelect, then
- * trigger the form submit via the inner button's native click. Radix
- * receives focus return after submission completes.
+ * fires. We hold a ref to the form, `e.preventDefault()` Radix's close, and
+ * call `form.requestSubmit()` explicitly so the action fires for both
+ * pointer click *and* keyboard (Enter / Space) activation.
  *
  * Usage:
  * ```tsx
@@ -183,34 +183,46 @@ export interface DropdownMenuFormItemProps
 export const DropdownMenuFormItem = forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Item>,
   DropdownMenuFormItemProps
->(({ className, formClassName, action, method = 'post', destructive, icon, hiddenFields, children, ...props }, ref) => (
-  <DropdownPrimitive.Item
-    ref={ref}
-    onSelect={(e) => e.preventDefault()}
-    asChild
-    className={cn(
-      itemBase,
-      destructive && 'text-status-danger data-[highlighted]:bg-status-danger/10 data-[highlighted]:text-status-danger',
-      className
-    )}
-    {...props}
-  >
-    <form
-      action={action as never}
-      method={typeof action === 'string' ? method : undefined}
-      className={cn('m-0 w-full', formClassName)}
+>(({ className, formClassName, action, method = 'post', destructive, icon, hiddenFields, children, ...props }, ref) => {
+  const formRef = useRef<HTMLFormElement>(null);
+  return (
+    <DropdownPrimitive.Item
+      ref={ref}
+      onSelect={(e) => {
+        // Keep menu mounted long enough for the form to submit. Triggering
+        // requestSubmit here covers keyboard (Enter/Space) — pointer clicks
+        // would also bubble to the inner button, but we always submit through
+        // the form so behavior is identical for both input modalities.
+        e.preventDefault();
+        formRef.current?.requestSubmit();
+      }}
+      asChild
+      className={cn(
+        itemBase,
+        destructive && 'text-status-danger data-[highlighted]:bg-status-danger/10 data-[highlighted]:text-status-danger',
+        className
+      )}
+      {...props}
     >
-      {hiddenFields && Object.entries(hiddenFields).map(([name, value]) => (
-        <input key={name} type="hidden" name={name} value={value} />
-      ))}
-      <button
-        type="submit"
-        className="flex w-full items-center gap-2 bg-transparent border-0 p-0 text-inherit cursor-pointer text-left font-inherit"
+      <form
+        ref={formRef}
+        action={action as never}
+        method={typeof action === 'string' ? method : undefined}
+        className={cn('m-0 w-full', formClassName)}
       >
-        {icon}
-        {children}
-      </button>
-    </form>
-  </DropdownPrimitive.Item>
-));
+        {hiddenFields && Object.entries(hiddenFields).map(([name, value]) => (
+          <input key={name} type="hidden" name={name} value={value} />
+        ))}
+        <button
+          type="submit"
+          tabIndex={-1}
+          className="flex w-full items-center gap-2 bg-transparent border-0 p-0 text-inherit cursor-pointer text-left font-inherit"
+        >
+          {icon}
+          {children}
+        </button>
+      </form>
+    </DropdownPrimitive.Item>
+  );
+});
 DropdownMenuFormItem.displayName = 'DropdownMenuFormItem';

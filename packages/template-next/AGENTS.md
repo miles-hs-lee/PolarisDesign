@@ -53,16 +53,32 @@ pnpm typecheck
 
 위반이 남아 있으면 작업 완료 보고 금지. 자동 수정 가능 항목은 `pnpm lint --fix`.
 
-## 사용 가능한 컴포넌트 (18개)
+## 사용 가능한 컴포넌트 (36개)
 
 ```ts
 import {
-  // Tier 0
+  // Tier 0 (12) — basic blocks
   Button, Input, Textarea, Card, Badge, Avatar, Dialog, Toast, Tabs,
   FileIcon, FileCard, NovaInput,
-  // Tier 1
+  // Tier 1 (6) — shell + menus
   DropdownMenu, Tooltip, Select, Sidebar, Navbar, PromptChip,
+  // Tier 2 (7) — auxiliary UI
+  Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
+  // Tier 2.5 (5) — layout / structural
+  Stack, HStack, VStack, Container, Drawer, Table, DescriptionList,
+  // Tier 3 (5) — date / overlay / command (Calendar·Command은 experimental)
+  Popover, Calendar, DatePicker, DateRangePicker,
+  CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem,
+  // Server-action friendly
+  DropdownMenuFormItem,
+  // Toast imperative API
+  Toaster, useToast, toast,
 } from '@polaris/ui';
+
+// Form/FormField는 react-hook-form이 함께 필요하므로 subpath import:
+import {
+  Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
+} from '@polaris/ui/form';
 ```
 
 새 컴포넌트가 필요하면 임의로 만들지 말고 사용자에게 보고. 단순 한 번 쓰는 조합은 토큰만 써서 인라인으로 만들어도 됨.

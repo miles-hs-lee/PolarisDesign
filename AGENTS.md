@@ -17,13 +17,31 @@
 
 ```ts
 import {
+  // Tier 0 (12) — basic blocks
   Button, Input, Textarea, Card, Badge, Avatar, Dialog, Toast, Tabs,
   FileIcon, FileCard, NovaInput,
+  // Tier 1 (6) — shell + menus
   DropdownMenu, Tooltip, Select, Sidebar, Navbar, PromptChip,
+  // Tier 2 (7) — auxiliary UI
+  Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
+  // Tier 2.5 (5) — layout / structural
+  Stack, HStack, VStack, Container, Drawer, Table, DescriptionList,
+  // Tier 3 — date / overlay / command (Calendar · Command은 experimental)
+  Popover, Calendar, DatePicker, DateRangePicker,
+  CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem,
+  // Server-action friendly
+  DropdownMenuFormItem,
+  // Toast imperative API
+  Toaster, useToast, toast,
 } from '@polaris/ui';
+
+// Form/FormField는 react-hook-form 의존이므로 subpath:
+import {
+  Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
+} from '@polaris/ui/form';
 ```
 
-native `<button>`, `<input>`, `<textarea>`, `<select>`, `<dialog>`은 **feature 코드에서 금지**. ESLint 룰 `@polaris/prefer-polaris-component`가 차단합니다.
+native `<button>`, `<input>`, `<textarea>`, `<select>`, `<dialog>`은 **feature 코드에서 금지**. ESLint 룰 `@polaris/prefer-polaris-component`가 차단합니다 (단, `<button type="submit">`는 form-control 패턴이라 허용).
 
 ### 2. 색상은 토큰만
 

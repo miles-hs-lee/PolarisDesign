@@ -12,6 +12,48 @@
 
 ---
 
+## [0.4.1] — 2026-05-04
+
+코덱스 리뷰 후속 패치. v0.4.0의 4건 이슈 수정.
+
+### 수정됨 — Form을 subpath export로 분리 (P1)
+
+`react-hook-form`이 optional peerDep인데도 v0.4.0의 root barrel이 `Form` 컴포넌트를 re-export해서, RHF 없이 `import { Button } from '@polaris/ui'`만 해도 dist 로드 시점에 `require('react-hook-form')`이 실행됐습니다.
+
+수정: Form/FormField 시리즈를 **`@polaris/ui/form`** subpath로 분리. 루트 bundle은 RHF 의존 0건 (`grep` 검증).
+
+```ts
+// 기존 (v0.4.0)
+import { Form, FormField } from '@polaris/ui';  // ❌ RHF 미설치 시 import 실패
+
+// 신규 (v0.4.1+)
+import { Form, FormField } from '@polaris/ui/form';  // ✓
+```
+
+### 수정됨 — DropdownMenuFormItem 키보드 submit 누락 (P1)
+
+이전엔 `onSelect`에서 `e.preventDefault()`만 호출하고 inner button의 native click에 의존했습니다. 포인터로는 동작했지만 **Radix menuitem에 포커스가 있는 상태에서 Enter/Space로 선택하면 submit이 누락**될 수 있었습니다.
+
+수정: `formRef`를 잡고 `onSelect`에서 `formRef.current?.requestSubmit()`을 명시적으로 호출. 포인터와 키보드 모두 동일 경로로 submit. 회귀 테스트 3건 추가 (DropdownMenu.test.tsx).
+
+### 수정됨 — CommandDialog props가 UI에 연결되지 않던 문제 (P3)
+
+`placeholder`/`emptyLabel` props가 사용되지 않은 채 API에만 노출돼 있었습니다. 자동 렌더링하는 길도 있었지만 cmdk의 합성 패턴(input/list/group을 children으로 두는)을 깨뜨립니다 — props 자체를 제거하고 children 합성 방식으로 통일. 사용자는 `<CommandInput placeholder="..." />`, `<CommandEmpty>`을 직접 자식으로 둠.
+
+### 수정됨 — Codex/Cursor 에이전트 지침 갱신 (P2)
+
+`AGENTS.md` (루트 + template-next)의 import 예시가 18개 컴포넌트로 고정돼 있어 Codex가 v0.3+ 컴포넌트(Table, Drawer, Form, DatePicker, Command 등)를 피하거나 불필요하게 질문하던 문제. 36개 기준으로 갱신 + Form은 subpath import 안내.
+
+### 수정됨 — nextjs-app-router.md Form 섹션 (P3)
+
+v0.4 시점에서 이미 `Form`/`FormField` 컴포넌트가 추가됐는데, 이 문서는 여전히 "추가 예정, 현재는 수동 RHF 패턴"이라고 안내했습니다. 새 컴포넌트 사용법으로 재작성. `recipes.md`와 표준 일치.
+
+### 추가됨 — 회귀 테스트
+
+`DropdownMenu.test.tsx` — 키보드/포인터 submit pathway + hiddenFields 렌더링 검증. 총 21 vitest tests (이전 18).
+
+---
+
 ## [0.4.0] — 2026-05-04
 
 두 번째 사내 마이그레이션 사이클(Next.js 16 + Tailwind v4)에서 받은 후속 피드백 + 0.2부터 약속된 v4 preset을 한 번에 정리한 릴리스. **Tailwind v4 native preset**, **Form/FormField (RHF + zod)**, 그리고 experimental 컴포넌트 2종(Calendar/DatePicker, CommandPalette).
@@ -331,7 +373,8 @@ GitHub Pages에 자동 배포 (https://miles-hs-lee.github.io/PolarisDesign/):
 
 ---
 
-[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.0...v0.2.1

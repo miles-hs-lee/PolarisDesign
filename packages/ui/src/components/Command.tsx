@@ -48,21 +48,26 @@ export const Command = forwardRef<
 ));
 Command.displayName = 'Command';
 
-export interface CommandDialogProps extends DialogPrimitive.DialogProps {
-  /** Localized placeholder for the search input. */
-  placeholder?: string;
-  /** Localized empty-state message. */
-  emptyLabel?: string;
-}
+export type CommandDialogProps = DialogPrimitive.DialogProps;
 
 /**
- * Modal dialog wrapping a `<Command>`. Standard Ctrl+K palette UX. Children
- * are the command list (`<CommandList>`, `<CommandGroup>`, `<CommandItem>`s).
+ * Modal dialog wrapping a `<Command>`. Standard Ctrl+K palette UX.
+ *
+ * Compose the input / list / groups inside as children:
+ * ```tsx
+ * <CommandDialog open={open} onOpenChange={setOpen}>
+ *   <CommandInput placeholder="검색" />
+ *   <CommandList>
+ *     <CommandEmpty>결과 없음</CommandEmpty>
+ *     <CommandGroup heading="페이지">
+ *       <CommandItem onSelect={...}>대시보드</CommandItem>
+ *     </CommandGroup>
+ *   </CommandList>
+ * </CommandDialog>
+ * ```
  */
 export const CommandDialog = ({
   children,
-  placeholder = '명령 또는 페이지 검색',
-  emptyLabel,
   ...props
 }: CommandDialogProps) => (
   <DialogPrimitive.Root {...props}>
@@ -81,11 +86,8 @@ export const CommandDialog = ({
           'focus:outline-none'
         )}
       >
-        <DialogPrimitive.Title className="sr-only">{placeholder}</DialogPrimitive.Title>
-        <Command>
-          {/* Caller composes CommandInput / CommandList inside */}
-          {children ?? null}
-        </Command>
+        <DialogPrimitive.Title className="sr-only">Command palette</DialogPrimitive.Title>
+        <Command>{children ?? null}</Command>
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>
   </DialogPrimitive.Root>

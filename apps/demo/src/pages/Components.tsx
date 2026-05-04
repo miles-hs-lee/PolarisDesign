@@ -106,6 +106,8 @@ import {
   CommandItem,
   CommandSeparator,
   CommandShortcut,
+} from '@polaris/ui';
+import {
   Form,
   FormField,
   FormItem,
@@ -113,7 +115,7 @@ import {
   FormControl,
   FormDescription,
   FormMessage,
-} from '@polaris/ui';
+} from '@polaris/ui/form';
 import type { DateRange } from 'react-day-picker';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';

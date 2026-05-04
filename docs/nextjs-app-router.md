@@ -97,8 +97,8 @@ export default function ContractEdit() {
 
 `<button type="submit">`은 우리 lint가 `allowFormSubmit: true` (default)로 native 사용을 허용 — `<Button>`이 그대로 통과합니다.
 
-### RHF + zod (client-side validation)
-대부분의 복잡한 폼은 이 패턴:
+### RHF + zod (client-side validation, 사내 표준)
+복잡한 폼은 v0.4에 추가된 `Form`/`FormField` 컴포넌트 사용. **`@polaris/ui/form` subpath**에서 import (root barrel은 RHF 없이도 동작하도록 분리됨):
 
 ```tsx
 'use client';
@@ -106,35 +106,53 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Input, Button } from '@polaris/ui';
+import {
+  Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
+} from '@polaris/ui/form';
 
 const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  email: z.string().email('이메일 형식이 올바르지 않습니다'),
+  password: z.string().min(8, '8자 이상'),
 });
 
 export function LoginForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
+  const form = useForm({ resolver: zodResolver(schema) });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Input
-        {...register('email')}
-        label="이메일"
-        error={errors.email?.message}
-      />
-      <Input
-        {...register('password')}
-        type="password"
-        label="비밀번호"
-        error={errors.password?.message}
-      />
-      <Button type="submit">로그인</Button>
-    </form>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>이메일</FormLabel>
+              <FormControl><Input type="email" {...field} /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>비밀번호</FormLabel>
+              <FormControl><Input type="password" {...field} /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">로그인</Button>
+      </form>
+    </Form>
   );
 }
 ```
 
-> v0.4에서 `<Form>`/`<FormField>` wrapper가 추가될 예정 — 현재는 위 패턴이 표준.
+`FormLabel`이 자동으로 input과 `htmlFor`를 wire-up하고, error 시 색이 status-danger로 전환됩니다. `<FormMessage />`는 RHF의 `errors`를 직접 읽어 표시.
+
+> 단순 한 줄 입력은 `Input`의 `label`/`hint`/`error` props만 써도 충분 — Form 컴포넌트는 다중 필드일 때 가치가 큼.
 
 ---
 

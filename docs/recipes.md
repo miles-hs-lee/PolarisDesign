@@ -14,9 +14,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
-  Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
   Input, Textarea, Checkbox, Button, VStack, toast,
 } from '@polaris/ui';
+import {
+  Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
+} from '@polaris/ui/form';  // ← subpath: keeps RHF out of root bundle
 
 const schema = z.object({
   name: z.string().min(2, '2자 이상 입력하세요'),

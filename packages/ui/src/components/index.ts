@@ -30,9 +30,10 @@ export * from './Container';
 export * from './Drawer';
 export * from './Table';
 export * from './DescriptionList';
-// Tier 3 — Form / Date / Command (v0.4)
+// Tier 3 — Date / Command / Popover (v0.4)
+// Note: Form is NOT exported from the root barrel — it pulls in
+// react-hook-form. Use the subpath: `import { Form, FormField, ... } from '@polaris/ui/form'`.
 export * from './Popover';
-export * from './Form';
 export * from './Calendar';
 export * from './DatePicker';
 export * from './Command';
