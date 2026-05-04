@@ -45,8 +45,20 @@ jobs:
       - name: Test — @polaris/plugin hook
         run: pnpm --filter @polaris/plugin test
 
-      - name: Lint demo (must be 0 violations)
+      - name: Lint — demo (must be 0 violations)
         run: pnpm --filter demo lint
 
-      - name: Build demo
+      - name: Lint — storybook (must be 0 violations)
+        run: pnpm --filter storybook lint
+
+      - name: Lint — template-next (must be 0 violations)
+        run: pnpm --filter polaris-template-next lint
+
+      - name: Build — demo
         run: pnpm --filter demo build
+
+      - name: Build — storybook
+        run: pnpm --filter storybook build
+
+      - name: Build — template-next
+        run: pnpm --filter polaris-template-next build

@@ -1,0 +1,75 @@
+# Agent instructions — Polaris template app
+
+Codex / Cursor / 기타 코드 에이전트가 이 프로젝트(이 템플릿에서 시작된 폴라리스 웹 서비스)에서 작업할 때 따라야 할 절차입니다. 이 파일은 `tiged`로 클론될 때 함께 복사되어, 사용자가 모노레포에서 분리해 새 앱으로 발전시킬 때 디자인 시스템 제약이 사라지지 않도록 보장합니다.
+
+원본은 [`@polaris/PolarisDesign/AGENTS.md`](https://github.com/miles-hs-lee/PolarisDesign/blob/main/AGENTS.md). 시스템 전체 맥락이 필요하면 그쪽을 보세요.
+
+## 이 프로젝트의 정체
+
+이 앱은 **`@polaris/ui` 디자인 시스템 위에 만들어진 폴라리스 웹 서비스**입니다. 따라서:
+
+- 색상은 토큰만 사용 (hex/rgb/CSS named color 금지)
+- 컴포넌트는 `@polaris/ui` 우선 (native `<button>`/`<input>` 등 금지)
+- 폰트는 Pretendard, 타이포 스케일은 `text-polaris-*` 클래스
+- `pnpm lint`가 위반을 자동 차단하며, 작업 완료 보고 전 반드시 0건이어야 함
+
+## 핵심 규칙 (요약)
+
+```ts
+// ✓ 컴포넌트
+import { Button, Input, Card, NovaInput, FileCard } from '@polaris/ui';
+
+// ✓ 색상 클래스
+'bg-brand-primary text-fg-primary border-surface-border bg-status-danger text-file-pdf'
+
+// ✗ 금지
+'#FF0000', 'rgb(...)',
+'bg-[#fff]', 'p-[13px]', "font-['Inter']",
+<button>...</button>, <input ... />,
+style={{ color: 'red' }}
+```
+
+### AI / NOVA 컨텍스트 (`brand-secondary` 보라)
+
+- AI 기능(생성/요약/자동완성/NOVA 진입점) → `bg-brand-secondary`
+- 일반 기능 → `bg-brand-primary` (파랑)
+- 같은 화면에서 둘을 섞지 마세요
+
+### 파일 타입 컬러 (전용)
+
+- DOCX/HWP → `text-file-docx` (파랑)
+- XLSX → `text-file-xlsx` (초록)
+- PPTX → `text-file-pptx` (주황)
+- PDF → `text-file-pdf` (빨강)
+
+차트나 일반 데이터 시각화에는 사용 금지.
+
+## 작업 종료 전 검증
+
+```sh
+pnpm lint        # @polaris/lint — 0건 필수
+pnpm typecheck
+```
+
+위반이 남아 있으면 작업 완료 보고 금지. 자동 수정 가능 항목은 `pnpm lint --fix`.
+
+## 사용 가능한 컴포넌트 (18개)
+
+```ts
+import {
+  // Tier 0
+  Button, Input, Textarea, Card, Badge, Avatar, Dialog, Toast, Tabs,
+  FileIcon, FileCard, NovaInput,
+  // Tier 1
+  DropdownMenu, Tooltip, Select, Sidebar, Navbar, PromptChip,
+} from '@polaris/ui';
+```
+
+새 컴포넌트가 필요하면 임의로 만들지 말고 사용자에게 보고. 단순 한 번 쓰는 조합은 토큰만 써서 인라인으로 만들어도 됨.
+
+## 안티 패턴 — 절대 하지 말 것
+
+- "사용자가 #FF5500을 언급했으니 그대로 박자" → ❌. 가까운 토큰 사용. 없으면 토큰 추가 여부 사용자 확인.
+- "shadcn/MUI에 비슷한 게 있으니 가져다 쓰자" → ❌. `@polaris/ui`에 없으면 토큰만으로 인라인 구현.
+- "lint 룰을 disable로 우회하자" → ❌. 룰을 끄면 시스템의 의미가 사라짐.
+- "임의값이 더 짧다" → 무관. 토큰 클래스가 항상 우선.

@@ -8,7 +8,7 @@ const styles = {
 export function GoodCard() {
   return (
     <div
-      className="bg-brand-primary text-text-on-brand p-4 rounded-polaris-md font-polaris"
+      className="bg-brand-primary text-fg-on-brand p-4 rounded-polaris-md font-polaris"
       style={styles}
     >
       Click

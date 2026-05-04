@@ -123,7 +123,7 @@ tester.run('prefer-polaris-component', polaris.rules['prefer-polaris-component']
 tester.run('no-arbitrary-tailwind', polaris.rules['no-arbitrary-tailwind'], {
   valid: [
     { code: `const cls = "bg-brand-primary p-4 rounded-polaris-md";` },
-    { code: `const cls = "text-text-primary font-polaris";` },
+    { code: `const cls = "text-fg-primary font-polaris";` },
     { code: `const cls = \`bg-surface-canvas \${active && 'ring-brand-primary'}\`;` },
     { code: `const x = "[1, 2, 3]";` },
   ],
