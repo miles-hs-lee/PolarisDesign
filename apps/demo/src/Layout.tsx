@@ -269,7 +269,7 @@ export function Layout() {
 
             <footer className="border-t border-surface-border">
               <div className="max-w-6xl mx-auto px-6 py-6 text-polaris-caption text-fg-muted flex flex-wrap items-center justify-between gap-3">
-                <div>Polaris Design System · v0.0.x</div>
+                <div>Polaris Design System · v0.1.0</div>
                 <a
                   href="https://github.com/miles-hs-lee/PolarisDesign"
                   className="text-brand-primary hover:underline"

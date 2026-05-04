@@ -1,6 +1,6 @@
 {
   "name": "@polaris/plugin",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "description": "Claude Code plugin source — distributes the polaris-design skill, slash commands, and PostToolUse lint hook",
   "scripts": {

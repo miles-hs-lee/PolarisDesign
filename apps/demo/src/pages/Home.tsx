@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
       <section className="mb-12">
-        <Badge variant="secondary" className="mb-4">v0.0.1 · Tier 0</Badge>
+        <Badge variant="secondary" className="mb-4">v0.1.0 · 사내 공개 alpha</Badge>
         <h1 className="text-polaris-display-md mb-3">
           Polaris Design System
         </h1>

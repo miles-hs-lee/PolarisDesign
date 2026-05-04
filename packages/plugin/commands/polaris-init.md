@@ -57,6 +57,6 @@ pnpm build
 - **`@polaris/ui` 미배포 상태에서 외부 클론은 실패**합니다. 템플릿의 `package.json`이 `"@polaris/ui": "workspace:*"`로 의존성을 참조하기 때문에 `pnpm install`이 npm 레지스트리에서 패키지를 찾지 못합니다.
   - **확인 절차**: 1단계 클론 직후 `cat package.json | grep workspace`로 workspace 참조가 남아 있는지 확인. 남아 있으면 사용자에게 다음 중 한 경로를 선택하도록 보고하세요.
     - (a) 모노레포 안에서 작업 — 새 앱을 `packages/` 또는 `apps/` 아래에 만들고 이 템플릿 파일들을 참조
-    - (b) `@polaris/ui`/`@polaris/lint`를 사내 npm/GitHub Packages에 publish 후, `workspace:*`를 실제 버전(예: `^0.0.1`)으로 교체
+    - (b) `@polaris/ui`/`@polaris/lint`를 사내 npm/GitHub Packages에 publish 후, `workspace:*`를 실제 버전(예: `^0.1.0`)으로 교체
     - (c) 임시 우회: `pnpm link`로 로컬 모노레포 빌드를 새 프로젝트에 링크
   - 위 셋 모두 사용자 결정이 필요하므로 임의로 진행하지 말고 반드시 보고할 것.

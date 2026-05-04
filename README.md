@@ -223,8 +223,8 @@ CI 워크플로우는 `.github/workflows/ci.yml` 참조. 배포는 `.github/work
 
 ## 로드맵
 
-- **v0.0.x (현재 — internal alpha)** — 토큰 + 18개 컴포넌트, 4 lint 룰, Claude Code 플러그인, NOVA 워크스페이스 + CRM/Sign 예시, 템플릿, polaris-audit, AGENTS.md
-- **v0.1.0 (사내 공개)** — 사내 npm 레지스트리 publish, tokens.md hex 사인오프, CHANGELOG, 첫 파일럿 위반율 측정 baseline
+- **v0.1.0 (현재 — 사내 공개 alpha)** — 토큰 + 18개 컴포넌트, 4 lint 룰, Claude Code 플러그인, NOVA 워크스페이스 + CRM/Sign 예시, 템플릿, polaris-audit, AGENTS.md
+- **v0.1.x (사내 공개 직후)** — 사내 npm 레지스트리 publish, tokens.md hex 사인오프, CHANGELOG, 첫 파일럿 위반율 측정 baseline
 - **v0.2.x** — Tier 2 컴포넌트 (Table 등), 시각 회귀 테스트, Pretendard 로컬 호스팅, 추가 예시 화면
 
 ## License
