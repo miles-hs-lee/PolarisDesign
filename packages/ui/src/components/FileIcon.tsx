@@ -5,7 +5,7 @@ import { cn } from '../lib/cn';
 export type FileType = 'docx' | 'hwp' | 'xlsx' | 'pptx' | 'pdf';
 
 const fileIconVariants = cva(
-  'inline-flex items-center justify-center font-bold text-text-on-brand select-none shrink-0 font-polaris tracking-tight',
+  'inline-flex items-center justify-center font-bold text-fg-on-brand select-none shrink-0 font-polaris tracking-tight',
   {
     variants: {
       type: {
@@ -28,6 +28,7 @@ const fileIconVariants = cva(
 export interface FileIconProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'type'>,
     VariantProps<typeof fileIconVariants> {
+  /** File type — controls the color (docx/hwp = blue, xlsx = green, pptx = orange, pdf = red). */
   type: FileType;
 }
 

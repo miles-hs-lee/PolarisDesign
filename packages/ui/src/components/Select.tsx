@@ -16,8 +16,8 @@ export const SelectTrigger = forwardRef<
     className={cn(
       'inline-flex h-10 w-full items-center justify-between gap-2 rounded-polaris-md',
       'border border-surface-border-strong bg-surface-raised px-3 py-2',
-      'text-polaris-body-sm font-polaris text-text-primary',
-      'data-[placeholder]:text-text-muted',
+      'text-polaris-body-sm font-polaris text-fg-primary',
+      'data-[placeholder]:text-fg-muted',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:border-brand-primary',
       'disabled:cursor-not-allowed disabled:opacity-50',
       className
@@ -26,7 +26,7 @@ export const SelectTrigger = forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 text-text-muted shrink-0" aria-hidden="true" />
+      <ChevronDown className="h-4 w-4 text-fg-muted shrink-0" aria-hidden="true" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -42,7 +42,7 @@ export const SelectContent = forwardRef<
       position={position}
       className={cn(
         'relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-polaris-md',
-        'border border-surface-border bg-surface-raised text-text-primary shadow-polaris-md',
+        'border border-surface-border bg-surface-raised text-fg-primary shadow-polaris-md',
         position === 'popper' && 'translate-y-1',
         className
       )}
@@ -66,7 +66,7 @@ export const SelectLabel = forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn('px-2.5 py-1.5 text-polaris-caption font-semibold uppercase tracking-wider text-text-muted', className)}
+    className={cn('px-2.5 py-1.5 text-polaris-caption font-semibold uppercase tracking-wider text-fg-muted', className)}
     {...props}
   />
 ));
@@ -80,7 +80,7 @@ export const SelectItem = forwardRef<
     ref={ref}
     className={cn(
       'relative flex cursor-pointer select-none items-center rounded-polaris-sm py-1.5 pl-7 pr-2.5',
-      'text-polaris-body-sm font-polaris text-text-primary outline-none',
+      'text-polaris-body-sm font-polaris text-fg-primary outline-none',
       'data-[highlighted]:bg-brand-primary-subtle data-[highlighted]:text-brand-primary',
       'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className

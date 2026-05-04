@@ -2,24 +2,32 @@ import { forwardRef } from 'react';
 import { cn } from '../lib/cn';
 import { FileIcon, type FileType } from './FileIcon';
 
-export interface FileCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+export interface FileCardProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {
+  /** File type — drives the FileIcon color (file.docx, file.xlsx, etc.). */
   type: FileType;
+  /** File name shown as the primary label. */
   name: string;
+  /** Optional meta line (date, size, etc.) shown below the name. */
   meta?: React.ReactNode;
+  /** Optional trailing slot at the right edge (badge, button, etc.). */
   trailing?: React.ReactNode;
+  /** Force <a> rendering even without href. */
   asLink?: boolean;
+  /** When provided, renders as an <a> with this href. */
   href?: string;
 }
 
-export const FileCard = forwardRef<HTMLDivElement, FileCardProps>(
+export const FileCard = forwardRef<HTMLElement, FileCardProps>(
   ({ className, type, name, meta, trailing, asLink, href, onClick, ...props }, ref) => {
     const interactive = Boolean(asLink || href || onClick);
-    const Comp: any = asLink || href ? 'a' : 'div';
+    const renderLink = Boolean(asLink || href);
+    const Comp = renderLink ? 'a' : 'div';
+    const linkProps = renderLink ? { href } : {};
 
     return (
       <Comp
-        ref={ref}
-        href={href}
+        ref={ref as React.Ref<HTMLAnchorElement & HTMLDivElement>}
+        {...linkProps}
         onClick={onClick}
         className={cn(
           'flex items-center gap-3 rounded-polaris-md bg-surface-raised border border-surface-border p-3',
@@ -31,9 +39,9 @@ export const FileCard = forwardRef<HTMLDivElement, FileCardProps>(
       >
         <FileIcon type={type} size="md" />
         <div className="flex-1 min-w-0">
-          <div className="text-polaris-body-sm font-medium text-text-primary truncate">{name}</div>
+          <div className="text-polaris-body-sm font-medium text-fg-primary truncate">{name}</div>
           {meta && (
-            <div className="text-polaris-caption text-text-muted truncate mt-0.5">{meta}</div>
+            <div className="text-polaris-caption text-fg-muted truncate mt-0.5">{meta}</div>
           )}
         </div>
         {trailing && <div className="shrink-0">{trailing}</div>}

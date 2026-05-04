@@ -94,7 +94,7 @@ export default function Components() {
     <div className="max-w-6xl mx-auto px-6 py-10">
       <header className="mb-10 pb-4 border-b border-surface-border">
         <h1 className="text-polaris-heading-lg mb-1">Tier 0 Components</h1>
-        <p className="text-polaris-body-sm text-text-muted">
+        <p className="text-polaris-body-sm text-fg-muted">
           12개 컴포넌트의 variant·상태·조합을 한 페이지에서 검증
         </p>
       </header>
@@ -137,7 +137,7 @@ export default function Components() {
               <CardDescription>2026년 1분기 매출 및 비용 분석 자료</CardDescription>
             </CardHeader>
             <CardBody>
-              <p className="text-polaris-body-sm text-text-secondary">
+              <p className="text-polaris-body-sm text-fg-secondary">
                 NOVA가 자동 생성한 요약: 전 분기 대비 매출 12% 증가, 영업이익 8% 증가.
               </p>
             </CardBody>
@@ -152,7 +152,7 @@ export default function Components() {
               <CardDescription>최근 활동 기반</CardDescription>
             </CardHeader>
             <CardBody>
-              <ul className="space-y-1.5 text-polaris-body-sm text-text-secondary">
+              <ul className="space-y-1.5 text-polaris-body-sm text-fg-secondary">
                 <li>• 회의록을 한 장 분량으로 요약</li>
                 <li>• 보고서 표지 이미지 생성</li>
                 <li>• 영문 번역 초안 작성</li>
@@ -257,17 +257,17 @@ export default function Components() {
         <div className="flex items-end gap-3 flex-wrap">
           <div className="flex flex-col items-center gap-1">
             <FileIcon type="docx" size="sm" />
-            <span className="text-polaris-caption text-text-muted">sm</span>
+            <span className="text-polaris-caption text-fg-muted">sm</span>
           </div>
           {(['docx', 'xlsx', 'pptx', 'pdf', 'hwp'] as const).map((t) => (
             <div key={t} className="flex flex-col items-center gap-1">
               <FileIcon type={t} size="md" />
-              <span className="text-polaris-caption text-text-muted">{t}</span>
+              <span className="text-polaris-caption text-fg-muted">{t}</span>
             </div>
           ))}
           <div className="flex flex-col items-center gap-1">
             <FileIcon type="docx" size="lg" />
-            <span className="text-polaris-caption text-text-muted">lg</span>
+            <span className="text-polaris-caption text-fg-muted">lg</span>
           </div>
         </div>
       </Section>
@@ -294,8 +294,8 @@ export default function Components() {
             }}
           />
           {submitted && (
-            <p className="text-polaris-caption text-text-muted mt-2">
-              마지막 요청: <span className="text-text-primary">{submitted}</span>
+            <p className="text-polaris-caption text-fg-muted mt-2">
+              마지막 요청: <span className="text-fg-primary">{submitted}</span>
             </p>
           )}
         </div>
@@ -355,7 +355,7 @@ export default function Components() {
       <Section title="15. Select (Tier 1)">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
           <div>
-            <label className="text-polaris-body-sm font-medium text-text-primary mb-1.5 block">정렬</label>
+            <label className="text-polaris-body-sm font-medium text-fg-primary mb-1.5 block">정렬</label>
             <Select defaultValue="recent">
               <SelectTrigger>
                 <SelectValue placeholder="정렬 기준 선택" />
@@ -371,7 +371,7 @@ export default function Components() {
             </Select>
           </div>
           <div>
-            <label className="text-polaris-body-sm font-medium text-text-primary mb-1.5 block">파일 형식</label>
+            <label className="text-polaris-body-sm font-medium text-fg-primary mb-1.5 block">파일 형식</label>
             <Select>
               <SelectTrigger>
                 <SelectValue placeholder="형식 선택" />
@@ -393,10 +393,10 @@ export default function Components() {
           <Sidebar width="14rem">
             <SidebarHeader>
               <div className="flex items-center gap-2">
-                <span className="inline-flex h-8 w-8 rounded-polaris-md bg-brand-primary text-text-on-brand items-center justify-center font-bold text-polaris-body-sm">P</span>
+                <span className="inline-flex h-8 w-8 rounded-polaris-md bg-brand-primary text-fg-on-brand items-center justify-center font-bold text-polaris-body-sm">P</span>
                 <div className="min-w-0">
                   <div className="text-polaris-body-sm font-semibold truncate">Polaris Office</div>
-                  <div className="text-polaris-caption text-text-muted truncate">Hae-Seok Lee</div>
+                  <div className="text-polaris-caption text-fg-muted truncate">Hae-Seok Lee</div>
                 </div>
               </div>
             </SidebarHeader>
@@ -413,10 +413,10 @@ export default function Components() {
               </SidebarSection>
             </SidebarBody>
             <SidebarFooter>
-              <div className="text-polaris-caption text-text-muted">크레딧 6,805</div>
+              <div className="text-polaris-caption text-fg-muted">크레딧 6,805</div>
             </SidebarFooter>
           </Sidebar>
-          <div className="flex-1 bg-surface-canvas p-4 text-polaris-body-sm text-text-muted">
+          <div className="flex-1 bg-surface-canvas p-4 text-polaris-body-sm text-fg-muted">
             메인 영역 — 활성 항목(홈)이 brand.primary.subtle 배경으로 강조됩니다.
           </div>
         </div>
@@ -426,13 +426,13 @@ export default function Components() {
         <Card className="overflow-hidden !p-0">
           <Navbar className="border-b-0">
             <NavbarBrand>
-              <span className="inline-flex h-7 w-7 rounded-polaris-md bg-brand-primary text-text-on-brand items-center justify-center font-bold text-polaris-caption">P</span>
+              <span className="inline-flex h-7 w-7 rounded-polaris-md bg-brand-primary text-fg-on-brand items-center justify-center font-bold text-polaris-caption">P</span>
               <span className="text-polaris-heading-sm font-semibold">Polaris Office</span>
             </NavbarBrand>
             <NavbarNav>
               <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium bg-brand-primary-subtle text-brand-primary">홈</a>
-              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-text-secondary hover:bg-brand-primary-subtle">드라이브</a>
-              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-text-secondary hover:bg-brand-primary-subtle">NOVA</a>
+              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-fg-secondary hover:bg-brand-primary-subtle">드라이브</a>
+              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-fg-secondary hover:bg-brand-primary-subtle">NOVA</a>
             </NavbarNav>
             <NavbarActions>
               <SimpleTooltip label="알림" side="bottom">
@@ -500,7 +500,7 @@ export default function Components() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-10">
-      <h2 className="text-polaris-heading-md mb-4 text-text-primary">{title}</h2>
+      <h2 className="text-polaris-heading-md mb-4 text-fg-primary">{title}</h2>
       {children}
     </section>
   );

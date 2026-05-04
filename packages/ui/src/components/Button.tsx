@@ -9,12 +9,12 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-brand-primary text-text-on-brand hover:bg-brand-primary-hover',
-        secondary: 'bg-brand-secondary text-text-on-brand hover:bg-brand-secondary-hover',
+        primary: 'bg-brand-primary text-fg-on-brand hover:bg-brand-primary-hover',
+        secondary: 'bg-brand-secondary text-fg-on-brand hover:bg-brand-secondary-hover',
         outline:
-          'bg-surface-raised text-text-primary border border-surface-border-strong hover:bg-brand-primary-subtle',
-        ghost: 'bg-transparent text-text-primary hover:bg-brand-primary-subtle',
-        danger: 'bg-status-danger text-text-on-brand hover:opacity-90',
+          'bg-surface-raised text-fg-primary border border-surface-border-strong hover:bg-brand-primary-subtle',
+        ghost: 'bg-transparent text-fg-primary hover:bg-brand-primary-subtle',
+        danger: 'bg-status-danger text-fg-on-brand hover:opacity-90',
       },
       size: {
         sm: 'text-polaris-body-sm h-8 px-3',
@@ -32,7 +32,9 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
+  /** Render the underlying element provided as children (e.g. <Link>) instead of <button>. */
   asChild?: boolean;
+  /** Show a spinner before the children and disable interaction. */
   loading?: boolean;
 }
 

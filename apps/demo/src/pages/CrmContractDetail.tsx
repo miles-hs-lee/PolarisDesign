@@ -66,12 +66,12 @@ export default function CrmContractDetail() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
       {/* Breadcrumb */}
-      <nav className="text-polaris-body-sm text-text-muted flex items-center gap-1.5 mb-3" aria-label="Breadcrumb">
+      <nav className="text-polaris-body-sm text-fg-muted flex items-center gap-1.5 mb-3" aria-label="Breadcrumb">
         <span>영업관리</span>
         <ChevronRight className="h-4 w-4" aria-hidden="true" />
         <span>계약</span>
         <ChevronRight className="h-4 w-4" aria-hidden="true" />
-        <span className="text-text-primary">CTR-2026-0413</span>
+        <span className="text-fg-primary">CTR-2026-0413</span>
       </nav>
 
       {/* Page header */}
@@ -80,10 +80,10 @@ export default function CrmContractDetail() {
           <div className="flex items-center gap-2 mb-2 flex-wrap">
             <Badge variant="warning">결재 진행</Badge>
             <Badge variant="neutral">신규</Badge>
-            <span className="text-polaris-caption text-text-muted">CTR-2026-0413</span>
+            <span className="text-polaris-caption text-fg-muted">CTR-2026-0413</span>
           </div>
           <h1 className="text-polaris-heading-lg mb-1">㈜핸디소프트 통합 라이선스 계약</h1>
-          <p className="text-polaris-body-sm text-text-secondary">
+          <p className="text-polaris-body-sm text-fg-secondary">
             2026 회계연도 통합 라이선스 갱신 · 책정 금액 ₩148,500,000
           </p>
         </div>
@@ -131,8 +131,8 @@ export default function CrmContractDetail() {
                 </span>
                 <div className="flex-1">
                   <div className="text-polaris-body-lg font-semibold">㈜핸디소프트</div>
-                  <div className="text-polaris-body-sm text-text-secondary mb-3">대규모 SI · 임직원 약 1,200명 · 사업자번호 220-81-XXXXX</div>
-                  <div className="flex flex-wrap gap-x-6 gap-y-1.5 text-polaris-body-sm text-text-secondary">
+                  <div className="text-polaris-body-sm text-fg-secondary mb-3">대규모 SI · 임직원 약 1,200명 · 사업자번호 220-81-XXXXX</div>
+                  <div className="flex flex-wrap gap-x-6 gap-y-1.5 text-polaris-body-sm text-fg-secondary">
                     <span className="inline-flex items-center gap-1.5"><User className="h-4 w-4" aria-hidden="true" /> 김민호 부장 (구매팀)</span>
                     <span className="inline-flex items-center gap-1.5"><Phone className="h-4 w-4" aria-hidden="true" /> 02-1234-5678</span>
                     <span className="inline-flex items-center gap-1.5"><Mail className="h-4 w-4" aria-hidden="true" /> minho.kim@handysoft.example</span>
@@ -171,21 +171,21 @@ export default function CrmContractDetail() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="text-polaris-body-sm font-semibold">{a.who}</span>
-                            <span className="text-polaris-caption text-text-muted">{a.when}</span>
+                            <span className="text-polaris-caption text-fg-muted">{a.when}</span>
                           </div>
-                          <p className="text-polaris-body-sm text-text-secondary mt-0.5">{a.text}</p>
+                          <p className="text-polaris-body-sm text-fg-secondary mt-0.5">{a.text}</p>
                         </div>
                       </li>
                     ))}
                   </ul>
                 </TabsContent>
                 <TabsContent value="comments">
-                  <div className="text-polaris-body-sm text-text-muted mt-2 flex items-center gap-2">
+                  <div className="text-polaris-body-sm text-fg-muted mt-2 flex items-center gap-2">
                     <MessageSquare className="h-4 w-4" aria-hidden="true" /> 아직 코멘트가 없습니다.
                   </div>
                 </TabsContent>
                 <TabsContent value="related">
-                  <div className="text-polaris-body-sm text-text-muted mt-2">연관 계약 0건</div>
+                  <div className="text-polaris-body-sm text-fg-muted mt-2">연관 계약 0건</div>
                 </TabsContent>
               </Tabs>
             </CardBody>
@@ -228,7 +228,7 @@ export default function CrmContractDetail() {
           <Card>
             <CardBody>
               <h2 className="text-polaris-heading-sm mb-3">계약 종료</h2>
-              <p className="text-polaris-body-sm text-text-secondary mb-4">
+              <p className="text-polaris-body-sm text-fg-secondary mb-4">
                 계약을 취소하거나 폐기합니다. 결재가 진행 중이면 결재선에도 통보됩니다.
               </p>
               <Dialog>
@@ -279,11 +279,11 @@ function Field({
 }) {
   return (
     <div>
-      <dt className="text-polaris-caption text-text-muted flex items-center gap-1.5 mb-1">
+      <dt className="text-polaris-caption text-fg-muted flex items-center gap-1.5 mb-1">
         <Icon className="h-3.5 w-3.5" aria-hidden="true" />
         {label}
       </dt>
-      <dd className="text-polaris-body-sm text-text-primary font-medium">{value}</dd>
+      <dd className="text-polaris-body-sm text-fg-primary font-medium">{value}</dd>
     </div>
   );
 }
@@ -298,7 +298,7 @@ function TimelineRow({ step, isLast }: { step: typeof TIMELINE[number]; isLast: 
             'inline-flex h-7 w-7 items-center justify-center rounded-polaris-full',
             step.status === 'done' && 'bg-status-success/15 text-status-success',
             step.status === 'current' && 'bg-status-warning/20 text-status-warning',
-            step.status === 'pending' && 'bg-neutral-100 text-text-muted'
+            step.status === 'pending' && 'bg-neutral-100 text-fg-muted'
           )}
         >
           <Icon className="h-4 w-4" aria-hidden="true" />
@@ -310,7 +310,7 @@ function TimelineRow({ step, isLast }: { step: typeof TIMELINE[number]; isLast: 
           <span
             className={cn(
               'text-polaris-body-sm font-semibold',
-              step.status === 'pending' ? 'text-text-muted' : 'text-text-primary'
+              step.status === 'pending' ? 'text-fg-muted' : 'text-fg-primary'
             )}
           >
             {step.label}
@@ -318,7 +318,7 @@ function TimelineRow({ step, isLast }: { step: typeof TIMELINE[number]; isLast: 
           {step.status === 'current' && <Badge variant="warning">진행 중</Badge>}
         </div>
         {(step.date || step.by) && (
-          <div className="text-polaris-caption text-text-muted mt-0.5">
+          <div className="text-polaris-caption text-fg-muted mt-0.5">
             {step.date && <span>{step.date}</span>}
             {step.date && step.by && <span> · </span>}
             {step.by && <span>{step.by}</span>}
@@ -344,8 +344,8 @@ function ApproverRow({
         <AvatarFallback>{name.slice(0, 1)}</AvatarFallback>
       </Avatar>
       <div className="flex-1 min-w-0">
-        <div className="text-polaris-body-sm font-medium text-text-primary truncate">{name}</div>
-        <div className="text-polaris-caption text-text-muted truncate">{role}</div>
+        <div className="text-polaris-body-sm font-medium text-fg-primary truncate">{name}</div>
+        <div className="text-polaris-caption text-fg-muted truncate">{role}</div>
       </div>
       {status === 'done' && <Badge variant="success">완료</Badge>}
       {status === 'current' && <Badge variant="warning">진행</Badge>}

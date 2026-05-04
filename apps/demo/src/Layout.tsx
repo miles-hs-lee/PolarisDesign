@@ -28,11 +28,11 @@ export function Layout() {
   return (
     <TooltipProvider delayDuration={200}>
     <ToastProvider swipeDirection="right">
-      <div className="min-h-screen bg-surface-canvas text-text-primary font-polaris">
+      <div className="min-h-screen bg-surface-canvas text-fg-primary font-polaris">
         <header className="sticky top-0 z-30 bg-surface-raised/90 backdrop-blur border-b border-surface-border">
           <div className="max-w-6xl mx-auto px-6 h-14 flex items-center gap-6">
             <NavLink to="/" className="flex items-center gap-2 shrink-0">
-              <span className="inline-flex h-7 w-7 rounded-polaris-md bg-brand-primary text-text-on-brand items-center justify-center text-polaris-caption font-bold">P</span>
+              <span className="inline-flex h-7 w-7 rounded-polaris-md bg-brand-primary text-fg-on-brand items-center justify-center text-polaris-caption font-bold">P</span>
               <span className="text-polaris-heading-sm font-semibold">Polaris UI</span>
               <Badge variant="secondary" className="hidden sm:inline-flex">Demo</Badge>
             </NavLink>
@@ -45,7 +45,7 @@ export function Layout() {
                   className={({ isActive }) =>
                     cn(
                       'px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium whitespace-nowrap',
-                      'text-text-secondary hover:bg-brand-primary-subtle hover:text-text-primary',
+                      'text-fg-secondary hover:bg-brand-primary-subtle hover:text-fg-primary',
                       isActive && 'bg-brand-primary-subtle text-brand-primary'
                     )
                   }
@@ -55,7 +55,7 @@ export function Layout() {
               ))}
               <a
                 href={swatchHref}
-                className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-text-secondary hover:bg-brand-primary-subtle hover:text-text-primary whitespace-nowrap"
+                className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-fg-secondary hover:bg-brand-primary-subtle hover:text-fg-primary whitespace-nowrap"
               >
                 Tokens
               </a>
@@ -71,7 +71,7 @@ export function Layout() {
         </main>
 
         <footer className="border-t border-surface-border mt-16">
-          <div className="max-w-6xl mx-auto px-6 py-8 text-polaris-caption text-text-muted flex flex-wrap items-center justify-between gap-3">
+          <div className="max-w-6xl mx-auto px-6 py-8 text-polaris-caption text-fg-muted flex flex-wrap items-center justify-between gap-3">
             <div>Polaris Design System · v0.0.1</div>
             <a
               href="https://github.com/miles-hs-lee/PolarisDesign"

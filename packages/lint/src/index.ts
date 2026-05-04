@@ -3,6 +3,7 @@ import tsParser from '@typescript-eslint/parser';
 import noHardcodedColor from './rules/no-hardcoded-color';
 import noArbitraryTailwind from './rules/no-arbitrary-tailwind';
 import noDirectFontFamily from './rules/no-direct-font-family';
+import preferPolarisComponent from './rules/prefer-polaris-component';
 
 const meta = {
   name: '@polaris/lint',
@@ -13,6 +14,7 @@ const rules = {
   'no-hardcoded-color': noHardcodedColor,
   'no-arbitrary-tailwind': noArbitraryTailwind,
   'no-direct-font-family': noDirectFontFamily,
+  'prefer-polaris-component': preferPolarisComponent,
 } as const;
 
 const plugin: ESLint.Plugin = {
@@ -36,6 +38,7 @@ const recommended: Linter.Config[] = [
       '@polaris/no-hardcoded-color': 'error',
       '@polaris/no-arbitrary-tailwind': 'error',
       '@polaris/no-direct-font-family': 'error',
+      '@polaris/prefer-polaris-component': 'error',
     },
   },
 ];

@@ -24,7 +24,7 @@ prop이나 variants를 임의로 추가하지 말 것. 부족하다고 느끼면
 ### 3. 없다면 — 인라인으로 만들되 토큰만 사용
 
 이 프로젝트에서 한 번만 쓰는 단순 컴포넌트라면 로컬 파일에 만들어도 됩니다. 단:
-- 색상 → `bg-brand-*`, `text-text-*`, `border-surface-*` 등 토큰 클래스만
+- 색상 → `bg-brand-*`, `text-fg-*`, `border-surface-*` 등 토큰 클래스만
 - 폰트 → `font-polaris`, `text-polaris-heading-md` 등
 - 스페이싱 → Tailwind 기본 (`p-4`, `gap-2`)
 - 반경/그림자 → `rounded-polaris-*`, `shadow-polaris-*`

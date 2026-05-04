@@ -11,7 +11,7 @@ export const DropdownMenuRadioGroup = DropdownPrimitive.RadioGroup;
 export const DropdownMenuSub = DropdownPrimitive.Sub;
 
 const itemBase =
-  'relative flex cursor-pointer select-none items-center gap-2 rounded-polaris-sm px-2.5 py-1.5 text-polaris-body-sm font-polaris text-text-primary outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-brand-primary-subtle data-[highlighted]:text-brand-primary';
+  'relative flex cursor-pointer select-none items-center gap-2 rounded-polaris-sm px-2.5 py-1.5 text-polaris-body-sm font-polaris text-fg-primary outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-brand-primary-subtle data-[highlighted]:text-brand-primary';
 
 export const DropdownMenuContent = forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Content>,
@@ -23,7 +23,7 @@ export const DropdownMenuContent = forwardRef<
       sideOffset={sideOffset}
       className={cn(
         'z-50 min-w-[10rem] overflow-hidden rounded-polaris-md border border-surface-border bg-surface-raised p-1 shadow-polaris-md',
-        'text-text-primary',
+        'text-fg-primary',
         className
       )}
       {...props}
@@ -32,9 +32,15 @@ export const DropdownMenuContent = forwardRef<
 ));
 DropdownMenuContent.displayName = 'DropdownMenuContent';
 
+export interface DropdownMenuItemProps
+  extends React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Item> {
+  /** Render the item with status-danger color (for delete / destructive actions). */
+  destructive?: boolean;
+}
+
 export const DropdownMenuItem = forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Item> & { destructive?: boolean }
+  DropdownMenuItemProps
 >(({ className, destructive, ...props }, ref) => (
   <DropdownPrimitive.Item
     ref={ref}
@@ -54,7 +60,7 @@ export const DropdownMenuLabel = forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownPrimitive.Label
     ref={ref}
-    className={cn('px-2.5 py-1.5 text-polaris-caption font-semibold uppercase tracking-wider text-text-muted', className)}
+    className={cn('px-2.5 py-1.5 text-polaris-caption font-semibold uppercase tracking-wider text-fg-muted', className)}
     {...props}
   />
 ));

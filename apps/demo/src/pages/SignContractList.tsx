@@ -133,7 +133,7 @@ export default function SignContractList() {
         <div className="flex items-end justify-between mb-2 flex-wrap gap-3">
           <div>
             <h1 className="text-polaris-heading-lg mb-1">전자계약</h1>
-            <p className="text-polaris-body-sm text-text-secondary">
+            <p className="text-polaris-body-sm text-fg-secondary">
               발송한 계약서를 한 곳에서 관리하고 서명 현황을 확인하세요.
             </p>
           </div>
@@ -156,7 +156,7 @@ export default function SignContractList() {
         <CardBody className="!py-4">
           <div className="flex flex-col md:flex-row gap-3 md:items-center">
             <div className="relative flex-1 min-w-0">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted pointer-events-none" aria-hidden="true" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-fg-muted pointer-events-none" aria-hidden="true" />
               <Input
                 placeholder="계약명, 거래처, 이메일로 검색"
                 value={query}
@@ -168,23 +168,23 @@ export default function SignContractList() {
             <div className="flex gap-2 overflow-x-auto">
               {FILTERS.map((f) => {
                 const active = filter === f.value;
+                const count = f.value === 'all' ? stats.all : stats[f.value as keyof typeof stats];
                 return (
-                  <button
+                  <Button
                     key={f.value}
+                    variant={active ? 'primary' : 'ghost'}
+                    size="sm"
                     onClick={() => setFilter(f.value)}
                     className={cn(
-                      'inline-flex items-center gap-1.5 rounded-polaris-full px-3 py-1.5 text-polaris-body-sm font-medium whitespace-nowrap transition-colors',
-                      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary',
-                      active
-                        ? 'bg-brand-primary text-text-on-brand'
-                        : 'bg-surface-sunken text-text-secondary hover:text-text-primary'
+                      'rounded-polaris-full whitespace-nowrap',
+                      !active && 'bg-surface-sunken hover:bg-surface-sunken hover:text-fg-primary'
                     )}
                   >
                     {f.label}
-                    <span className={cn('text-polaris-caption', active ? 'opacity-90' : 'text-text-muted')}>
-                      {f.value === 'all' ? stats.all : stats[f.value as keyof typeof stats]}
+                    <span className={cn('text-polaris-caption', active ? 'opacity-90' : 'text-fg-muted')}>
+                      {count}
                     </span>
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -196,8 +196,8 @@ export default function SignContractList() {
       {visible.length === 0 ? (
         <Card>
           <CardBody className="py-12 text-center">
-            <Inbox className="h-10 w-10 text-text-muted mx-auto mb-3" aria-hidden="true" />
-            <p className="text-polaris-body-sm text-text-secondary">조건에 맞는 계약서가 없습니다.</p>
+            <Inbox className="h-10 w-10 text-fg-muted mx-auto mb-3" aria-hidden="true" />
+            <p className="text-polaris-body-sm text-fg-secondary">조건에 맞는 계약서가 없습니다.</p>
           </CardBody>
         </Card>
       ) : (
@@ -208,7 +208,7 @@ export default function SignContractList() {
         </ul>
       )}
 
-      <p className="text-polaris-caption text-text-muted mt-6 text-center">
+      <p className="text-polaris-caption text-fg-muted mt-6 text-center">
         {visible.length} / {CONTRACTS.length} 건 표시
       </p>
     </div>
@@ -227,7 +227,7 @@ function StatCard({
   tone: 'neutral' | 'info' | 'warning' | 'success';
 }) {
   const toneClasses = {
-    neutral: 'bg-neutral-100 text-text-secondary',
+    neutral: 'bg-neutral-100 text-fg-secondary',
     info: 'bg-status-info/15 text-status-info',
     warning: 'bg-status-warning/20 text-status-warning',
     success: 'bg-status-success/15 text-status-success',
@@ -239,8 +239,8 @@ function StatCard({
           <Icon className="h-5 w-5" aria-hidden="true" />
         </span>
         <div className="min-w-0">
-          <div className="text-polaris-caption text-text-muted">{label}</div>
-          <div className="text-polaris-heading-md text-text-primary leading-none mt-0.5">{value}</div>
+          <div className="text-polaris-caption text-fg-muted">{label}</div>
+          <div className="text-polaris-heading-md text-fg-primary leading-none mt-0.5">{value}</div>
         </div>
       </CardBody>
     </Card>
@@ -271,10 +271,10 @@ function ContractRow({ contract: c }: { contract: Contract }) {
               <FileIcon type={c.type} size="md" />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-polaris-body-sm font-semibold text-text-primary truncate">{c.title}</span>
+                  <span className="text-polaris-body-sm font-semibold text-fg-primary truncate">{c.title}</span>
                   {statusBadge}
                 </div>
-                <div className="text-polaris-caption text-text-muted truncate mt-0.5">
+                <div className="text-polaris-caption text-fg-muted truncate mt-0.5">
                   {c.id} · 발송 {c.sentAt} · 마감 {c.dueAt}
                 </div>
               </div>
@@ -285,15 +285,15 @@ function ContractRow({ contract: c }: { contract: Contract }) {
                 <AvatarFallback>{c.counterparty.name.slice(0, 1)}</AvatarFallback>
               </Avatar>
               <div className="min-w-0">
-                <div className="text-polaris-body-sm text-text-primary truncate">{c.counterparty.name}</div>
-                <div className="text-polaris-caption text-text-muted truncate">{c.counterparty.email}</div>
+                <div className="text-polaris-body-sm text-fg-primary truncate">{c.counterparty.name}</div>
+                <div className="text-polaris-caption text-fg-muted truncate">{c.counterparty.email}</div>
               </div>
             </div>
 
             <div className="hidden md:block shrink-0 w-36">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-polaris-caption text-text-muted">서명</span>
-                <span className="text-polaris-caption text-text-secondary font-medium">
+                <span className="text-polaris-caption text-fg-muted">서명</span>
+                <span className="text-polaris-caption text-fg-secondary font-medium">
                   {c.signed} / {c.total}
                 </span>
               </div>

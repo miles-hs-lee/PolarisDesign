@@ -36,6 +36,9 @@ tester.run('no-hardcoded-color', polaris.rules['no-hardcoded-color'], {
     { code: `const c = \`color: var(--polaris-text-primary);\`;` },
     // 2-letter strings starting with # are not colors
     { code: `const id = "#x1";` },
+    // Named color in non-color context is fine
+    { code: `const x = { value: "red" };` },
+    { code: `const x = { fill: "currentColor" };` },
   ],
   invalid: [
     {
@@ -66,6 +69,50 @@ tester.run('no-hardcoded-color', polaris.rules['no-hardcoded-color'], {
       // Multiple violations in one string
       code: `const css = "color: #fff; background: #000;";`,
       errors: [{ messageId: 'hex' }, { messageId: 'hex' }],
+    },
+    {
+      // CSS named color in inline style
+      code: `const style = { color: "red" };`,
+      errors: [{ messageId: 'colorProp' }],
+    },
+    {
+      code: `const style = { backgroundColor: "blue" };`,
+      errors: [{ messageId: 'colorProp' }],
+    },
+    {
+      code: `const style = { fill: "darkslategray" };`,
+      errors: [{ messageId: 'colorProp' }],
+    },
+  ],
+});
+
+tester.run('prefer-polaris-component', polaris.rules['prefer-polaris-component'], {
+  valid: [
+    { code: `const x = <div>hi</div>;` },
+    { code: `import { Button } from '@polaris/ui'; const x = <Button>hi</Button>;` },
+    { code: `const x = <span>hi</span>;` },
+    { code: `const x = <p>hi</p>;` },
+  ],
+  invalid: [
+    {
+      code: `const x = <button>click</button>;`,
+      errors: [{ messageId: 'replace' }],
+    },
+    {
+      code: `const x = <input type="text" />;`,
+      errors: [{ messageId: 'replace' }],
+    },
+    {
+      code: `const x = <textarea />;`,
+      errors: [{ messageId: 'replace' }],
+    },
+    {
+      code: `const x = <select><option>a</option></select>;`,
+      errors: [{ messageId: 'replace' }],
+    },
+    {
+      code: `const x = <dialog>x</dialog>;`,
+      errors: [{ messageId: 'replace' }],
     },
   ],
 });

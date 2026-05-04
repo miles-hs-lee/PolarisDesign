@@ -5,14 +5,14 @@ const styles = {
   fontFamily: 'var(--polaris-font-sans)',
 };
 
-export function GoodButton() {
+export function GoodCard() {
   return (
-    <button
-      className="bg-brand-primary text-text-on-brand p-4 rounded-polaris-md font-polaris hover:bg-brand-primary-hover"
+    <div
+      className="bg-brand-primary text-text-on-brand p-4 rounded-polaris-md font-polaris"
       style={styles}
     >
       Click
-    </button>
+    </div>
   );
 }
 

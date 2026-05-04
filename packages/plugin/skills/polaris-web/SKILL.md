@@ -19,7 +19,7 @@ If no `tailwind.config.ts` or `eslint.config.mjs` exists yet, run `/polaris-init
 
 ### 3. Colors — the most common violation
 Use ONLY these:
-- **Tailwind classes**: `bg-brand-primary`, `text-text-primary`, `border-surface-border`, `bg-status-danger`, `text-file-pdf`, `bg-neutral-100`
+- **Tailwind classes**: `bg-brand-primary`, `text-fg-primary`, `border-surface-border`, `bg-status-danger`, `text-file-pdf`, `bg-neutral-100`
 - **CSS variables**: `var(--polaris-brand-primary)`, `var(--polaris-text-primary)`
 - **TS imports**: `import { brand, status, fileType } from '@polaris/ui/tokens';`
 

@@ -26,11 +26,11 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        info: 'bg-status-info/10 border-status-info text-status-info',
-        success: 'bg-status-success/10 border-status-success text-status-success',
-        warning: 'bg-status-warning/15 border-status-warning text-status-warning',
-        danger: 'bg-status-danger/10 border-status-danger text-status-danger',
-        neutral: 'bg-surface-raised border-surface-border-strong text-text-primary',
+        info: 'bg-status-info/10 border-status-info text-fg-primary',
+        success: 'bg-status-success/10 border-status-success text-fg-primary',
+        warning: 'bg-status-warning/15 border-status-warning text-fg-primary',
+        danger: 'bg-status-danger/10 border-status-danger text-fg-primary',
+        neutral: 'bg-surface-raised border-surface-border-strong text-fg-primary',
       },
     },
     defaultVariants: { variant: 'neutral' },

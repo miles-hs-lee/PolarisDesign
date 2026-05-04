@@ -4,11 +4,13 @@ import { cn } from '../lib/cn';
 
 export interface NovaInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onSubmit'> {
-  /** Called when the user presses Enter or clicks the send button. */
+  /** Called when the user presses Enter or clicks the send button. Empty values are ignored. */
   onSubmit?: (value: string) => void;
   /** Show the sparkle icon at the start. Defaults true. */
   showIcon?: boolean;
+  /** Class applied to the outer rounded container (border / bg / padding). */
   containerClassName?: string;
+  /** Accessible label for the send button. */
   sendLabel?: string;
 }
 
@@ -82,7 +84,7 @@ export const NovaInput = forwardRef<HTMLInputElement, NovaInputProps>(
           placeholder={placeholder}
           disabled={disabled}
           className={cn(
-            'flex-1 bg-transparent border-none outline-none text-polaris-body-sm font-polaris text-text-primary placeholder:text-text-muted py-1 min-w-0',
+            'flex-1 bg-transparent border-none outline-none text-polaris-body-sm font-polaris text-fg-primary placeholder:text-fg-muted py-1 min-w-0',
             className
           )}
           {...props}
@@ -94,7 +96,7 @@ export const NovaInput = forwardRef<HTMLInputElement, NovaInputProps>(
           aria-label={sendLabel}
           className={cn(
             'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-polaris-full',
-            'bg-brand-secondary text-text-on-brand',
+            'bg-brand-secondary text-fg-on-brand',
             'hover:bg-brand-secondary-hover',
             'disabled:opacity-40 disabled:cursor-not-allowed',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas',

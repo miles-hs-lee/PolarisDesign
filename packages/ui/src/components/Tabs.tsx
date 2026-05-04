@@ -27,8 +27,8 @@ export const TabsTrigger = forwardRef<
     ref={ref}
     className={cn(
       'inline-flex items-center justify-center whitespace-nowrap rounded-polaris-sm px-3 py-1.5 text-polaris-body-sm font-medium font-polaris transition-colors',
-      'text-text-secondary hover:text-text-primary',
-      'data-[state=active]:bg-surface-raised data-[state=active]:text-text-primary data-[state=active]:shadow-polaris-xs',
+      'text-fg-secondary hover:text-fg-primary',
+      'data-[state=active]:bg-surface-raised data-[state=active]:text-fg-primary data-[state=active]:shadow-polaris-xs',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary',
       'disabled:opacity-50 disabled:pointer-events-none',
       className

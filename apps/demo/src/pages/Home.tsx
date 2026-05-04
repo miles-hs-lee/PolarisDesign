@@ -35,7 +35,7 @@ export default function Home() {
         <h1 className="text-polaris-display-md mb-3">
           Polaris Design System
         </h1>
-        <p className="text-polaris-body-lg text-text-secondary max-w-2xl">
+        <p className="text-polaris-body-lg text-fg-secondary max-w-2xl">
           바이브코딩옵스로 만들어지는 폴라리스 웹 서비스들의 디자인을 일관되게 만드는 시스템.
           토큰·컴포넌트·린트·Claude Code 플러그인까지 묶어서 모델이 우회 못하게 하는 게 목표.
         </p>
@@ -55,7 +55,7 @@ export default function Home() {
                     <Badge variant="neutral">{card.badge}</Badge>
                   </div>
                   <h3 className="text-polaris-heading-sm mb-1.5">{card.title}</h3>
-                  <p className="text-polaris-body-sm text-text-secondary mb-4">{card.desc}</p>
+                  <p className="text-polaris-body-sm text-fg-secondary mb-4">{card.desc}</p>
                   <span className="inline-flex items-center gap-1 text-polaris-body-sm text-brand-primary">
                     살펴보기 <ArrowRight className="h-4 w-4" aria-hidden="true" />
                   </span>
@@ -77,7 +77,7 @@ export default function Home() {
                 <Badge variant="secondary">Tokens v0.1</Badge>
               </div>
               <h3 className="text-polaris-heading-sm mb-1.5">디자인 토큰 스와치</h3>
-              <p className="text-polaris-body-sm text-text-secondary mb-4">
+              <p className="text-polaris-body-sm text-fg-secondary mb-4">
                 4색 브랜드 팔레트(파랑·초록·주황·빨강)와 NOVA 보라, 시맨틱 상태 컬러, 뉴트럴 12단계, 타이포·반경·그림자까지 한 페이지에서.
               </p>
               <span className="inline-flex items-center gap-1 text-polaris-body-sm text-brand-secondary">
@@ -90,15 +90,15 @@ export default function Home() {
         <Card>
           <CardBody>
             <h3 className="text-polaris-heading-sm mb-3">아키텍처</h3>
-            <ul className="text-polaris-body-sm text-text-secondary space-y-2">
+            <ul className="text-polaris-body-sm text-fg-secondary space-y-2">
               <li>
-                <code className="text-text-primary font-polaris-mono">@polaris/ui</code> — TS 토큰 + CSS 변수 + Tailwind preset + 12개 컴포넌트
+                <code className="text-fg-primary font-polaris-mono">@polaris/ui</code> — TS 토큰 + CSS 변수 + Tailwind preset + 12개 컴포넌트
               </li>
               <li>
-                <code className="text-text-primary font-polaris-mono">@polaris/lint</code> — hex/임의값/직접 font-family 차단 ESLint 룰
+                <code className="text-fg-primary font-polaris-mono">@polaris/lint</code> — hex/임의값/직접 font-family 차단 ESLint 룰
               </li>
               <li>
-                <code className="text-text-primary font-polaris-mono">polaris-design</code> — Claude Code 플러그인 (skill, slash 커맨드, PostToolUse 훅)
+                <code className="text-fg-primary font-polaris-mono">polaris-design</code> — Claude Code 플러그인 (skill, slash 커맨드, PostToolUse 훅)
               </li>
             </ul>
           </CardBody>

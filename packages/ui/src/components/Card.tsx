@@ -30,7 +30,7 @@ export const CardTitle = forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTM
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn('text-polaris-heading-md text-text-primary', className)}
+      className={cn('text-polaris-heading-md text-fg-primary', className)}
       {...props}
     />
   )
@@ -41,7 +41,7 @@ export const CardDescription = forwardRef<HTMLParagraphElement, React.HTMLAttrib
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
-      className={cn('text-polaris-body-sm text-text-secondary', className)}
+      className={cn('text-polaris-body-sm text-fg-secondary', className)}
       {...props}
     />
   )

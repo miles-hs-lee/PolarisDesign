@@ -12,7 +12,7 @@ test('cn merges polaris box-shadow classes', () => {
 
 test('cn keeps polaris font-size classes from being stripped by text-color', () => {
   assert.equal(
-    cn('text-polaris-body-sm', 'text-text-on-brand'),
-    'text-polaris-body-sm text-text-on-brand',
+    cn('text-polaris-body-sm', 'text-fg-on-brand'),
+    'text-polaris-body-sm text-fg-on-brand',
   );
 });

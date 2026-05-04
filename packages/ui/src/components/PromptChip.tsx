@@ -21,7 +21,7 @@ export const PromptChip = forwardRef<HTMLButtonElement, PromptChipProps>(
       className={cn(
         'group inline-flex items-start gap-2 rounded-polaris-lg',
         'bg-surface-raised border border-surface-border px-4 py-3 text-left',
-        'text-polaris-body-sm font-polaris text-text-primary',
+        'text-polaris-body-sm font-polaris text-fg-primary',
         'hover:border-brand-secondary hover:bg-brand-secondary-subtle transition-colors',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas',
         'shadow-polaris-xs',
@@ -33,7 +33,7 @@ export const PromptChip = forwardRef<HTMLButtonElement, PromptChipProps>(
       {icon && (
         <span
           className={cn(
-            'inline-flex h-5 w-5 items-center justify-center text-text-muted shrink-0 mt-0.5',
+            'inline-flex h-5 w-5 items-center justify-center text-fg-muted shrink-0 mt-0.5',
             'group-hover:text-brand-secondary transition-colors'
           )}
           aria-hidden="true"

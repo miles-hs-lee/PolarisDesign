@@ -42,7 +42,10 @@ const polarisPreset: Partial<Config> = {
           'border-strong': 'var(--polaris-surface-border-strong)',
         },
 
-        text: {
+        // Foreground (text) color tokens. Class form: `text-fg-primary`,
+        // `text-fg-on-brand`, etc. We use `fg` instead of `text` to avoid
+        // tailwind-merge confusion with the `text-` font-size utility prefix.
+        fg: {
           primary:    'var(--polaris-text-primary)',
           secondary:  'var(--polaris-text-secondary)',
           muted:      'var(--polaris-text-muted)',

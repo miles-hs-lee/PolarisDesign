@@ -6,7 +6,9 @@ type SidebarContextValue = { collapsed?: boolean };
 const SidebarContext = createContext<SidebarContextValue>({});
 
 export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
+  /** Collapse to icon-only mode (4rem wide). */
   collapsed?: boolean;
+  /** Width when expanded. Defaults to 15rem. */
   width?: string;
 }
 
@@ -64,7 +66,7 @@ export const SidebarSection = forwardRef<HTMLDivElement, SidebarSectionProps>(
     return (
       <div ref={ref} className={cn('py-1.5', className)} {...props}>
         {title && !collapsed && (
-          <div className="px-3 py-1 text-polaris-caption font-semibold uppercase tracking-wider text-text-muted">
+          <div className="px-3 py-1 text-polaris-caption font-semibold uppercase tracking-wider text-fg-muted">
             {title}
           </div>
         )}
@@ -75,28 +77,33 @@ export const SidebarSection = forwardRef<HTMLDivElement, SidebarSectionProps>(
 );
 SidebarSection.displayName = 'SidebarSection';
 
-export interface SidebarItemProps extends React.HTMLAttributes<HTMLElement> {
+export interface SidebarItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Highlight this item as the active route. */
   active?: boolean;
+  /** Render the underlying element provided as children (e.g. <Link>) instead of <button>. */
   asChild?: boolean;
+  /** Icon rendered before the label (typically a 16px lucide icon). */
   icon?: React.ReactNode;
+  /** Label text (or any node) shown next to the icon. */
   label: React.ReactNode;
+  /** Trailing content (badge, count, etc.) shown at the right edge. */
   trailing?: React.ReactNode;
 }
 
-export const SidebarItem = forwardRef<HTMLElement, SidebarItemProps>(
+export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
   ({ className, active, asChild, icon, label, trailing, children, ...props }, ref) => {
     const { collapsed } = useContext(SidebarContext);
-    const Comp: any = asChild ? Slot : 'button';
+    const Comp = asChild ? Slot : 'button';
 
     return (
       <li>
         <Comp
-          ref={ref as any}
+          ref={ref}
           aria-current={active ? 'page' : undefined}
           className={cn(
             'flex w-full items-center gap-2.5 rounded-polaris-md px-2.5 py-1.5',
-            'text-polaris-body-sm font-medium font-polaris text-text-secondary',
-            'hover:bg-brand-primary-subtle hover:text-text-primary transition-colors',
+            'text-polaris-body-sm font-medium font-polaris text-fg-secondary',
+            'hover:bg-brand-primary-subtle hover:text-fg-primary transition-colors',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary',
             active && 'bg-brand-primary-subtle text-brand-primary',
             collapsed && 'justify-center',
