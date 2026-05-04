@@ -32,8 +32,51 @@ import {
   FileIcon,
   FileCard,
   NovaInput,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  SimpleTooltip,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectGroup,
+  Sidebar,
+  SidebarHeader,
+  SidebarBody,
+  SidebarFooter,
+  SidebarSection,
+  SidebarItem,
+  Navbar,
+  NavbarBrand,
+  NavbarNav,
+  NavbarActions,
+  PromptChip,
 } from '@polaris/ui';
-import { Plus, Sparkles } from 'lucide-react';
+import {
+  Plus,
+  Sparkles,
+  MoreHorizontal,
+  Copy,
+  Download,
+  Pencil,
+  Trash2,
+  Search,
+  Image as ImageIcon,
+  FileText,
+  Home,
+  Star,
+  Folder,
+  Trash,
+  Bell,
+  Settings,
+  HelpCircle,
+} from 'lucide-react';
 
 type ToastEntry = { id: number; title: string; description?: string; variant: 'info' | 'success' | 'warning' | 'danger' };
 
@@ -258,7 +301,180 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="12. 폴라리스 화면 모방 (조합 검증)">
+      <Section title="13. DropdownMenu (Tier 1)">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              <MoreHorizontal className="h-4 w-4" /> 더보기
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuLabel>문서 액션</DropdownMenuLabel>
+            <DropdownMenuItem onSelect={() => pushToast('info', '편집 모드로 전환')}>
+              <Pencil className="h-4 w-4" /> 편집
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => pushToast('info', '복제 완료')}>
+              <Copy className="h-4 w-4" /> 복제
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => pushToast('info', '다운로드 시작')}>
+              <Download className="h-4 w-4" /> 다운로드
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem destructive onSelect={() => pushToast('danger', '문서 삭제됨')}>
+              <Trash2 className="h-4 w-4" /> 삭제
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </Section>
+
+      <Section title="14. Tooltip (Tier 1)">
+        <div className="flex flex-wrap gap-3">
+          <SimpleTooltip label="새 문서를 만듭니다">
+            <Button size="sm">
+              <Plus className="h-4 w-4" /> 새 문서
+            </Button>
+          </SimpleTooltip>
+          <SimpleTooltip label="알림 (3개)" side="bottom">
+            <Button variant="ghost" size="sm" aria-label="알림">
+              <Bell className="h-4 w-4" />
+            </Button>
+          </SimpleTooltip>
+          <SimpleTooltip label="설정" side="bottom">
+            <Button variant="ghost" size="sm" aria-label="설정">
+              <Settings className="h-4 w-4" />
+            </Button>
+          </SimpleTooltip>
+          <SimpleTooltip label="도움말 — 자세한 안내는 도움말 센터에서 확인할 수 있습니다." side="right">
+            <Button variant="ghost" size="sm" aria-label="도움말">
+              <HelpCircle className="h-4 w-4" />
+            </Button>
+          </SimpleTooltip>
+        </div>
+      </Section>
+
+      <Section title="15. Select (Tier 1)">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
+          <div>
+            <label className="text-polaris-body-sm font-medium text-text-primary mb-1.5 block">정렬</label>
+            <Select defaultValue="recent">
+              <SelectTrigger>
+                <SelectValue placeholder="정렬 기준 선택" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>기본</SelectLabel>
+                  <SelectItem value="recent">최근 수정순</SelectItem>
+                  <SelectItem value="name">이름순</SelectItem>
+                  <SelectItem value="size">크기순</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <label className="text-polaris-body-sm font-medium text-text-primary mb-1.5 block">파일 형식</label>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="형식 선택" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="docx">DOCX</SelectItem>
+                <SelectItem value="xlsx">XLSX</SelectItem>
+                <SelectItem value="pptx">PPTX</SelectItem>
+                <SelectItem value="pdf">PDF</SelectItem>
+                <SelectItem value="hwp">HWP</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </Section>
+
+      <Section title="16. Sidebar (Tier 1)">
+        <div className="rounded-polaris-lg border border-surface-border overflow-hidden h-96 flex">
+          <Sidebar width="14rem">
+            <SidebarHeader>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex h-8 w-8 rounded-polaris-md bg-brand-primary text-text-on-brand items-center justify-center font-bold text-polaris-body-sm">P</span>
+                <div className="min-w-0">
+                  <div className="text-polaris-body-sm font-semibold truncate">Polaris Office</div>
+                  <div className="text-polaris-caption text-text-muted truncate">Hae-Seok Lee</div>
+                </div>
+              </div>
+            </SidebarHeader>
+            <SidebarBody>
+              <SidebarSection>
+                <SidebarItem icon={<Home className="h-4 w-4" />} label="홈" active />
+                <SidebarItem icon={<Folder className="h-4 w-4" />} label="폴라리스 드라이브" />
+                <SidebarItem icon={<Sparkles className="h-4 w-4" />} label="NOVA" trailing={<Badge variant="secondary">AI</Badge>} />
+              </SidebarSection>
+              <SidebarSection title="문서">
+                <SidebarItem icon={<FileText className="h-4 w-4" />} label="공유 문서" />
+                <SidebarItem icon={<Star className="h-4 w-4" />} label="중요 문서" trailing={<Badge variant="neutral">12</Badge>} />
+                <SidebarItem icon={<Trash className="h-4 w-4" />} label="휴지통" />
+              </SidebarSection>
+            </SidebarBody>
+            <SidebarFooter>
+              <div className="text-polaris-caption text-text-muted">크레딧 6,805</div>
+            </SidebarFooter>
+          </Sidebar>
+          <div className="flex-1 bg-surface-canvas p-4 text-polaris-body-sm text-text-muted">
+            메인 영역 — 활성 항목(홈)이 brand.primary.subtle 배경으로 강조됩니다.
+          </div>
+        </div>
+      </Section>
+
+      <Section title="17. Navbar (Tier 1)">
+        <Card className="overflow-hidden !p-0">
+          <Navbar className="border-b-0">
+            <NavbarBrand>
+              <span className="inline-flex h-7 w-7 rounded-polaris-md bg-brand-primary text-text-on-brand items-center justify-center font-bold text-polaris-caption">P</span>
+              <span className="text-polaris-heading-sm font-semibold">Polaris Office</span>
+            </NavbarBrand>
+            <NavbarNav>
+              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium bg-brand-primary-subtle text-brand-primary">홈</a>
+              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-text-secondary hover:bg-brand-primary-subtle">드라이브</a>
+              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-text-secondary hover:bg-brand-primary-subtle">NOVA</a>
+            </NavbarNav>
+            <NavbarActions>
+              <SimpleTooltip label="알림" side="bottom">
+                <Button variant="ghost" size="sm" aria-label="알림">
+                  <Bell className="h-4 w-4" />
+                </Button>
+              </SimpleTooltip>
+              <SimpleTooltip label="설정" side="bottom">
+                <Button variant="ghost" size="sm" aria-label="설정">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </SimpleTooltip>
+              <Avatar size="sm"><AvatarFallback>이</AvatarFallback></Avatar>
+            </NavbarActions>
+          </Navbar>
+        </Card>
+      </Section>
+
+      <Section title="18. PromptChip (Tier 1, 폴라리스 고유)">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <PromptChip
+            icon={<Search className="h-4 w-4" />}
+            onClick={() => pushToast('info', '검색 시작', '2025년 소비자 트렌드')}
+          >
+            2025년 소비자 트렌드를 산업별로 심층 조사해줘
+          </PromptChip>
+          <PromptChip
+            icon={<FileText className="h-4 w-4" />}
+            onClick={() => pushToast('info', '요약 시작')}
+          >
+            회의의 주요 내용을 한 장 분량으로 간결하게 요약해 줘
+          </PromptChip>
+          <PromptChip
+            icon={<ImageIcon className="h-4 w-4" />}
+            onClick={() => pushToast('info', '이미지 생성 시작')}
+          >
+            보고서 주제에 맞는 키 비주얼 이미지를 만들어줘
+          </PromptChip>
+        </div>
+      </Section>
+
+      <Section title="19. 폴라리스 화면 모방 (조합 검증)">
         <Card>
           <CardHeader>
             <CardTitle>최근 문서</CardTitle>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { ToastProvider, ToastViewport, Button, Badge, cn } from '@polaris/ui';
+import { ToastProvider, ToastViewport, TooltipProvider, Button, Badge, cn } from '@polaris/ui';
 
 const NAV = [
   { to: '/', label: 'Home', end: true },
@@ -26,6 +26,7 @@ export function Layout() {
   const swatchHref = `${import.meta.env.BASE_URL}swatches.html`;
 
   return (
+    <TooltipProvider delayDuration={200}>
     <ToastProvider swipeDirection="right">
       <div className="min-h-screen bg-surface-canvas text-text-primary font-polaris">
         <header className="sticky top-0 z-30 bg-surface-raised/90 backdrop-blur border-b border-surface-border">
@@ -86,5 +87,6 @@ export function Layout() {
         <ToastViewport />
       </div>
     </ToastProvider>
+    </TooltipProvider>
   );
 }
