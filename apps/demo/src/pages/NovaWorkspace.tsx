@@ -45,6 +45,50 @@ import {
 type Length = 'short' | 'medium' | 'long';
 type Tone = 'formal' | 'friendly' | 'concise';
 
+// Deterministic pseudo-random so star positions are stable across renders
+// and reloads (no Math.random at runtime).
+const pseudo = (n: number) => {
+  const v = Math.sin(n * 12.9898) * 43758.5453;
+  return v - Math.floor(v);
+};
+const STARS = Array.from({ length: 60 }, (_, i) => ({
+  x: pseudo(i + 1) * 1200,
+  y: pseudo(i * 2 + 7) * 520,
+  r: pseudo(i * 3 + 13) * 1.4 + 0.3,
+  o: pseudo(i * 5 + 19) * 0.5 + 0.35,
+}));
+
+function NovaHeroBackground() {
+  return (
+    <div
+      aria-hidden="true"
+      className="absolute inset-0 -z-10 overflow-hidden pointer-events-none"
+    >
+      {/* Base gradient — diagonal purple → canvas → blue */}
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-secondary-subtle via-surface-canvas to-brand-primary-subtle" />
+
+      {/* Glow orbs — soft nebula-like blobs */}
+      <div className="absolute top-0 left-1/4 h-72 w-72 rounded-polaris-full bg-brand-secondary opacity-25 blur-3xl" />
+      <div className="absolute top-1/3 right-1/5 h-72 w-72 rounded-polaris-full bg-polaris-blue opacity-15 blur-3xl" />
+      <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-polaris-full bg-polaris-purple opacity-20 blur-3xl" />
+
+      {/* Starfield */}
+      <svg
+        className="absolute inset-0 w-full h-full text-brand-secondary"
+        viewBox="0 0 1200 520"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        {STARS.map((s, i) => (
+          <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="currentColor" opacity={s.o} />
+        ))}
+      </svg>
+
+      {/* Bottom fade so the hero blends into the canvas before recent responses */}
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-surface-canvas" />
+    </div>
+  );
+}
+
 const PROMPT_TEMPLATES = [
   { icon: Search, label: '트렌드 조사', prompt: '2025년 소비자 트렌드를 산업별로 심층 조사해 줘' },
   { icon: FileText, label: '회의록 요약', prompt: '회의의 주요 내용을 한 장 분량으로 간결하게 요약해 줘' },
@@ -101,132 +145,136 @@ export default function NovaWorkspace() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10">
-      {/* Hero */}
-      <header className="text-center mb-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-polaris-full bg-brand-secondary-subtle text-brand-secondary text-polaris-caption font-semibold mb-4">
-          <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> AI · NOVA
-        </div>
-        <h1 className="text-polaris-display-md mb-3">NOVA 워크스페이스</h1>
-        <p className="text-polaris-body-lg text-fg-secondary max-w-2xl mx-auto">
-          AI에게 무엇이든 묻고 결과를 한 곳에 모아보세요. 응답은 길이/톤을 조절할 수 있고,
-          자주 쓰는 프롬프트는 저장됩니다.
-        </p>
-      </header>
+    <>
+      {/* Hero band — gradient + nebula orbs + starfield, edge-to-edge */}
+      <section className="relative isolate">
+        <NovaHeroBackground />
+        <div className="max-w-5xl mx-auto px-6 pt-12 pb-16">
+          <header className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-polaris-full bg-brand-secondary-subtle text-brand-secondary text-polaris-caption font-semibold mb-4 backdrop-blur-sm">
+              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> AI · NOVA
+            </div>
+            <h1 className="text-polaris-display-md mb-3">NOVA 워크스페이스</h1>
+            <p className="text-polaris-body-lg text-fg-secondary max-w-2xl mx-auto">
+              AI에게 무엇이든 묻고 결과를 한 곳에 모아보세요. 응답은 길이/톤을 조절할 수 있고,
+              자주 쓰는 프롬프트는 저장됩니다.
+            </p>
+          </header>
 
-      {/* NovaInput hero */}
-      <div className="mb-6">
-        <NovaInput
-          onSubmit={handleSubmit}
-          placeholder="NOVA에게 무엇이든 물어보기"
-        />
-      </div>
+          <div className="mb-6">
+            <NovaInput
+              onSubmit={handleSubmit}
+              placeholder="NOVA에게 무엇이든 물어보기"
+            />
+          </div>
 
-      {/* Settings row: Select + Tooltip */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-3 mb-8 text-polaris-body-sm">
-        <div className="flex items-center gap-2">
-          <span className="text-fg-muted">응답 길이</span>
-          <SimpleTooltip label="응답의 분량을 조절합니다. 보통 = 한 화면 분량.">
-            <Info className="h-3.5 w-3.5 text-fg-muted" aria-hidden="true" />
-          </SimpleTooltip>
-          <Select value={length} onValueChange={(v) => setLength(v as Length)}>
-            <SelectTrigger className="!h-9 !w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="short">짧게</SelectItem>
-              <SelectItem value="medium">보통</SelectItem>
-              <SelectItem value="long">길게</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+          {/* Settings row: Select + Tooltip */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-3 mb-8 text-polaris-body-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-fg-muted">응답 길이</span>
+              <SimpleTooltip label="응답의 분량을 조절합니다. 보통 = 한 화면 분량.">
+                <Info className="h-3.5 w-3.5 text-fg-muted" aria-hidden="true" />
+              </SimpleTooltip>
+              <Select value={length} onValueChange={(v) => setLength(v as Length)}>
+                <SelectTrigger className="!h-9 !w-32">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="short">짧게</SelectItem>
+                  <SelectItem value="medium">보통</SelectItem>
+                  <SelectItem value="long">길게</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-fg-muted">톤</span>
-          <SimpleTooltip label="응답의 어조. 사내 보고서면 정중함, 메모면 간결을 추천.">
-            <Info className="h-3.5 w-3.5 text-fg-muted" aria-hidden="true" />
-          </SimpleTooltip>
-          <Select value={tone} onValueChange={(v) => setTone(v as Tone)}>
-            <SelectTrigger className="!h-9 !w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="formal">정중함</SelectItem>
-              <SelectItem value="friendly">친근함</SelectItem>
-              <SelectItem value="concise">간결함</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+            <div className="flex items-center gap-2">
+              <span className="text-fg-muted">톤</span>
+              <SimpleTooltip label="응답의 어조. 사내 보고서면 정중함, 메모면 간결을 추천.">
+                <Info className="h-3.5 w-3.5 text-fg-muted" aria-hidden="true" />
+              </SimpleTooltip>
+              <Select value={tone} onValueChange={(v) => setTone(v as Tone)}>
+                <SelectTrigger className="!h-9 !w-32">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="formal">정중함</SelectItem>
+                  <SelectItem value="friendly">친근함</SelectItem>
+                  <SelectItem value="concise">간결함</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
-              <History className="h-4 w-4" /> 최근 설정
-              <ChevronDown className="h-3.5 w-3.5 ml-1" aria-hidden="true" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>최근 사용한 조합</DropdownMenuLabel>
-            <DropdownMenuItem onSelect={() => { setLength('short'); setTone('concise'); }}>
-              짧게 + 간결함
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => { setLength('medium'); setTone('formal'); }}>
-              보통 + 정중함
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => { setLength('long'); setTone('friendly'); }}>
-              길게 + 친근함
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <History className="h-4 w-4" /> 최근 설정
+                  <ChevronDown className="h-3.5 w-3.5 ml-1" aria-hidden="true" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>최근 사용한 조합</DropdownMenuLabel>
+                <DropdownMenuItem onSelect={() => { setLength('short'); setTone('concise'); }}>
+                  짧게 + 간결함
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => { setLength('medium'); setTone('formal'); }}>
+                  보통 + 정중함
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => { setLength('long'); setTone('friendly'); }}>
+                  길게 + 친근함
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-        {submitted && (
-          <Badge variant="info">
-            마지막 요청: {submitted.slice(0, 30)}{submitted.length > 30 ? '…' : ''}
-          </Badge>
-        )}
-      </div>
+            {submitted && (
+              <Badge variant="info">
+                마지막 요청: {submitted.slice(0, 30)}{submitted.length > 30 ? '…' : ''}
+              </Badge>
+            )}
+          </div>
 
-      {/* Prompt templates: PromptChip grid + DropdownMenu for "+더보기" */}
-      <section className="mb-12">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-polaris-heading-sm">자주 쓰는 프롬프트</h2>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm">
-                <Plus className="h-4 w-4" /> 템플릿 추가
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>추가 템플릿</DropdownMenuLabel>
-              {MORE_TEMPLATES.map((t) => {
+          {/* Prompt templates: PromptChip grid + DropdownMenu for "+더보기" */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-polaris-heading-sm">자주 쓰는 프롬프트</h2>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm">
+                    <Plus className="h-4 w-4" /> 템플릿 추가
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>추가 템플릿</DropdownMenuLabel>
+                  {MORE_TEMPLATES.map((t) => {
+                    const Icon = t.icon;
+                    return (
+                      <DropdownMenuItem key={t.label} onSelect={() => fillPrompt(t.prompt)}>
+                        <Icon className="h-4 w-4" /> {t.label}
+                      </DropdownMenuItem>
+                    );
+                  })}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onSelect={() => alert('새 템플릿 만들기')}>
+                    <Plus className="h-4 w-4" /> 새 템플릿 만들기
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              {PROMPT_TEMPLATES.map((t) => {
                 const Icon = t.icon;
                 return (
-                  <DropdownMenuItem key={t.label} onSelect={() => fillPrompt(t.prompt)}>
-                    <Icon className="h-4 w-4" /> {t.label}
-                  </DropdownMenuItem>
+                  <PromptChip key={t.label} icon={<Icon className="h-4 w-4" />} onClick={() => fillPrompt(t.prompt)}>
+                    {t.prompt}
+                  </PromptChip>
                 );
               })}
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => alert('새 템플릿 만들기')}>
-                <Plus className="h-4 w-4" /> 새 템플릿 만들기
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-          {PROMPT_TEMPLATES.map((t) => {
-            const Icon = t.icon;
-            return (
-              <PromptChip key={t.label} icon={<Icon className="h-4 w-4" />} onClick={() => fillPrompt(t.prompt)}>
-                {t.prompt}
-              </PromptChip>
-            );
-          })}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Recent responses */}
-      <section>
+      {/* Recent responses (no background) */}
+      <div className="max-w-5xl mx-auto px-6 py-10">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-polaris-heading-sm">최근 응답</h2>
           <Button variant="ghost" size="sm">
@@ -282,7 +330,7 @@ export default function NovaWorkspace() {
             </Card>
           ))}
         </div>
-      </section>
-    </div>
+      </div>
+    </>
   );
 }
