@@ -24,6 +24,7 @@ export function Layout() {
   const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
 
   const swatchHref = `${import.meta.env.BASE_URL}swatches.html`;
+  const storybookHref = `${import.meta.env.BASE_URL}storybook/`;
 
   return (
     <TooltipProvider delayDuration={200}>
@@ -58,6 +59,12 @@ export function Layout() {
                 className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-fg-secondary hover:bg-brand-primary-subtle hover:text-fg-primary whitespace-nowrap"
               >
                 Tokens
+              </a>
+              <a
+                href={storybookHref}
+                className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-fg-secondary hover:bg-brand-primary-subtle hover:text-fg-primary whitespace-nowrap"
+              >
+                Storybook
               </a>
             </nav>
             <Button variant="outline" size="sm" onClick={toggleTheme}>

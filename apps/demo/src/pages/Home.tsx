@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Card, CardBody, Badge } from '@polaris/ui';
-import { Layers, FileText, Mail, Palette, ArrowRight } from 'lucide-react';
+import { Layers, FileText, Mail, Palette, BookOpen, ArrowRight } from 'lucide-react';
 
 const CARDS = [
   {
@@ -28,6 +28,7 @@ const CARDS = [
 
 export default function Home() {
   const swatchHref = `${import.meta.env.BASE_URL}swatches.html`;
+  const storybookHref = `${import.meta.env.BASE_URL}storybook/`;
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
       <section className="mb-12">
@@ -66,7 +67,7 @@ export default function Home() {
         })}
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
         <a href={swatchHref} className="group">
           <Card className="h-full transition-colors hover:border-brand-primary">
             <CardBody>
@@ -74,14 +75,34 @@ export default function Home() {
                 <span className="inline-flex h-9 w-9 items-center justify-center rounded-polaris-md bg-brand-secondary-subtle text-brand-secondary">
                   <Palette className="h-5 w-5" aria-hidden="true" />
                 </span>
-                <Badge variant="secondary">Tokens v0.1</Badge>
+                <Badge variant="secondary">Tokens</Badge>
               </div>
               <h3 className="text-polaris-heading-sm mb-1.5">디자인 토큰 스와치</h3>
               <p className="text-polaris-body-sm text-fg-secondary mb-4">
-                4색 브랜드 팔레트(파랑·초록·주황·빨강)와 NOVA 보라, 시맨틱 상태 컬러, 뉴트럴 12단계, 타이포·반경·그림자까지 한 페이지에서.
+                4색 브랜드 팔레트와 NOVA 보라, 뉴트럴, 타이포·반경·그림자까지 한 페이지에서.
               </p>
               <span className="inline-flex items-center gap-1 text-polaris-body-sm text-brand-secondary">
                 토큰 보기 <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </span>
+            </CardBody>
+          </Card>
+        </a>
+
+        <a href={storybookHref} className="group">
+          <Card className="h-full transition-colors hover:border-brand-primary">
+            <CardBody>
+              <div className="flex items-center justify-between mb-3">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-polaris-md bg-brand-primary-subtle text-brand-primary">
+                  <BookOpen className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <Badge variant="primary">Storybook</Badge>
+              </div>
+              <h3 className="text-polaris-heading-sm mb-1.5">컴포넌트 카탈로그 (Storybook)</h3>
+              <p className="text-polaris-body-sm text-fg-secondary mb-4">
+                Button·Dialog·FileIcon·FileCard·NovaInput을 prop별·variant별로 격리해 검증. 라이트/다크 토글 포함.
+              </p>
+              <span className="inline-flex items-center gap-1 text-polaris-body-sm text-brand-primary">
+                Storybook 열기 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </span>
             </CardBody>
           </Card>
@@ -92,13 +113,13 @@ export default function Home() {
             <h3 className="text-polaris-heading-sm mb-3">아키텍처</h3>
             <ul className="text-polaris-body-sm text-fg-secondary space-y-2">
               <li>
-                <code className="text-fg-primary font-polaris-mono">@polaris/ui</code> — TS 토큰 + CSS 변수 + Tailwind preset + 12개 컴포넌트
+                <code className="text-fg-primary font-polaris-mono">@polaris/ui</code> — 토큰 + 18개 컴포넌트
               </li>
               <li>
-                <code className="text-fg-primary font-polaris-mono">@polaris/lint</code> — hex/임의값/직접 font-family 차단 ESLint 룰
+                <code className="text-fg-primary font-polaris-mono">@polaris/lint</code> — 4가지 ESLint 룰
               </li>
               <li>
-                <code className="text-fg-primary font-polaris-mono">polaris-design</code> — Claude Code 플러그인 (skill, slash 커맨드, PostToolUse 훅)
+                <code className="text-fg-primary font-polaris-mono">polaris-design</code> — Claude Code 플러그인
               </li>
             </ul>
           </CardBody>
