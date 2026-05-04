@@ -16,8 +16,9 @@ export const SelectTrigger = forwardRef<
     className={cn(
       'inline-flex h-10 w-full items-center justify-between gap-2 rounded-polaris-md',
       'border border-surface-border-strong bg-surface-raised px-3 py-2',
-      'text-polaris-body-sm font-polaris text-fg-primary',
+      'text-polaris-body-sm font-polaris text-fg-primary whitespace-nowrap',
       'data-[placeholder]:text-fg-muted',
+      '[&>span]:truncate [&>span]:block [&>span]:min-w-0',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:border-brand-primary',
       'disabled:cursor-not-allowed disabled:opacity-50',
       className

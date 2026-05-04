@@ -4,27 +4,52 @@
  * grouped layout with vertical separators, optional tabs across the top.
  *
  * Composable primitives — use just what you need:
- * - `<Ribbon>` — root container
- * - `<RibbonTabs>` / `<RibbonTab>` / `<RibbonContent>` — tabbed mode (Office-style)
- * - `<RibbonGroup>` — vertical group with optional bottom label
- * - `<RibbonSeparator>` — vertical divider between groups
- * - `<RibbonButton>` — icon button (size: `sm` icon-only, `lg` icon-over-label)
- * - `<RibbonSplitButton>` — main action + dropdown chevron
+ *
+ * Layout:
+ * - `<Ribbon>` — root container (no tabs needed for single-panel toolbars)
+ * - `<RibbonTabs>` / `<RibbonTabList>` / `<RibbonTab>` / `<RibbonContent>` — tabbed mode
+ * - `<RibbonGroup>` — group of related controls with optional bottom label
+ * - `<RibbonStack>` — vertical column inside a group (e.g. 2-row icon clusters)
+ * - `<RibbonRow>` — horizontal row inside a `RibbonStack`
+ * - `<RibbonSeparator>` — full-height divider between groups
+ * - `<RibbonRowDivider>` — short divider between clusters within a single row
+ *
+ * Controls (use `size="sm"` for icon-only, `size="lg"` for icon-over-label):
+ * - `<RibbonButton>` — plain button. Labels accept `\n` for line breaks at lg.
+ * - `<RibbonMenuButton>` — single button that opens a dropdown (no main action)
+ * - `<RibbonSplitButton>` — main action + dropdown chevron. At lg the chevron
+ *    becomes a strip below the label (Office paste-button pattern).
  * - `<RibbonToggleGroup>` / `<RibbonToggleItem>` — single/multiple selection toggles
  *
  * Tab-less single-panel example (MD editor):
  * ```tsx
  * <Ribbon>
- *   <RibbonGroup label="서식">
- *     <RibbonToggleGroup type="multiple" value={marks} onValueChange={setMarks}>
- *       <RibbonToggleItem value="bold" icon={<Bold />} tooltip="굵게 (⌘B)" />
- *       <RibbonToggleItem value="italic" icon={<Italic />} tooltip="기울임 (⌘I)" />
- *     </RibbonToggleGroup>
- *   </RibbonGroup>
+ *   <div className="flex items-stretch px-1 py-1">
+ *     <RibbonGroup label="서식">
+ *       <RibbonToggleGroup type="multiple" value={marks} onValueChange={setMarks}>
+ *         <RibbonToggleItem value="bold" icon={<Bold />} tooltip="굵게 (⌘B)" />
+ *         <RibbonToggleItem value="italic" icon={<Italic />} tooltip="기울임 (⌘I)" />
+ *       </RibbonToggleGroup>
+ *     </RibbonGroup>
+ *   </div>
+ * </Ribbon>
+ * ```
+ *
+ * Tabbed example (Office-style):
+ * ```tsx
+ * <Ribbon>
+ *   <RibbonTabs value={tab} onValueChange={setTab}>
+ *     <RibbonTabList>
+ *       <RibbonTab value="home">홈</RibbonTab>
+ *       <RibbonTab value="insert">삽입</RibbonTab>
+ *     </RibbonTabList>
+ *     <RibbonContent value="home">…</RibbonContent>
+ *     <RibbonContent value="insert">…</RibbonContent>
+ *   </RibbonTabs>
  * </Ribbon>
  * ```
  */
-import { forwardRef, useState, type ReactNode } from 'react';
+import { forwardRef, type ReactNode } from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 import { Slot } from '@radix-ui/react-slot';
@@ -37,6 +62,20 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from '../components/DropdownMenu';
+
+/** Wrap children in a span with `whitespace-pre-line` so `\n` in labels
+ *  produces a hard line break and the text stays centered (`size="lg"`). */
+const LgLabel = ({ children }: { children: ReactNode }) => (
+  <span className="leading-tight whitespace-pre-line text-center">{children}</span>
+);
+
+/** Chevron rendered next to / below a label to signal a dropdown trigger. */
+const TriggerChevron = ({ stacked = false }: { stacked?: boolean }) => (
+  <ChevronDown
+    className={cn('h-3 w-3 shrink-0 text-fg-muted', stacked ? 'mt-0' : 'ml-0.5')}
+    aria-hidden="true"
+  />
+);
 
 /* ----- Root ----- */
 
@@ -105,7 +144,18 @@ export const RibbonContent = forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
+      // Radix sets `hidden` attribute on inactive panels, but tailwind's
+      // `flex` would otherwise win and the inactive panel would still claim
+      // its padding box. Force display:none when inactive so the ribbon
+      // height collapses to just the active panel.
+      'data-[state=inactive]:hidden',
+      // Hide the horizontal scrollbar visually — when controls overflow,
+      // an `overflow-x: auto` scrollbar would claim ~15px of panel height,
+      // making overflowing tabs visibly taller than fitting ones. Users
+      // can still scroll via trackpad / shift-wheel; the Office product
+      // also hides the scrollbar.
       'flex items-stretch gap-0 px-1 py-1 overflow-x-auto',
+      '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
       'focus-visible:outline-none',
       className
     )}
@@ -126,7 +176,7 @@ export const RibbonGroup = forwardRef<HTMLDivElement, RibbonGroupProps>(
     <div
       ref={ref}
       className={cn(
-        'flex flex-col items-stretch shrink-0 px-1.5',
+        'flex flex-col items-stretch shrink-0 px-1',
         className
       )}
       {...props}
@@ -194,6 +244,25 @@ export const RibbonSeparator = forwardRef<HTMLDivElement, React.HTMLAttributes<H
 );
 RibbonSeparator.displayName = 'RibbonSeparator';
 
+/**
+ * Short vertical divider used WITHIN a `RibbonRow` to separate button
+ * clusters in the same row. Distinct from `RibbonSeparator` (which spans
+ * the full ribbon height to divide groups). Office's bottom-row pattern of
+ * `B I U S | X₁ X² | A_ A_ | A▢ A_ E` uses this between clusters.
+ */
+export const RibbonRowDivider = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      role="separator"
+      aria-orientation="vertical"
+      className={cn('mx-1 h-4 w-px shrink-0 bg-surface-border self-center', className)}
+      {...props}
+    />
+  )
+);
+RibbonRowDivider.displayName = 'RibbonRowDivider';
+
 /* ----- RibbonButton ----- */
 
 const ribbonButtonStyles = cva(
@@ -207,9 +276,9 @@ const ribbonButtonStyles = cva(
   {
     variants: {
       size: {
-        sm: 'h-6 min-w-6 px-1 text-polaris-body-sm',
+        sm: 'h-6 min-w-6 px-0.5 text-polaris-body-sm',
         md: 'h-8 min-w-8 px-2 text-polaris-body-sm',
-        lg: 'flex-col h-16 min-w-14 px-1.5 py-1 text-polaris-caption gap-0.5',
+        lg: 'flex-col h-16 min-w-14 px-1 py-1 text-polaris-caption gap-0.5',
       },
     },
     defaultVariants: { size: 'sm' },
@@ -227,9 +296,24 @@ export interface RibbonButtonProps
   asChild?: boolean;
 }
 
+/** Icon-only buttons (no visible label) need an accessible name. Tooltips
+ *  are visual-only — when the consumer didn't pass an explicit `aria-label`
+ *  and the tooltip is a string, we use it as the accessible name. JSX
+ *  tooltips still require the consumer to set `aria-label` explicitly. */
+function inferAriaLabel(
+  children: ReactNode,
+  tooltip: ReactNode,
+  explicit: string | undefined
+): string | undefined {
+  if (explicit) return explicit;
+  if (children) return undefined;
+  return typeof tooltip === 'string' ? tooltip : undefined;
+}
+
 export const RibbonButton = forwardRef<HTMLButtonElement, RibbonButtonProps>(
   ({ className, size, icon, tooltip, asChild, children, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
+    const ariaLabel = inferAriaLabel(children, tooltip, props['aria-label']);
     const inner = (
       // eslint-disable-next-line @polaris/prefer-polaris-component -- primitive layer
       <Comp
@@ -237,11 +321,10 @@ export const RibbonButton = forwardRef<HTMLButtonElement, RibbonButtonProps>(
         type={asChild ? undefined : 'button'}
         className={cn(ribbonButtonStyles({ size }), className)}
         {...props}
+        aria-label={ariaLabel}
       >
         {icon}
-        {children && (
-          <span className={cn(size === 'lg' && 'leading-tight whitespace-pre-line text-center')}>{children}</span>
-        )}
+        {children && (size === 'lg' ? <LgLabel>{children}</LgLabel> : <span>{children}</span>)}
       </Comp>
     );
     if (tooltip) {
@@ -252,39 +335,27 @@ export const RibbonButton = forwardRef<HTMLButtonElement, RibbonButtonProps>(
 );
 RibbonButton.displayName = 'RibbonButton';
 
-/* ----- RibbonMenuButton -----
- * Single button that opens a dropdown when clicked. Different from
- * RibbonSplitButton: there's no separate main action — the entire button
- * IS the menu trigger. Office ribbon uses this for option-style controls
- * (여백, 용지 방향, 크기, 단 …). At `size="lg"` a chevron renders below
- * the label.
- */
+/* ----- RibbonMenuButton ----- */
 
 export interface RibbonMenuButtonProps extends Omit<RibbonButtonProps, 'children' | 'onClick'> {
   children?: ReactNode;
-  /** Dropdown content. */
+  /** Dropdown content (typically `<DropdownMenuItem>` children). */
   menu: ReactNode;
 }
 
+/**
+ * Single button that opens a dropdown when clicked. Unlike `RibbonSplitButton`
+ * there is no separate main action — the entire button IS the menu trigger.
+ * Office uses this for option-style controls (여백, 용지 방향, 크기, 단, …).
+ * At `size="lg"` the chevron renders below the label.
+ */
 export const RibbonMenuButton = forwardRef<HTMLButtonElement, RibbonMenuButtonProps>(
   ({ size = 'lg', icon, children, menu, className, ...props }, ref) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <RibbonButton
-          ref={ref}
-          size={size}
-          icon={icon}
-          className={className}
-          {...props}
-        >
+        <RibbonButton ref={ref} size={size} icon={icon} className={className} {...props}>
           {children}
-          <ChevronDown
-            className={cn(
-              size === 'lg' ? 'h-3 w-3 mt-0' : 'h-3 w-3 ml-0.5',
-              'text-fg-muted shrink-0'
-            )}
-            aria-hidden="true"
-          />
+          <TriggerChevron stacked={size === 'lg'} />
         </RibbonButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">{menu}</DropdownMenuContent>
@@ -306,53 +377,126 @@ export interface RibbonSplitButtonProps extends Omit<RibbonButtonProps, 'childre
   menuLabel?: string;
 }
 
+/**
+ * Main action + dropdown chevron, with the two halves hovering independently
+ * (Office pattern). Layout adapts to size:
+ * - `sm` / `md` — horizontal: `[icon][▾]`
+ * - `lg`         — vertical: icon+label on top, chevron strip below
+ *
+ * Use this when there's a meaningful default action (paste, strikethrough,
+ * find) AND alternative options behind a dropdown. If there's no main action,
+ * use `RibbonMenuButton` instead.
+ */
 export const RibbonSplitButton = forwardRef<HTMLButtonElement, RibbonSplitButtonProps>(
-  ({ className, size = 'sm', icon, tooltip, children, menu, menuTooltip, menuLabel = '더보기', onClick, ...props }, ref) => (
-    <div className={cn('inline-flex rounded-polaris-sm hover:bg-brand-primary-subtle', className)}>
-      <RibbonButton
-        ref={ref}
-        size={size}
-        icon={icon}
-        tooltip={tooltip}
-        onClick={onClick}
-        className="rounded-r-none hover:bg-transparent"
-        {...props}
-      >
-        {children}
-      </RibbonButton>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+  (
+    {
+      className,
+      size = 'sm',
+      icon,
+      tooltip,
+      children,
+      menu,
+      menuTooltip,
+      menuLabel = '더보기',
+      onClick,
+      // Pulled out so we can apply it to BOTH the main button AND the menu
+      // trigger — otherwise a `disabled` split button still opens its menu.
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
+    const chevronIcon = <ChevronDown className="h-3 w-3" aria-hidden="true" />;
+
+    if (size === 'lg') {
+      return (
+        <div className={cn('inline-flex flex-col items-stretch shrink-0 rounded-polaris-sm', className)}>
           <RibbonButton
-            size={size}
-            tooltip={menuTooltip}
-            aria-label={menuLabel}
-            className="rounded-l-none px-1 hover:bg-transparent"
-            icon={<ChevronDown className="h-3 w-3" aria-hidden="true" />}
-          />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">{menu}</DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  )
+            ref={ref}
+            size="lg"
+            icon={icon}
+            tooltip={tooltip}
+            onClick={onClick}
+            disabled={disabled}
+            className="h-12 rounded-b-none pb-0"
+            {...props}
+          >
+            {children}
+          </RibbonButton>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <RibbonButton
+                size="sm"
+                tooltip={menuTooltip}
+                aria-label={menuLabel}
+                disabled={disabled}
+                className="h-4 min-w-0 px-0 py-0 rounded-t-none self-stretch"
+                icon={chevronIcon}
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">{menu}</DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
+    }
+    return (
+      <div className={cn('inline-flex rounded-polaris-sm', className)}>
+        <RibbonButton
+          ref={ref}
+          size={size}
+          icon={icon}
+          tooltip={tooltip}
+          onClick={onClick}
+          disabled={disabled}
+          className="rounded-r-none"
+          {...props}
+        >
+          {children}
+        </RibbonButton>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <RibbonButton
+              size={size}
+              tooltip={menuTooltip}
+              aria-label={menuLabel}
+              disabled={disabled}
+              className="rounded-l-none min-w-0 px-0.5"
+              icon={chevronIcon}
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">{menu}</DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    );
+  }
 );
 RibbonSplitButton.displayName = 'RibbonSplitButton';
 
-/* ----- ToggleGroup / ToggleItem ----- */
+/* ----- ToggleGroup / ToggleItem -----
+ *
+ * Use for mutually-exclusive (`type="single"`) or independent (`type="multiple"`)
+ * toggleable controls — alignment, text marks (B/I/U), view modes. The "on"
+ * state uses the brand tint via `data-[state=on]` in the shared button cva.
+ *
+ * Example (paragraph alignment):
+ * ```tsx
+ * <RibbonToggleGroup type="single" value={align} onValueChange={(v) => v && setAlign(v)}>
+ *   <RibbonToggleItem value="left" icon={<AlignLeft />} tooltip="왼쪽 정렬" />
+ *   <RibbonToggleItem value="center" icon={<AlignCenter />} tooltip="가운데 정렬" />
+ * </RibbonToggleGroup>
+ * ```
+ */
 
 type ToggleGroupRootProps = React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root>;
 
 export const RibbonToggleGroup = forwardRef<HTMLDivElement, ToggleGroupRootProps>(
   ({ className, ...props }, ref) => {
+    // Radix's Root is a discriminated union (single vs multiple). Cast to a
+    // plain forwardRef so we can pass through props without TS narrowing here.
     const Root = ToggleGroupPrimitive.Root as React.ForwardRefExoticComponent<
       ToggleGroupRootProps & React.RefAttributes<HTMLDivElement>
     >;
-    return (
-      <Root
-        ref={ref}
-        className={cn('inline-flex items-center gap-0.5', className)}
-        {...props}
-      />
-    );
+    return <Root ref={ref} className={cn('inline-flex items-center gap-0', className)} {...props} />;
   }
 );
 RibbonToggleGroup.displayName = 'RibbonToggleGroup';
@@ -360,7 +504,9 @@ RibbonToggleGroup.displayName = 'RibbonToggleGroup';
 export interface RibbonToggleItemProps
   extends React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item>,
     VariantProps<typeof ribbonButtonStyles> {
+  /** Leading icon. For `size="lg"` it's stacked above the label. */
   icon?: ReactNode;
+  /** Optional tooltip. Useful when icon-only. */
   tooltip?: ReactNode;
 }
 
@@ -368,14 +514,16 @@ export const RibbonToggleItem = forwardRef<
   React.ElementRef<typeof ToggleGroupPrimitive.Item>,
   RibbonToggleItemProps
 >(({ className, size, icon, tooltip, children, ...props }, ref) => {
+  const ariaLabel = inferAriaLabel(children, tooltip, props['aria-label']);
   const inner = (
     <ToggleGroupPrimitive.Item
       ref={ref}
       className={cn(ribbonButtonStyles({ size }), className)}
       {...props}
+      aria-label={ariaLabel}
     >
       {icon}
-      {children}
+      {children && (size === 'lg' ? <LgLabel>{children}</LgLabel> : <span>{children}</span>)}
     </ToggleGroupPrimitive.Item>
   );
   if (tooltip) {
@@ -385,4 +533,6 @@ export const RibbonToggleItem = forwardRef<
 });
 RibbonToggleItem.displayName = 'RibbonToggleItem';
 
+/** Exposed for downstream packages building custom ribbon-like controls
+ *  (e.g. a checkable toggle that isn't part of a ToggleGroup). */
 export { ribbonButtonStyles };
