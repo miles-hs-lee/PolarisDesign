@@ -8,6 +8,11 @@ import {
   Avatar,
   AvatarFallback,
   FileIcon,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
   cn,
 } from '@polaris/ui';
 import {
@@ -18,6 +23,11 @@ import {
   CheckCircle2,
   Clock3,
   ChevronRight,
+  Eye,
+  Copy,
+  Send,
+  Bell,
+  Trash2,
 } from 'lucide-react';
 
 type ContractStatus = 'in_progress' | 'completed' | 'expiring' | 'declined';
@@ -310,9 +320,35 @@ function ContractRow({ contract: c }: { contract: Contract }) {
               <Button variant="ghost" size="sm">
                 보기 <ChevronRight className="h-4 w-4" aria-hidden="true" />
               </Button>
-              <Button variant="ghost" size="sm" aria-label="더보기">
-                <MoreVertical className="h-4 w-4" aria-hidden="true" />
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" aria-label="더보기">
+                    <MoreVertical className="h-4 w-4" aria-hidden="true" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onSelect={() => alert(`상세 보기: ${c.id}`)}>
+                    <Eye className="h-4 w-4" /> 상세 보기
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => alert(`복제: ${c.id}`)}>
+                    <Copy className="h-4 w-4" /> 복제해서 새로 보내기
+                  </DropdownMenuItem>
+                  {c.status === 'in_progress' && (
+                    <DropdownMenuItem onSelect={() => alert(`독촉: ${c.id}`)}>
+                      <Bell className="h-4 w-4" /> 서명 독촉
+                    </DropdownMenuItem>
+                  )}
+                  {c.status === 'expiring' && (
+                    <DropdownMenuItem onSelect={() => alert(`재발송: ${c.id}`)}>
+                      <Send className="h-4 w-4" /> 재발송
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem destructive onSelect={() => alert(`취소: ${c.id}`)}>
+                    <Trash2 className="h-4 w-4" /> 계약 취소
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </CardBody>

@@ -22,6 +22,12 @@ import {
   ToastTitle,
   ToastDescription,
   ToastClose,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   cn,
 } from '@polaris/ui';
 import {
@@ -40,6 +46,11 @@ import {
   Circle,
   Clock,
   MessageSquare,
+  MoreHorizontal,
+  Copy,
+  Download,
+  Archive,
+  Link2,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -97,6 +108,29 @@ export default function CrmContractDetail() {
           <Button size="sm" onClick={() => setToastOpen(true)}>
             <Send className="h-4 w-4" aria-hidden="true" /> 결재 독촉
           </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" aria-label="더보기">
+                <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>계약 액션</DropdownMenuLabel>
+              <DropdownMenuItem onSelect={() => alert('계약 복제')}>
+                <Copy className="h-4 w-4" /> 계약 복제
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => alert('첨부 일괄 다운로드')}>
+                <Download className="h-4 w-4" /> 첨부 일괄 다운로드
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => alert('공유 링크 복사')}>
+                <Link2 className="h-4 w-4" /> 공유 링크 복사
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onSelect={() => alert('보관 처리')}>
+                <Archive className="h-4 w-4" /> 보관 처리
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 

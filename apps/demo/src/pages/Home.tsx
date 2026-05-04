@@ -1,28 +1,39 @@
 import { Link } from 'react-router-dom';
-import { Card, CardBody, Badge } from '@polaris/ui';
-import { Layers, FileText, Mail, Palette, BookOpen, ArrowRight } from 'lucide-react';
+import { Card, CardBody, Badge, cn } from '@polaris/ui';
+import { Layers, FileText, Mail, Palette, BookOpen, ArrowRight, Sparkles } from 'lucide-react';
 
 const CARDS = [
   {
-    to: '/components',
-    icon: Layers,
-    title: 'Tier 0 Components',
-    desc: '12개 핵심 컴포넌트(Button, Input, Card, Dialog, Toast, Tabs, FileIcon/Card, NovaInput 등)의 모든 variant',
-    badge: '컴포넌트 카탈로그',
+    to: '/nova',
+    icon: Sparkles,
+    title: 'NOVA 워크스페이스',
+    desc: 'AI 컨텍스트 시연. NovaInput·PromptChip·Select·Tooltip·DropdownMenu가 보라(brand.secondary) 톤으로 묶이는 화면',
+    badge: 'AI 예시',
+    accent: 'secondary' as const,
   },
   {
     to: '/crm/contract',
     icon: FileText,
     title: '폴라리스 영업관리 — 계약 상세',
-    desc: '실제 CRM 화면을 폴라리스 토큰만으로 구성한 사례. 상태 타임라인, 결재, 첨부 파일까지',
-    badge: '예시 1',
+    desc: 'CRM 화면을 폴라리스 토큰만으로 구성. 상태 타임라인, 결재선, 첨부 파일, 더보기 메뉴까지',
+    badge: '업무 예시 1',
+    accent: 'primary' as const,
   },
   {
     to: '/sign/contracts',
     icon: Mail,
     title: '폴라리스 사인 — 계약서 목록',
-    desc: '전자계약 SaaS의 계약서 관리 화면. 필터·진행률·서명자 표시까지 토큰 기반으로 구현',
-    badge: '예시 2',
+    desc: '전자계약 SaaS의 계약서 관리 화면. 필터·진행률·서명자·행별 액션 메뉴까지 토큰 기반으로 구현',
+    badge: '업무 예시 2',
+    accent: 'primary' as const,
+  },
+  {
+    to: '/components',
+    icon: Layers,
+    title: '컴포넌트 카탈로그',
+    desc: '18개 컴포넌트(Tier 0 + Tier 1)의 모든 variant·상태·조합을 한 페이지에서 확인',
+    badge: '레퍼런스',
+    accent: 'primary' as const,
   },
 ] as const;
 
@@ -42,22 +53,34 @@ export default function Home() {
         </p>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
         {CARDS.map((card) => {
           const Icon = card.icon;
+          const isAi = card.accent === 'secondary';
           return (
             <Link key={card.to} to={card.to} className="group">
-              <Card className="h-full transition-colors hover:border-brand-primary group-focus-visible:ring-2 group-focus-visible:ring-brand-primary">
+              <Card className={cn(
+                'h-full transition-colors group-focus-visible:ring-2',
+                isAi
+                  ? 'hover:border-brand-secondary group-focus-visible:ring-brand-secondary'
+                  : 'hover:border-brand-primary group-focus-visible:ring-brand-primary'
+              )}>
                 <CardBody>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-polaris-md bg-brand-primary-subtle text-brand-primary">
+                    <span className={cn(
+                      'inline-flex h-9 w-9 items-center justify-center rounded-polaris-md',
+                      isAi ? 'bg-brand-secondary-subtle text-brand-secondary' : 'bg-brand-primary-subtle text-brand-primary'
+                    )}>
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </span>
-                    <Badge variant="neutral">{card.badge}</Badge>
+                    <Badge variant={isAi ? 'secondary' : 'neutral'}>{card.badge}</Badge>
                   </div>
                   <h3 className="text-polaris-heading-sm mb-1.5">{card.title}</h3>
                   <p className="text-polaris-body-sm text-fg-secondary mb-4">{card.desc}</p>
-                  <span className="inline-flex items-center gap-1 text-polaris-body-sm text-brand-primary">
+                  <span className={cn(
+                    'inline-flex items-center gap-1 text-polaris-body-sm',
+                    isAi ? 'text-brand-secondary' : 'text-brand-primary'
+                  )}>
                     살펴보기 <ArrowRight className="h-4 w-4" aria-hidden="true" />
                   </span>
                 </CardBody>
