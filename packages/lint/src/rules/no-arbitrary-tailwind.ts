@@ -10,7 +10,7 @@ const rule: Rule.RuleModule = {
     },
     schema: [],
     messages: {
-      arbitrary: 'Tailwind arbitrary value "{{value}}" is not allowed. Use a token-based class (bg-brand-primary, text-text-primary, p-4, rounded-polaris-md, etc.) instead.',
+      arbitrary: 'Tailwind arbitrary value "{{value}}" is not allowed. Use a token-based class (bg-brand-primary, text-fg-primary, p-4, rounded-polaris-md, etc.) instead.',
     },
   },
   create(context) {

@@ -82,6 +82,9 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
     devDependencies:
+      '@polaris/lint':
+        specifier: workspace:*
+        version: link:../../packages/lint
       '@storybook/react':
         specifier: ^8.4.7
         version: 8.6.18(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.18)(typescript@5.9.3)
@@ -103,6 +106,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.5.0(postcss@8.5.13)
+      eslint:
+        specifier: ^9.18.0
+        version: 9.39.4(jiti@1.21.7)
       postcss:
         specifier: ^8.5.0
         version: 8.5.13

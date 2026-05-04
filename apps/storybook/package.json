@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "storybook dev -p 6006 --no-open",
     "build": "storybook build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@polaris/ui": "workspace:*",
@@ -15,6 +16,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@polaris/lint": "workspace:*",
     "@storybook/react": "^8.4.7",
     "@storybook/react-vite": "^8.4.7",
     "@types/node": "^22.10.5",
@@ -22,6 +24,7 @@
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "eslint": "^9.18.0",
     "postcss": "^8.5.0",
     "storybook": "^8.4.7",
     "tailwindcss": "^3.4.17",

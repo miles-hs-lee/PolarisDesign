@@ -8,6 +8,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
+  Input,
 } from '@polaris/ui';
 import { Button } from '@polaris/ui';
 
@@ -53,10 +54,7 @@ export const Form: Story = {
           <DialogTitle>새 폴더</DialogTitle>
           <DialogDescription>이 위치에 새 폴더를 만듭니다.</DialogDescription>
         </DialogHeader>
-        <input
-          className="h-10 px-3 w-full rounded-polaris-md border border-surface-border-strong bg-surface-raised text-fg-primary placeholder:text-fg-muted text-polaris-body-sm font-polaris focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:border-brand-primary"
-          placeholder="폴더 이름"
-        />
+        <Input label="폴더 이름" placeholder="예: 2026 Q2 보고서" />
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">취소</Button>

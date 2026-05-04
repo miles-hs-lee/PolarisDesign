@@ -1,70 +1,95 @@
 import type { Config } from 'tailwindcss';
 
+/**
+ * Returns a Tailwind color value that supports both opaque and alpha-modified
+ * forms (e.g. `bg-status-success` vs `bg-status-success/15`).
+ *
+ * Without this, plain `'var(--polaris-status-success)'` strings cause Tailwind
+ * to drop the alpha modifier silently — the rule for `bg-status-success/15`
+ * never gets generated and the tinted background disappears at runtime. The
+ * function form lets us produce `color-mix()` for the alpha case.
+ *
+ * `color-mix(in srgb, ...)` is supported in Chrome 111+, Safari 16.2+,
+ * Firefox 113+ which covers our target browsers.
+ */
+function token(varName: string): string {
+  const fn = ({ opacityValue }: { opacityValue?: string } = {}) => {
+    if (opacityValue !== undefined && opacityValue !== '1') {
+      return `color-mix(in srgb, var(${varName}) calc(${opacityValue} * 100%), transparent)`;
+    }
+    return `var(${varName})`;
+  };
+  // Tailwind accepts callable color values at runtime; the public TS types
+  // only expose `string | RecursiveKeyValuePair<string, string>`. Cast here
+  // so the preset typechecks while still resolving alpha modifiers correctly.
+  return fn as unknown as string;
+}
+
 const polarisPreset: Partial<Config> = {
   theme: {
     extend: {
       colors: {
-        'polaris-blue':   'var(--polaris-blue)',
-        'polaris-green':  'var(--polaris-green)',
-        'polaris-orange': 'var(--polaris-orange)',
-        'polaris-red':    'var(--polaris-red)',
-        'polaris-purple': 'var(--polaris-purple)',
+        'polaris-blue':   token('--polaris-blue'),
+        'polaris-green':  token('--polaris-green'),
+        'polaris-orange': token('--polaris-orange'),
+        'polaris-red':    token('--polaris-red'),
+        'polaris-purple': token('--polaris-purple'),
 
         brand: {
-          primary:            'var(--polaris-brand-primary)',
-          'primary-hover':    'var(--polaris-brand-primary-hover)',
-          'primary-subtle':   'var(--polaris-brand-primary-subtle)',
-          secondary:          'var(--polaris-brand-secondary)',
-          'secondary-hover':  'var(--polaris-brand-secondary-hover)',
-          'secondary-subtle': 'var(--polaris-brand-secondary-subtle)',
+          primary:            token('--polaris-brand-primary'),
+          'primary-hover':    token('--polaris-brand-primary-hover'),
+          'primary-subtle':   token('--polaris-brand-primary-subtle'),
+          secondary:          token('--polaris-brand-secondary'),
+          'secondary-hover':  token('--polaris-brand-secondary-hover'),
+          'secondary-subtle': token('--polaris-brand-secondary-subtle'),
         },
 
         file: {
-          docx: 'var(--polaris-file-docx)',
-          hwp:  'var(--polaris-file-hwp)',
-          xlsx: 'var(--polaris-file-xlsx)',
-          pptx: 'var(--polaris-file-pptx)',
-          pdf:  'var(--polaris-file-pdf)',
+          docx: token('--polaris-file-docx'),
+          hwp:  token('--polaris-file-hwp'),
+          xlsx: token('--polaris-file-xlsx'),
+          pptx: token('--polaris-file-pptx'),
+          pdf:  token('--polaris-file-pdf'),
         },
 
         status: {
-          success: 'var(--polaris-status-success)',
-          warning: 'var(--polaris-status-warning)',
-          danger:  'var(--polaris-status-danger)',
-          info:    'var(--polaris-status-info)',
+          success: token('--polaris-status-success'),
+          warning: token('--polaris-status-warning'),
+          danger:  token('--polaris-status-danger'),
+          info:    token('--polaris-status-info'),
         },
 
         surface: {
-          canvas:          'var(--polaris-surface-canvas)',
-          raised:          'var(--polaris-surface-raised)',
-          sunken:          'var(--polaris-surface-sunken)',
-          border:          'var(--polaris-surface-border)',
-          'border-strong': 'var(--polaris-surface-border-strong)',
+          canvas:          token('--polaris-surface-canvas'),
+          raised:          token('--polaris-surface-raised'),
+          sunken:          token('--polaris-surface-sunken'),
+          border:          token('--polaris-surface-border'),
+          'border-strong': token('--polaris-surface-border-strong'),
         },
 
         // Foreground (text) color tokens. Class form: `text-fg-primary`,
         // `text-fg-on-brand`, etc. We use `fg` instead of `text` to avoid
         // tailwind-merge confusion with the `text-` font-size utility prefix.
         fg: {
-          primary:    'var(--polaris-text-primary)',
-          secondary:  'var(--polaris-text-secondary)',
-          muted:      'var(--polaris-text-muted)',
-          'on-brand': 'var(--polaris-text-on-brand)',
+          primary:    token('--polaris-text-primary'),
+          secondary:  token('--polaris-text-secondary'),
+          muted:      token('--polaris-text-muted'),
+          'on-brand': token('--polaris-text-on-brand'),
         },
 
         neutral: {
-          0:    'var(--polaris-neutral-0)',
-          50:   'var(--polaris-neutral-50)',
-          100:  'var(--polaris-neutral-100)',
-          200:  'var(--polaris-neutral-200)',
-          300:  'var(--polaris-neutral-300)',
-          400:  'var(--polaris-neutral-400)',
-          500:  'var(--polaris-neutral-500)',
-          600:  'var(--polaris-neutral-600)',
-          700:  'var(--polaris-neutral-700)',
-          800:  'var(--polaris-neutral-800)',
-          900:  'var(--polaris-neutral-900)',
-          1000: 'var(--polaris-neutral-1000)',
+          0:    token('--polaris-neutral-0'),
+          50:   token('--polaris-neutral-50'),
+          100:  token('--polaris-neutral-100'),
+          200:  token('--polaris-neutral-200'),
+          300:  token('--polaris-neutral-300'),
+          400:  token('--polaris-neutral-400'),
+          500:  token('--polaris-neutral-500'),
+          600:  token('--polaris-neutral-600'),
+          700:  token('--polaris-neutral-700'),
+          800:  token('--polaris-neutral-800'),
+          900:  token('--polaris-neutral-900'),
+          1000: token('--polaris-neutral-1000'),
         },
       },
 
