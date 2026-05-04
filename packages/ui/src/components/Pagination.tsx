@@ -28,7 +28,7 @@ export const PaginationItem = forwardRef<HTMLButtonElement, PaginationItemProps>
       aria-current={active ? 'page' : undefined}
       className={cn(
         'inline-flex h-9 min-w-9 items-center justify-center rounded-polaris-md px-3 text-polaris-body-sm font-medium transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas',
+        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
         'disabled:opacity-50 disabled:pointer-events-none',
         active
           ? 'bg-brand-primary text-fg-on-brand'

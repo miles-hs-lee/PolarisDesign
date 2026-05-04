@@ -10,7 +10,7 @@ export const Switch = forwardRef<
     ref={ref}
     className={cn(
       'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-polaris-full border-2 border-transparent transition-colors',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas',
+      'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
       'disabled:cursor-not-allowed disabled:opacity-50',
       'data-[state=checked]:bg-brand-primary data-[state=unchecked]:bg-surface-border-strong',
       className

@@ -99,7 +99,7 @@ export const NovaInput = forwardRef<HTMLInputElement, NovaInputProps>(
             'bg-brand-secondary text-fg-on-brand',
             'hover:bg-brand-secondary-hover',
             'disabled:opacity-40 disabled:cursor-not-allowed',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas',
+            'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-secondary',
             'transition-colors'
           )}
         >

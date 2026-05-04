@@ -12,6 +12,22 @@
 
 ---
 
+## [0.2.1] — 2026-05-04
+
+### 수정됨 — focus 링 시각 비대칭
+
+`bg-surface-raised` 부모(예: Navbar) 위에 놓인 버튼/컴포넌트에서 focus 링이 좌/상/하는 얇고 우/모서리만 두꺼워 보이던 문제 수정.
+
+원인: `focus-visible:ring-offset-2 ring-offset-surface-canvas` 패턴의 box-shadow gap이 `surface-canvas` 색으로 칠해지면서 부모의 `surface-raised` 배경과 색 차이가 발생. 라운드 코너에서는 gap 노출 면적이 더 커서 더 도드라짐.
+
+수정: `ring + ring-offset` (box-shadow 스택) → 네이티브 `outline + outline-offset`. gap이 투명이라 부모 배경 색과 자동으로 맞고, `border-radius`를 정확히 따라가 모든 면이 균일.
+
+영향 컴포넌트: Button, Pagination, Switch, Checkbox, NovaInput, PromptChip.
+
+브라우저 지원: Chrome 94+, Firefox 88+, Safari 16.4+ (모던 outline + border-radius). 그보다 구버전에서는 outline이 사각형으로 그려지지만 기능엔 문제 없음.
+
+---
+
 ## [0.2.0] — 2026-05-04
 
 첫 사내 마이그레이션(Next.js 16 + Tailwind v4 기존 프로젝트)에서 받은 피드백을 반영한 패치 릴리스. 컴포넌트 7개 추가, lint 룰 false-positive 보정, SSR 호환 패턴 정비.
@@ -148,6 +164,7 @@ GitHub Pages에 자동 배포 (https://miles-hs-lee.github.io/PolarisDesign/):
 
 ---
 
-[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/miles-hs-lee/PolarisDesign/releases/tag/v0.1.0

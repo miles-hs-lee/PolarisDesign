@@ -23,7 +23,7 @@ export const PromptChip = forwardRef<HTMLButtonElement, PromptChipProps>(
         'bg-surface-raised border border-surface-border px-4 py-3 text-left',
         'text-polaris-body-sm font-polaris text-fg-primary',
         'hover:border-brand-secondary hover:bg-brand-secondary-subtle transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas',
+        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-secondary',
         'shadow-polaris-xs',
         'min-h-12',
         className
