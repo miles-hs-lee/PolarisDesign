@@ -41,11 +41,6 @@ import {
   Trash2,
   Info,
   History,
-  Wand2,
-  ImagePlus,
-  Presentation,
-  MessagesSquare,
-  Eraser,
   ArrowRight,
 } from 'lucide-react';
 
@@ -112,9 +107,8 @@ type Feature = {
   id: string;
   title: string;
   desc: string;
-  icon: typeof Sparkles;
-  bgClass: string;
-  iconColorClass: string;
+  /** Filename under apps/demo/public/nova-features/. Resolved via BASE_URL. */
+  image: string;
   isNew?: boolean;
 };
 
@@ -123,68 +117,52 @@ const NOVA_FEATURES: Feature[] = [
     id: 'style',
     title: '스타일 스튜디오',
     desc: '요즘 뜨는 밈도 클릭 한 번이면 스타일을 입혀요',
-    icon: Wand2,
-    bgClass: 'bg-gradient-to-br from-brand-secondary/20 via-brand-primary-subtle to-brand-secondary-subtle',
-    iconColorClass: 'text-brand-secondary',
+    image: 'style.png',
     isNew: true,
   },
   {
     id: 'nano',
     title: '나노 바나나 스튜디오',
     desc: '세상에 없는 이미지, 원하는 대로 만들어요',
-    icon: ImagePlus,
-    bgClass: 'bg-gradient-to-br from-status-warning/20 via-status-danger/10 to-brand-secondary-subtle',
-    iconColorClass: 'text-status-warning',
+    image: 'nano.png',
     isNew: true,
   },
   {
     id: 'ppt',
     title: 'AI PPT 생성',
     desc: '텍스트/문서만 넣으면 발표 자료가 완성돼요',
-    icon: Presentation,
-    bgClass: 'bg-gradient-to-br from-status-danger/15 via-brand-secondary-subtle to-surface-raised',
-    iconColorClass: 'text-status-danger',
+    image: 'ppt.png',
     isNew: true,
   },
   {
     id: 'dictation',
     title: '받아쓰기',
     desc: '회의나 강의 등 음성을 한 번에 텍스트로 바꿔요',
-    icon: Mic,
-    bgClass: 'bg-gradient-to-br from-status-success/20 via-status-success/8 to-surface-raised',
-    iconColorClass: 'text-status-success',
+    image: 'dictation.png',
   },
   {
     id: 'translate',
     title: '다국어 번역',
     desc: '파일만 넣으면 형식 그대로 정확하게 번역해요',
-    icon: Languages,
-    bgClass: 'bg-gradient-to-br from-brand-primary-subtle via-polaris-blue/10 to-surface-raised',
-    iconColorClass: 'text-brand-primary',
+    image: 'translate.png',
   },
   {
     id: 'imagegen',
     title: '이미지 생성',
     desc: '상상하는 이미지를 무엇이든 만들어요',
-    icon: ImageIcon,
-    bgClass: 'bg-gradient-to-br from-brand-secondary-subtle via-polaris-purple/15 to-brand-primary-subtle',
-    iconColorClass: 'text-brand-secondary',
+    image: 'imagegen.png',
   },
   {
     id: 'chat',
     title: 'AI 채팅',
     desc: '다양한 최신 모델로 질문을 똑똑하게 답해요',
-    icon: MessagesSquare,
-    bgClass: 'bg-gradient-to-br from-brand-secondary-subtle via-brand-secondary/12 to-brand-primary-subtle',
-    iconColorClass: 'text-brand-secondary',
+    image: 'chat.png',
   },
   {
     id: 'bgremove',
     title: '배경 제거',
     desc: '이미지에서 배경만 깔끔하게 지워요',
-    icon: Eraser,
-    bgClass: 'bg-gradient-to-br from-status-info/20 via-polaris-blue/10 to-surface-raised',
-    iconColorClass: 'text-status-info',
+    image: 'bgremove.png',
   },
 ];
 
@@ -369,41 +347,42 @@ export default function NovaWorkspace() {
           </Button>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {NOVA_FEATURES.map((f) => {
-            const Icon = f.icon;
-            return (
-              <Card
-                key={f.id}
-                role="button"
-                tabIndex={0}
-                onClick={() => alert(f.title)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    alert(f.title);
-                  }
-                }}
-                className="cursor-pointer hover:border-brand-secondary hover:shadow-polaris-md transition-all overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas"
-              >
-                <div className={cn('relative h-32 flex items-center justify-center', f.bgClass)}>
-                  {f.isNew && (
-                    <Badge variant="danger" className="absolute top-2.5 left-2.5 shadow-polaris-xs">
-                      NEW
-                    </Badge>
-                  )}
-                  <Sparkles
-                    className="absolute top-2.5 right-2.5 h-4 w-4 text-fg-muted opacity-60"
-                    aria-hidden="true"
-                  />
-                  <Icon className={cn('h-12 w-12', f.iconColorClass)} aria-hidden="true" />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-polaris-heading-sm mb-1">{f.title}</h3>
-                  <p className="text-polaris-body-sm text-fg-secondary line-clamp-2">{f.desc}</p>
-                </div>
-              </Card>
-            );
-          })}
+          {NOVA_FEATURES.map((f) => (
+            <Card
+              key={f.id}
+              role="button"
+              tabIndex={0}
+              onClick={() => alert(f.title)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  alert(f.title);
+                }
+              }}
+              className="cursor-pointer hover:border-brand-secondary hover:shadow-polaris-md transition-all overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas"
+            >
+              <div className="relative h-36 overflow-hidden bg-surface-sunken">
+                {f.isNew && (
+                  <Badge
+                    variant="danger"
+                    className="absolute top-2.5 left-2.5 z-10 shadow-polaris-xs"
+                  >
+                    NEW
+                  </Badge>
+                )}
+                <img
+                  src={`${import.meta.env.BASE_URL}nova-features/${f.image}`}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="text-polaris-heading-sm mb-1">{f.title}</h3>
+                <p className="text-polaris-body-sm text-fg-secondary line-clamp-2">{f.desc}</p>
+              </div>
+            </Card>
+          ))}
         </div>
       </div>
 
