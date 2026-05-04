@@ -214,7 +214,7 @@ export default function NovaWorkspace() {
       {/* Hero band — gradient + nebula orbs + starfield, edge-to-edge */}
       <section className="relative isolate">
         <NovaHeroBackground />
-        <div className="max-w-5xl mx-auto px-6 pt-12 pb-16">
+        <div className="max-w-5xl mx-auto px-6 pt-12 pb-10">
           <header className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-polaris-full bg-brand-secondary-subtle text-brand-secondary text-polaris-caption font-semibold mb-4 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> AI · NOVA
@@ -339,7 +339,7 @@ export default function NovaWorkspace() {
       </section>
 
       {/* NOVA features grid — what you can do with NOVA */}
-      <div className="max-w-5xl mx-auto px-6 pt-10">
+      <div className="max-w-5xl mx-auto px-6 pt-2">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-polaris-heading-sm">NOVA로 할 수 있는 것</h2>
           <Button variant="ghost" size="sm">
@@ -365,7 +365,8 @@ export default function NovaWorkspace() {
                 {f.isNew && (
                   <Badge
                     variant="danger"
-                    className="absolute top-2.5 left-2.5 z-10 shadow-polaris-xs"
+                    tone="solid"
+                    className="absolute top-2.5 left-2.5 z-10 shadow-polaris-sm"
                   >
                     NEW
                   </Badge>

@@ -7,22 +7,60 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        neutral: 'bg-neutral-100 text-fg-secondary',
-        primary: 'bg-brand-primary-subtle text-brand-primary',
-        secondary: 'bg-brand-secondary-subtle text-brand-secondary',
-        success: 'bg-status-success/15 text-status-success',
-        warning: 'bg-status-warning/20 text-status-warning',
-        danger: 'bg-status-danger/15 text-status-danger',
-        info: 'bg-status-info/15 text-status-info',
-        docx: 'bg-file-docx/15 text-file-docx',
-        xlsx: 'bg-file-xlsx/15 text-file-xlsx',
-        pptx: 'bg-file-pptx/15 text-file-pptx',
-        pdf: 'bg-file-pdf/15 text-file-pdf',
-        hwp: 'bg-file-hwp/15 text-file-hwp',
+        neutral: '',
+        primary: '',
+        secondary: '',
+        success: '',
+        warning: '',
+        danger: '',
+        info: '',
+        docx: '',
+        xlsx: '',
+        pptx: '',
+        pdf: '',
+        hwp: '',
+      },
+      tone: {
+        /** Tinted background + colored text. The default — works on calm
+         *  surfaces (cards, body bg). Can disappear over photos / busy
+         *  backgrounds because the bg uses ~15% alpha. */
+        subtle: '',
+        /** Filled bg + on-brand white text. Use over images, dark
+         *  backgrounds, or anywhere maximum legibility matters. */
+        solid: '',
       },
     },
+    compoundVariants: [
+      // Subtle (default)
+      { variant: 'neutral',   tone: 'subtle', class: 'bg-neutral-100 text-fg-secondary' },
+      { variant: 'primary',   tone: 'subtle', class: 'bg-brand-primary-subtle text-brand-primary' },
+      { variant: 'secondary', tone: 'subtle', class: 'bg-brand-secondary-subtle text-brand-secondary' },
+      { variant: 'success',   tone: 'subtle', class: 'bg-status-success/15 text-status-success' },
+      { variant: 'warning',   tone: 'subtle', class: 'bg-status-warning/20 text-status-warning' },
+      { variant: 'danger',    tone: 'subtle', class: 'bg-status-danger/15 text-status-danger' },
+      { variant: 'info',      tone: 'subtle', class: 'bg-status-info/15 text-status-info' },
+      { variant: 'docx',      tone: 'subtle', class: 'bg-file-docx/15 text-file-docx' },
+      { variant: 'xlsx',      tone: 'subtle', class: 'bg-file-xlsx/15 text-file-xlsx' },
+      { variant: 'pptx',      tone: 'subtle', class: 'bg-file-pptx/15 text-file-pptx' },
+      { variant: 'pdf',       tone: 'subtle', class: 'bg-file-pdf/15 text-file-pdf' },
+      { variant: 'hwp',       tone: 'subtle', class: 'bg-file-hwp/15 text-file-hwp' },
+      // Solid (filled)
+      { variant: 'neutral',   tone: 'solid', class: 'bg-neutral-1000 text-neutral-0' },
+      { variant: 'primary',   tone: 'solid', class: 'bg-brand-primary text-fg-on-brand' },
+      { variant: 'secondary', tone: 'solid', class: 'bg-brand-secondary text-fg-on-brand' },
+      { variant: 'success',   tone: 'solid', class: 'bg-status-success text-fg-on-brand' },
+      { variant: 'warning',   tone: 'solid', class: 'bg-status-warning text-fg-on-brand' },
+      { variant: 'danger',    tone: 'solid', class: 'bg-status-danger text-fg-on-brand' },
+      { variant: 'info',      tone: 'solid', class: 'bg-status-info text-fg-on-brand' },
+      { variant: 'docx',      tone: 'solid', class: 'bg-file-docx text-fg-on-brand' },
+      { variant: 'xlsx',      tone: 'solid', class: 'bg-file-xlsx text-fg-on-brand' },
+      { variant: 'pptx',      tone: 'solid', class: 'bg-file-pptx text-fg-on-brand' },
+      { variant: 'pdf',       tone: 'solid', class: 'bg-file-pdf text-fg-on-brand' },
+      { variant: 'hwp',       tone: 'solid', class: 'bg-file-hwp text-fg-on-brand' },
+    ],
     defaultVariants: {
       variant: 'neutral',
+      tone: 'subtle',
     },
   }
 );
@@ -32,8 +70,8 @@ export interface BadgeProps
     VariantProps<typeof badgeVariants> {}
 
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ className, variant, ...props }, ref) => (
-    <span ref={ref} className={cn(badgeVariants({ variant }), className)} {...props} />
+  ({ className, variant, tone, ...props }, ref) => (
+    <span ref={ref} className={cn(badgeVariants({ variant, tone }), className)} {...props} />
   )
 );
 Badge.displayName = 'Badge';
