@@ -18,6 +18,27 @@ const twMerge = extendTailwindMerge({
           ],
         },
       ],
+      rounded: [
+        {
+          rounded: [
+            'polaris-sm',
+            'polaris-md',
+            'polaris-lg',
+            'polaris-xl',
+            'polaris-full',
+          ],
+        },
+      ],
+      shadow: [
+        {
+          shadow: [
+            'polaris-xs',
+            'polaris-sm',
+            'polaris-md',
+            'polaris-lg',
+          ],
+        },
+      ],
     },
   },
 });
