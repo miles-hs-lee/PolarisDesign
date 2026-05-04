@@ -6,6 +6,7 @@ import CrmContractDetail from './pages/CrmContractDetail';
 import SignContractList from './pages/SignContractList';
 import NovaWorkspace from './pages/NovaWorkspace';
 import PolarisOffice from './pages/PolarisOffice';
+import Tokens from './pages/Tokens';
 
 export function App() {
   return (
@@ -18,6 +19,7 @@ export function App() {
           <Route path="crm/contract" element={<CrmContractDetail />} />
           <Route path="sign/contracts" element={<SignContractList />} />
           <Route path="polaris-office" element={<PolarisOffice />} />
+          <Route path="tokens" element={<Tokens />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

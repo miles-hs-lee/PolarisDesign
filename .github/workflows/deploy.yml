@@ -39,14 +39,6 @@ jobs:
           GITHUB_PAGES: 'true'
         run: pnpm --filter demo build
 
-      - name: Build Storybook
-        run: pnpm --filter storybook build
-
-      - name: Combine artifacts
-        run: |
-          mkdir -p apps/demo/dist/storybook
-          cp -r apps/storybook/storybook-static/. apps/demo/dist/storybook/
-
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3

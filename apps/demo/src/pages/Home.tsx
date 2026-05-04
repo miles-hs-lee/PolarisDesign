@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Card, CardBody, Badge, cn } from '@polaris/ui';
-import { Layers, FileText, Mail, Palette, BookOpen, ArrowRight, Sparkles, FileSpreadsheet } from 'lucide-react';
+import { Layers, FileText, Mail, Palette, ArrowRight, Sparkles, FileSpreadsheet } from 'lucide-react';
 
 const CARDS = [
   {
@@ -46,8 +46,6 @@ const CARDS = [
 ] as const;
 
 export default function Home() {
-  const swatchHref = `${import.meta.env.BASE_URL}swatches.html`;
-  const storybookHref = `${import.meta.env.BASE_URL}storybook/`;
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
       <section className="mb-12">
@@ -98,8 +96,8 @@ export default function Home() {
         })}
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-        <a href={swatchHref} className="group">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+        <Link to="/tokens" className="group">
           <Card className="h-full transition-colors hover:border-brand-primary">
             <CardBody>
               <div className="flex items-center justify-between mb-3">
@@ -108,7 +106,7 @@ export default function Home() {
                 </span>
                 <Badge variant="secondary">Tokens</Badge>
               </div>
-              <h3 className="text-polaris-heading-sm mb-1.5">디자인 토큰 스와치</h3>
+              <h3 className="text-polaris-heading-sm mb-1.5">디자인 토큰</h3>
               <p className="text-polaris-body-sm text-fg-secondary mb-4">
                 4색 브랜드 팔레트와 NOVA 보라, 뉴트럴, 타이포·반경·그림자까지 한 페이지에서.
               </p>
@@ -117,27 +115,7 @@ export default function Home() {
               </span>
             </CardBody>
           </Card>
-        </a>
-
-        <a href={storybookHref} className="group">
-          <Card className="h-full transition-colors hover:border-brand-primary">
-            <CardBody>
-              <div className="flex items-center justify-between mb-3">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-polaris-md bg-brand-primary-subtle text-brand-primary">
-                  <BookOpen className="h-5 w-5" aria-hidden="true" />
-                </span>
-                <Badge variant="primary">Storybook</Badge>
-              </div>
-              <h3 className="text-polaris-heading-sm mb-1.5">컴포넌트 카탈로그 (Storybook)</h3>
-              <p className="text-polaris-body-sm text-fg-secondary mb-4">
-                Button·Dialog·FileIcon·FileCard·NovaInput을 prop별·variant별로 격리해 검증. 라이트/다크 토글 포함.
-              </p>
-              <span className="inline-flex items-center gap-1 text-polaris-body-sm text-brand-primary">
-                Storybook 열기 <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </span>
-            </CardBody>
-          </Card>
-        </a>
+        </Link>
 
         <Card>
           <CardBody>

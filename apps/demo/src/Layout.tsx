@@ -35,7 +35,6 @@ import {
   PenSquare,
   Layers,
   Palette,
-  BookOpen,
   Bell,
   Settings,
   HelpCircle,
@@ -59,6 +58,7 @@ const APP_NAV: { to: string; label: string; icon: React.ElementType; end?: boole
 
 const REFERENCE_NAV: { to: string; label: string; icon: React.ElementType; end?: boolean }[] = [
   { to: '/components', label: '컴포넌트 카탈로그', icon: Layers },
+  { to: '/tokens', label: '디자인 토큰', icon: Palette },
 ];
 
 export function Layout() {
@@ -82,9 +82,6 @@ export function Layout() {
   }, [pathname]);
 
   const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
-
-  const swatchHref = `${import.meta.env.BASE_URL}swatches.html`;
-  const storybookHref = `${import.meta.env.BASE_URL}storybook/`;
 
   const isActive = (to: string, end?: boolean) =>
     end ? pathname === to : pathname === to || pathname.startsWith(`${to}/`);
@@ -159,20 +156,6 @@ export function Layout() {
                     />
                   );
                 })}
-                <SidebarItem
-                  icon={<Palette className="h-4 w-4" />}
-                  label="디자인 토큰"
-                  onClick={() => {
-                    window.location.href = swatchHref;
-                  }}
-                />
-                <SidebarItem
-                  icon={<BookOpen className="h-4 w-4" />}
-                  label="Storybook"
-                  onClick={() => {
-                    window.location.href = storybookHref;
-                  }}
-                />
               </SidebarSection>
             </SidebarBody>
             <SidebarFooter>
