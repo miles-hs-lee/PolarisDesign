@@ -131,7 +131,7 @@ export const RibbonGroup = forwardRef<HTMLDivElement, RibbonGroupProps>(
       )}
       {...props}
     >
-      <div className="flex items-center justify-center gap-0 flex-1 min-h-14">{children}</div>
+      <div className="flex items-center justify-center gap-0 flex-1 min-h-16">{children}</div>
       {label && (
         <div className="mt-0.5 text-center text-polaris-caption text-fg-muted leading-tight whitespace-pre-line">
           {label}
@@ -209,7 +209,7 @@ const ribbonButtonStyles = cva(
       size: {
         sm: 'h-6 min-w-6 px-1 text-polaris-body-sm',
         md: 'h-8 min-w-8 px-2 text-polaris-body-sm',
-        lg: 'flex-col h-14 min-w-14 px-1.5 py-1 text-polaris-caption gap-0.5',
+        lg: 'flex-col h-16 min-w-14 px-1.5 py-1 text-polaris-caption gap-0.5',
       },
     },
     defaultVariants: { size: 'sm' },
@@ -251,6 +251,47 @@ export const RibbonButton = forwardRef<HTMLButtonElement, RibbonButtonProps>(
   }
 );
 RibbonButton.displayName = 'RibbonButton';
+
+/* ----- RibbonMenuButton -----
+ * Single button that opens a dropdown when clicked. Different from
+ * RibbonSplitButton: there's no separate main action — the entire button
+ * IS the menu trigger. Office ribbon uses this for option-style controls
+ * (여백, 용지 방향, 크기, 단 …). At `size="lg"` a chevron renders below
+ * the label.
+ */
+
+export interface RibbonMenuButtonProps extends Omit<RibbonButtonProps, 'children' | 'onClick'> {
+  children?: ReactNode;
+  /** Dropdown content. */
+  menu: ReactNode;
+}
+
+export const RibbonMenuButton = forwardRef<HTMLButtonElement, RibbonMenuButtonProps>(
+  ({ size = 'lg', icon, children, menu, className, ...props }, ref) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <RibbonButton
+          ref={ref}
+          size={size}
+          icon={icon}
+          className={className}
+          {...props}
+        >
+          {children}
+          <ChevronDown
+            className={cn(
+              size === 'lg' ? 'h-3 w-3 mt-0' : 'h-3 w-3 ml-0.5',
+              'text-fg-muted shrink-0'
+            )}
+            aria-hidden="true"
+          />
+        </RibbonButton>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">{menu}</DropdownMenuContent>
+    </DropdownMenu>
+  )
+);
+RibbonMenuButton.displayName = 'RibbonMenuButton';
 
 /* ----- RibbonSplitButton ----- */
 

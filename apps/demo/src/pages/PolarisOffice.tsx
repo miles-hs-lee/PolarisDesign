@@ -31,6 +31,7 @@ import {
   RibbonSeparator,
   RibbonButton,
   RibbonSplitButton,
+  RibbonMenuButton,
   RibbonToggleGroup,
   RibbonToggleItem,
 } from '@polaris/ui/ribbon';
@@ -445,19 +446,19 @@ export default function PolarisOffice() {
           {/* === 레이아웃 === */}
           <RibbonContent value="layout">
             <RibbonGroup>
-              <RibbonSplitButton size="lg" icon={<LayoutIcon className="h-6 w-6 text-fg-secondary" />} menuLabel="여백 선택" menu={<DropdownMenuItem>좁게 / 보통 / 넓게</DropdownMenuItem>}>여백</RibbonSplitButton>
+              <RibbonMenuButton icon={<LayoutIcon className="h-6 w-6 text-fg-secondary" />} menu={<DropdownMenuItem>좁게 / 보통 / 넓게</DropdownMenuItem>}>여백</RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-              <RibbonSplitButton size="lg" icon={<RotateCw className="h-6 w-6 text-fg-secondary" />} menuLabel="용지 방향" menu={<><DropdownMenuItem>세로</DropdownMenuItem><DropdownMenuItem>가로</DropdownMenuItem></>}>용지{'\n'}방향</RibbonSplitButton>
+              <RibbonMenuButton icon={<RotateCw className="h-6 w-6 text-fg-secondary" />} menu={<><DropdownMenuItem>세로</DropdownMenuItem><DropdownMenuItem>가로</DropdownMenuItem></>}>용지{'\n'}방향</RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-              <RibbonSplitButton size="lg" icon={<Maximize2 className="h-6 w-6 text-fg-secondary" />} menuLabel="용지 크기" menu={<><DropdownMenuItem>A4</DropdownMenuItem><DropdownMenuItem>Letter</DropdownMenuItem></>}>크기</RibbonSplitButton>
+              <RibbonMenuButton icon={<Maximize2 className="h-6 w-6 text-fg-secondary" />} menu={<><DropdownMenuItem>A4</DropdownMenuItem><DropdownMenuItem>Letter</DropdownMenuItem></>}>크기</RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-              <RibbonSplitButton size="lg" icon={<Columns3 className="h-6 w-6 text-fg-secondary" />} menuLabel="단 나누기" menu={<><DropdownMenuItem>1단</DropdownMenuItem><DropdownMenuItem>2단</DropdownMenuItem><DropdownMenuItem>3단</DropdownMenuItem></>}>단</RibbonSplitButton>
+              <RibbonMenuButton icon={<Columns3 className="h-6 w-6 text-fg-secondary" />} menu={<><DropdownMenuItem>1단</DropdownMenuItem><DropdownMenuItem>2단</DropdownMenuItem><DropdownMenuItem>3단</DropdownMenuItem></>}>단</RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-              <RibbonSplitButton size="lg" icon={<SplitSquareVertical className="h-6 w-6 text-status-danger" />} menuLabel="페이지/단/구역 나누기" menu={<><DropdownMenuItem>페이지 나누기</DropdownMenuItem><DropdownMenuItem>단 나누기</DropdownMenuItem><DropdownMenuItem>구역 나누기</DropdownMenuItem></>}>나누기</RibbonSplitButton>
+              <RibbonMenuButton icon={<SplitSquareVertical className="h-6 w-6 text-status-danger" />} menu={<><DropdownMenuItem>페이지 나누기</DropdownMenuItem><DropdownMenuItem>단 나누기</DropdownMenuItem><DropdownMenuItem>구역 나누기</DropdownMenuItem></>}>나누기</RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
               <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-brand-primary" />}>페이지{'\n'}설정</RibbonButton>
@@ -468,25 +469,25 @@ export default function PolarisOffice() {
             <RibbonSeparator />
             {/* Image-related — disabled until selection */}
             <RibbonGroup>
-              <RibbonSplitButton size="lg" disabled icon={<Move className="h-6 w-6" />} menuLabel="위치" menu={<DropdownMenuItem>위치 선택</DropdownMenuItem>}>위치</RibbonSplitButton>
+              <RibbonMenuButton disabled icon={<Move className="h-6 w-6" />} menu={<DropdownMenuItem>위치 선택</DropdownMenuItem>}>위치</RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-              <RibbonSplitButton size="lg" disabled icon={<WrapText className="h-6 w-6" />} menuLabel="줄 바꿈 옵션" menu={<DropdownMenuItem>옵션</DropdownMenuItem>}>텍스트{'\n'}줄 바꿈</RibbonSplitButton>
+              <RibbonMenuButton disabled icon={<WrapText className="h-6 w-6" />} menu={<DropdownMenuItem>옵션</DropdownMenuItem>}>텍스트{'\n'}줄 바꿈</RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-              <RibbonSplitButton size="lg" disabled icon={<Group className="h-6 w-6" />} menuLabel="그룹" menu={<DropdownMenuItem>그룹/해제</DropdownMenuItem>}>그룹</RibbonSplitButton>
+              <RibbonMenuButton disabled icon={<Group className="h-6 w-6" />} menu={<DropdownMenuItem>그룹/해제</DropdownMenuItem>}>그룹</RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-              <RibbonSplitButton size="lg" disabled icon={<ArrowUpToLine className="h-6 w-6" />} menuLabel="앞으로" menu={<DropdownMenuItem>맨 앞으로</DropdownMenuItem>}>앞으로{'\n'}가져오기</RibbonSplitButton>
+              <RibbonMenuButton disabled icon={<ArrowUpToLine className="h-6 w-6" />} menu={<DropdownMenuItem>맨 앞으로</DropdownMenuItem>}>앞으로{'\n'}가져오기</RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-              <RibbonSplitButton size="lg" disabled icon={<ArrowDownToLine className="h-6 w-6" />} menuLabel="뒤로" menu={<DropdownMenuItem>맨 뒤로</DropdownMenuItem>}>뒤로{'\n'}보내기</RibbonSplitButton>
+              <RibbonMenuButton disabled icon={<ArrowDownToLine className="h-6 w-6" />} menu={<DropdownMenuItem>맨 뒤로</DropdownMenuItem>}>뒤로{'\n'}보내기</RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-              <RibbonSplitButton size="lg" disabled icon={<AlignLeft className="h-6 w-6" />} menuLabel="맞춤" menu={<DropdownMenuItem>왼쪽/오른쪽/위/아래</DropdownMenuItem>}>맞춤</RibbonSplitButton>
+              <RibbonMenuButton disabled icon={<AlignLeft className="h-6 w-6" />} menu={<DropdownMenuItem>왼쪽/오른쪽/위/아래</DropdownMenuItem>}>맞춤</RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-              <RibbonSplitButton size="lg" disabled icon={<RotateCw className="h-6 w-6" />} menuLabel="회전" menu={<><DropdownMenuItem>90° 회전</DropdownMenuItem><DropdownMenuItem>180° 회전</DropdownMenuItem></>}>회전</RibbonSplitButton>
+              <RibbonMenuButton disabled icon={<RotateCw className="h-6 w-6" />} menu={<><DropdownMenuItem>90° 회전</DropdownMenuItem><DropdownMenuItem>180° 회전</DropdownMenuItem></>}>회전</RibbonMenuButton>
             </RibbonGroup>
           </RibbonContent>
 
