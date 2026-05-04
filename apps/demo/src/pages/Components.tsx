@@ -57,6 +57,24 @@ import {
   NavbarNav,
   NavbarActions,
   PromptChip,
+  Checkbox,
+  Switch,
+  Skeleton,
+  Alert,
+  AlertTitle,
+  AlertDescription,
+  Pagination,
+  PaginationItem,
+  PaginationPrev,
+  PaginationNext,
+  PaginationEllipsis,
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  EmptyState,
 } from '@polaris/ui';
 import {
   Plus,
@@ -76,6 +94,7 @@ import {
   Bell,
   Settings,
   HelpCircle,
+  Inbox,
 } from 'lucide-react';
 
 type ToastEntry = { id: number; title: string; description?: string; variant: 'info' | 'success' | 'warning' | 'danger' };
@@ -85,6 +104,9 @@ export default function Components() {
   const [toasts, setToasts] = useState<ToastEntry[]>([]);
   const [novaQuery, setNovaQuery] = useState('');
   const [submitted, setSubmitted] = useState<string | null>(null);
+  const [agreed, setAgreed] = useState(false);
+  const [notifications, setNotifications] = useState(true);
+  const [page, setPage] = useState(3);
 
   const pushToast = (variant: ToastEntry['variant'], title: string, description?: string) => {
     setToasts((t) => [...t, { id: Date.now() + Math.random(), title, description, variant }]);
@@ -93,9 +115,9 @@ export default function Components() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
       <header className="mb-10 pb-4 border-b border-surface-border">
-        <h1 className="text-polaris-heading-lg mb-1">Tier 0 Components</h1>
+        <h1 className="text-polaris-heading-lg mb-1">Polaris Components</h1>
         <p className="text-polaris-body-sm text-fg-muted">
-          12개 컴포넌트의 variant·상태·조합을 한 페이지에서 검증
+          25개 컴포넌트(Tier 0 + Tier 1 + Tier 2)의 variant·상태·조합을 한 페이지에서 검증
         </p>
       </header>
 
@@ -474,7 +496,140 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="19. 폴라리스 화면 모방 (조합 검증)">
+      <Section title="19. Checkbox + Switch (Tier 2)">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card>
+            <CardBody>
+              <h3 className="text-polaris-heading-sm mb-3">Checkbox</h3>
+              <div className="space-y-3">
+                <label className="flex items-center gap-2 text-polaris-body-sm">
+                  <Checkbox checked={agreed} onCheckedChange={(v) => setAgreed(v === true)} />
+                  이용 약관에 동의합니다
+                </label>
+                <label className="flex items-center gap-2 text-polaris-body-sm">
+                  <Checkbox checked="indeterminate" />
+                  일부 항목 선택됨 (indeterminate)
+                </label>
+                <label className="flex items-center gap-2 text-polaris-body-sm text-fg-muted">
+                  <Checkbox disabled />
+                  비활성 상태
+                </label>
+              </div>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardBody>
+              <h3 className="text-polaris-heading-sm mb-3">Switch</h3>
+              <div className="space-y-3">
+                <label className="flex items-center justify-between text-polaris-body-sm">
+                  알림 받기
+                  <Switch checked={notifications} onCheckedChange={setNotifications} />
+                </label>
+                <label className="flex items-center justify-between text-polaris-body-sm text-fg-muted">
+                  마케팅 수신 (비활성)
+                  <Switch disabled />
+                </label>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+      </Section>
+
+      <Section title="20. Skeleton (Tier 2)">
+        <Card>
+          <CardBody>
+            <div className="flex items-center gap-3 mb-4">
+              <Skeleton className="h-10 w-10 rounded-polaris-full" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-4 w-1/3" />
+                <Skeleton className="h-3 w-1/2" />
+              </div>
+            </div>
+            <Skeleton className="h-32 w-full" />
+          </CardBody>
+        </Card>
+      </Section>
+
+      <Section title="21. Alert (Tier 2)">
+        <div className="space-y-3">
+          <Alert variant="info">
+            <AlertTitle>새 버전이 배포되었습니다</AlertTitle>
+            <AlertDescription>v0.2.0 — Tier 2 컴포넌트 7개 추가, Toast imperative API.</AlertDescription>
+          </Alert>
+          <Alert variant="success">
+            <AlertTitle>저장됨</AlertTitle>
+            <AlertDescription>모든 변경 사항이 자동으로 저장되었습니다.</AlertDescription>
+          </Alert>
+          <Alert variant="warning">
+            <AlertTitle>곧 만료됩니다</AlertTitle>
+            <AlertDescription>구독 갱신을 7일 안에 완료해주세요.</AlertDescription>
+          </Alert>
+          <Alert variant="danger">
+            <AlertTitle>업로드 실패</AlertTitle>
+            <AlertDescription>파일 크기가 50MB를 초과합니다.</AlertDescription>
+          </Alert>
+        </div>
+      </Section>
+
+      <Section title="22. Pagination (Tier 2)">
+        <Card>
+          <CardBody>
+            <Pagination>
+              <PaginationPrev onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} />
+              {[1, 2, 3, 4, 5].map((n) => (
+                <PaginationItem key={n} active={page === n} onClick={() => setPage(n)}>
+                  {n}
+                </PaginationItem>
+              ))}
+              <PaginationEllipsis />
+              <PaginationItem onClick={() => setPage(12)} active={page === 12}>12</PaginationItem>
+              <PaginationNext onClick={() => setPage((p) => Math.min(12, p + 1))} disabled={page === 12} />
+            </Pagination>
+            <p className="mt-3 text-polaris-caption text-fg-muted text-center">현재 페이지: {page} / 12</p>
+          </CardBody>
+        </Card>
+      </Section>
+
+      <Section title="23. Breadcrumb (Tier 2)">
+        <Card>
+          <CardBody>
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="#">홈</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="#">영업관리</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="#">계약</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>2026 Q1 보고서</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </CardBody>
+        </Card>
+      </Section>
+
+      <Section title="24. EmptyState (Tier 2)">
+        <EmptyState
+          icon={<Inbox />}
+          title="아직 받은 문서가 없습니다"
+          description="결재 요청을 받으면 여기에 표시됩니다. NOVA에게 새 문서 작성을 요청해보세요."
+          action={
+            <Button onClick={() => pushToast('info', 'NOVA로 이동')}>
+              <Sparkles className="h-4 w-4" /> NOVA 시작하기
+            </Button>
+          }
+        />
+      </Section>
+
+      <Section title="25. 폴라리스 화면 모방 (조합 검증)">
         <Card>
           <CardHeader>
             <CardTitle>최근 문서</CardTitle>

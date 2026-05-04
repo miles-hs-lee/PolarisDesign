@@ -53,10 +53,14 @@ const polarisPreset: Partial<Config> = {
         },
 
         status: {
-          success: token('--polaris-status-success'),
-          warning: token('--polaris-status-warning'),
-          danger:  token('--polaris-status-danger'),
-          info:    token('--polaris-status-info'),
+          success:         token('--polaris-status-success'),
+          'success-hover': token('--polaris-status-success-hover'),
+          warning:         token('--polaris-status-warning'),
+          'warning-hover': token('--polaris-status-warning-hover'),
+          danger:          token('--polaris-status-danger'),
+          'danger-hover':  token('--polaris-status-danger-hover'),
+          info:            token('--polaris-status-info'),
+          'info-hover':    token('--polaris-status-info-hover'),
         },
 
         surface: {
@@ -71,10 +75,11 @@ const polarisPreset: Partial<Config> = {
         // `text-fg-on-brand`, etc. We use `fg` instead of `text` to avoid
         // tailwind-merge confusion with the `text-` font-size utility prefix.
         fg: {
-          primary:    token('--polaris-text-primary'),
-          secondary:  token('--polaris-text-secondary'),
-          muted:      token('--polaris-text-muted'),
-          'on-brand': token('--polaris-text-on-brand'),
+          primary:     token('--polaris-text-primary'),
+          secondary:   token('--polaris-text-secondary'),
+          muted:       token('--polaris-text-muted'),
+          'on-brand':  token('--polaris-text-on-brand'),
+          'on-status': token('--polaris-text-on-status'),
         },
 
         neutral: {

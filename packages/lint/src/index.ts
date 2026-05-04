@@ -7,7 +7,7 @@ import preferPolarisComponent from './rules/prefer-polaris-component';
 
 const meta = {
   name: '@polaris/lint',
-  version: '0.1.0',
+  version: '0.2.0',
 } as const;
 
 const rules = {

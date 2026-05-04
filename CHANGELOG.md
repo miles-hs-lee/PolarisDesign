@@ -12,6 +12,60 @@
 
 ---
 
+## [0.2.0] — 2026-05-04
+
+첫 사내 마이그레이션(Next.js 16 + Tailwind v4 기존 프로젝트)에서 받은 피드백을 반영한 패치 릴리스. 컴포넌트 7개 추가, lint 룰 false-positive 보정, SSR 호환 패턴 정비.
+
+### 추가됨 — Tier 2 컴포넌트 7개 (`@polaris/ui` → 18개에서 25개)
+
+- **Checkbox** — Radix Checkbox 기반, `checked='indeterminate'` 지원
+- **Switch** — Radix Switch 기반, on/off 24px 트랙
+- **Skeleton** — `animate-pulse` placeholder, prop 없이 className만으로 사용
+- **Alert / AlertTitle / AlertDescription** — info/success/warning/danger/neutral 5종, leading icon 자동
+- **Pagination / PaginationItem / PaginationPrev / PaginationNext / PaginationEllipsis** — 페이지 번호 + prev/next + ellipsis
+- **Breadcrumb / BreadcrumbList / BreadcrumbItem / BreadcrumbLink / BreadcrumbPage / BreadcrumbSeparator** — `asChild`로 라우터 Link wrap 가능
+- **EmptyState** — icon + title + description + action 슬롯
+
+### 추가됨 — Toast imperative API (`@polaris/ui`)
+
+기존 `<Toast>` primitive에 더해 shadcn 패턴의 `useToast()` 훅 + `toast()` 함수 + `<Toaster />` 컴포넌트 export. 호출처에서 stack을 직접 관리할 필요 없음:
+
+```tsx
+<ToastProvider><App /><Toaster /><ToastViewport /></ToastProvider>
+// 어디서든
+toast({ title: '저장됨', variant: 'success' });
+```
+
+### 추가됨 — Card `asChild` (`@polaris/ui`)
+
+`<Card asChild><section>...</section></Card>` — Button·DropdownMenuTrigger·SidebarItem과 동일한 Slot 패턴.
+
+### 추가됨 — 색상 토큰
+
+- `status.{success,warning,danger,info}.hover` — solid 액션 버튼 hover 색
+- `text.onStatus` (Tailwind: `text-fg-on-status`) — solid 상태 배경 위 텍스트 색
+
+### 추가됨 — 문서
+
+- `docs/tailwind-v4-migration.md` — Tailwind v4 (`@theme inline`) 매핑 가이드. v0.3에서 v4-네이티브 preset 추가 전까지의 임시 안내.
+
+### 변경됨 — `@polaris/lint`
+
+- `no-arbitrary-tailwind` — `grid-cols-[1fr_180px_120px]` 같은 layout utility 화이트리스트. 토큰화 불가능한 layout 표현은 허용.
+- `prefer-polaris-component` — 새 옵션 `allowFormSubmit` (default `true`). `<button type="submit">`/`<button type="reset">`은 form-control 패턴이므로 native 사용 허용.
+
+### 변경됨 — `packages/template-next`
+
+- `ThemeToggle` SSR 안전 재작성. `useState` + `useEffect` 제거, DOM(`html[data-theme]`) + 쿠키를 source of truth로. React 19의 `react-hooks/set-state-in-effect` 경고 제거 + 첫 페인트부터 올바른 테마.
+- `app/layout.tsx`가 `cookies()`로 `polaris-theme` 쿠키를 읽어 `<html data-theme>`을 SSR 시점에 결정.
+
+### 의존성 추가 — `@polaris/ui`
+
+- `@radix-ui/react-checkbox@^1.1.3`
+- `@radix-ui/react-switch@^1.1.2`
+
+---
+
 ## [0.1.0] — 2026-05-04
 
 사내 공개 alpha. 폴라리스오피스의 바이브코딩옵스에서 만들어지는 React/Next.js 웹 서비스가 **토큰·컴포넌트·린트·플러그인 한 묶음**으로 회사 단위 일관성을 자동 유지하도록 한다는 가설을 처음 외부 검증에 내놓는 버전. v0.0.x는 내부 실험이었고, 0.1.0부터 SemVer 약속이 시작됩니다.
@@ -94,5 +148,6 @@ GitHub Pages에 자동 배포 (https://miles-hs-lee.github.io/PolarisDesign/):
 
 ---
 
-[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/miles-hs-lee/PolarisDesign/releases/tag/v0.1.0

@@ -14,3 +14,12 @@ html, body {
 body {
   margin: 0;
 }
+
+/* ThemeToggle icon swap — driven by [data-theme] on <html>, no JS state. */
+:root[data-theme="light"] .theme-icon-dark,
+:root:not([data-theme="dark"]) .theme-icon-dark {
+  display: none;
+}
+:root[data-theme="dark"] .theme-icon-light {
+  display: none;
+}

@@ -31,7 +31,7 @@ const CARDS = [
     to: '/components',
     icon: Layers,
     title: '컴포넌트 카탈로그',
-    desc: '18개 컴포넌트(Tier 0 + Tier 1)의 모든 variant·상태·조합을 한 페이지에서 확인',
+    desc: '25개 컴포넌트(Tier 0 + Tier 1 + Tier 2)의 모든 variant·상태·조합을 한 페이지에서 확인',
     badge: '레퍼런스',
     accent: 'primary' as const,
   },
@@ -136,7 +136,7 @@ export default function Home() {
             <h3 className="text-polaris-heading-sm mb-3">아키텍처</h3>
             <ul className="text-polaris-body-sm text-fg-secondary space-y-2">
               <li>
-                <code className="text-fg-primary font-polaris-mono">@polaris/ui</code> — 토큰 + 18개 컴포넌트
+                <code className="text-fg-primary font-polaris-mono">@polaris/ui</code> — 토큰 + 25개 컴포넌트
               </li>
               <li>
                 <code className="text-fg-primary font-polaris-mono">@polaris/lint</code> — 4가지 ESLint 룰

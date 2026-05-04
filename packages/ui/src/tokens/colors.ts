@@ -27,10 +27,14 @@ export const fileType = {
 } as const satisfies Record<string, ColorPair>;
 
 export const status = {
-  success: { light: '#16A34A', dark: '#3FCB72' },
-  warning: { light: '#EAB308', dark: '#FFD64A' },
-  danger:  { light: '#DC2626', dark: '#FF6962' },
-  info:    { light: '#2563EB', dark: '#5C9FFF' },
+  success:      { light: '#16A34A', dark: '#3FCB72' },
+  successHover: { light: '#138A3F', dark: '#58D788' },
+  warning:      { light: '#EAB308', dark: '#FFD64A' },
+  warningHover: { light: '#C99B0A', dark: '#FFE17A' },
+  danger:       { light: '#DC2626', dark: '#FF6962' },
+  dangerHover:  { light: '#B91C1C', dark: '#FF8782' },
+  info:         { light: '#2563EB', dark: '#5C9FFF' },
+  infoHover:    { light: '#1D4ED8', dark: '#7AB1FF' },
 } as const satisfies Record<string, ColorPair>;
 
 export const neutral = {
@@ -61,6 +65,7 @@ export const text = {
   secondary: { light: neutral['700'].light,  dark: neutral['700'].dark },
   muted:     { light: neutral['500'].light,  dark: neutral['500'].dark },
   onBrand:   { light: '#FFFFFF', dark: '#FFFFFF' },
+  onStatus:  { light: '#FFFFFF', dark: '#FFFFFF' },
 } as const satisfies Record<string, ColorPair>;
 
 export const colors = {

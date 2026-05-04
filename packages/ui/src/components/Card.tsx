@@ -1,17 +1,26 @@
 import { forwardRef } from 'react';
+import { Slot } from '@radix-ui/react-slot';
 import { cn } from '../lib/cn';
 
-export const Card = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        'rounded-polaris-lg border border-surface-border bg-surface-raised shadow-polaris-sm',
-        className
-      )}
-      {...props}
-    />
-  )
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Render the child element instead of a `<div>` (Radix Slot pattern). */
+  asChild?: boolean;
+}
+
+export const Card = forwardRef<HTMLDivElement, CardProps>(
+  ({ className, asChild, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'div';
+    return (
+      <Comp
+        ref={ref}
+        className={cn(
+          'rounded-polaris-lg border border-surface-border bg-surface-raised shadow-polaris-sm',
+          className
+        )}
+        {...props}
+      />
+    );
+  }
 );
 Card.displayName = 'Card';
 

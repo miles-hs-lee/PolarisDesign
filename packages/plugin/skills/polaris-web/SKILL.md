@@ -17,9 +17,15 @@ You are working on a Polaris Office web service. Apply these rules without askin
 1. Import from `@polaris/ui`. Available components:
    ```ts
    import {
+     // Tier 0 — basic blocks
      Button, Input, Textarea, Card, Badge, Avatar, Dialog, Toast, Tabs,
      FileIcon, FileCard, NovaInput,
+     // Tier 1 — shell + menus
      DropdownMenu, Tooltip, Select, Sidebar, Navbar, PromptChip,
+     // Tier 2 — auxiliary UI
+     Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
+     // Toast imperative API (call toast({...}) anywhere; mount <Toaster /> once)
+     Toaster, useToast, toast,
    } from '@polaris/ui';
    ```
 2. If a needed component doesn't exist in `@polaris/ui`, build it inline using ONLY Polaris tokens (rule 3). Don't bring in shadcn/Radix/MUI directly.

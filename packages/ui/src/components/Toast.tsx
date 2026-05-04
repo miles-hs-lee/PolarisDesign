@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useEffect, useState, type ReactNode } from 'react';
 import * as ToastPrimitive from '@radix-ui/react-toast';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
@@ -111,3 +111,103 @@ export const ToastClose = forwardRef<
 ToastClose.displayName = 'ToastClose';
 
 export { toastVariants };
+
+/* ----------------------------------------------------------------------------
+ * Imperative API: useToast() hook + Toaster component
+ *
+ * Module-level store (shadcn-style) — keeps Toaster usage to a single line
+ * inside ToastProvider, so callers anywhere in the tree can fire toasts via
+ * `toast({ title, description, variant })` without lifting state.
+ * ------------------------------------------------------------------------- */
+
+type ToastVariant = NonNullable<VariantProps<typeof toastVariants>['variant']>;
+
+export interface ToastInput {
+  title?: ReactNode;
+  description?: ReactNode;
+  action?: ReactNode;
+  variant?: ToastVariant;
+  duration?: number;
+}
+
+export interface ToastEntry extends ToastInput {
+  id: string;
+  open: boolean;
+}
+
+type ToastListener = (toasts: ToastEntry[]) => void;
+
+let toastIdCounter = 0;
+let toastQueue: ToastEntry[] = [];
+const toastListeners = new Set<ToastListener>();
+const TOAST_LIMIT = 5;
+
+function emit() {
+  for (const listener of toastListeners) listener(toastQueue);
+}
+
+export function toast(input: ToastInput): { id: string; dismiss: () => void } {
+  const id = `polaris-toast-${++toastIdCounter}`;
+  const entry: ToastEntry = { ...input, id, open: true };
+  toastQueue = [entry, ...toastQueue].slice(0, TOAST_LIMIT);
+  emit();
+  return {
+    id,
+    dismiss: () => dismissToast(id),
+  };
+}
+
+export function dismissToast(id?: string) {
+  toastQueue = toastQueue.map((t) => (id === undefined || t.id === id ? { ...t, open: false } : t));
+  emit();
+}
+
+export function useToast() {
+  const [toasts, setToasts] = useState<ToastEntry[]>(toastQueue);
+  useEffect(() => {
+    const listener: ToastListener = (next) => setToasts([...next]);
+    toastListeners.add(listener);
+    return () => {
+      toastListeners.delete(listener);
+    };
+  }, []);
+  return { toasts, toast, dismiss: dismissToast };
+}
+
+/**
+ * Render once near the root of your app, *inside* a `<ToastProvider>` and next
+ * to a `<ToastViewport>`. Then call `toast({ title, description })` anywhere.
+ *
+ * ```tsx
+ * <ToastProvider>
+ *   <App />
+ *   <Toaster />
+ *   <ToastViewport />
+ * </ToastProvider>
+ * ```
+ */
+export function Toaster() {
+  const { toasts, dismiss } = useToast();
+  return (
+    <>
+      {toasts.map((t) => (
+        <Toast
+          key={t.id}
+          variant={t.variant}
+          duration={t.duration}
+          open={t.open}
+          onOpenChange={(open) => {
+            if (!open) dismiss(t.id);
+          }}
+        >
+          <div className="flex-1 min-w-0">
+            {t.title && <ToastTitle>{t.title}</ToastTitle>}
+            {t.description && <ToastDescription>{t.description}</ToastDescription>}
+          </div>
+          {t.action}
+          <ToastClose />
+        </Toast>
+      ))}
+    </>
+  );
+}

@@ -92,10 +92,24 @@ tester.run('prefer-polaris-component', polaris.rules['prefer-polaris-component']
     { code: `import { Button } from '@polaris/ui'; const x = <Button>hi</Button>;` },
     { code: `const x = <span>hi</span>;` },
     { code: `const x = <p>hi</p>;` },
+    // form-submit allowance (default: true) — these are legitimate native usages
+    { code: `const x = <button type="submit">전송</button>;` },
+    { code: `const x = <button type="reset">취소</button>;` },
   ],
   invalid: [
     {
       code: `const x = <button>click</button>;`,
+      errors: [{ messageId: 'replace' }],
+    },
+    {
+      // type="button" is the default — still flagged
+      code: `const x = <button type="button">click</button>;`,
+      errors: [{ messageId: 'replace' }],
+    },
+    {
+      // explicit opt-out: allowFormSubmit:false makes <button type="submit"> invalid too
+      code: `const x = <button type="submit">전송</button>;`,
+      options: [{ allowFormSubmit: false }],
       errors: [{ messageId: 'replace' }],
     },
     {
@@ -126,6 +140,11 @@ tester.run('no-arbitrary-tailwind', polaris.rules['no-arbitrary-tailwind'], {
     { code: `const cls = "text-fg-primary font-polaris";` },
     { code: `const cls = \`bg-surface-canvas \${active && 'ring-brand-primary'}\`;` },
     { code: `const x = "[1, 2, 3]";` },
+    // Layout utilities — token-uncovered, must be allowed
+    { code: `const cls = "grid grid-cols-[1fr_180px_120px]";` },
+    { code: `const cls = "grid grid-rows-[auto_1fr_auto]";` },
+    { code: `const cls = "col-span-[2] row-span-[3]";` },
+    { code: `const cls = "col-start-[1] col-end-[3]";` },
   ],
   invalid: [
     {

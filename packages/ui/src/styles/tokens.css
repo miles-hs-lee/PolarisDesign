@@ -33,6 +33,12 @@
   --polaris-status-danger:  #DC2626;
   --polaris-status-info:    #2563EB;
 
+  /* Status hover variants — solid-bg components (alert action, banner CTA). */
+  --polaris-status-success-hover: #138A3F;
+  --polaris-status-warning-hover: #C99B0A;
+  --polaris-status-danger-hover:  #B91C1C;
+  --polaris-status-info-hover:    #1D4ED8;
+
   /* === Neutral 12-step === */
   --polaris-neutral-0:    #FFFFFF;
   --polaris-neutral-50:   #FAFAFB;
@@ -57,6 +63,9 @@
   --polaris-text-secondary: var(--polaris-neutral-700);
   --polaris-text-muted:     var(--polaris-neutral-500);
   --polaris-text-on-brand:  #FFFFFF;
+  /* Foreground when sitting on a solid status background. White works for all
+   * four current statuses since each has sufficient contrast against white. */
+  --polaris-text-on-status: #FFFFFF;
 
   /* === Radius === */
   --polaris-radius-sm:   6px;
@@ -93,6 +102,11 @@
   --polaris-status-danger:  #FF6962;
   --polaris-status-info:    #5C9FFF;
 
+  --polaris-status-success-hover: #58D788;
+  --polaris-status-warning-hover: #FFE17A;
+  --polaris-status-danger-hover:  #FF8782;
+  --polaris-status-info-hover:    #7AB1FF;
+
   --polaris-neutral-0:    #0B0B12;
   --polaris-neutral-50:   #131320;
   --polaris-neutral-100:  #1B1B2A;
@@ -128,6 +142,10 @@
     --polaris-status-warning: #FFD64A;
     --polaris-status-danger:  #FF6962;
     --polaris-status-info:    #5C9FFF;
+    --polaris-status-success-hover: #58D788;
+    --polaris-status-warning-hover: #FFE17A;
+    --polaris-status-danger-hover:  #FF8782;
+    --polaris-status-info-hover:    #7AB1FF;
     --polaris-neutral-0:    #0B0B12;
     --polaris-neutral-50:   #131320;
     --polaris-neutral-100:  #1B1B2A;

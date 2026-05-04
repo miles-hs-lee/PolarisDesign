@@ -1,6 +1,6 @@
 # @polaris/ui
 
-폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 18개 React 컴포넌트.
+폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 25개 React 컴포넌트.
 
 루트 [README](../../README.md)에 전체 시스템 설명이 있습니다. 이 문서는 패키지 사용법만 다룹니다.
 
@@ -70,15 +70,19 @@ export default {
 | 반경 | `rounded-polaris-sm/md/lg/xl/full` |
 | 그림자 | `shadow-polaris-xs/sm/md/lg` |
 
-## 컴포넌트 (18개)
+## 컴포넌트 (25개)
 
 ```tsx
 import {
-  // Tier 0 (12)
+  // Tier 0 (12) — 기본 빌딩 블록
   Button, Input, Textarea, Card, Badge, Avatar, Dialog, Toast, Tabs,
   FileIcon, FileCard, NovaInput,
-  // Tier 1 (6)
+  // Tier 1 (6) — 셸 + 메뉴
   DropdownMenu, Tooltip, Select, Sidebar, Navbar, PromptChip,
+  // Tier 2 (7) — 보조 UI
+  Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
+  // Toast imperative API
+  Toaster, useToast, toast,
   // 헬퍼
   cn,
 } from '@polaris/ui';
