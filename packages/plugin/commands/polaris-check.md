@@ -20,9 +20,13 @@ pnpm exec eslint . --fix
 
 - **hex 색상** (`#1D4ED8` 등) → `var(--polaris-brand-primary)` 또는 `bg-brand-primary` 클래스
 - **rgb/hsl 함수** → 시맨틱 토큰으로 교체
+- **inline style의 CSS named color** (`style={{ color: 'red' }}`) → 시맨틱 토큰
 - **Tailwind 임의값** (`bg-[#xxx]`, `p-[13px]`) → 토큰 기반 클래스 (`bg-brand-primary`, `p-4`)
 - **font-family 직접 지정** → `var(--polaris-font-sans)` 또는 `font-polaris` 클래스
 - **font-['Inter']** Tailwind 임의값 → `font-polaris`
+- **native `<button>`/`<input>`/`<textarea>`/`<select>`/`<dialog>`** → `@polaris/ui` 컴포넌트로 교체 (`<Button>`, `<Input>`, …)
+
+전체 진단(자주 등장 hex 분석 등)이 필요하면 `npx polaris-audit`로 요약 리포트 확인. 마이그레이션 가이드는 `/polaris-migrate`.
 
 ### 위반이 없으면
 

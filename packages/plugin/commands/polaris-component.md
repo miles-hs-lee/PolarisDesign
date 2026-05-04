@@ -8,10 +8,10 @@ argument-hint: <컴포넌트 이름>
 ### 1. @polaris/ui에 이미 있는지 확인
 
 ```sh
-grep -l "export.*$ARGUMENTS" node_modules/@polaris/ui/dist/*.d.ts || echo "Not found"
+grep -E "^export (const|function|interface|type) $ARGUMENTS\b" node_modules/@polaris/ui/dist/index.d.ts || echo "Not found"
 ```
 
-또는 `node_modules/@polaris/ui/src/components/`에서 확인.
+또는 데모(`/components` 페이지)나 [Storybook](https://miles-hs-lee.github.io/PolarisDesign/storybook/)에서 컴포넌트 카탈로그 시각 확인.
 
 ### 2. 있다면 — 그대로 import
 

@@ -9,13 +9,21 @@ You are working on a Polaris Office web service. Apply these rules without askin
 
 ## Procedure
 
-### 1. New project
-If no `tailwind.config.ts` or `eslint.config.mjs` exists yet, run `/polaris-init` first. Do not write feature code before scaffolding completes.
+### 1. New / existing project
+- **New project**: run `/polaris-init <name>` first — bootstraps a Next.js 15 app from `template-next` with everything pre-wired. Do not write feature code before scaffolding completes.
+- **Existing project that's not yet polaris-compliant**: run `/polaris-migrate` instead — it walks through audit → eslint --fix → page-by-page conversion → enforce. Don't try to write new polaris-compliant code on top of unmigrated code; migrate first.
 
 ### 2. UI elements (in order of preference)
-1. Import from `@polaris/ui`: `import { Button, Input, Card, Dialog, Toast, Navbar, Sidebar, Table } from '@polaris/ui';`
+1. Import from `@polaris/ui`. Available components:
+   ```ts
+   import {
+     Button, Input, Textarea, Card, Badge, Avatar, Dialog, Toast, Tabs,
+     FileIcon, FileCard, NovaInput,
+     DropdownMenu, Tooltip, Select, Sidebar, Navbar, PromptChip,
+   } from '@polaris/ui';
+   ```
 2. If a needed component doesn't exist in `@polaris/ui`, build it inline using ONLY Polaris tokens (rule 3). Don't bring in shadcn/Radix/MUI directly.
-3. Native `<button>`, `<input>`, `<select>`, etc. are forbidden in feature code. (They're allowed inside `@polaris/ui` itself.)
+3. Native `<button>`, `<input>`, `<textarea>`, `<select>`, `<dialog>` are forbidden in feature code — the lint rule `@polaris/prefer-polaris-component` blocks them. (They're allowed inside `@polaris/ui` itself.)
 
 ### 3. Colors — the most common violation
 Use ONLY these:
