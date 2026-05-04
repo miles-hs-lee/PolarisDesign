@@ -8,9 +8,55 @@
 
 ## [Unreleased]
 
-다음 릴리스(v0.5.x)에 들어갈 항목 — [docs/roadmap.md](docs/roadmap.md).
+다음 릴리스(v0.6.x+)에 들어갈 항목 — [docs/roadmap.md](docs/roadmap.md).
 
 **검증 필요:** v0.4 사용자 보고 — `prefer-polaris-component` lint가 server action `<form action={...}>` 안의 `<button type="submit">`을 일부 케이스에서 flag. v0.2.0 `allowFormSubmit` 수정 후 회귀 테스트는 통과 — 사용자 lint 버전 또는 화이트리스트 미커버 케이스 확인 필요.
+
+---
+
+## [0.6.0] — 2026-05-05
+
+v0.5.0 Ribbon 출시 후 실사용 검증(폴라리스 오피스 워드 리본 재현)을 거쳐 정비 + 새 컴포넌트를 추가하고, 데모 인프라를 단순화한 정비 릴리스.
+
+### 추가됨 — `@polaris/ui/ribbon`
+
+- **`RibbonMenuButton`** — chevron만 클릭 가능한 메뉴 트리거 (메인 액션 없음). 레이아웃 탭의 "여백·용지 방향·크기·단·나누기" 같은 옵션 컨트롤에 사용. `lg` 사이즈에선 chevron이 라벨 아래에 stacked.
+- **`RibbonStack`** — RibbonGroup 안 세로 컬럼. 잘라내기/복사/서식복사 같은 stack of secondary actions 패턴.
+- **`RibbonRow`** — RibbonStack 안 가로 행. Office 클래식 2-row 그룹 구성에 사용.
+- **`RibbonRowDivider`** — 같은 RibbonRow 안 클러스터 사이 짧은 세로선. Office의 `B I U S | X₁ X² | A_ A_ | A▢ E` 같은 cluster 분할에 사용 (RibbonSeparator는 그룹 전체 height을 가르므로 구분).
+
+### 변경됨
+
+- **`RibbonSplitButton` lg 자동 vertical 분할** — `size="lg"`일 때 메인 액션 위 + chevron strip 아래의 column 레이아웃으로 자동 전환 (Office paste 버튼 패턴).
+- **메인/chevron 독립 hover** — `RibbonSplitButton`의 두 영역이 wrapper hover 없이 각자 hover state를 가짐. chevron 영역 폭도 `min-w-0 px-0.5`로 축소.
+- **`RibbonContent` panel 높이 안정화** — horizontal scrollbar를 시각적으로 숨겨(`scrollbar-width: none` + `::-webkit-scrollbar:hidden`) overflow 여부와 무관하게 panel 높이가 일정하도록. inactive panel은 `data-[state=inactive]:hidden`으로 layout에서 제거 (Radix `hidden` attribute가 `flex` className에 밀리던 문제 해결).
+- **lg 버튼 라벨 wrap 통일** — `RibbonToggleItem`도 `RibbonButton`과 동일하게 lg에서 children을 `whitespace-pre-line text-center` span으로 wrap. `\n` 줄바꿈이 우연히 자연 wrap에 의존하던 fragile 상태 fix.
+- **lg cva density** — `min-w-12 → min-w-14` (짧은 라벨도 가로폭 균일), `RibbonGroup` outer `px-1.5 → px-1` (그룹 사이 간격 축소).
+- **`SelectTrigger` 줄바꿈 방지** — `whitespace-nowrap` + `[&>span]:truncate [&>span]:min-w-0` 보장. 좁은 select에서 콘텐츠가 잘리되 절대 wrap되지 않음 (ribbon 폰트 select 등).
+
+### 수정됨
+
+- **`RibbonSplitButton`이 `disabled` 상태에서도 메뉴가 열리던 버그** — `disabled` prop이 메인 버튼에만 spread되고 `DropdownMenuTrigger`에는 전달되지 않아 비활성 split의 chevron 클릭 시 메뉴가 열리던 문제. 이제 `disabled`를 destructure해서 양쪽 모두에 명시적으로 적용.
+- **icon-only `RibbonButton` / `RibbonToggleItem`의 accessible name 누락** — `tooltip`은 시각 전용이라 스크린리더에는 안 노출. `children`이 없고 `tooltip`이 string이면 `aria-label`로 자동 fallback (consumer가 `aria-label`을 명시했다면 우선).
+
+### 추가됨 — 데모 (`apps/demo`)
+
+- **`/#/polaris-office`** — 폴라리스 오피스 워드 리본 재현. 8 탭(파일·홈·삽입·레이아웃·검토·보기·펜·AI 도구) 중 5탭(홈·삽입·레이아웃·검토·AI 도구)을 self-contained 컴포넌트로 분리해서 사용자가 한 탭 코드를 그대로 카피해 시작점으로 쓸 수 있도록 구성.
+- **`/#/tokens`** (NEW) — 디자인 토큰 SPA 페이지. `@polaris/ui/tokens`에서 자동 import해서 색상(light/dark 페어), 타이포그래피, radius, shadow를 한 페이지에 시각화. 정적 `swatches.html`을 대체하면서 NavBar/Sidebar 셸 안으로 통합.
+
+### 변경됨 — 데모
+
+- **`vite.config.ts`에 `@polaris/ui` source alias** — dev에서 ui 패키지 변경 시 별도 `tsup` 빌드 없이 즉시 HMR 반영 (subpath alias 5개 + bare alias). `pnpm --filter demo dev` 한 번만 띄우고 양쪽 코드 편집 가능.
+
+### 제거됨 — Storybook
+
+- `apps/storybook` 전체 패키지 (-83 dep)
+- `.github/workflows/ci.yml`의 Lint/Build storybook 단계
+- `.github/workflows/deploy.yml`의 Build Storybook + Combine artifacts 단계
+- 데모 사이드바/홈에서 Storybook 항목·카드·외부 링크
+- `apps/demo/public/swatches.html` 정적 파일 (위 `/#/tokens` 라우트로 이전)
+
+근거: 컴포넌트 카탈로그(`/#/components`)와 역할 중복. 사내 디자인 시스템 맥락에서 외부 OSS 친숙도 가치 낮음. prop controls는 코드 직접 수정이 더 빠름. 이중 유지보수 부담 제거.
 
 ---
 

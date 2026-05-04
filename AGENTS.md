@@ -43,8 +43,9 @@ import {
 // 에디터 / 도큐먼트 제품(MS Office 스타일 리본 + MD 에디터 등):
 import {
   Ribbon, RibbonTabs, RibbonTabList, RibbonTab, RibbonContent,
-  RibbonGroup, RibbonSeparator,
-  RibbonButton, RibbonSplitButton,
+  RibbonGroup, RibbonStack, RibbonRow,
+  RibbonSeparator, RibbonRowDivider,
+  RibbonButton, RibbonMenuButton, RibbonSplitButton,
   RibbonToggleGroup, RibbonToggleItem,
 } from '@polaris/ui/ribbon';
 ```

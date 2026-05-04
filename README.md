@@ -8,32 +8,31 @@
 
 GitHub Pages: **https://miles-hs-lee.github.io/PolarisDesign/**
 
-데모는 좌측 Sidebar + 상단 Navbar의 앱 셸 위에 4개 라우트와 2개 외부 자산:
+데모는 좌측 Sidebar + 상단 Navbar의 앱 셸 위에 모든 라우트가 통합돼 있습니다:
 
-- `/` — 데모 인덱스 (4 카드 + 아키텍처 요약)
+- `/` — 데모 인덱스 (5 카드 + 아키텍처 요약)
 - `/#/nova` — NOVA 워크스페이스 (AI 컨텍스트 시연: 코스믹 hero + NovaInput + Select·Tooltip + PromptChip + 8개 폴라리스 기능 카드 + DropdownMenu 별 응답)
 - `/#/crm/contract` — 폴라리스 영업관리 계약 상세 (Card·Tabs·FileCard·Dialog·DropdownMenu)
 - `/#/sign/contracts` — 폴라리스 사인 계약서 목록 (Stats·Filter chips·행별 DropdownMenu)
+- `/#/polaris-office` — 폴라리스 오피스 워드 리본 재현 (Ribbon family — `@polaris/ui/ribbon`)
 - `/#/components` — Tier 0 + Tier 1 + Tier 2 + Tier 2.5 + Tier 3 + Tier 4 컴포넌트 37개 카탈로그
-- `/swatches.html` — 디자인 토큰 스와치 (라이트/다크 토글)
-- `/storybook/` — Storybook 컴포넌트 카탈로그
+- `/#/tokens` — 디자인 토큰 (색상 light/dark 페어, 타이포·반경·그림자) — `@polaris/ui/tokens`에서 자동 생성
 
 상단 Navbar의 사용자 Avatar → DropdownMenu에서 라이트/다크 모드를 즉시 전환할 수 있습니다.
 
 ## Architecture
 
-세 개의 패키지 + 데모 앱 + 템플릿 + Storybook이 하나의 모노레포에 있습니다.
+네 개의 패키지 + 데모 앱이 하나의 모노레포에 있습니다.
 
 ```
 PolarisDesign/
 ├── packages/
-│   ├── ui/             → @polaris/ui            — 토큰 + 37개 컴포넌트
+│   ├── ui/             → @polaris/ui            — 토큰 + 37개 컴포넌트 + Ribbon family
 │   ├── lint/           → @polaris/lint          — ESLint 플러그인 + polaris-audit CLI
 │   ├── plugin/         → polaris-design         — Claude Code 플러그인
 │   └── template-next/  → polaris-template-next  — Next.js 15 부트스트랩 템플릿 (AGENTS.md 동행)
 ├── apps/
-│   ├── demo/           — Vite 기반 데모 (Home, NOVA, CRM, Sign + 컴포넌트 카탈로그)
-│   └── storybook/      — Storybook 8 + 5개 핵심 스토리
+│   └── demo/           — Vite 기반 데모 (Home/NOVA/CRM/Sign/Polaris Office + 컴포넌트 카탈로그 + 토큰 페이지)
 ├── AGENTS.md           — Codex / Cursor 등 비-Claude 에이전트용 절차
 ├── CHANGELOG.md        — 버전별 변경 사항 (Keep a Changelog 형식)
 └── tokens.md           — Phase 1 디자인 토큰 사양
@@ -50,7 +49,7 @@ PolarisDesign/
   - **Tier 2 (7)**: Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState
   - **Tier 2.5 (5)**: Stack/HStack/VStack, Container, Drawer, Table, DescriptionList — layout/structural
   - **Tier 3 (6)**: Form/FormField, Popover, Calendar, DatePicker/DateRangePicker, CommandPalette — form / date / overlay (Calendar·Command은 experimental). Form은 `@polaris/ui/form` subpath
-  - **Tier 4 — Ribbon (subpath)**: Ribbon/RibbonTabs/RibbonGroup/RibbonButton/RibbonSplitButton/RibbonToggleGroup — Office 도큐먼트, MD 에디터, 스프레드시트 등 에디터 제품 전용. `@polaris/ui/ribbon`
+  - **Tier 4 — Ribbon (subpath)**: `Ribbon` / `RibbonTabs` / `RibbonTabList` / `RibbonTab` / `RibbonContent` / `RibbonGroup` / `RibbonStack` / `RibbonRow` / `RibbonSeparator` / `RibbonRowDivider` / `RibbonButton` / `RibbonMenuButton` / `RibbonSplitButton` / `RibbonToggleGroup` / `RibbonToggleItem` — Office 도큐먼트, MD 에디터, 스프레드시트 등 에디터 제품 전용. `@polaris/ui/ribbon` (별도 subpath라 미사용 시 `@radix-ui/react-toggle-group` 의존성 0)
 
 ### `@polaris/lint`
 
@@ -196,13 +195,10 @@ pnpm install
 pnpm --filter @polaris/ui build
 pnpm --filter @polaris/lint build
 
-# 데모 dev 서버
+# 데모 dev 서버 — `@polaris/ui`를 source로 alias하므로
+# ui 변경 시 별도 빌드 없이 즉시 HMR 반영됨 (vite.config.ts).
 pnpm --filter demo dev
 # → http://localhost:5173/
-
-# Storybook
-pnpm --filter storybook dev
-# → http://localhost:6006/
 
 # 템플릿 직접 검증
 pnpm --filter polaris-template-next dev
@@ -220,11 +216,11 @@ pnpm install --frozen-lockfile
 pnpm --filter @polaris/ui build && pnpm --filter @polaris/lint build
 pnpm -r typecheck
 pnpm --filter @polaris/ui test && pnpm --filter @polaris/lint test && pnpm --filter @polaris/plugin test
-pnpm --filter demo lint && pnpm --filter storybook lint && pnpm --filter polaris-template-next lint
-pnpm --filter demo build && pnpm --filter storybook build && pnpm --filter polaris-template-next build
+pnpm --filter demo lint && pnpm --filter polaris-template-next lint
+pnpm --filter demo build && pnpm --filter polaris-template-next build
 ```
 
-CI 워크플로우는 `.github/workflows/ci.yml` 참조. 배포는 `.github/workflows/deploy.yml`이 main push 시 GitHub Pages로 자동 푸시합니다 (데모 + Storybook 결합).
+CI 워크플로우는 `.github/workflows/ci.yml` 참조. 배포는 `.github/workflows/deploy.yml`이 main push 시 GitHub Pages로 데모를 자동 푸시합니다.
 
 ## 로드맵
 
@@ -233,9 +229,9 @@ CI 워크플로우는 `.github/workflows/ci.yml` 참조. 배포는 `.github/work
 - **v0.2.1** — focus 링 비대칭 fix (`ring`+`ring-offset` → 네이티브 `outline`+`outline-offset`)
 - **v0.3.0** — Tier 2.5 컴포넌트 5개(Stack/Container/Drawer/Table/DescriptionList), DropdownMenuFormItem, Pagination/Card/Checkbox/EmptyState API 보강, 5건 docs
 - **v0.4.x (현재)** — Tailwind v4 네이티브 preset, Form/FormField (RHF + zod), Calendar/DatePicker/Command (experimental), Popover, 사내 npm 레지스트리 publish, tokens.md hex 사인오프, 파일럿 위반율 측정 baseline
-- **v0.5.0 (현재)** — Ribbon 컴포넌트 family (subpath `@polaris/ui/ribbon`) — Office 도큐먼트·MD 에디터·스프레드시트·PDF 등 에디터 제품용. Tabs/Groups/Separator/Button(sm/md/lg)/SplitButton/ToggleGroup 합성
-- **v0.5.x** — DataPagination wrapper, Table sticky+sortable, StatCard, Badge dot variant, Drawer responsive, asChild 일관성, Tier stability matrix. 자세히 → [docs/roadmap.md](docs/roadmap.md)
-- **v0.6+** — DataTable, Combobox, NumberInput, AvatarGroup, Slider, CodeBlock, experimental 컴포넌트 안정화
+- **v0.5.0** — Ribbon 컴포넌트 family (subpath `@polaris/ui/ribbon`) — Office 도큐먼트·MD 에디터·스프레드시트·PDF 등 에디터 제품용. Tabs/Groups/Separator/Button(sm/md/lg)/SplitButton/ToggleGroup 합성
+- **v0.6.0 (현재)** — Ribbon 정비: `RibbonMenuButton`/`RibbonRowDivider` 추가, lg vertical split, scrollbar 숨김으로 panel 높이 통일, disabled split의 menu trigger도 차단, icon-only 버튼 aria-label 자동 fallback. PolarisOffice 데모 탭별 컴포넌트 분리. Storybook 제거 → 컴포넌트 카탈로그(SPA) + `/tokens` 라우트로 통일. demo vite alias로 ui source 직접 import (별도 빌드 없이 HMR)
+- **v0.6.x+** — DataTable, Combobox, NumberInput, AvatarGroup, Slider, CodeBlock, experimental 컴포넌트 안정화. 자세히 → [docs/roadmap.md](docs/roadmap.md)
 - **v1.0** — Badge variant BREAKING, Pretendard local, 시각 회귀 테스트, 사인오프
 
 ## License

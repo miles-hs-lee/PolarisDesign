@@ -111,8 +111,9 @@ import {
 // 리본 / 에디터 툴바 (Office 도큐먼트 · MD 에디터 · 스프레드시트 · PDF 등)
 import {
   Ribbon, RibbonTabs, RibbonTabList, RibbonTab, RibbonContent,
-  RibbonGroup, RibbonSeparator,
-  RibbonButton, RibbonSplitButton,
+  RibbonGroup, RibbonStack, RibbonRow,
+  RibbonSeparator, RibbonRowDivider,
+  RibbonButton, RibbonMenuButton, RibbonSplitButton,
   RibbonToggleGroup, RibbonToggleItem,
 } from '@polaris/ui/ribbon';
 ```

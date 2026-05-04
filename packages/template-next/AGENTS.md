@@ -82,11 +82,28 @@ import {
 
 // 에디터 / 문서 제품(Office 리본 / MD 에디터 등)을 만들 때만 subpath:
 import {
+  // tabs + content
   Ribbon, RibbonTabs, RibbonTabList, RibbonTab, RibbonContent,
-  RibbonGroup, RibbonSeparator,
-  RibbonButton, RibbonSplitButton,
+  // layout primitives
+  RibbonGroup, RibbonStack, RibbonRow,
+  RibbonSeparator, RibbonRowDivider,
+  // controls
+  RibbonButton, RibbonMenuButton, RibbonSplitButton,
   RibbonToggleGroup, RibbonToggleItem,
 } from '@polaris/ui/ribbon';
+//
+// 컨트롤 선택 가이드:
+// - RibbonButton          — 단순 액션 (저장, 새 페이지, …)
+// - RibbonMenuButton      — chevron 클릭 시 메뉴만 열림 (여백, 용지 방향, …)
+// - RibbonSplitButton     — 메인 액션 + 옆/아래 chevron (붙여넣기, 글머리 기호, …)
+// - RibbonToggleGroup/Item — 토글 상태 (B/I/U, 정렬, 변경 추적, …)
+//
+// 레이아웃 가이드:
+// - RibbonGroup           — 그룹 컨테이너. 여러 컨트롤을 묶음
+// - RibbonStack           — 그룹 안 세로 컬럼 (잘라내기/복사/서식복사 같은 stack)
+// - RibbonRow             — Stack 안 가로 행 (Office 클래식 2-row 구성)
+// - RibbonSeparator       — 그룹 사이 풀-높이 세로선
+// - RibbonRowDivider      — 같은 Row 안 클러스터 사이 짧은 세로선 (B I U S | X₁ X² …)
 ```
 
 새 컴포넌트가 필요하면 임의로 만들지 말고 사용자에게 보고. 단순 한 번 쓰는 조합은 토큰만 써서 인라인으로 만들어도 됨.
