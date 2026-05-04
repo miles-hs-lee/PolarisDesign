@@ -47,10 +47,46 @@ ESLint 9 플러그인. 모델이 토큰을 우회하는 가장 흔한 세 패턴
 ### Claude Code 플러그인 (`packages/plugin`)
 
 - `polaris-web` 스킬 — 폴라리스 웹 서비스 작성 시 절차적 지시 (토큰만 쓰기, 컴포넌트 우선)
-- `/polaris-init` `/polaris-check` `/polaris-component` 슬래시 커맨드
-- **PostToolUse 훅** — Edit/Write 발생 시 변경 파일에 자동 lint, 위반이 있으면 다음 턴 모델 컨텍스트에 수정 가이드 주입
+- 슬래시 커맨드:
+  - `/polaris-init <name>` — 새 프로젝트 1줄 부트스트랩 (template-next 사용)
+  - `/polaris-migrate` — 기존 코드 점진적 마이그레이션 (audit → fix → enforce)
+  - `/polaris-check` — 현재 프로젝트 lint 검증
+  - `/polaris-component <이름>` — 컴포넌트 사용/추가 가이드
+- **PostToolUse 훅** — Edit/Write 발생 시 변경 파일에 자동 lint, 위반이 있으면 다음 턴 모델 컨텍스트에 수정 가이드 주입 (eslint 미설정 시 1시간 1회 안내)
 
-## Quick start (사용자 프로젝트에서)
+### 템플릿 + 마이그레이션 도구
+
+- **`packages/template-next`** — Next.js 15 (App Router) + 폴라리스 사전 통합 템플릿. `/polaris-init`이 가리키는 실제 코드.
+- **`packages/lint/bin/polaris-audit.mjs`** — `npx polaris-audit`로 실행. 기존 프로젝트의 토큰 비준수율을 정량 측정.
+
+## Quick start
+
+### 새 프로젝트 (greenfield)
+
+한 줄로 폴라리스 통합 Next.js 앱 생성:
+
+```sh
+npx -y tiged miles-hs-lee/PolarisDesign/packages/template-next my-app
+cd my-app
+pnpm install
+pnpm dev
+```
+
+또는 Claude Code에서 `/polaris-init my-app` 슬래시커맨드.
+
+### 기존 프로젝트 온보딩 (migration)
+
+먼저 진단:
+
+```sh
+npx polaris-audit
+```
+
+위반 카운트, 자주 쓰이는 hex 컬러, 임의 Tailwind 값, 위반 많은 파일 등을 한 번에 보여줍니다. 마이그레이션 절차는 Claude Code의 `/polaris-migrate` 슬래시커맨드가 단계별로 안내합니다.
+
+### 수동 셋업
+
+기존 코드에 직접 추가하려면:
 
 ```sh
 pnpm add @polaris/ui @polaris/lint

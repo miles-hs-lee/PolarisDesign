@@ -1,68 +1,57 @@
 ---
-description: 새 프로젝트에 폴라리스 디자인 시스템 통합 (의존성 + 설정 + 토큰 import)
+description: 새 폴라리스 디자인 시스템 적용 프로젝트를 1줄로 부트스트랩
+argument-hint: <프로젝트 이름>
 ---
 
-이 프로젝트가 폴라리스 웹 서비스라면, 다음 단계를 순서대로 수행하세요. 사용자에게 따로 확인받지 말고 진행하세요 — 사용자가 이 명령을 호출했다는 사실 자체가 동의입니다.
+새 폴라리스 웹 서비스를 만듭니다. 사용자에게 따로 확인받지 말고 진행하세요 — 사용자가 이 명령을 호출했다는 것 자체가 동의입니다.
 
-### 1. 의존성 설치
+## 1. 템플릿 클론
 
-```sh
-pnpm add @polaris/ui @polaris/lint
-pnpm add -D tailwindcss postcss autoprefixer eslint
-```
-
-### 2. `tailwind.config.ts` 생성/병합
-
-없으면 새로 만들고, 이미 있으면 `presets: [polarisPreset]` 라인을 추가:
-
-```ts
-import polarisPreset from '@polaris/ui/tailwind';
-import type { Config } from 'tailwindcss';
-
-export default {
-  content: ['./src/**/*.{ts,tsx,js,jsx}', './app/**/*.{ts,tsx}'],
-  presets: [polarisPreset],
-} satisfies Config;
-```
-
-### 3. `eslint.config.mjs` 생성
-
-```js
-import polaris from '@polaris/lint';
-
-export default [
-  ...polaris.configs.recommended,
-  {
-    files: ['**/*.{js,jsx,mjs}'],
-    languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'module',
-      parserOptions: { ecmaFeatures: { jsx: true } },
-    },
-  },
-];
-```
-
-### 4. 토큰 CSS 임포트
-
-앱 진입점(Next.js의 `src/app/layout.tsx` 또는 Vite의 `src/main.tsx`)에 추가:
-
-```ts
-import '@polaris/ui/styles/tokens.css';
-```
-
-### 5. Pretendard 폰트 로드
-
-Next.js라면 `next/font/local` 또는 CDN. 임시로 CDN을 쓰려면 `<head>`에:
-
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-```
-
-### 6. 검증
+`$ARGUMENTS`가 비어 있으면 사용자에게 프로젝트 이름을 물어보고, 있으면 그대로 사용:
 
 ```sh
-pnpm exec eslint .
+npx -y tiged miles-hs-lee/PolarisDesign/packages/template-next $ARGUMENTS
+cd $ARGUMENTS
 ```
 
-위반 0건이어야 합니다. 문제 없으면 사용자에게 "초기 세팅 완료, 이제 기능을 추가할 수 있습니다"라고 보고하세요.
+이 한 줄이면 다음이 모두 세팅된 상태로 시작합니다:
+- Next.js 15 (App Router) + TypeScript
+- `@polaris/ui` + `@polaris/lint` 사전 통합
+- Tailwind preset + tokens.css 자동 import
+- Pretendard 폰트 (CDN)
+- `app/layout.tsx`에 ToastProvider/TooltipProvider/다크모드 영구화 wrapping
+- 샘플 `app/page.tsx`에 NovaInput, PromptChip, FileCard, Card 사용 예시
+
+## 2. 의존성 설치 + dev 실행
+
+```sh
+pnpm install
+pnpm dev
+```
+
+## 3. package.json 정리
+
+`package.json`의 `name`을 사용자가 원하는 프로젝트명으로 바꿉니다. 그 외에는 손대지 마세요.
+
+## 4. 검증
+
+```sh
+pnpm lint        # @polaris/lint — 위반 0건이어야 함 (샘플 페이지가 토큰만 사용)
+pnpm typecheck
+pnpm build
+```
+
+## 5. 사용자에게 보고
+
+다음 형식으로 한 메시지에 정리:
+
+> 새 프로젝트 `<name>`이 준비됐습니다. http://localhost:3000 에서 확인하세요.
+> - `app/page.tsx`를 편집해서 본인 콘텐츠로 교체
+> - 추가 라우트는 `app/<path>/page.tsx`
+> - 컴포넌트는 `@polaris/ui`에서 import
+> - lint가 토큰 우회를 자동 차단하니 hex/임의값 직접 사용 금지
+
+## 주의
+
+- **기존 디렉터리에 적용하려는 경우** `/polaris-init`이 아니라 `/polaris-migrate`를 사용하세요 (기존 코드는 토큰 위반을 가지고 있을 가능성이 높음)
+- `@polaris/ui`가 사내 npm에 publish되지 않은 환경이면 위 `pnpm install`이 실패할 수 있습니다. 그 경우 사용자에게 `@polaris/ui`/`@polaris/lint` workspace 의존성 해결 방안(npm 사설 레지스트리 또는 monorepo 직접 추가)을 확인하세요.
