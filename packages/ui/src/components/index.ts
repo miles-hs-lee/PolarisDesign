@@ -24,9 +24,15 @@ export * from './Alert';
 export * from './Pagination';
 export * from './Breadcrumb';
 export * from './EmptyState';
-// Tier 2.5 (v0.3) — layout + structural
+// Tier 2.5 — layout / structural
 export * from './Stack';
 export * from './Container';
 export * from './Drawer';
 export * from './Table';
 export * from './DescriptionList';
+// Tier 3 — Form / Date / Command (v0.4)
+export * from './Popover';
+export * from './Form';
+export * from './Calendar';
+export * from './DatePicker';
+export * from './Command';

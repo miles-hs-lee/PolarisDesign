@@ -14,7 +14,7 @@ GitHub Pages: **https://miles-hs-lee.github.io/PolarisDesign/**
 - `/#/nova` — NOVA 워크스페이스 (AI 컨텍스트 시연: 코스믹 hero + NovaInput + Select·Tooltip + PromptChip + 8개 폴라리스 기능 카드 + DropdownMenu 별 응답)
 - `/#/crm/contract` — 폴라리스 영업관리 계약 상세 (Card·Tabs·FileCard·Dialog·DropdownMenu)
 - `/#/sign/contracts` — 폴라리스 사인 계약서 목록 (Stats·Filter chips·행별 DropdownMenu)
-- `/#/components` — Tier 0 + Tier 1 + Tier 2 + Tier 2.5 컴포넌트 30개 카탈로그
+- `/#/components` — Tier 0 + Tier 1 + Tier 2 + Tier 2.5 + Tier 3 컴포넌트 36개 카탈로그
 - `/swatches.html` — 디자인 토큰 스와치 (라이트/다크 토글)
 - `/storybook/` — Storybook 컴포넌트 카탈로그
 
@@ -27,7 +27,7 @@ GitHub Pages: **https://miles-hs-lee.github.io/PolarisDesign/**
 ```
 PolarisDesign/
 ├── packages/
-│   ├── ui/             → @polaris/ui            — 토큰 + 30개 컴포넌트
+│   ├── ui/             → @polaris/ui            — 토큰 + 36개 컴포넌트
 │   ├── lint/           → @polaris/lint          — ESLint 플러그인 + polaris-audit CLI
 │   ├── plugin/         → polaris-design         — Claude Code 플러그인
 │   └── template-next/  → polaris-template-next  — Next.js 15 부트스트랩 템플릿 (AGENTS.md 동행)
@@ -44,11 +44,12 @@ PolarisDesign/
 - **토큰** (`@polaris/ui/tokens`) — TypeScript export. `brand`, `fileType`, `status`, `neutral`, `surface`, `text`, `radius`, `shadow`, `textStyle`, `spacing`, `breakpoint`.
 - **CSS 변수** (`@polaris/ui/styles/tokens.css`) — 라이트/다크 모드 페어. `[data-theme="dark"]`로 토글.
 - **Tailwind preset** (`@polaris/ui/tailwind`) — `bg-brand-primary`, `text-fg-on-brand`, `text-polaris-body-sm`, `rounded-polaris-md`, `shadow-polaris-sm` 같은 시맨틱 유틸리티 클래스 자동 등록.
-- **컴포넌트 30개** — Radix UI 위에 폴라리스 토큰으로 스타일링.
+- **컴포넌트 36개** — Radix UI 위에 폴라리스 토큰으로 스타일링.
   - **Tier 0 (12)**: Button, Input, Textarea, Card, Badge, Avatar, Dialog, Toast, Tabs, FileIcon, FileCard, NovaInput
   - **Tier 1 (6)**: DropdownMenu, Tooltip, Select, Sidebar, Navbar, PromptChip
   - **Tier 2 (7)**: Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState
   - **Tier 2.5 (5)**: Stack/HStack/VStack, Container, Drawer, Table, DescriptionList — layout/structural
+  - **Tier 3 (6)**: Form/FormField, Popover, Calendar, DatePicker/DateRangePicker, CommandPalette — form / date / overlay (Calendar·Command은 experimental)
 
 ### `@polaris/lint`
 
@@ -229,9 +230,10 @@ CI 워크플로우는 `.github/workflows/ci.yml` 참조. 배포는 `.github/work
 - **v0.1.0** — 토큰 + 18개 컴포넌트, 4 lint 룰, Claude Code 플러그인, NOVA 워크스페이스 + CRM/Sign 예시, 템플릿, polaris-audit, AGENTS.md, CHANGELOG
 - **v0.2.0** — Tier 2 컴포넌트 7개(Checkbox/Switch/Skeleton/Alert/Pagination/Breadcrumb/EmptyState), Toast `useToast`/`<Toaster>` imperative API, Card `asChild`, lint false-positive 보정, SSR-safe theme toggle, status hover/on-status 색상 토큰, Tailwind v4 임시 가이드
 - **v0.2.1** — focus 링 비대칭 fix (`ring`+`ring-offset` → 네이티브 `outline`+`outline-offset`)
-- **v0.3.0 (현재)** — Tier 2.5 컴포넌트 5개(Stack/Container/Drawer/Table/DescriptionList), DropdownMenuFormItem (server action race condition), Pagination/Card/Checkbox/EmptyState API 보강, 5건 docs (variant-axes·patterns·nextjs·migration·recipes)
-- **v0.3.x** — 사내 npm 레지스트리 publish, tokens.md hex 사인오프, 파일럿 위반율 측정 baseline
-- **v0.4** — Form/FormField (RHF + zod), Combobox, DataTable (sortable·virtualized), Tailwind v4 네이티브 preset, 시각 회귀 테스트
+- **v0.3.0** — Tier 2.5 컴포넌트 5개(Stack/Container/Drawer/Table/DescriptionList), DropdownMenuFormItem, Pagination/Card/Checkbox/EmptyState API 보강, 5건 docs
+- **v0.4.0 (현재)** — Tailwind v4 네이티브 preset (`@polaris/ui/styles/v4-theme.css`), Form/FormField (RHF + zod), Calendar/DatePicker/DateRangePicker (experimental, react-day-picker), CommandPalette (experimental, cmdk), Popover, v0.3.1 patches 6건(hiddenFields, Toaster position, NavbarBrand asChild, pageNumberItems util, DescriptionList responsive, Pagination labels)
+- **v0.4.x** — 사내 npm 레지스트리 publish, tokens.md hex 사인오프, 파일럿 위반율 측정 baseline. experimental 컴포넌트(Calendar, Command) 안정화
+- **v0.5+** — Combobox, DataTable (sortable·virtualized), Slider/Range, NumberInput, AvatarGroup, CodeBlock, 시각 회귀 테스트, Badge variant 축 재구성 (BREAKING — RFC 후)
 
 ## License
 

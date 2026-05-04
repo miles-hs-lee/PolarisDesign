@@ -12,6 +12,114 @@
 
 ---
 
+## [0.4.0] — 2026-05-04
+
+두 번째 사내 마이그레이션 사이클(Next.js 16 + Tailwind v4)에서 받은 후속 피드백 + 0.2부터 약속된 v4 preset을 한 번에 정리한 릴리스. **Tailwind v4 native preset**, **Form/FormField (RHF + zod)**, 그리고 experimental 컴포넌트 2종(Calendar/DatePicker, CommandPalette).
+
+### 추가됨 — Tailwind v4 native preset (`@polaris/ui/styles/v4-theme.css`)
+
+0.2부터 약속된 v4 직접 지원. `@theme inline { ... }` 매핑을 사용자 측에서 50+줄 직접 작성하던 부담을 한 import로 대체:
+
+```css
+@import 'tailwindcss';
+@import '@polaris/ui/styles/tokens.css';
+@import '@polaris/ui/styles/v4-theme.css';
+```
+
+v3 preset과 **동일한 클래스명**(`bg-brand-primary`, `text-fg-primary`, `rounded-polaris-md`, `text-polaris-body-sm` 등)이 v4에서도 그대로 작동. v3와 v4 매핑이 같은 CSS 변수 이름을 참조하므로 토큰 추가 시 양쪽이 함께 갱신됩니다.
+
+### 추가됨 — Form/FormField (`@polaris/ui`)
+
+shadcn 패턴 기반 `react-hook-form` + `zod` 어댑터. 사내 폼 wiring 표준:
+
+```tsx
+<Form {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)}>
+    <FormField
+      control={form.control}
+      name="email"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>이메일</FormLabel>
+          <FormControl><Input {...field} /></FormControl>
+          <FormDescription>로그인용 주소</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <Button type="submit">제출</Button>
+  </form>
+</Form>
+```
+
+자동: `htmlFor` wiring, error 시 label 색 전환, `aria-invalid`/`aria-describedby` 연결, `<FormMessage />`가 RHF `errors` 직접 읽음.
+
+### 추가됨 — Calendar / DatePicker / DateRangePicker (`@polaris/ui`, **experimental**)
+
+`react-day-picker` v9 기반. 한국어 로케일(`date-fns/locale/ko`) 기본. `<Calendar mode="single|range">`, `<DatePicker>`, `<DateRangePicker>`. **API는 v0.5에서 변경될 수 있음** — 사용자 피드백 기반.
+
+### 추가됨 — CommandPalette (`@polaris/ui`, **experimental**)
+
+`cmdk` 기반 Ctrl+K 검색 팔레트. `<CommandDialog>`, `<CommandInput>`, `<CommandList>`, `<CommandGroup>`, `<CommandItem>`, `<CommandShortcut>`, `<CommandEmpty>`, `<CommandSeparator>`. **API는 v0.5에서 변경될 수 있음**.
+
+### 추가됨 — Popover (`@polaris/ui`)
+
+Radix Popover 래퍼. `<Popover>`, `<PopoverTrigger>`, `<PopoverContent>`, `<PopoverAnchor>`, `<PopoverClose>`. DatePicker 내부에서 사용되며, 일반 popover 용도로도 export.
+
+### 변경됨 — DropdownMenuFormItem `hiddenFields` prop
+
+CSRF token, `redirect_to` 같은 hidden input 추가:
+
+```tsx
+<DropdownMenuFormItem
+  action="/auth/sign-out"
+  hiddenFields={{ redirect: '/login' }}
+  destructive
+>로그아웃</DropdownMenuFormItem>
+```
+
+### 변경됨 — `<ToastViewport>` `position` prop
+
+`top-right` (default) / `top-left` / `top-center` / `bottom-right` / `bottom-left` / `bottom-center`.
+
+### 변경됨 — NavbarBrand `asChild`
+
+`<NavbarBrand asChild><Link href="/">Polaris</Link></NavbarBrand>` — div + a 중첩 제거.
+
+### 추가됨 — Pagination 보조
+
+- `pageNumberItems(current, total, siblings?)` — `[1, '…', 5, 6, 7, '…', 20]` 같은 ellipsis 시퀀스 계산 유틸리티
+- `PAGE_ELLIPSIS` sentinel
+- `PaginationPrev`/`PaginationNext`에 `label` prop (aria-label override)
+
+### 변경됨 — DescriptionList `inline` 반응형
+
+`layout="inline"` (기본)이 `sm` 미만에서 자동으로 stack. 좁은 viewport에서 label 컬럼 squeeze 방지. 명시적 grid가 필요하면 `layout="inline-strict"` 사용.
+
+### 추가됨 — 문서
+
+- **patterns.md**에 §6 Drawer vs Dialog, §7 asChild 가능 컴포넌트 표 추가
+- **app-shell-layout.md** — Sidebar + Navbar 표준 레이아웃 패턴 + 모바일 대응 + 다크 토글 + CommandPalette 통합
+- **tailwind-v4-migration.md** 전면 갱신 — 새 v4-theme.css 사용법 (manual @theme inline 작성 제거)
+- **recipes.md §1 Form** — RHF + Form/FormField 컴포넌트 패턴으로 갱신
+
+### 의존성 추가
+
+- `@radix-ui/react-popover@^1.1.4` (Popover, DatePicker)
+- `cmdk@^1.0.4` (CommandPalette)
+- `date-fns@^4.1.0` (Calendar 한국어 로케일)
+- `react-day-picker@^9.4.4` (Calendar)
+- `react-hook-form@^7.50.0` peerDep (Form/FormField, optional)
+
+### 데모
+
+- §31 DatePicker / DateRangePicker
+- §32 CommandPalette (⌘K)
+- §33 Form (RHF + zod)
+- §34로 폴라리스 화면 모방 이동
+
+---
+
 ## [0.3.0] — 2026-05-04
 
 첫 사내 마이그레이션 사이클(Next.js 16 + Tailwind v4)에서 받은 후속 피드백을 반영. Tier 2.5 layout/structural 컴포넌트 + Pagination asChild + Form-aware DropdownMenu + 4건의 docs.
@@ -223,7 +331,8 @@ GitHub Pages에 자동 배포 (https://miles-hs-lee.github.io/PolarisDesign/):
 
 ---
 
-[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.1.0...v0.2.0

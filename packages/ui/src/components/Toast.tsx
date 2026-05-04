@@ -6,14 +6,38 @@ import { cn } from '../lib/cn';
 
 export const ToastProvider = ToastPrimitive.Provider;
 
+export type ToastPosition =
+  | 'top-right'
+  | 'top-left'
+  | 'top-center'
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'bottom-center';
+
+const POSITION: Record<ToastPosition, string> = {
+  'top-right':     'top-4 right-4 items-end',
+  'top-left':      'top-4 left-4 items-start',
+  'top-center':    'top-4 left-1/2 -translate-x-1/2 items-center',
+  'bottom-right':  'bottom-4 right-4 items-end',
+  'bottom-left':   'bottom-4 left-4 items-start',
+  'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2 items-center',
+};
+
+export interface ToastViewportProps
+  extends React.ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport> {
+  /** Anchor position. Default: `top-right`. */
+  position?: ToastPosition;
+}
+
 export const ToastViewport = forwardRef<
   React.ElementRef<typeof ToastPrimitive.Viewport>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport>
->(({ className, ...props }, ref) => (
+  ToastViewportProps
+>(({ className, position = 'top-right', ...props }, ref) => (
   <ToastPrimitive.Viewport
     ref={ref}
     className={cn(
-      'fixed top-4 right-4 z-[100] flex flex-col gap-2 max-w-sm w-full outline-none',
+      'fixed z-[100] flex flex-col gap-2 max-w-sm w-full outline-none',
+      POSITION[position],
       className
     )}
     {...props}

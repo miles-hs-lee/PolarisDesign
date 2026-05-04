@@ -96,7 +96,28 @@ import {
   DescriptionList,
   DescriptionTerm,
   DescriptionDetails,
+  DatePicker,
+  DateRangePicker,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+  CommandShortcut,
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
 } from '@polaris/ui';
+import type { DateRange } from 'react-day-picker';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
   Plus,
   Sparkles,
@@ -128,6 +149,16 @@ export default function Components() {
   const [agreed, setAgreed] = useState(false);
   const [notifications, setNotifications] = useState(true);
   const [page, setPage] = useState(3);
+  const [pickedDate, setPickedDate] = useState<Date | undefined>();
+  const [pickedRange, setPickedRange] = useState<DateRange | undefined>();
+  const [cmdOpen, setCmdOpen] = useState(false);
+  const contactForm = useForm<{ name: string; email: string }>({
+    resolver: zodResolver(z.object({
+      name: z.string().min(2, '2자 이상 입력하세요'),
+      email: z.string().email('이메일 형식이 올바르지 않습니다'),
+    })),
+    defaultValues: { name: '', email: '' },
+  });
 
   const pushToast = (variant: ToastEntry['variant'], title: string, description?: string) => {
     setToasts((t) => [...t, { id: Date.now() + Math.random(), title, description, variant }]);
@@ -138,7 +169,7 @@ export default function Components() {
       <header className="mb-10 pb-4 border-b border-surface-border">
         <h1 className="text-polaris-heading-lg mb-1">Polaris Components</h1>
         <p className="text-polaris-body-sm text-fg-muted">
-          30개 컴포넌트(Tier 0 + Tier 1 + Tier 2 + Tier 2.5)의 variant·상태·조합을 한 페이지에서 검증
+          36개 컴포넌트(Tier 0 + Tier 1 + Tier 2 + Tier 2.5 + Tier 3)의 variant·상태·조합을 한 페이지에서 검증
         </p>
       </header>
 
@@ -793,7 +824,97 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="31. 폴라리스 화면 모방 (조합 검증)">
+      <Section title="31. DatePicker / DateRangePicker (Tier 3, experimental)">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card variant="padded">
+            <h3 className="text-polaris-heading-sm mb-3">DatePicker (single)</h3>
+            <DatePicker value={pickedDate} onChange={setPickedDate} />
+            {pickedDate && (
+              <p className="mt-2 text-polaris-caption text-fg-muted">선택: {pickedDate.toLocaleDateString('ko-KR')}</p>
+            )}
+          </Card>
+          <Card variant="padded">
+            <h3 className="text-polaris-heading-sm mb-3">DateRangePicker</h3>
+            <DateRangePicker value={pickedRange} onChange={setPickedRange} />
+            {pickedRange?.from && (
+              <p className="mt-2 text-polaris-caption text-fg-muted">
+                {pickedRange.from.toLocaleDateString('ko-KR')}
+                {pickedRange.to ? ` ~ ${pickedRange.to.toLocaleDateString('ko-KR')}` : ''}
+              </p>
+            )}
+          </Card>
+        </div>
+      </Section>
+
+      <Section title="32. CommandPalette (Tier 3, experimental)">
+        <Card variant="padded">
+          <p className="text-polaris-body-sm text-fg-secondary mb-3">
+            <kbd className="px-1.5 py-0.5 rounded-polaris-sm border border-surface-border bg-surface-sunken text-polaris-caption">⌘K</kbd> 또는 아래 버튼으로 열기.
+          </p>
+          <Button variant="outline" onClick={() => setCmdOpen(true)}>명령 열기</Button>
+          <CommandDialog open={cmdOpen} onOpenChange={setCmdOpen}>
+            <CommandInput placeholder="페이지 또는 액션 검색" />
+            <CommandList>
+              <CommandEmpty>일치하는 결과가 없습니다.</CommandEmpty>
+              <CommandGroup heading="페이지">
+                <CommandItem onSelect={() => { setCmdOpen(false); pushToast('info', '대시보드로 이동'); }}>대시보드</CommandItem>
+                <CommandItem onSelect={() => { setCmdOpen(false); pushToast('info', '계약 목록 이동'); }}>계약 목록</CommandItem>
+                <CommandItem onSelect={() => { setCmdOpen(false); pushToast('info', '고객 관리 이동'); }}>고객 관리</CommandItem>
+              </CommandGroup>
+              <CommandSeparator />
+              <CommandGroup heading="액션">
+                <CommandItem onSelect={() => { setCmdOpen(false); pushToast('success', '새 계약 생성'); }}>
+                  새 계약 생성
+                  <CommandShortcut>⌘N</CommandShortcut>
+                </CommandItem>
+                <CommandItem onSelect={() => { setCmdOpen(false); pushToast('info', '내보내기'); }}>
+                  CSV로 내보내기
+                </CommandItem>
+              </CommandGroup>
+            </CommandList>
+          </CommandDialog>
+        </Card>
+      </Section>
+
+      <Section title="33. Form (RHF + zod, 사내 표준)">
+        <Card variant="padded">
+          <Form {...contactForm}>
+            <form
+              onSubmit={contactForm.handleSubmit((v) => pushToast('success', '제출됨', `${v.name} <${v.email}>`))}
+              className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl"
+            >
+              <FormField
+                control={contactForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>이름</FormLabel>
+                    <FormControl><Input placeholder="홍길동" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={contactForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>이메일</FormLabel>
+                    <FormControl><Input type="email" placeholder="hong@example.com" {...field} /></FormControl>
+                    <FormDescription>회신용 주소</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="md:col-span-2">
+                <Button type="submit">제출</Button>
+              </div>
+            </form>
+          </Form>
+        </Card>
+      </Section>
+
+      <Section title="34. 폴라리스 화면 모방 (조합 검증)">
         <Card>
           <CardHeader>
             <CardTitle>최근 문서</CardTitle>

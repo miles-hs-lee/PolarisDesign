@@ -170,14 +170,20 @@ export interface DropdownMenuFormItemProps
   destructive?: boolean;
   /** Icon rendered before children. */
   icon?: React.ReactNode;
-  /** Form className passthrough — rare, mainly for hidden-input wrapping needs. */
+  /**
+   * Hidden inputs to include in the submitted form. Common cases: CSRF token,
+   * `redirect` after sign-out, scope hints. Each entry becomes
+   * `<input type="hidden" name={key} value={value} />`.
+   */
+  hiddenFields?: Record<string, string>;
+  /** Form className passthrough. */
   formClassName?: string;
 }
 
 export const DropdownMenuFormItem = forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Item>,
   DropdownMenuFormItemProps
->(({ className, formClassName, action, method = 'post', destructive, icon, children, ...props }, ref) => (
+>(({ className, formClassName, action, method = 'post', destructive, icon, hiddenFields, children, ...props }, ref) => (
   <DropdownPrimitive.Item
     ref={ref}
     onSelect={(e) => e.preventDefault()}
@@ -194,6 +200,9 @@ export const DropdownMenuFormItem = forwardRef<
       method={typeof action === 'string' ? method : undefined}
       className={cn('m-0 w-full', formClassName)}
     >
+      {hiddenFields && Object.entries(hiddenFields).map(([name, value]) => (
+        <input key={name} type="hidden" name={name} value={value} />
+      ))}
       <button
         type="submit"
         className="flex w-full items-center gap-2 bg-transparent border-0 p-0 text-inherit cursor-pointer text-left font-inherit"

@@ -150,3 +150,57 @@ import Link from 'next/link';
 ```
 
 `asChild`를 쓰면 button 대신 NavLink/Link로 렌더되어 RSC + URL 페이징과 자연스럽게 연결됩니다.
+
+### Ellipsis 계산 유틸리티
+
+`pageNumberItems(current, total, siblings?)` — `[1, '…', 5, 6, 7, '…', 20]` 같은 sequence 반환:
+
+```tsx
+import { pageNumberItems, PAGE_ELLIPSIS } from '@polaris/ui';
+
+{pageNumberItems(current, total).map((item, i) =>
+  item === PAGE_ELLIPSIS
+    ? <PaginationEllipsis key={`ell-${i}`} />
+    : <PaginationItem key={item} active={item === current} onClick={() => setPage(item)}>{item}</PaginationItem>
+)}
+```
+
+---
+
+## 6. Drawer vs Dialog
+
+같은 Radix Dialog 위에 만들었지만 시각·UX 의도가 다릅니다.
+
+| | Dialog | Drawer |
+|---|---|---|
+| 위치 | 화면 중앙 | 가장자리 (right/left/top/bottom) |
+| 폭 | 콘텐츠 따라 (max-w-lg default) | 한쪽 면 가득 차고 max-w-md |
+| 사용 의도 | 결정 요구 (confirm/edit modal) | 보조 패널 (inspector / filter / nav) |
+| 닫기 | 명시적 액션이 일반적 | overlay 클릭 + Esc로 가벼운 닫기 |
+| 예시 | "삭제하시겠습니까?", 첨부 미리보기 | 테이블 행 상세, 모바일 sidebar, 필터 사이드패널 |
+
+규칙: **사용자가 "결정"을 내려야 하면 Dialog**, **참고용 정보를 옆에서 보여주면 Drawer**. 한 화면에서 둘 다 띄우지 마세요 (focus trap이 stacking됨).
+
+---
+
+## 7. asChild 가능한 컴포넌트 목록
+
+Polaris의 Radix Slot 패턴을 따라 `asChild` prop을 지원하는 컴포넌트:
+
+| 컴포넌트 | 용도 |
+|---|---|
+| `Button` | `<Button asChild><Link href="...">텍스트</Link></Button>` |
+| `Card` | semantic element 유지 (`<article>`, `<section>`) |
+| `NavbarBrand` | 로고를 `<Link>`로 감쌀 때 |
+| `PaginationItem` / `PaginationPrev` / `PaginationNext` | URL-driven pagination에서 `<Link>` |
+| `Container` | `<main>`, `<section>` 등 semantic root |
+| `Stack` / `HStack` / `VStack` | 같은 이유 |
+| `BreadcrumbLink` | router Link 래핑 |
+| `DialogTrigger` / `DropdownMenuTrigger` / `PopoverTrigger` / `DrawerTrigger` / `TooltipTrigger` (Radix 기본 제공) | trigger를 다른 컴포넌트(Button 등)로 |
+| `SidebarItem` | 같은 이유 |
+| `DropdownMenuItem` | 같은 이유 |
+
+**asChild 사용 시 주의:**
+- 자식은 정확히 하나의 React element여야 함 (string/array 안 됨)
+- 자식 element에 `className`을 주면 `cn()`으로 자동 merge됨
+- `ref`/`onClick` 등은 자식에 forward됨

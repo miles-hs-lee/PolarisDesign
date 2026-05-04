@@ -4,14 +4,19 @@
 
 ---
 
-## 1. Form: react-hook-form + zod (사내 표준)
+## 1. Form: react-hook-form + zod (사내 표준, v0.4+)
+
+`<Form>` + `<FormField>` 컴포넌트로 wiring을 간소화 (shadcn 패턴):
 
 ```tsx
 'use client';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Input, Textarea, Checkbox, Button, VStack, toast } from '@polaris/ui';
+import {
+  Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
+  Input, Textarea, Checkbox, Button, VStack, toast,
+} from '@polaris/ui';
 
 const schema = z.object({
   name: z.string().min(2, '2자 이상 입력하세요'),
@@ -19,13 +24,10 @@ const schema = z.object({
   message: z.string().min(10, '10자 이상 입력하세요').max(500),
   agree: z.literal(true, { errorMap: () => ({ message: '약관에 동의해야 합니다' }) }),
 });
-
 type FormValues = z.infer<typeof schema>;
 
 export function ContactForm() {
-  const { register, handleSubmit, formState: { errors, isSubmitting }, watch, setValue } = useForm<FormValues>({
-    resolver: zodResolver(schema),
-  });
+  const form = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   const onSubmit = async (values: FormValues) => {
     await fetch('/api/contact', { method: 'POST', body: JSON.stringify(values) });
@@ -33,28 +35,74 @@ export function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <VStack gap={4}>
-        <Input {...register('name')} label="이름" error={errors.name?.message} />
-        <Input {...register('email')} type="email" label="이메일" error={errors.email?.message} />
-        <Textarea {...register('message')} label="메시지" rows={5} error={errors.message?.message} />
-        <Checkbox
-          checked={watch('agree') ?? false}
-          onCheckedChange={(v) => setValue('agree', v === true, { shouldValidate: true })}
-          label="이용 약관에 동의합니다"
-          error={errors.agree?.message}
-        />
-        <Button type="submit" loading={isSubmitting}>전송</Button>
-      </VStack>
-    </form>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <VStack gap={4}>
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>이름</FormLabel>
+                <FormControl><Input {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>이메일</FormLabel>
+                <FormControl><Input type="email" {...field} /></FormControl>
+                <FormDescription>회신용 이메일</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="message"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>메시지</FormLabel>
+                <FormControl><Textarea rows={5} {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="agree"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Checkbox
+                    checked={field.value ?? false}
+                    onCheckedChange={field.onChange}
+                    label="이용 약관에 동의합니다"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" loading={form.formState.isSubmitting}>전송</Button>
+        </VStack>
+      </form>
+    </Form>
   );
 }
 ```
 
-핵심:
-- `register()` spread → `Input`/`Textarea`에 직접 전달
-- `error={errors.field?.message}` → 컴포넌트가 알아서 색·메시지 표시
-- Checkbox는 controlled (`watch` + `setValue`) — checkbox만 register가 깔끔히 안 됨
+장점:
+- `FormLabel`이 자동으로 input과 `htmlFor` wiring
+- error 시 label 색이 자동으로 status-danger
+- `aria-invalid` / `aria-describedby` 자동 연결
+- error 메시지는 `<FormMessage />`가 자동으로 RHF의 errors 읽음
+
+복잡한 wiring 없는 단순 form은 기존 `<Input label hint error />` 패턴도 여전히 OK.
 
 ---
 

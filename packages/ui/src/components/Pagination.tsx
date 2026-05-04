@@ -55,9 +55,14 @@ export const PaginationItem = forwardRef<HTMLElement, PaginationItemProps>(
 );
 PaginationItem.displayName = 'PaginationItem';
 
-export const PaginationPrev = forwardRef<HTMLElement, PaginationItemProps>(
-  ({ className, children, ...props }, ref) => (
-    <PaginationItem ref={ref} className={className} aria-label="이전 페이지" {...props}>
+export interface PaginationStepProps extends PaginationItemProps {
+  /** aria-label override. Default: `이전 페이지` / `다음 페이지`. */
+  label?: string;
+}
+
+export const PaginationPrev = forwardRef<HTMLElement, PaginationStepProps>(
+  ({ className, children, label = '이전 페이지', ...props }, ref) => (
+    <PaginationItem ref={ref} className={className} aria-label={label} {...props}>
       <ChevronLeft className="h-4 w-4" aria-hidden="true" />
       {children}
     </PaginationItem>
@@ -65,9 +70,9 @@ export const PaginationPrev = forwardRef<HTMLElement, PaginationItemProps>(
 );
 PaginationPrev.displayName = 'PaginationPrev';
 
-export const PaginationNext = forwardRef<HTMLElement, PaginationItemProps>(
-  ({ className, children, ...props }, ref) => (
-    <PaginationItem ref={ref} className={className} aria-label="다음 페이지" {...props}>
+export const PaginationNext = forwardRef<HTMLElement, PaginationStepProps>(
+  ({ className, children, label = '다음 페이지', ...props }, ref) => (
+    <PaginationItem ref={ref} className={className} aria-label={label} {...props}>
       {children}
       <ChevronRight className="h-4 w-4" aria-hidden="true" />
     </PaginationItem>
@@ -89,3 +94,32 @@ export const PaginationEllipsis = forwardRef<HTMLSpanElement, React.HTMLAttribut
   )
 );
 PaginationEllipsis.displayName = 'PaginationEllipsis';
+
+/** Sentinel value indicating an ellipsis position in `pageNumberItems()` output. */
+export const PAGE_ELLIPSIS = '…' as const;
+export type PageNumberItem = number | typeof PAGE_ELLIPSIS;
+
+/**
+ * Compute the visible page-number sequence with ellipses around the current
+ * page. Returns numbers for clickable items and `PAGE_ELLIPSIS` for gaps.
+ *
+ * Example: `pageNumberItems(7, 20)` → `[1, '…', 5, 6, 7, 8, 9, '…', 20]`
+ *
+ * @param current   Current page (1-based).
+ * @param total     Total page count.
+ * @param siblings  Pages shown on each side of `current`. Default: 2.
+ */
+export function pageNumberItems(current: number, total: number, siblings = 2): PageNumberItem[] {
+  if (total <= 0) return [];
+  if (total <= 7 + (siblings - 2) * 2) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  const start = Math.max(2, current - siblings);
+  const end = Math.min(total - 1, current + siblings);
+  const items: PageNumberItem[] = [1];
+  if (start > 2) items.push(PAGE_ELLIPSIS);
+  for (let p = start; p <= end; p++) items.push(p);
+  if (end < total - 1) items.push(PAGE_ELLIPSIS);
+  items.push(total);
+  return items;
+}

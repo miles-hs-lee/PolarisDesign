@@ -1,0 +1,144 @@
+/* Polaris Design — Tailwind v4 native theme
+ *
+ * Mirrors the v3 preset (`@polaris/ui/tailwind`) as a Tailwind v4 `@theme inline`
+ * block. The same utility class names work in both versions: `bg-brand-primary`,
+ * `text-fg-primary`, `rounded-polaris-md`, `shadow-polaris-sm`, `font-polaris`,
+ * `text-polaris-body-sm`, etc.
+ *
+ * Usage (Next.js 15+ / Tailwind v4):
+ * ```css
+ * @import 'tailwindcss';
+ * @import '@polaris/ui/styles/tokens.css';
+ * @import '@polaris/ui/styles/v4-theme.css';
+ * ```
+ *
+ * Notes:
+ * - `tokens.css` provides raw CSS variables (`--polaris-*`). This file maps
+ *   them to Tailwind v4's `--color-*` / `--radius-*` / `--shadow-*` namespaces.
+ * - Alpha modifiers (`bg-status-success/15`) work because the underlying
+ *   `--polaris-status-*` values are plain hex — Tailwind v4 wraps them in
+ *   `color-mix()` automatically when an opacity is requested.
+ * - Dark mode uses `tokens.css`'s `[data-theme="dark"]` selector. To enable
+ *   Tailwind's `dark:` variant on top of that, add this to globals.css:
+ *   `@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));`
+ */
+
+@theme inline {
+  /* === Brand palette base === */
+  --color-polaris-blue:   var(--polaris-blue);
+  --color-polaris-green:  var(--polaris-green);
+  --color-polaris-orange: var(--polaris-orange);
+  --color-polaris-red:    var(--polaris-red);
+  --color-polaris-purple: var(--polaris-purple);
+
+  /* === Brand semantic === */
+  --color-brand-primary:            var(--polaris-brand-primary);
+  --color-brand-primary-hover:      var(--polaris-brand-primary-hover);
+  --color-brand-primary-subtle:     var(--polaris-brand-primary-subtle);
+  --color-brand-secondary:          var(--polaris-brand-secondary);
+  --color-brand-secondary-hover:    var(--polaris-brand-secondary-hover);
+  --color-brand-secondary-subtle:   var(--polaris-brand-secondary-subtle);
+
+  /* === File type === */
+  --color-file-docx: var(--polaris-file-docx);
+  --color-file-hwp:  var(--polaris-file-hwp);
+  --color-file-xlsx: var(--polaris-file-xlsx);
+  --color-file-pptx: var(--polaris-file-pptx);
+  --color-file-pdf:  var(--polaris-file-pdf);
+
+  /* === Status === */
+  --color-status-success:        var(--polaris-status-success);
+  --color-status-success-hover:  var(--polaris-status-success-hover);
+  --color-status-warning:        var(--polaris-status-warning);
+  --color-status-warning-hover:  var(--polaris-status-warning-hover);
+  --color-status-danger:         var(--polaris-status-danger);
+  --color-status-danger-hover:   var(--polaris-status-danger-hover);
+  --color-status-info:           var(--polaris-status-info);
+  --color-status-info-hover:     var(--polaris-status-info-hover);
+
+  /* === Surface === */
+  --color-surface-canvas:        var(--polaris-surface-canvas);
+  --color-surface-raised:        var(--polaris-surface-raised);
+  --color-surface-sunken:        var(--polaris-surface-sunken);
+  --color-surface-border:        var(--polaris-surface-border);
+  --color-surface-border-strong: var(--polaris-surface-border-strong);
+
+  /* === Foreground === */
+  --color-fg-primary:    var(--polaris-text-primary);
+  --color-fg-secondary:  var(--polaris-text-secondary);
+  --color-fg-muted:      var(--polaris-text-muted);
+  --color-fg-on-brand:   var(--polaris-text-on-brand);
+  --color-fg-on-status:  var(--polaris-text-on-status);
+
+  /* === Neutral 12-step === */
+  --color-neutral-0:    var(--polaris-neutral-0);
+  --color-neutral-50:   var(--polaris-neutral-50);
+  --color-neutral-100:  var(--polaris-neutral-100);
+  --color-neutral-200:  var(--polaris-neutral-200);
+  --color-neutral-300:  var(--polaris-neutral-300);
+  --color-neutral-400:  var(--polaris-neutral-400);
+  --color-neutral-500:  var(--polaris-neutral-500);
+  --color-neutral-600:  var(--polaris-neutral-600);
+  --color-neutral-700:  var(--polaris-neutral-700);
+  --color-neutral-800:  var(--polaris-neutral-800);
+  --color-neutral-900:  var(--polaris-neutral-900);
+  --color-neutral-1000: var(--polaris-neutral-1000);
+
+  /* === Border radius === */
+  --radius-polaris-sm:   var(--polaris-radius-sm);
+  --radius-polaris-md:   var(--polaris-radius-md);
+  --radius-polaris-lg:   var(--polaris-radius-lg);
+  --radius-polaris-xl:   var(--polaris-radius-xl);
+  --radius-polaris-full: var(--polaris-radius-full);
+
+  /* === Shadow === */
+  --shadow-polaris-xs: var(--polaris-shadow-xs);
+  --shadow-polaris-sm: var(--polaris-shadow-sm);
+  --shadow-polaris-md: var(--polaris-shadow-md);
+  --shadow-polaris-lg: var(--polaris-shadow-lg);
+
+  /* === Font family === */
+  --font-polaris:      var(--polaris-font-sans);
+  --font-polaris-mono: var(--polaris-font-mono);
+
+  /* === Font size + line-height + weight + letter-spacing
+   * v4 supports compound values via `--text-{name}` plus
+   * `--text-{name}--line-height` / `--text-{name}--font-weight` /
+   * `--text-{name}--letter-spacing`.
+   */
+  --text-polaris-display-lg: 48px;
+  --text-polaris-display-lg--line-height: 60px;
+  --text-polaris-display-lg--font-weight: 700;
+  --text-polaris-display-lg--letter-spacing: -0.025em;
+
+  --text-polaris-display-md: 36px;
+  --text-polaris-display-md--line-height: 44px;
+  --text-polaris-display-md--font-weight: 700;
+  --text-polaris-display-md--letter-spacing: -0.02em;
+
+  --text-polaris-heading-lg: 24px;
+  --text-polaris-heading-lg--line-height: 32px;
+  --text-polaris-heading-lg--font-weight: 600;
+  --text-polaris-heading-lg--letter-spacing: -0.01em;
+
+  --text-polaris-heading-md: 20px;
+  --text-polaris-heading-md--line-height: 28px;
+  --text-polaris-heading-md--font-weight: 600;
+  --text-polaris-heading-md--letter-spacing: -0.005em;
+
+  --text-polaris-heading-sm: 16px;
+  --text-polaris-heading-sm--line-height: 24px;
+  --text-polaris-heading-sm--font-weight: 600;
+
+  --text-polaris-body-lg: 16px;
+  --text-polaris-body-lg--line-height: 24px;
+  --text-polaris-body-lg--font-weight: 400;
+
+  --text-polaris-body-sm: 14px;
+  --text-polaris-body-sm--line-height: 20px;
+  --text-polaris-body-sm--font-weight: 400;
+
+  --text-polaris-caption: 12px;
+  --text-polaris-caption--line-height: 16px;
+  --text-polaris-caption--font-weight: 400;
+}

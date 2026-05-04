@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { Slot } from '@radix-ui/react-slot';
 import { cn } from '../lib/cn';
 
 export const Navbar = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
@@ -18,10 +19,16 @@ export const Navbar = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
 );
 Navbar.displayName = 'Navbar';
 
-export const NavbarBrand = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('flex items-center gap-2 shrink-0', className)} {...props} />
-  )
+export interface NavbarBrandProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Render the child element instead of `<div>`. Useful for Link wrapping. */
+  asChild?: boolean;
+}
+
+export const NavbarBrand = forwardRef<HTMLDivElement, NavbarBrandProps>(
+  ({ className, asChild, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'div';
+    return <Comp ref={ref} className={cn('flex items-center gap-2 shrink-0', className)} {...props} />;
+  }
 );
 NavbarBrand.displayName = 'NavbarBrand';
 

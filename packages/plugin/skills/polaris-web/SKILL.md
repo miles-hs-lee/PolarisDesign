@@ -26,6 +26,11 @@ You are working on a Polaris Office web service. Apply these rules without askin
      Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
      // Tier 2.5 — layout / structural
      Stack, HStack, VStack, Container, Drawer, Table, DescriptionList,
+     // Tier 3 — form / date / overlay (Calendar·Command are experimental — APIs may change)
+     Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
+     Popover, PopoverTrigger, PopoverContent,
+     Calendar, DatePicker, DateRangePicker,
+     CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem,
      // Server-action friendly (Next.js App Router)
      DropdownMenuFormItem,
      // Toast imperative API (call toast({...}) anywhere; mount <Toaster /> once)
