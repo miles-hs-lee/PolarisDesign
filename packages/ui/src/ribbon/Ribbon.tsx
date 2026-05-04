@@ -105,7 +105,7 @@ export const RibbonContent = forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
-      'flex items-stretch gap-1 px-2 py-1.5 overflow-x-auto',
+      'flex items-stretch gap-0 px-1 py-1 overflow-x-auto',
       'focus-visible:outline-none',
       className
     )}
@@ -117,7 +117,7 @@ RibbonContent.displayName = 'RibbonContent';
 /* ----- Group + Separator ----- */
 
 export interface RibbonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Optional small label rendered below the group items. */
+  /** Optional small label rendered below the group items (Office-style). */
   label?: ReactNode;
 }
 
@@ -126,12 +126,12 @@ export const RibbonGroup = forwardRef<HTMLDivElement, RibbonGroupProps>(
     <div
       ref={ref}
       className={cn(
-        'flex flex-col items-stretch px-2 py-0.5 min-w-fit',
+        'flex flex-col items-stretch shrink-0 px-1.5',
         className
       )}
       {...props}
     >
-      <div className="flex items-center gap-1 flex-1">{children}</div>
+      <div className="flex items-center justify-center gap-0 flex-1 min-h-14">{children}</div>
       {label && (
         <div className="mt-0.5 text-center text-polaris-caption text-fg-muted leading-tight whitespace-pre-line">
           {label}
@@ -142,13 +142,45 @@ export const RibbonGroup = forwardRef<HTMLDivElement, RibbonGroupProps>(
 );
 RibbonGroup.displayName = 'RibbonGroup';
 
+/**
+ * Stack of 2-3 small buttons (e.g. 잘라내기 / 복사 / 서식복사 next to a large
+ * paste button). Use inside `RibbonGroup` to lay items in a vertical column
+ * matching Office ribbon density.
+ */
+export const RibbonStack = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn('flex flex-col items-stretch gap-0', className)}
+      {...props}
+    />
+  )
+);
+RibbonStack.displayName = 'RibbonStack';
+
+/**
+ * Horizontal row of small buttons. Use inside `RibbonStack` to compose a
+ * group with multiple rows of icon buttons (Office's classic 2-row format
+ * inside a single group).
+ */
+export const RibbonRow = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn('flex items-center gap-0', className)}
+      {...props}
+    />
+  )
+);
+RibbonRow.displayName = 'RibbonRow';
+
 export const RibbonSeparator = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
       role="separator"
       aria-orientation="vertical"
-      className={cn('mx-1 my-1 w-px bg-surface-border', className)}
+      className={cn('mx-0 my-1 w-px shrink-0 bg-surface-border', className)}
       {...props}
     />
   )
@@ -159,7 +191,7 @@ RibbonSeparator.displayName = 'RibbonSeparator';
 
 const ribbonButtonStyles = cva(
   cn(
-    'inline-flex items-center justify-center gap-1 rounded-polaris-sm text-fg-primary transition-colors',
+    'inline-flex items-center justify-center gap-1 rounded-polaris-sm text-fg-primary transition-colors shrink-0',
     'hover:bg-brand-primary-subtle',
     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
     'disabled:opacity-40 disabled:pointer-events-none aria-disabled:opacity-40 aria-disabled:pointer-events-none',
@@ -168,9 +200,9 @@ const ribbonButtonStyles = cva(
   {
     variants: {
       size: {
-        sm: 'h-8 min-w-8 px-1.5 text-polaris-body-sm',
-        md: 'h-9 min-w-9 px-2 text-polaris-body-sm',
-        lg: 'flex-col h-14 min-w-14 px-2 py-1 text-polaris-caption gap-0.5',
+        sm: 'h-6 min-w-6 px-1 text-polaris-body-sm',
+        md: 'h-8 min-w-8 px-2 text-polaris-body-sm',
+        lg: 'flex-col h-14 min-w-14 px-1.5 py-1 text-polaris-caption gap-0.5',
       },
     },
     defaultVariants: { size: 'sm' },

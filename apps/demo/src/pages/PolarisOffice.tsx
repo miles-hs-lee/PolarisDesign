@@ -26,6 +26,8 @@ import {
   RibbonTab,
   RibbonContent,
   RibbonGroup,
+  RibbonStack,
+  RibbonRow,
   RibbonSeparator,
   RibbonButton,
   RibbonSplitButton,
@@ -219,29 +221,29 @@ export default function PolarisOffice() {
               >
                 붙여넣기
               </RibbonSplitButton>
-              <div className="flex flex-col gap-0.5 ml-1">
-                <RibbonButton size="sm" disabled icon={<Scissors className="h-4 w-4" />}>잘라내기</RibbonButton>
-                <RibbonButton size="sm" disabled icon={<Copy className="h-4 w-4" />}>복사</RibbonButton>
+              <RibbonStack className="ml-0.5">
+                <RibbonButton size="sm" disabled icon={<Scissors className="h-3.5 w-3.5" />}>잘라내기</RibbonButton>
+                <RibbonButton size="sm" disabled icon={<Copy className="h-3.5 w-3.5" />}>복사</RibbonButton>
                 <RibbonSplitButton
                   size="sm"
                   disabled
-                  icon={<Brush className="h-4 w-4" />}
+                  icon={<Brush className="h-3.5 w-3.5" />}
                   tooltip="서식 복사"
                   menuLabel="서식 복사 옵션"
                   menu={<DropdownMenuItem>서식 복사 잠금</DropdownMenuItem>}
                 >
                   서식복사
                 </RibbonSplitButton>
-              </div>
+              </RibbonStack>
             </RibbonGroup>
 
             <RibbonSeparator />
 
             <RibbonGroup>
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1">
+              <RibbonStack>
+                <RibbonRow>
                   <Select value={fontFamily} onValueChange={setFontFamily}>
-                    <SelectTrigger className="!h-7 w-44 text-polaris-body-sm">
+                    <SelectTrigger className="!h-6 w-36 text-polaris-body-sm">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -252,7 +254,7 @@ export default function PolarisOffice() {
                     </SelectContent>
                   </Select>
                   <Select value={fontSize} onValueChange={setFontSize}>
-                    <SelectTrigger className="!h-7 w-20 text-polaris-body-sm">
+                    <SelectTrigger className="!h-6 w-14 ml-0.5 text-polaris-body-sm">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -275,8 +277,8 @@ export default function PolarisOffice() {
                       </>
                     }
                   />
-                </div>
-                <div className="flex items-center gap-0.5">
+                </RibbonRow>
+                <RibbonRow>
                   <RibbonToggleGroup type="multiple" value={marks} onValueChange={setMarks}>
                     <RibbonToggleItem value="bold" tooltip="굵게 (⌘B)" icon={<Bold className="h-4 w-4" />} />
                     <RibbonToggleItem value="italic" tooltip="기울임 (⌘I)" icon={<Italic className="h-4 w-4" />} />
@@ -310,38 +312,40 @@ export default function PolarisOffice() {
                   <RibbonButton tooltip="문자 강조 표시" icon={<SquareUser className="h-4 w-4" />} />
                   <RibbonButton tooltip="문자 테두리" icon={<span className="inline-flex h-4 w-4 items-center justify-center border-2 border-fg-primary rounded-polaris-sm text-polaris-caption font-bold leading-none">A</span>} />
                   <RibbonButton tooltip="서식 지우기" icon={<Eraser className="h-4 w-4" />} />
-                </div>
-              </div>
+                </RibbonRow>
+              </RibbonStack>
             </RibbonGroup>
 
             <RibbonSeparator />
 
             <RibbonGroup>
-              <div className="flex flex-col gap-0.5">
-                <div className="flex items-center gap-0.5">
+              <RibbonStack>
+                <RibbonRow>
                   <RibbonSplitButton tooltip="글머리 기호" icon={<List className="h-4 w-4" />} menuLabel="글머리 기호" menu={<DropdownMenuItem>· — ▪</DropdownMenuItem>} />
                   <RibbonSplitButton tooltip="번호 매기기" icon={<ListOrdered className="h-4 w-4" />} menuLabel="번호 매기기" menu={<DropdownMenuItem>1. 2. 3.</DropdownMenuItem>} />
                   <RibbonSplitButton tooltip="다단계 목록" icon={<ListTree className="h-4 w-4" />} menuLabel="다단계 목록" menu={<DropdownMenuItem>1.1.1</DropdownMenuItem>} />
-                </div>
-                <div className="flex items-center gap-0.5">
+                </RibbonRow>
+                <RibbonRow>
                   <RibbonButton tooltip="내어쓰기" icon={<IndentDecrease className="h-4 w-4" />} />
                   <RibbonButton tooltip="들여쓰기" icon={<IndentIncrease className="h-4 w-4" />} />
-                </div>
-              </div>
+                </RibbonRow>
+              </RibbonStack>
             </RibbonGroup>
 
             <RibbonSeparator />
 
             <RibbonGroup>
-              <RibbonSplitButton tooltip="채우기 색" icon={<PaintBucket className="h-4 w-4" />} menuLabel="채우기 색" menu={<DropdownMenuItem>색 선택…</DropdownMenuItem>} />
-              <RibbonSplitButton tooltip="문자 간격" icon={<ArrowLeftRight className="h-4 w-4" />} menuLabel="문자 간격" menu={<DropdownMenuItem>좁게 / 보통 / 넓게</DropdownMenuItem>} />
+              <RibbonRow>
+                <RibbonSplitButton tooltip="채우기 색" icon={<PaintBucket className="h-4 w-4" />} menuLabel="채우기 색" menu={<DropdownMenuItem>색 선택…</DropdownMenuItem>} />
+                <RibbonSplitButton tooltip="문자 간격" icon={<ArrowLeftRight className="h-4 w-4" />} menuLabel="문자 간격" menu={<DropdownMenuItem>좁게 / 보통 / 넓게</DropdownMenuItem>} />
+              </RibbonRow>
             </RibbonGroup>
 
             <RibbonSeparator />
 
             <RibbonGroup>
-              <div className="flex flex-col gap-0.5">
-                <div className="flex items-center gap-0.5">
+              <RibbonStack>
+                <RibbonRow>
                   <RibbonToggleGroup type="single" value={align} onValueChange={(v) => v && setAlign(v)}>
                     <RibbonToggleItem value="left" tooltip="왼쪽 정렬" icon={<AlignLeft className="h-4 w-4" />} />
                     <RibbonToggleItem value="center" tooltip="가운데 정렬" icon={<AlignCenter className="h-4 w-4" />} />
@@ -349,15 +353,15 @@ export default function PolarisOffice() {
                     <RibbonToggleItem value="justify" tooltip="양쪽 정렬" icon={<AlignJustify className="h-4 w-4" />} />
                     <RibbonToggleItem value="distribute" tooltip="배분 정렬" icon={<WrapText className="h-4 w-4" />} />
                   </RibbonToggleGroup>
-                </div>
-                <div className="flex items-center gap-0.5">
+                </RibbonRow>
+                <RibbonRow>
                   <RibbonSplitButton tooltip="줄 간격" icon={<ChevronsUpDown className="h-4 w-4" />} menuLabel="줄 간격" menu={<DropdownMenuItem>1.0 / 1.5 / 2.0</DropdownMenuItem>} />
                   <RibbonSplitButton tooltip="단락 간격" icon={<AlignVerticalSpaceBetween className="h-4 w-4" />} menuLabel="단락 간격" menu={<DropdownMenuItem>0 / 6 / 12pt</DropdownMenuItem>} />
                   <RibbonButton tooltip="단락 들여쓰기" icon={<IndentIncrease className="h-4 w-4" />} />
                   <RibbonButton tooltip="단락 기호 표시" icon={<Pilcrow className="h-4 w-4" />} />
                   <RibbonButton tooltip="줄바꿈 표시" icon={<CornerDownLeft className="h-4 w-4" />} />
-                </div>
-              </div>
+                </RibbonRow>
+              </RibbonStack>
             </RibbonGroup>
 
             <RibbonSeparator />
@@ -369,33 +373,33 @@ export default function PolarisOffice() {
             <RibbonSeparator />
 
             <RibbonGroup>
-              <div className="flex flex-col gap-0.5">
+              <RibbonStack>
                 <RibbonSplitButton size="sm" icon={<Search className="h-4 w-4" />} tooltip="찾기" menuLabel="찾기 옵션" menu={<DropdownMenuItem>고급 찾기…</DropdownMenuItem>}>
                   찾기
                 </RibbonSplitButton>
                 <RibbonButton size="sm" icon={<Replace className="h-4 w-4" />} tooltip="바꾸기">
                   바꾸기
                 </RibbonButton>
-              </div>
+              </RibbonStack>
             </RibbonGroup>
           </RibbonContent>
 
           {/* === 삽입 === */}
           <RibbonContent value="insert">
-            <RibbonGroup label="새 페이지">
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<FilePlus className="h-6 w-6 text-fg-secondary" />}>새{'\n'}페이지</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label="페이지 나누기">
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<SeparatorHorizontal className="h-6 w-6 text-status-danger" />}>페이지{'\n'}나누기</RibbonButton>
             </RibbonGroup>
             <RibbonSeparator />
-            <RibbonGroup label="표">
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<Table className="h-6 w-6 text-fg-secondary" />}>표</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label="그림">
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<ImageIcon className="h-6 w-6 text-status-success" />}>그림</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>온라인<br/>그림</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={
                 <span className="relative inline-flex">
                   <ImageIcon className="h-6 w-6 text-status-success" />
@@ -403,7 +407,7 @@ export default function PolarisOffice() {
                 </span>
               }>온라인{'\n'}그림</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label="도형">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" icon={<Shapes className="h-6 w-6 text-fg-secondary" />} menuLabel="도형 선택" menu={
                 <>
                   <DropdownMenuItem>사각형</DropdownMenuItem>
@@ -413,10 +417,10 @@ export default function PolarisOffice() {
               }>도형</RibbonSplitButton>
             </RibbonGroup>
             <RibbonSeparator />
-            <RibbonGroup label="하이퍼 링크">
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<LinkIcon className="h-6 w-6 text-fg-secondary" />}>하이퍼{'\n'}링크</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label="책갈피">
+            <RibbonGroup>
               <RibbonButton size="lg" icon={
                 <span className="relative inline-flex">
                   <Bookmark className="h-6 w-6 text-fg-secondary" />
@@ -424,7 +428,7 @@ export default function PolarisOffice() {
                 </span>
               }>책갈피</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>텍스트<br/>상자</>}>
+            <RibbonGroup>
               <RibbonSplitButton size="lg" icon={<TextCursorInput className="h-6 w-6 text-fg-secondary" />} menuLabel="텍스트 상자 종류" menu={
                 <>
                   <DropdownMenuItem>가로 텍스트 상자</DropdownMenuItem>
@@ -433,87 +437,87 @@ export default function PolarisOffice() {
               }>텍스트{'\n'}상자</RibbonSplitButton>
             </RibbonGroup>
             <RibbonSeparator />
-            <RibbonGroup label="기호">
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<Sigma className="h-6 w-6 text-fg-secondary" />}>기호</RibbonButton>
             </RibbonGroup>
           </RibbonContent>
 
           {/* === 레이아웃 === */}
           <RibbonContent value="layout">
-            <RibbonGroup label="여백">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" icon={<LayoutIcon className="h-6 w-6 text-fg-secondary" />} menuLabel="여백 선택" menu={<DropdownMenuItem>좁게 / 보통 / 넓게</DropdownMenuItem>}>여백</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label={<>용지<br/>방향</>}>
+            <RibbonGroup>
               <RibbonSplitButton size="lg" icon={<RotateCw className="h-6 w-6 text-fg-secondary" />} menuLabel="용지 방향" menu={<><DropdownMenuItem>세로</DropdownMenuItem><DropdownMenuItem>가로</DropdownMenuItem></>}>용지{'\n'}방향</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label="크기">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" icon={<Maximize2 className="h-6 w-6 text-fg-secondary" />} menuLabel="용지 크기" menu={<><DropdownMenuItem>A4</DropdownMenuItem><DropdownMenuItem>Letter</DropdownMenuItem></>}>크기</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label="단">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" icon={<Columns3 className="h-6 w-6 text-fg-secondary" />} menuLabel="단 나누기" menu={<><DropdownMenuItem>1단</DropdownMenuItem><DropdownMenuItem>2단</DropdownMenuItem><DropdownMenuItem>3단</DropdownMenuItem></>}>단</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label="나누기">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" icon={<SplitSquareVertical className="h-6 w-6 text-status-danger" />} menuLabel="페이지/단/구역 나누기" menu={<><DropdownMenuItem>페이지 나누기</DropdownMenuItem><DropdownMenuItem>단 나누기</DropdownMenuItem><DropdownMenuItem>구역 나누기</DropdownMenuItem></>}>나누기</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label={<>페이지<br/>설정</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-brand-primary" />}>페이지{'\n'}설정</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>레이아웃<br/>설정</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-brand-primary" />}>레이아웃{'\n'}설정</RibbonButton>
             </RibbonGroup>
             <RibbonSeparator />
             {/* Image-related — disabled until selection */}
-            <RibbonGroup label="위치">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" disabled icon={<Move className="h-6 w-6" />} menuLabel="위치" menu={<DropdownMenuItem>위치 선택</DropdownMenuItem>}>위치</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label={<>텍스트<br/>줄 바꿈</>}>
+            <RibbonGroup>
               <RibbonSplitButton size="lg" disabled icon={<WrapText className="h-6 w-6" />} menuLabel="줄 바꿈 옵션" menu={<DropdownMenuItem>옵션</DropdownMenuItem>}>텍스트{'\n'}줄 바꿈</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label="그룹">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" disabled icon={<Group className="h-6 w-6" />} menuLabel="그룹" menu={<DropdownMenuItem>그룹/해제</DropdownMenuItem>}>그룹</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label={<>앞으로<br/>가져오기</>}>
+            <RibbonGroup>
               <RibbonSplitButton size="lg" disabled icon={<ArrowUpToLine className="h-6 w-6" />} menuLabel="앞으로" menu={<DropdownMenuItem>맨 앞으로</DropdownMenuItem>}>앞으로{'\n'}가져오기</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label={<>뒤로<br/>보내기</>}>
+            <RibbonGroup>
               <RibbonSplitButton size="lg" disabled icon={<ArrowDownToLine className="h-6 w-6" />} menuLabel="뒤로" menu={<DropdownMenuItem>맨 뒤로</DropdownMenuItem>}>뒤로{'\n'}보내기</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label="맞춤">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" disabled icon={<AlignLeft className="h-6 w-6" />} menuLabel="맞춤" menu={<DropdownMenuItem>왼쪽/오른쪽/위/아래</DropdownMenuItem>}>맞춤</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label="회전">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" disabled icon={<RotateCw className="h-6 w-6" />} menuLabel="회전" menu={<><DropdownMenuItem>90° 회전</DropdownMenuItem><DropdownMenuItem>180° 회전</DropdownMenuItem></>}>회전</RibbonSplitButton>
             </RibbonGroup>
           </RibbonContent>
 
           {/* === 검토 === */}
           <RibbonContent value="review">
-            <RibbonGroup label={<>ABC 123<br/>단어<br/>개수</>}>
-              <RibbonButton size="lg" icon={<span className="text-polaris-caption font-bold leading-tight text-center">ABC<br/>123</span>}>단어{'\n'}개수</RibbonButton>
+            <RibbonGroup>
+              <RibbonButton size="lg" icon={<span className="text-polaris-caption font-bold leading-tight text-center">ABC{'\n'}123</span>}>단어{'\n'}개수</RibbonButton>
             </RibbonGroup>
             <RibbonSeparator />
-            <RibbonGroup label={<>새<br/>메모</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<MessageSquarePlus className="h-6 w-6 text-status-warning" />}>새{'\n'}메모</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label="삭제">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" disabled icon={<XIcon className="h-6 w-6" />} menuLabel="삭제 옵션" menu={<><DropdownMenuItem>삭제</DropdownMenuItem><DropdownMenuItem>모두 삭제</DropdownMenuItem></>}>삭제</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label="이전">
+            <RibbonGroup>
               <RibbonButton size="lg" disabled icon={<ChevronLeft className="h-6 w-6" />}>이전</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label="다음">
+            <RibbonGroup>
               <RibbonButton size="lg" disabled icon={<ChevronRight className="h-6 w-6" />}>다음</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>메모<br/>표시</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<MessageSquare className="h-6 w-6 text-status-warning" />}>메모{'\n'}표시</RibbonButton>
             </RibbonGroup>
             <RibbonSeparator />
-            <RibbonGroup label={<>변경내용<br/>추적</>}>
+            <RibbonGroup>
               <RibbonToggleGroup type="multiple" value={trackChanges} onValueChange={setTrackChanges}>
                 <RibbonToggleItem value="track" size="lg" tooltip="변경내용 추적" icon={<History className="h-6 w-6 text-status-danger" />}>변경내용{'\n'}추적</RibbonToggleItem>
               </RibbonToggleGroup>
             </RibbonGroup>
-            <RibbonGroup label={<>변경내용<br/>표시</>}>
+            <RibbonGroup>
               <RibbonSplitButton size="lg" icon={<ListChecks className="h-6 w-6 text-fg-secondary" />} menuLabel="변경내용 표시 옵션" menu={
                 <>
                   <DropdownMenuItem>모든 변경 사항</DropdownMenuItem>
@@ -535,7 +539,7 @@ export default function PolarisOffice() {
               </Select>
             </RibbonGroup>
             <RibbonSeparator />
-            <RibbonGroup label="적용">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" icon={<Check className="h-6 w-6 text-status-success" />} menuLabel="적용 옵션" menu={
                 <>
                   <DropdownMenuItem>이 변경 사항 적용</DropdownMenuItem>
@@ -543,7 +547,7 @@ export default function PolarisOffice() {
                 </>
               }>적용</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label="취소">
+            <RibbonGroup>
               <RibbonSplitButton size="lg" icon={<XIcon className="h-6 w-6 text-status-danger" />} menuLabel="취소 옵션" menu={
                 <>
                   <DropdownMenuItem>이 변경 사항 취소</DropdownMenuItem>
@@ -551,17 +555,17 @@ export default function PolarisOffice() {
                 </>
               }>취소</RibbonSplitButton>
             </RibbonGroup>
-            <RibbonGroup label="이전">
+            <RibbonGroup>
               <RibbonButton size="lg" disabled icon={<ChevronLeft className="h-6 w-6" />}>이전</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label="다음">
+            <RibbonGroup>
               <RibbonButton size="lg" disabled icon={<ChevronRight className="h-6 w-6" />}>다음</RibbonButton>
             </RibbonGroup>
           </RibbonContent>
 
           {/* === AI 도구 === */}
           <RibbonContent value="ai">
-            <RibbonGroup label={<>NOVA<br/>AI 채팅</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={
                 <span className="relative inline-flex">
                   <MessageSquare className="h-6 w-6 text-fg-secondary" />
@@ -569,7 +573,7 @@ export default function PolarisOffice() {
                 </span>
               }>NOVA{'\n'}AI 채팅</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>웹<br/>검색</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={
                 <span className="relative inline-flex">
                   <Search className="h-6 w-6 text-fg-secondary" />
@@ -577,7 +581,7 @@ export default function PolarisOffice() {
                 </span>
               }>웹{'\n'}검색</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>AI<br/>Write</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={
                 <span className="relative inline-flex">
                   <FileText className="h-6 w-6 text-fg-secondary" />
@@ -585,7 +589,7 @@ export default function PolarisOffice() {
                 </span>
               }>AI{'\n'}Write</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label="번역">
+            <RibbonGroup>
               <RibbonButton size="lg" icon={
                 <span className="relative inline-flex">
                   <Languages className="h-6 w-6 text-fg-secondary" />
@@ -593,11 +597,11 @@ export default function PolarisOffice() {
                 </span>
               }>번역</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>워드<br/>클라우드</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<Cloud className="h-6 w-6 text-fg-secondary" />}>워드{'\n'}클라우드</RibbonButton>
             </RibbonGroup>
             <RibbonSeparator />
-            <RibbonGroup label="받아쓰기">
+            <RibbonGroup>
               <RibbonButton size="lg" icon={
                 <span className="relative inline-flex">
                   <Mic className="h-6 w-6 text-fg-secondary" />
@@ -606,32 +610,32 @@ export default function PolarisOffice() {
               }>받아쓰기</RibbonButton>
             </RibbonGroup>
             <RibbonSeparator />
-            <RibbonGroup label={<>Text to<br/>Image</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<ImagePlus className="h-6 w-6 text-fg-secondary" />}>Text to{'\n'}Image</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>2D→3D<br/>변환</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<Box className="h-6 w-6 text-fg-secondary" />}>2D→3D{'\n'}변환</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>배경<br/>제거</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<Eraser2 className="h-6 w-6 text-fg-secondary" />}>배경{'\n'}제거</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>배경<br/>변경</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<ImageIcon className="h-6 w-6 text-fg-secondary" />}>배경{'\n'}변경</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>이미지<br/>리메이크</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<Wand2 className="h-6 w-6 text-fg-secondary" />}>이미지{'\n'}리메이크</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>이미지<br/>확장</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<Maximize className="h-6 w-6 text-fg-secondary" />}>이미지{'\n'}확장</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>해상도<br/>향상</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<ZoomIn className="h-6 w-6 text-fg-secondary" />}>해상도{'\n'}향상</RibbonButton>
             </RibbonGroup>
-            <RibbonGroup label={<>스타일<br/>변환</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<PaletteIcon className="h-6 w-6 text-fg-secondary" />}>스타일{'\n'}변환</RibbonButton>
             </RibbonGroup>
             <RibbonSeparator />
-            <RibbonGroup label={<>AI 도구<br/>사용자 가이드</>}>
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<BookOpen className="h-6 w-6 text-brand-secondary" />}>AI 도구{'\n'}사용자 가이드</RibbonButton>
             </RibbonGroup>
           </RibbonContent>
