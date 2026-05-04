@@ -231,9 +231,10 @@ CI 워크플로우는 `.github/workflows/ci.yml` 참조. 배포는 `.github/work
 - **v0.2.0** — Tier 2 컴포넌트 7개(Checkbox/Switch/Skeleton/Alert/Pagination/Breadcrumb/EmptyState), Toast `useToast`/`<Toaster>` imperative API, Card `asChild`, lint false-positive 보정, SSR-safe theme toggle, status hover/on-status 색상 토큰, Tailwind v4 임시 가이드
 - **v0.2.1** — focus 링 비대칭 fix (`ring`+`ring-offset` → 네이티브 `outline`+`outline-offset`)
 - **v0.3.0** — Tier 2.5 컴포넌트 5개(Stack/Container/Drawer/Table/DescriptionList), DropdownMenuFormItem, Pagination/Card/Checkbox/EmptyState API 보강, 5건 docs
-- **v0.4.0 (현재)** — Tailwind v4 네이티브 preset (`@polaris/ui/styles/v4-theme.css`), Form/FormField (RHF + zod), Calendar/DatePicker/DateRangePicker (experimental, react-day-picker), CommandPalette (experimental, cmdk), Popover, v0.3.1 patches 6건(hiddenFields, Toaster position, NavbarBrand asChild, pageNumberItems util, DescriptionList responsive, Pagination labels)
-- **v0.4.x** — 사내 npm 레지스트리 publish, tokens.md hex 사인오프, 파일럿 위반율 측정 baseline. experimental 컴포넌트(Calendar, Command) 안정화
-- **v0.5+** — Combobox, DataTable (sortable·virtualized), Slider/Range, NumberInput, AvatarGroup, CodeBlock, 시각 회귀 테스트, Badge variant 축 재구성 (BREAKING — RFC 후)
+- **v0.4.x (현재)** — Tailwind v4 네이티브 preset, Form/FormField (RHF + zod), Calendar/DatePicker/Command (experimental), Popover, 사내 npm 레지스트리 publish, tokens.md hex 사인오프, 파일럿 위반율 측정 baseline
+- **v0.5+** — DataPagination wrapper, Table sticky+sortable, StatCard, Badge dot variant, Drawer responsive, asChild 일관성, Tier stability matrix. 자세히 → [docs/roadmap.md](docs/roadmap.md)
+- **v0.6+** — DataTable, Combobox, NumberInput, AvatarGroup, Slider, CodeBlock, experimental 컴포넌트 안정화
+- **v1.0** — Badge variant BREAKING, Pretendard local, 시각 회귀 테스트, 사인오프
 
 ## License
 

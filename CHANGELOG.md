@@ -8,7 +8,9 @@
 
 ## [Unreleased]
 
-— 다음 릴리스에 들어갈 변경 사항을 여기에 누적하세요.
+다음 릴리스(v0.5)에 우선 들어갈 항목들 — 자세한 우선순위는 [docs/roadmap.md](docs/roadmap.md) 참고.
+
+**검증 필요:** v0.4 사용자 보고 — `prefer-polaris-component` lint가 server action `<form action={...}>` 안의 `<button type="submit">`을 일부 케이스에서 flag. v0.2.0 `allowFormSubmit` 수정 후 회귀 테스트는 통과 — 사용자 lint 버전 또는 화이트리스트 미커버 케이스 확인 필요.
 
 ---
 
