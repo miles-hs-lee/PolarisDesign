@@ -1,0 +1,148 @@
+/* Polaris Design Tokens — CSS Custom Properties
+ * Single source of truth: change brand-base values to update all aliases.
+ * Theme switching: set [data-theme="dark"] on <html> or any ancestor.
+ */
+
+:root,
+[data-theme="light"] {
+  /* === Brand palette base === */
+  --polaris-blue:   #2B7FFF;
+  --polaris-green:  #1FAE53;
+  --polaris-orange: #F37021;
+  --polaris-red:    #E5413A;
+  --polaris-purple: #7C5CFF;
+
+  /* === Brand semantic aliases === */
+  --polaris-brand-primary:          var(--polaris-blue);
+  --polaris-brand-primary-hover:    #1E66DB;
+  --polaris-brand-primary-subtle:   #E8EFFF;
+  --polaris-brand-secondary:        var(--polaris-purple);
+  --polaris-brand-secondary-hover:  #6B47FF;
+  --polaris-brand-secondary-subtle: #F3EFFF;
+
+  /* === File type aliases === */
+  --polaris-file-docx: var(--polaris-blue);
+  --polaris-file-hwp:  var(--polaris-blue);
+  --polaris-file-xlsx: var(--polaris-green);
+  --polaris-file-pptx: var(--polaris-orange);
+  --polaris-file-pdf:  var(--polaris-red);
+
+  /* === Status semantic === */
+  --polaris-status-success: #16A34A;
+  --polaris-status-warning: #EAB308;
+  --polaris-status-danger:  #DC2626;
+  --polaris-status-info:    #2563EB;
+
+  /* === Neutral 12-step === */
+  --polaris-neutral-0:    #FFFFFF;
+  --polaris-neutral-50:   #FAFAFB;
+  --polaris-neutral-100:  #F4F4F7;
+  --polaris-neutral-200:  #E8E8EE;
+  --polaris-neutral-300:  #D5D5DE;
+  --polaris-neutral-400:  #B5B5C4;
+  --polaris-neutral-500:  #8C8CA0;
+  --polaris-neutral-600:  #6E6E84;
+  --polaris-neutral-700:  #4F4F63;
+  --polaris-neutral-800:  #2F2F40;
+  --polaris-neutral-900:  #1A1A26;
+  --polaris-neutral-1000: #0B0B12;
+
+  /* === Surface / text semantic === */
+  --polaris-surface-canvas:        var(--polaris-neutral-50);
+  --polaris-surface-raised:        var(--polaris-neutral-0);
+  --polaris-surface-sunken:        var(--polaris-neutral-100);
+  --polaris-surface-border:        var(--polaris-neutral-200);
+  --polaris-surface-border-strong: var(--polaris-neutral-300);
+  --polaris-text-primary:   var(--polaris-neutral-1000);
+  --polaris-text-secondary: var(--polaris-neutral-700);
+  --polaris-text-muted:     var(--polaris-neutral-500);
+  --polaris-text-on-brand:  #FFFFFF;
+
+  /* === Radius === */
+  --polaris-radius-sm:   6px;
+  --polaris-radius-md:   10px;
+  --polaris-radius-lg:   14px;
+  --polaris-radius-xl:   20px;
+  --polaris-radius-full: 9999px;
+
+  /* === Shadow === */
+  --polaris-shadow-xs: 0 1px 2px rgba(15, 15, 35, 0.06);
+  --polaris-shadow-sm: 0 2px 6px rgba(15, 15, 35, 0.08);
+  --polaris-shadow-md: 0 8px 20px rgba(15, 15, 35, 0.10);
+  --polaris-shadow-lg: 0 20px 40px rgba(15, 15, 35, 0.14);
+
+  /* === Typography === */
+  --polaris-font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --polaris-font-mono: "JetBrains Mono", "D2Coding", ui-monospace, monospace;
+}
+
+[data-theme="dark"] {
+  --polaris-blue:   #5C9FFF;
+  --polaris-green:  #3FCB72;
+  --polaris-orange: #FF8F4D;
+  --polaris-red:    #FF6962;
+  --polaris-purple: #9B85FF;
+
+  --polaris-brand-primary-hover:    #7AA5F5;
+  --polaris-brand-primary-subtle:   #1A2238;
+  --polaris-brand-secondary-hover:  #A896FF;
+  --polaris-brand-secondary-subtle: #2A2247;
+
+  --polaris-status-success: #3FCB72;
+  --polaris-status-warning: #FFD64A;
+  --polaris-status-danger:  #FF6962;
+  --polaris-status-info:    #5C9FFF;
+
+  --polaris-neutral-0:    #0B0B12;
+  --polaris-neutral-50:   #131320;
+  --polaris-neutral-100:  #1B1B2A;
+  --polaris-neutral-200:  #232336;
+  --polaris-neutral-300:  #2D2D45;
+  --polaris-neutral-400:  #4A4A66;
+  --polaris-neutral-500:  #6B6B85;
+  --polaris-neutral-600:  #8B8BA3;
+  --polaris-neutral-700:  #B4B4C8;
+  --polaris-neutral-800:  #D5D5DE;
+  --polaris-neutral-900:  #EDEDF2;
+  --polaris-neutral-1000: #FFFFFF;
+
+  --polaris-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.40);
+  --polaris-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.45);
+  --polaris-shadow-md: 0 8px 20px rgba(0, 0, 0, 0.50);
+  --polaris-shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.60);
+}
+
+/* OS preference fallback when no [data-theme] is set */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --polaris-blue:   #5C9FFF;
+    --polaris-green:  #3FCB72;
+    --polaris-orange: #FF8F4D;
+    --polaris-red:    #FF6962;
+    --polaris-purple: #9B85FF;
+    --polaris-brand-primary-hover:    #7AA5F5;
+    --polaris-brand-primary-subtle:   #1A2238;
+    --polaris-brand-secondary-hover:  #A896FF;
+    --polaris-brand-secondary-subtle: #2A2247;
+    --polaris-status-success: #3FCB72;
+    --polaris-status-warning: #FFD64A;
+    --polaris-status-danger:  #FF6962;
+    --polaris-status-info:    #5C9FFF;
+    --polaris-neutral-0:    #0B0B12;
+    --polaris-neutral-50:   #131320;
+    --polaris-neutral-100:  #1B1B2A;
+    --polaris-neutral-200:  #232336;
+    --polaris-neutral-300:  #2D2D45;
+    --polaris-neutral-400:  #4A4A66;
+    --polaris-neutral-500:  #6B6B85;
+    --polaris-neutral-600:  #8B8BA3;
+    --polaris-neutral-700:  #B4B4C8;
+    --polaris-neutral-800:  #D5D5DE;
+    --polaris-neutral-900:  #EDEDF2;
+    --polaris-neutral-1000: #FFFFFF;
+    --polaris-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.40);
+    --polaris-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.45);
+    --polaris-shadow-md: 0 8px 20px rgba(0, 0, 0, 0.50);
+    --polaris-shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.60);
+  }
+}
