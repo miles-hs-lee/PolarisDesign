@@ -205,7 +205,7 @@ export default function PolarisOffice() {
 
           {/* === 홈 === */}
           <RibbonContent value="home">
-            <RibbonGroup label="붙여넣기">
+            <RibbonGroup>
               <RibbonSplitButton
                 size="lg"
                 icon={<Clipboard className="h-6 w-6 text-brand-primary" />}
@@ -366,7 +366,7 @@ export default function PolarisOffice() {
 
             <RibbonSeparator />
 
-            <RibbonGroup label="스타일">
+            <RibbonGroup>
               <RibbonButton size="lg" icon={<Pencil className="h-6 w-6 text-status-danger" />}>스타일</RibbonButton>
             </RibbonGroup>
 

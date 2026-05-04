@@ -146,12 +146,19 @@ RibbonGroup.displayName = 'RibbonGroup';
  * Stack of 2-3 small buttons (e.g. 잘라내기 / 복사 / 서식복사 next to a large
  * paste button). Use inside `RibbonGroup` to lay items in a vertical column
  * matching Office ribbon density.
+ *
+ * Children are left-aligned (icon → label) — matches Office where a stack
+ * of secondary actions reads top-to-bottom from a common x-position.
  */
 export const RibbonStack = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('flex flex-col items-stretch gap-0', className)}
+      className={cn(
+        'flex flex-col items-stretch gap-0',
+        '[&_button]:justify-start',
+        className
+      )}
       {...props}
     />
   )
