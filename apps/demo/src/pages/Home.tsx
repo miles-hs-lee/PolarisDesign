@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Card, CardBody, Badge, cn } from '@polaris/ui';
-import { Layers, FileText, Mail, Palette, BookOpen, ArrowRight, Sparkles } from 'lucide-react';
+import { Layers, FileText, Mail, Palette, BookOpen, ArrowRight, Sparkles, FileSpreadsheet } from 'lucide-react';
 
 const CARDS = [
   {
@@ -25,6 +25,14 @@ const CARDS = [
     title: '폴라리스 사인 — 계약서 목록',
     desc: '전자계약 SaaS의 계약서 관리 화면. 필터·진행률·서명자·행별 액션 메뉴까지 토큰 기반으로 구현',
     badge: '업무 예시 2',
+    accent: 'primary' as const,
+  },
+  {
+    to: '/polaris-office',
+    icon: FileSpreadsheet,
+    title: '폴라리스 오피스 — 워드 리본',
+    desc: '@polaris/ui/ribbon으로 재현한 워드 에디터 리본. 5개 탭(홈·삽입·레이아웃·검토·AI 도구)의 그룹·버튼·split·toggle 구성',
+    badge: '에디터 예시',
     accent: 'primary' as const,
   },
   {

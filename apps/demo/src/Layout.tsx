@@ -43,6 +43,7 @@ import {
   LogOut,
   User,
   Menu as MenuIcon,
+  FileText,
   X as XIcon,
 } from 'lucide-react';
 
@@ -53,6 +54,7 @@ const APP_NAV: { to: string; label: string; icon: React.ElementType; end?: boole
   { to: '/nova', label: 'NOVA 워크스페이스', icon: Sparkles, trailing: <Badge variant="secondary">AI</Badge> },
   { to: '/crm/contract', label: '영업관리', icon: Briefcase },
   { to: '/sign/contracts', label: '사인', icon: PenSquare },
+  { to: '/polaris-office', label: '폴라리스 오피스 (리본)', icon: FileText },
 ];
 
 const REFERENCE_NAV: { to: string; label: string; icon: React.ElementType; end?: boolean }[] = [

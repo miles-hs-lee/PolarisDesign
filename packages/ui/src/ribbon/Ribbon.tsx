@@ -133,7 +133,7 @@ export const RibbonGroup = forwardRef<HTMLDivElement, RibbonGroupProps>(
     >
       <div className="flex items-center gap-1 flex-1">{children}</div>
       {label && (
-        <div className="mt-0.5 text-center text-polaris-caption text-fg-muted truncate">
+        <div className="mt-0.5 text-center text-polaris-caption text-fg-muted leading-tight whitespace-pre-line">
           {label}
         </div>
       )}
@@ -201,7 +201,7 @@ export const RibbonButton = forwardRef<HTMLButtonElement, RibbonButtonProps>(
       >
         {icon}
         {children && (
-          <span className={size === 'lg' ? 'leading-tight' : ''}>{children}</span>
+          <span className={cn(size === 'lg' && 'leading-tight whitespace-pre-line text-center')}>{children}</span>
         )}
       </Comp>
     );
