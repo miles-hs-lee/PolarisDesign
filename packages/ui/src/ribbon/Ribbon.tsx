@@ -160,7 +160,13 @@ export const RibbonContent = forwardRef<
       // Without it, the panel grows a stray vertical scrollbar whenever any
       // child briefly exceeds panel height (e.g. focus rings on tightly
       // packed controls, certain font/zoom levels in narrow viewports).
-      'flex items-stretch gap-0 px-1 py-1 overflow-x-auto overflow-y-clip',
+      //
+      // `min-h-20` (80px = lg button 64 + py-1 padding 8 + slack 8) keeps the
+      // panel the same height across tabs even when one tab has a 3-row sm
+      // stack (~72px) and others only have lg buttons (~64px). Without this
+      // the active panel grows to fit its tallest group, so swapping tabs
+      // visibly nudges the ribbon height.
+      'flex items-stretch gap-0 px-1 py-1 min-h-20 overflow-x-auto overflow-y-clip',
       '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
       'focus-visible:outline-none',
       className
