@@ -14,7 +14,7 @@
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
     "changeset": "changeset",
-    "version": "changeset version",
+    "version": "changeset version && node scripts/sync-root-version.mjs",
     "release": "changeset publish",
     "test:e2e": "playwright test",
     "test:e2e:update": "playwright test --update-snapshots",

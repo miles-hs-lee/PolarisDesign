@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history so `changeset status --since=origin/main` can
+          # diff against the base branch on PRs.
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
         with:
@@ -35,6 +39,12 @@ jobs:
         # If the committed tokens.css drifts from what the script produces,
         # this step fails — forcing the contributor to commit the regen.
         run: git diff --exit-code packages/ui/src/styles/tokens.css || (echo "::error::tokens.css is out of sync — run 'pnpm --filter @polaris/ui build:tokens' and commit the result" && exit 1)
+
+      - name: Verify root version sync
+        # Root package.json isn't in the changesets fixed group (it's not
+        # a workspace member), so we sync it via a post-version script.
+        # This guards against a release that forgot to run that script.
+        run: node scripts/sync-root-version.mjs --check
 
       - name: Build @polaris/lint
         run: pnpm --filter @polaris/lint build
@@ -65,6 +75,10 @@ jobs:
 
       - name: Verify changeset / version sync
         # If a changeset file is present, this PR will bump versions on
-        # release. We surface the planned bump in the CI log so reviewers
-        # see what's about to ship; not a hard fail.
-        run: pnpm changeset status --since=origin/main || true
+        # release. Surfaces the planned bump in the CI log so reviewers
+        # see what's about to ship. Fails if the `since` ref isn't
+        # reachable (caller must use fetch-depth: 0) — silent skip would
+        # let release-time surprises slip through.
+        # Skipped on direct pushes to main (no base to diff against).
+        if: github.event_name == 'pull_request'
+        run: pnpm changeset status --since=origin/${{ github.base_ref }}

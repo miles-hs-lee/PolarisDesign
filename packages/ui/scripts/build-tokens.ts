@@ -27,6 +27,7 @@ import {
   text,
   radius,
   shadow,
+  fontFamily,
   type ColorPair,
 } from '../src/tokens';
 
@@ -79,6 +80,16 @@ function emitRadiusBlock(): string {
     .join('\n');
 }
 
+function emitFontFamilyBlock(): string {
+  // Font families are mode-independent. Tailwind preset's `font-polaris`
+  // / `font-polaris-mono` utilities and demo/template globals.css both
+  // reference these variables — must be emitted or font-family becomes
+  // invalid across the app.
+  return Object.entries(fontFamily)
+    .map(([key, value]) => `  --polaris-font-${camelToKebab(key)}: ${value};`)
+    .join('\n');
+}
+
 function emitShadowBlock(mode: 'light' | 'dark'): string {
   return Object.entries(shadow[mode])
     .map(([key, value]) => `  --polaris-shadow-${key}: ${value};`)
@@ -90,6 +101,8 @@ const lightBlock = `:root,
 ${emitColorBlock('light')}
 
 ${emitRadiusBlock()}
+
+${emitFontFamilyBlock()}
 
 ${emitShadowBlock('light')}
 }`;
