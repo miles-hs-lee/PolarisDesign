@@ -11,7 +11,7 @@ argument-hint: <컴포넌트 이름>
 grep -E "^export (const|function|interface|type) $ARGUMENTS\b" node_modules/@polaris/ui/dist/index.d.ts || echo "Not found"
 ```
 
-또는 데모(`/components` 페이지)나 [Storybook](https://miles-hs-lee.github.io/PolarisDesign/storybook/)에서 컴포넌트 카탈로그 시각 확인.
+또는 [데모의 컴포넌트 카탈로그 페이지](https://miles-hs-lee.github.io/PolarisDesign/#/components)에서 시각 확인.
 
 ### 2. 있다면 — 그대로 import
 

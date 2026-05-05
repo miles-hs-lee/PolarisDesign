@@ -87,7 +87,7 @@ grep -rln '#1D4ED8' src | xargs sed -i '' 's/#1D4ED8/var(--polaris-brand-primary
 
 근사값은 한 파일씩 수동 검토.
 
-**검증**: `pnpm exec eslint . --rule '{"@polaris/no-hardcoded-color": "error"}'`로 남은 위반 확인.
+**검증**: `pnpm lint -- --rule '{"@polaris/no-hardcoded-color": "error"}'`로 남은 위반 확인.
 
 ---
 
@@ -139,7 +139,7 @@ import polaris from '@polaris/lint';
 export default [...polaris.configs.recommended];
 ```
 
-CI 워크플로우에 `pnpm exec eslint . --max-warnings=0` 추가.
+CI 워크플로우에 `pnpm lint -- --max-warnings=0` 추가.
 
 Claude Code 사용 중이면 polaris-design 플러그인 설치 → PostToolUse 훅이 자동으로 토큰 우회 차단.
 

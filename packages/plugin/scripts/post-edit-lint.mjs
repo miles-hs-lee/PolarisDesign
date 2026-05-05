@@ -113,7 +113,7 @@ ${blocks}
 - native <button>/<input>/<textarea>/<select>/<dialog> → @polaris/ui 컴포넌트로 교체
 - inline style 색상 named-color → 토큰
 
-자동 수정 가능 항목: pnpm exec eslint --fix <file>
+자동 수정 가능 항목은 프로젝트의 lint --fix 명령으로 처리 (예: pnpm lint --fix 또는 pnpm --filter <pkg> lint --fix)
 
 이 위반들이 모두 해결될 때까지 작업 완료를 보고하지 마세요.`
     );

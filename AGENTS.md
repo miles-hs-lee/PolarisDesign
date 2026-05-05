@@ -98,13 +98,15 @@ native `<button>`, `<input>`, `<textarea>`, `<select>`, `<dialog>`은 **feature 
 작업을 완료로 보고하기 전에 반드시:
 
 ```sh
-pnpm exec eslint .
+pnpm lint
 ```
 
-위반이 있으면 **모두 수정한 후** 보고. 자동 수정 가능한 것은 `--fix`로 처리:
+(폴라리스 모노레포는 root에 eslint 바이너리가 없으므로 `pnpm exec eslint .`은 실패합니다 — 항상 `pnpm lint` 또는 `pnpm --filter <pkg> lint`를 사용하세요.)
+
+위반이 있으면 **모두 수정한 후** 보고. 자동 수정 가능한 것은 패키지 단위로:
 
 ```sh
-pnpm exec eslint . --fix
+pnpm --filter <pkg> lint --fix
 ```
 
 ## 새 프로젝트를 만들 때
@@ -128,8 +130,8 @@ publish 전이라면 모노레포 내부에서 `apps/` 또는 `packages/` 아래
 # 1. 진단: 어디에 얼마나 위반이 있는지
 npx polaris-audit
 
-# 2. 자동 수정 가능한 항목 처리
-pnpm exec eslint . --fix
+# 2. 자동 수정 가능한 항목 처리 (대상 프로젝트의 lint 스크립트로)
+pnpm lint --fix
 
 # 3. 남은 위반은 페이지 단위로 토큰으로 교체
 #    - hex → var(--polaris-*) 또는 bg-brand-* 클래스
@@ -153,4 +155,6 @@ pnpm exec eslint . --fix
 - [메인 README](README.md) — 시스템 전체 개요
 - [tokens.md](tokens.md) — 토큰 사양
 - 라이브 데모: https://miles-hs-lee.github.io/PolarisDesign/
-- 컴포넌트 카탈로그: https://miles-hs-lee.github.io/PolarisDesign/storybook/
+- 컴포넌트 카탈로그: https://miles-hs-lee.github.io/PolarisDesign/#/components
+- 디자인 토큰: https://miles-hs-lee.github.io/PolarisDesign/#/tokens
+- 디자인 자산 (로고/아이콘): https://miles-hs-lee.github.io/PolarisDesign/#/assets

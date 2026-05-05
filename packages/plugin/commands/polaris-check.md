@@ -5,15 +5,17 @@ description: 폴라리스 디자인 시스템 준수 여부 검사 (lint 실행)
 다음을 실행하고 결과를 보고하세요:
 
 ```sh
-pnpm exec eslint .
+pnpm lint
 ```
+
+(프로젝트 root에 eslint 바이너리가 없어도 동작하도록 항상 `pnpm lint`를 사용. 모노레포라면 `pnpm --filter <pkg> lint`로 패키지별 실행.)
 
 ### 위반이 있으면
 
 자동 수정 가능한 항목이 있다면 먼저 시도:
 
 ```sh
-pnpm exec eslint . --fix
+pnpm lint --fix
 ```
 
 남은 항목은 직접 수정:
