@@ -1,0 +1,19 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.4/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [
+    [
+      "@polaris/ui",
+      "@polaris/lint",
+      "@polaris/plugin",
+      "polaris-template-next",
+      "demo"
+    ]
+  ],
+  "linked": [],
+  "access": "restricted",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}

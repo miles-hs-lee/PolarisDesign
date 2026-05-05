@@ -204,6 +204,14 @@ pnpm --filter demo dev
 pnpm --filter polaris-template-next dev
 # → http://localhost:3000/
 
+# 변경 사항 기록 (PR 작성 시)
+# 사용자에게 영향 있는 변경이면 PR에 같이 commit. 자세히 → .changeset/README.md
+pnpm changeset
+
+# 릴리스 (changeset이 모인 후 main에서)
+pnpm version    # 모든 fixed 패키지 자동 bump + CHANGELOG.md 갱신
+# → 검토 후 commit + tag + push
+
 # 린트 + 테스트
 pnpm --filter @polaris/ui test    # 컴포넌트 + cn() 테스트 (vitest 18 + node:test 3 = 21건)
 pnpm --filter @polaris/lint test   # ESLint 룰 단위 테스트 (42건)
