@@ -8,9 +8,49 @@
 
 ## [Unreleased]
 
-다음 릴리스(v0.6.x+)에 들어갈 항목 — [docs/roadmap.md](docs/roadmap.md).
+다음 릴리스(v0.7+)에 들어갈 항목 — [docs/roadmap.md](docs/roadmap.md), [docs/design-assets-v07.md](docs/design-assets-v07.md).
 
 **검증 필요:** v0.4 사용자 보고 — `prefer-polaris-component` lint가 server action `<form action={...}>` 안의 `<button type="submit">`을 일부 케이스에서 flag. v0.2.0 `allowFormSubmit` 수정 후 회귀 테스트는 통과 — 사용자 lint 버전 또는 화이트리스트 미커버 케이스 확인 필요.
+
+---
+
+## [0.6.1] — 2026-05-05
+
+v0.6.0 출시 후 코덱스 리뷰 + 사용자 피드백을 반영한 정비 패치. ribbon 잔여 버그를 모두 잡고, 안전망(테스트/시각 회귀/changeset/토큰 generator)을 모두 갖춘 첫 release.
+
+### Ribbon (`@polaris/ui/ribbon`)
+
+- **`disabled` SplitButton 메뉴 차단** — 비활성 상태에서는 `DropdownMenu` 자체를 mount하지 않아 chevron 클릭으로도 메뉴가 열리지 않음. Radix `asChild` + native `disabled`만으로는 부족했던 race condition fix.
+- **panel 높이 통일** — `min-h-20`(80px) + `data-[state=inactive]:hidden` + `overflow-y-clip`. lg 버튼 + 다중 행 sm stack 같은 그룹 조합이 있을 때 탭 간 ribbon 높이가 흔들리던 문제 + inactive panel이 padding box를 점유하던 문제 + 의도치 않은 vertical scrollbar 모두 해소.
+- **scrollbar 반응형** — md 미만에선 native thin scrollbar 노출(가로 스크롤 affordance), md 이상은 hidden(Office 패턴). `RibbonTabList`도 동일 처리.
+
+### Tests (`@polaris/ui`)
+
+- 14개 컴포넌트 + ribbon + form 테스트 스위트 추가. **17% → 60%+** 커버리지. 21 files / 82 tests 통과. ribbon disabled 버그·icon-only aria-label fallback 같은 fix들이 회귀 가드로 lock됨.
+
+### Tokens
+
+- **`tokens.css` 자동 생성** — `packages/ui/scripts/build-tokens.ts`(tsx)이 `src/tokens/*.ts`에서 색·radius·shadow·fontFamily를 모두 읽어 CSS 변수로 emit. `pnpm --filter @polaris/ui build`가 자동 호출, CI가 drift 검출.
+- `tokens.md` 사양 문서가 `tokens.ts`와 1:1 매칭되도록 재작성 — 누락된 status hover 변형/`text.onStatus`/spacing 전체 표/dark shadow 추가, camelCase로 통일.
+
+### Demo (`apps/demo`)
+
+- **`/#/assets`** 신규 — 폴라리스 자체 제작 자산(로고/아이콘/NOVA cosmic 배경/통합 AI 로고)을 lucide 카테고리 그리드와 함께 한 페이지에 정리. 디자인 자산 v0.7+ 작업 가이드 ([docs/design-assets-v07.md](docs/design-assets-v07.md)).
+- **`/#/tokens`** 신규 — 정적 `swatches.html` 대체. `@polaris/ui/tokens`에서 자동 import.
+- Polaris Office 데모: top-bar 라벨 반응형(md/lg에서 점진적 hide), 문서명 truncate, EditorChrome이 모바일에서 한 줄에 fit.
+- `vite.config`이 `@polaris/ui` 및 subpath들을 source로 alias — dev에서 ui 변경 시 별도 빌드 없이 즉시 HMR.
+
+### 인프라 / 릴리스 자동화
+
+- **changesets** 도입 — 5개 워크스페이스 패키지를 `fixed` 그룹으로 묶음. 다음 릴리스부터 `pnpm exec changeset version`이 자동 bump + CHANGELOG entry 작성. `scripts/sync-root-version.mjs`가 root pkg version도 sync, CI가 drift 검출.
+- **Playwright 시각 회귀 테스트** — desktop + mobile, 8 라우트 + 5 ribbon 탭 = 26 baseline PNG. `pnpm test:e2e` 비교, `:update` 갱신.
+- **Turbo `test`가 자기 패키지 build 의존** — `dist/`를 읽는 node:test와 build 사이의 race 차단.
+- CI `pnpm changeset status` 단계가 `fetch-depth: 0` + base ref + 명시적 fail (silent `|| true` 제거).
+- Codex/Cursor용 `AGENTS.md` + plugin commands가 `pnpm exec eslint .` 대신 `pnpm lint`(또는 `--filter <pkg> lint`) 사용 — root에 eslint 바이너리 없는 모노레포 환경에서 실패하던 verify 명령 fix.
+
+### 알려진 한계
+
+- Visual regression baseline은 darwin에서 캡처됨. CI(linux)에서 첫 실행 시 새로 캡처 필요. `e2e/__screenshots__/{project}-{platform}/` 구조라 충돌은 안 남.
 
 ---
 
