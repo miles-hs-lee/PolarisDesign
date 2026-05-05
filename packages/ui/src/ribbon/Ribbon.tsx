@@ -110,7 +110,12 @@ export const RibbonTabList = forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
+      // Tabs can overflow on narrow viewports (Office tabs are 8 items).
+      // Allow horizontal scroll, hide the scrollbar on md+ where the
+      // tabs usually fit, leave a thin native scrollbar on mobile.
       'flex items-center gap-4 px-4 h-9 border-b border-surface-border',
+      'overflow-x-auto overflow-y-hidden',
+      'md:[scrollbar-width:none] md:[&::-webkit-scrollbar]:hidden',
       className
     )}
     {...props}
@@ -149,17 +154,13 @@ export const RibbonContent = forwardRef<
       // its padding box. Force display:none when inactive so the ribbon
       // height collapses to just the active panel.
       'data-[state=inactive]:hidden',
-      // Hide the horizontal scrollbar visually — when controls overflow,
-      // an `overflow-x: auto` scrollbar would claim ~15px of panel height,
-      // making overflowing tabs visibly taller than fitting ones. Users
-      // can still scroll via trackpad / shift-wheel; the Office product
-      // also hides the scrollbar.
+      // Hide the horizontal scrollbar visually on desktop — Office ribbons
+      // hide it too, and on wide screens the controls usually fit.
       //
       // `overflow-y-clip` is required because CSS spec promotes
       // `overflow-y: visible` to `auto` whenever `overflow-x` is non-visible.
       // Without it, the panel grows a stray vertical scrollbar whenever any
-      // child briefly exceeds panel height (e.g. focus rings on tightly
-      // packed controls, certain font/zoom levels in narrow viewports).
+      // child briefly exceeds panel height.
       //
       // `min-h-20` (80px = lg button 64 + py-1 padding 8 + slack 8) keeps the
       // panel the same height across tabs even when one tab has a 3-row sm
@@ -167,7 +168,13 @@ export const RibbonContent = forwardRef<
       // the active panel grows to fit its tallest group, so swapping tabs
       // visibly nudges the ribbon height.
       'flex items-stretch gap-0 px-1 py-1 min-h-20 overflow-x-auto overflow-y-clip',
-      '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+      // On md+ viewports hide the scrollbar (controls usually fit). Below
+      // md the controls almost always overflow on phones / split panes —
+      // we leave the browser's native thin scrollbar visible so users
+      // get a clear affordance to scroll horizontally instead of the
+      // ribbon silently clipping.
+      'md:[scrollbar-width:none] md:[&::-webkit-scrollbar]:hidden',
+      '[scrollbar-width:thin]',
       'focus-visible:outline-none',
       className
     )}

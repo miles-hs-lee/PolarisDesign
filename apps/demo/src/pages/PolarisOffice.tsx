@@ -118,39 +118,42 @@ function OverlayIcon({ base, overlay }: { base: ReactNode; overlay: ReactNode })
 function EditorChrome() {
   return (
     <div className="flex items-center gap-2 h-12 px-3 border-b border-surface-border bg-surface-raised">
-      <Button variant="ghost" size="sm" aria-label="Menu" className="!h-9 !w-9 !px-0">
+      <Button variant="ghost" size="sm" aria-label="Menu" className="!h-9 !w-9 !px-0 shrink-0">
         <Menu className="h-5 w-5 text-brand-primary" />
       </Button>
-      <div className="flex items-center gap-1.5 text-polaris-body-sm">
-        <span>NewDocument 2026-05-05 063559.docx</span>
-        <ChevronDown className="h-4 w-4 text-fg-muted" aria-hidden="true" />
+      <div className="flex items-center gap-1.5 text-polaris-body-sm min-w-0">
+        <span className="truncate">NewDocument 2026-05-05 063559.docx</span>
+        <ChevronDown className="h-4 w-4 text-fg-muted shrink-0" aria-hidden="true" />
       </div>
-      <Button variant="ghost" size="sm" aria-label="즐겨찾기" className="!h-8 !w-8 !px-0 ml-1">
+      <Button variant="ghost" size="sm" aria-label="즐겨찾기" className="!h-8 !w-8 !px-0 ml-1 shrink-0 hidden sm:inline-flex">
         <Star className="h-4 w-4 text-fg-muted" />
       </Button>
       <SimpleTooltip label="저장됨">
-        <Button variant="ghost" size="sm" aria-label="저장" className="!h-8 !w-8 !px-0">
+        <Button variant="ghost" size="sm" aria-label="저장" className="!h-8 !w-8 !px-0 shrink-0">
           <Save className="h-4 w-4 text-brand-primary" />
         </Button>
       </SimpleTooltip>
-      <div className="ml-auto flex items-center gap-1">
-        <Button variant="ghost" size="sm" className="gap-1.5">
+      <div className="ml-auto flex items-center gap-1 shrink-0">
+        {/* Compact: collapse "PC 앱으로 열기" / "공유" / "Miles (이해석)" labels
+            below md so the bar fits on phones without overlapping.
+            Buttons stay clickable; icons keep them recognizable. */}
+        <Button variant="ghost" size="sm" aria-label="PC 앱으로 열기" className="gap-1.5">
           <Monitor className="h-4 w-4" aria-hidden="true" />
-          <span className="font-semibold">PC 앱으로 열기</span>
+          <span className="font-semibold hidden lg:inline">PC 앱으로 열기</span>
         </Button>
-        <Button variant="ghost" size="sm" className="gap-1.5">
+        <Button variant="ghost" size="sm" aria-label="공유" className="gap-1.5">
           <UsersRound className="h-4 w-4" aria-hidden="true" />
-          <span>공유</span>
+          <span className="hidden md:inline">공유</span>
         </Button>
         <Button variant="ghost" size="sm" aria-label="알림" className="gap-1.5">
           <Bell className="h-4 w-4" aria-hidden="true" />
-          <span>알림</span>
+          <span className="hidden md:inline">알림</span>
         </Button>
-        <Button variant="ghost" size="sm" className="gap-1.5">
+        <Button variant="ghost" size="sm" aria-label="Miles (이해석)" className="gap-1.5">
           <Avatar size="sm">
             <AvatarFallback>이</AvatarFallback>
           </Avatar>
-          <span>Miles (이해석)</span>
+          <span className="hidden lg:inline">Miles (이해석)</span>
         </Button>
       </div>
     </div>
