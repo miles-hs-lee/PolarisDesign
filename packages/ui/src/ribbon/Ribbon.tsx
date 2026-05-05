@@ -427,64 +427,95 @@ export const RibbonSplitButton = forwardRef<HTMLButtonElement, RibbonSplitButton
   ) => {
     const chevronIcon = <ChevronDown className="h-3 w-3" aria-hidden="true" />;
 
+    // When disabled, skip mounting `DropdownMenu` entirely. Radix's
+    // `DropdownMenuTrigger asChild` doesn't always honor a child button's
+    // native `disabled` (it intercepts pointer events earlier), so the
+    // menu could still open. Rendering a plain disabled chevron button
+    // is the cleanest guarantee.
     if (size === 'lg') {
+      const lgMain = (
+        <RibbonButton
+          ref={ref}
+          size="lg"
+          icon={icon}
+          tooltip={tooltip}
+          onClick={onClick}
+          disabled={disabled}
+          className="h-12 rounded-b-none pb-0"
+          {...props}
+        >
+          {children}
+        </RibbonButton>
+      );
       return (
         <div className={cn('inline-flex flex-col items-stretch shrink-0 rounded-polaris-sm', className)}>
+          {lgMain}
+          {disabled ? (
+            <RibbonButton
+              size="sm"
+              tooltip={menuTooltip}
+              aria-label={menuLabel}
+              disabled
+              className="h-4 min-w-0 px-0 py-0 rounded-t-none self-stretch"
+              icon={chevronIcon}
+            />
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <RibbonButton
+                  size="sm"
+                  tooltip={menuTooltip}
+                  aria-label={menuLabel}
+                  className="h-4 min-w-0 px-0 py-0 rounded-t-none self-stretch"
+                  icon={chevronIcon}
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">{menu}</DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        </div>
+      );
+    }
+    const smMain = (
+      <RibbonButton
+        ref={ref}
+        size={size}
+        icon={icon}
+        tooltip={tooltip}
+        onClick={onClick}
+        disabled={disabled}
+        className="rounded-r-none"
+        {...props}
+      >
+        {children}
+      </RibbonButton>
+    );
+    return (
+      <div className={cn('inline-flex rounded-polaris-sm', className)}>
+        {smMain}
+        {disabled ? (
           <RibbonButton
-            ref={ref}
-            size="lg"
-            icon={icon}
-            tooltip={tooltip}
-            onClick={onClick}
-            disabled={disabled}
-            className="h-12 rounded-b-none pb-0"
-            {...props}
-          >
-            {children}
-          </RibbonButton>
+            size={size}
+            tooltip={menuTooltip}
+            aria-label={menuLabel}
+            disabled
+            className="rounded-l-none min-w-0 px-0.5"
+            icon={chevronIcon}
+          />
+        ) : (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <RibbonButton
-                size="sm"
+                size={size}
                 tooltip={menuTooltip}
                 aria-label={menuLabel}
-                disabled={disabled}
-                className="h-4 min-w-0 px-0 py-0 rounded-t-none self-stretch"
+                className="rounded-l-none min-w-0 px-0.5"
                 icon={chevronIcon}
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">{menu}</DropdownMenuContent>
           </DropdownMenu>
-        </div>
-      );
-    }
-    return (
-      <div className={cn('inline-flex rounded-polaris-sm', className)}>
-        <RibbonButton
-          ref={ref}
-          size={size}
-          icon={icon}
-          tooltip={tooltip}
-          onClick={onClick}
-          disabled={disabled}
-          className="rounded-r-none"
-          {...props}
-        >
-          {children}
-        </RibbonButton>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <RibbonButton
-              size={size}
-              tooltip={menuTooltip}
-              aria-label={menuLabel}
-              disabled={disabled}
-              className="rounded-l-none min-w-0 px-0.5"
-              icon={chevronIcon}
-            />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">{menu}</DropdownMenuContent>
-        </DropdownMenu>
+        )}
       </div>
     );
   }
