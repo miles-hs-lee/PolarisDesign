@@ -701,8 +701,8 @@ export default function PolarisOffice() {
         </RibbonTabs>
       </Ribbon>
 
-      <div className="px-6 py-10 max-w-4xl mx-auto">
-        <Card variant="padded" className="min-h-96">
+      <div className="px-6 py-6 max-w-4xl mx-auto">
+        <Card variant="padded">
           <div className="flex items-center gap-2 mb-4 text-polaris-caption text-fg-muted">
             <Badge variant="secondary">데모</Badge>
             현재 탭: {activeTab}
