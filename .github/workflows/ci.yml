@@ -30,6 +30,12 @@ jobs:
       - name: Build @polaris/ui
         run: pnpm --filter @polaris/ui build
 
+      - name: Verify token sync (tokens.css matches generator output)
+        # `pnpm --filter @polaris/ui build` runs `build:tokens` first.
+        # If the committed tokens.css drifts from what the script produces,
+        # this step fails — forcing the contributor to commit the regen.
+        run: git diff --exit-code packages/ui/src/styles/tokens.css || (echo "::error::tokens.css is out of sync — run 'pnpm --filter @polaris/ui build:tokens' and commit the result" && exit 1)
+
       - name: Build @polaris/lint
         run: pnpm --filter @polaris/lint build
 

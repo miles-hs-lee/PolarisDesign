@@ -2,6 +2,8 @@
 
 > 2026-05-04 작성. 이 문서는 **합의를 위한 초안**이며, hex 값은 메인 사이트 스크린샷에서 추정한 값입니다. 실제 브랜드 가이드의 정확한 값으로 교체 필요. `🟡 confirm` 표시가 된 항목은 사용자 확인이 필요한 부분.
 
+> **단일 소스 정책 (v0.6.1+)**: 실제 토큰 값은 [`packages/ui/src/tokens/*.ts`](packages/ui/src/tokens)에 정의됩니다. `packages/ui/src/styles/tokens.css`는 `tsx scripts/build-tokens.ts`로 자동 생성되며 손으로 편집하지 않습니다. CI가 두 파일이 동기화 상태인지 검증합니다.
+
 ---
 
 ## 0. 토큰 명명 원칙
