@@ -7,3 +7,8 @@ storybook-static
 .env.local
 .DS_Store
 .claude/
+
+# Playwright run artifacts (HTML report + per-run output) — baselines
+# in e2e/__screenshots__/ ARE committed for visual regression diffing.
+playwright-report/
+test-results/

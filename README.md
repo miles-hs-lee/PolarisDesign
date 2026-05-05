@@ -212,12 +212,18 @@ pnpm changeset
 pnpm version    # 모든 fixed 패키지 자동 bump + CHANGELOG.md 갱신
 # → 검토 후 commit + tag + push
 
-# 린트 + 테스트
-pnpm --filter @polaris/ui test    # 컴포넌트 + cn() 테스트 (vitest 18 + node:test 3 = 21건)
+# 린트 + 단위 테스트
+pnpm --filter @polaris/ui test    # 컴포넌트 + ribbon + form + cn() 테스트 (~85건)
 pnpm --filter @polaris/lint test   # ESLint 룰 단위 테스트 (42건)
 pnpm --filter @polaris/plugin test # PostToolUse 훅 스모크 (17건)
 pnpm --filter demo lint            # 데모 코드 자기 검증 (위반 0건)
 pnpm -r typecheck                  # 모든 패키지 typecheck
+
+# 시각 회귀 테스트 (Playwright)
+pnpm test:e2e                  # baseline과 비교, 실패 시 diff HTML report
+pnpm test:e2e:update           # 의도적 시각 변경 시 baseline 갱신
+pnpm test:e2e:report           # 마지막 실행 report 열기
+# baseline은 e2e/__screenshots__/ 에 OS별로 분리 저장됨 (darwin / linux 별도)
 
 # 전체 — CI에서 동일하게 실행
 pnpm install --frozen-lockfile
