@@ -154,7 +154,13 @@ export const RibbonContent = forwardRef<
       // making overflowing tabs visibly taller than fitting ones. Users
       // can still scroll via trackpad / shift-wheel; the Office product
       // also hides the scrollbar.
-      'flex items-stretch gap-0 px-1 py-1 overflow-x-auto',
+      //
+      // `overflow-y-clip` is required because CSS spec promotes
+      // `overflow-y: visible` to `auto` whenever `overflow-x` is non-visible.
+      // Without it, the panel grows a stray vertical scrollbar whenever any
+      // child briefly exceeds panel height (e.g. focus rings on tightly
+      // packed controls, certain font/zoom levels in narrow viewports).
+      'flex items-stretch gap-0 px-1 py-1 overflow-x-auto overflow-y-clip',
       '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
       'focus-visible:outline-none',
       className
