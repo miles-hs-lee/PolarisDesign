@@ -96,6 +96,111 @@ const polarisPreset: Partial<Config> = {
           900:  token('--polaris-neutral-900'),
           1000: token('--polaris-neutral-1000'),
         },
+
+        // ───── v1 spec semantic tokens (preferred for new code) ─────
+        //
+        // The v0.6 aliases above (`fg.*`, `surface.*`, `brand.*`) keep
+        // working unchanged. New code should reach for these spec names
+        // — they match the design team's Figma library and DESIGN.md.
+
+        label: {
+          normal:      token('--polaris-label-normal'),
+          neutral:     token('--polaris-label-neutral'),
+          alternative: token('--polaris-label-alternative'),
+          assistive:   token('--polaris-label-assistive'),
+          inverse:     token('--polaris-label-inverse'),
+        },
+        background: {
+          normal:      token('--polaris-background-normal'),
+          alternative: token('--polaris-background-alternative'),
+        },
+        line: {
+          neutral: token('--polaris-line-neutral'),
+          normal:  token('--polaris-line-normal'),
+        },
+        fill: {
+          normal: token('--polaris-fill-normal'),
+        },
+        primary: {
+          normal: token('--polaris-primary-normal'),
+          strong: token('--polaris-primary-strong'),
+        },
+        ai: {
+          normal:  token('--polaris-ai-normal'),
+          strong:  token('--polaris-ai-strong'),
+          hover:   token('--polaris-ai-hover'),
+          pressed: token('--polaris-ai-pressed'),
+        },
+
+        // 9-step ramps — for chart categories, hover/pressed nuances,
+        // or anywhere the semantic alias above isn't expressive enough.
+        // Class form: `bg-blue-50`, `text-purple-70`, etc.
+        blue: {
+          5:  token('--polaris-blue-5'),
+          10: token('--polaris-blue-10'),
+          20: token('--polaris-blue-20'),
+          30: token('--polaris-blue-30'),
+          40: token('--polaris-blue-40'),
+          50: token('--polaris-blue-50'),
+          60: token('--polaris-blue-60'),
+          70: token('--polaris-blue-70'),
+          80: token('--polaris-blue-80'),
+        },
+        green: {
+          5:  token('--polaris-green-5'),
+          10: token('--polaris-green-10'),
+          20: token('--polaris-green-20'),
+          30: token('--polaris-green-30'),
+          40: token('--polaris-green-40'),
+          50: token('--polaris-green-50'),
+          60: token('--polaris-green-60'),
+          70: token('--polaris-green-70'),
+          80: token('--polaris-green-80'),
+        },
+        orange: {
+          5:  token('--polaris-orange-5'),
+          10: token('--polaris-orange-10'),
+          20: token('--polaris-orange-20'),
+          30: token('--polaris-orange-30'),
+          40: token('--polaris-orange-40'),
+          50: token('--polaris-orange-50'),
+          60: token('--polaris-orange-60'),
+          70: token('--polaris-orange-70'),
+          80: token('--polaris-orange-80'),
+        },
+        red: {
+          5:  token('--polaris-red-5'),
+          10: token('--polaris-red-10'),
+          20: token('--polaris-red-20'),
+          30: token('--polaris-red-30'),
+          40: token('--polaris-red-40'),
+          50: token('--polaris-red-50'),
+          60: token('--polaris-red-60'),
+          70: token('--polaris-red-70'),
+          80: token('--polaris-red-80'),
+        },
+        purple: {
+          5:  token('--polaris-purple-5'),
+          10: token('--polaris-purple-10'),
+          20: token('--polaris-purple-20'),
+          30: token('--polaris-purple-30'),
+          40: token('--polaris-purple-40'),
+          50: token('--polaris-purple-50'),
+          60: token('--polaris-purple-60'),
+          70: token('--polaris-purple-70'),
+          80: token('--polaris-purple-80'),
+        },
+        gray: {
+          10: token('--polaris-gray-10'),
+          20: token('--polaris-gray-20'),
+          30: token('--polaris-gray-30'),
+          40: token('--polaris-gray-40'),
+          50: token('--polaris-gray-50'),
+          60: token('--polaris-gray-60'),
+          70: token('--polaris-gray-70'),
+          80: token('--polaris-gray-80'),
+          90: token('--polaris-gray-90'),
+        },
       },
 
       borderRadius: {

@@ -192,6 +192,82 @@ export const grayRamp = {
   '90': '#26282B',
 } as const satisfies Record<string, string>;
 
+/* ================================================================== *
+ * v1 spec semantic tokens (2026.05)
+ *
+ * Design team's spec uses a different naming convention from our v0.6
+ * `surface.*` / `text.*` aliases. Both are kept — old names continue
+ * to work but new code (and the v0.7 codemod target) should use
+ * `label.*` / `background.*` / `line.*` / `fill.*` / `primary.*` / `ai.*`.
+ *
+ * Light values match the spec PDF exactly. Dark values are derived
+ * from our v0.6 neutral dark scale (design team will revise once they
+ * publish dark-mode hex).
+ * ================================================================== */
+
+/** Text color tokens (spec: "label"). Use these in place of `text.primary` /
+ *  `text.secondary` / `text.muted` in new code. */
+export const label = {
+  /** 1차 텍스트 (primary copy, headlines). */
+  normal:      { light: '#26282B', dark: '#FFFFFF' },
+  /** 본문 / 2차 (body copy, secondary text). */
+  neutral:     { light: '#454C53', dark: '#D5D5DE' },
+  /** 3차, 캡션 (tertiary, captions). */
+  alternative: { light: '#72787F', dark: '#B4B4C8' },
+  /** Placeholder, disabled (assistive). */
+  assistive:   { light: '#9EA4AA', dark: '#6B6B85' },
+  /** 진한 배경 위 텍스트 (on dark / on-brand surfaces). */
+  inverse:     { light: '#FFFFFF', dark: '#0B0B12' },
+} as const satisfies Record<string, ColorPair>;
+
+/** Surface tokens (spec: "background"). */
+export const background = {
+  /** 기본 배경 (cards, modals, navbar). */
+  normal:      { light: '#FFFFFF', dark: '#1B1B2A' },
+  /** 대체 배경 (canvas, sidebar — slightly tinted). */
+  alternative: { light: '#F7F8F9', dark: '#0B0B12' },
+} as const satisfies Record<string, ColorPair>;
+
+/** Border / divider tokens (spec: "line"). */
+export const line = {
+  /** 기본 구분선 (dividers, list separators). */
+  neutral: { light: '#E8EBED', dark: '#232336' },
+  /** 인풋 보더, 강한 라인 (input outlines, strong borders). */
+  normal:  { light: '#C9CDD2', dark: '#2D2D45' },
+} as const satisfies Record<string, ColorPair>;
+
+/** Fill tokens for hover surfaces / filled chips (spec: "fill"). */
+export const fill = {
+  /** 호버 / 채워진 칩. Same hex as `interaction.hover`. */
+  normal: { light: '#F2F4F6', dark: '#1B1B2A' },
+} as const satisfies Record<string, ColorPair>;
+
+/** Interaction state tokens (spec: "interaction"). */
+export const interaction = {
+  /** Hover surface. */
+  hover: { light: '#F2F4F6', dark: '#1B1B2A' },
+} as const satisfies Record<string, ColorPair>;
+
+/** Primary brand tokens (spec: "primary"). Aliases `brand.primary*`. */
+export const primary = {
+  /** PO Blue — 기본 강조색 (buttons, links, focus). */
+  normal: brand.primary,
+  /** PO Blue strong — hover / pressed. */
+  strong: brand.primaryHover,
+} as const satisfies Record<string, ColorPair>;
+
+/** AI surface tokens (spec: "ai"). AI Purple — never on general product UI. */
+export const ai = {
+  /** AI Purple — AI 액션 버튼, 링크, 강조. */
+  normal:  brand.secondary,
+  /** AI Purple strong — hover / pressed. */
+  strong:  brand.secondaryHover,
+  /** AI 항목의 hover 표면 (light tint). */
+  hover:   brand.secondarySubtle,
+  /** AI pressed 표면. */
+  pressed: { light: '#E0D1FF', dark: '#3E0F8D' },
+} as const satisfies Record<string, ColorPair>;
+
 export const colors = {
   brandPalette,
   brand,
@@ -208,4 +284,12 @@ export const colors = {
   redPalette,
   purplePalette,
   grayRamp,
+  // v1 semantic tokens
+  label,
+  background,
+  line,
+  fill,
+  interaction,
+  primary,
+  ai,
 } as const;

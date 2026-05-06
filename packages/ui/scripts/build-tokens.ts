@@ -34,6 +34,12 @@ import {
   redPalette,
   purplePalette,
   grayRamp,
+  label,
+  background,
+  line,
+  fill,
+  primary,
+  ai,
   type ColorPair,
 } from '../src/tokens';
 
@@ -58,6 +64,7 @@ type ColorGroup = Record<string, ColorPair>;
  *  variable is named after the key directly (e.g. brandPalette.blue
  *  becomes --polaris-blue). */
 const COLOR_GROUPS: Array<{ prefix: string; group: ColorGroup }> = [
+  // v0.6 groups (kept for backward compat — `surface.canvas` etc.)
   { prefix: '', group: brandPalette },
   { prefix: 'brand', group: brand },
   { prefix: 'file', group: fileType },
@@ -65,6 +72,13 @@ const COLOR_GROUPS: Array<{ prefix: string; group: ColorGroup }> = [
   { prefix: 'neutral', group: neutral },
   { prefix: 'surface', group: surface },
   { prefix: 'text', group: text },
+  // v1 spec semantic tokens
+  { prefix: 'label', group: label },
+  { prefix: 'background', group: background },
+  { prefix: 'line', group: line },
+  { prefix: 'fill', group: fill },
+  { prefix: 'primary', group: primary },
+  { prefix: 'ai', group: ai },
 ];
 
 function emitColorBlock(mode: 'light' | 'dark'): string {
