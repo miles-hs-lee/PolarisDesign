@@ -41,7 +41,7 @@ export const Table = forwardRef<HTMLTableElement, TableProps>(
         <table
           ref={ref}
           data-density={density}
-          className={cn('w-full text-polaris-body-sm font-polaris', className)}
+          className={cn('w-full text-polaris-body2 font-polaris', className)}
           {...props}
         />
       </DensityContext.Provider>
@@ -104,7 +104,7 @@ export const TableHead = forwardRef<HTMLTableCellElement, React.ThHTMLAttributes
         className={cn(
           CELL_PAD_X,
           ROW_PAD[density],
-          'text-left font-semibold text-polaris-meta uppercase tracking-wider',
+          'text-left font-semibold text-polaris-caption1 uppercase tracking-wider',
           className
         )}
         {...props}
@@ -132,7 +132,7 @@ export const TableCaption = forwardRef<HTMLTableCaptionElement, React.HTMLAttrib
   ({ className, ...props }, ref) => (
     <caption
       ref={ref}
-      className={cn('mt-2 text-polaris-meta text-label-alternative', className)}
+      className={cn('mt-2 text-polaris-caption1 text-label-alternative', className)}
       {...props}
     />
   )

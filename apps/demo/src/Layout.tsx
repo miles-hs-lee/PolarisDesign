@@ -113,7 +113,7 @@ export function Layout() {
             <SidebarHeader>
               <div className="flex items-center justify-between gap-2">
                 <NavLink to="/" className="flex items-center gap-2 min-w-0">
-                  <span className="inline-flex h-8 w-8 shrink-0 rounded-polaris-md bg-primary-normal text-label-inverse items-center justify-center font-bold text-polaris-body-sm">
+                  <span className="inline-flex h-8 w-8 shrink-0 rounded-polaris-md bg-accent-brand-normal text-label-inverse items-center justify-center font-bold text-polaris-body2">
                     P
                   </span>
                   <span className="text-polaris-heading-sm font-semibold truncate">Polaris</span>
@@ -162,7 +162,7 @@ export function Layout() {
             </SidebarBody>
             <SidebarFooter>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-polaris-meta text-label-alternative truncate">크레딧 6,805</span>
+                <span className="text-polaris-caption1 text-label-alternative truncate">크레딧 6,805</span>
                 <Button variant="outline" size="sm" onClick={toggleTheme} className="!px-2.5">
                   {theme === 'dark' ? '☀' : '🌙'}
                 </Button>
@@ -183,7 +183,7 @@ export function Layout() {
                 <MenuIcon className="h-4 w-4" />
               </Button>
               <NavbarBrand className="md:hidden">
-                <span className="inline-flex h-7 w-7 rounded-polaris-md bg-primary-normal text-label-inverse items-center justify-center font-bold text-polaris-meta">
+                <span className="inline-flex h-7 w-7 rounded-polaris-md bg-accent-brand-normal text-label-inverse items-center justify-center font-bold text-polaris-caption1">
                   P
                 </span>
                 <span className="text-polaris-heading-sm font-semibold">Polaris</span>
@@ -233,7 +233,7 @@ export function Layout() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="min-w-48">
                     <DropdownMenuLabel>이해석</DropdownMenuLabel>
-                    <div className="px-2.5 pb-1.5 text-polaris-meta text-label-alternative">miles@polaris.example</div>
+                    <div className="px-2.5 pb-1.5 text-polaris-caption1 text-label-alternative">miles@polaris.example</div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={() => alert('계정 설정')}>
                       <User className="h-4 w-4" /> 계정 설정
@@ -255,11 +255,11 @@ export function Layout() {
             </main>
 
             <footer className="border-t border-line-neutral">
-              <div className="max-w-6xl mx-auto px-6 py-6 text-polaris-meta text-label-alternative flex flex-wrap items-center justify-between gap-3">
+              <div className="max-w-6xl mx-auto px-6 py-6 text-polaris-caption1 text-label-alternative flex flex-wrap items-center justify-between gap-3">
                 <div>Polaris Design System · v0.1.0</div>
                 <a
                   href="https://github.com/miles-hs-lee/PolarisDesign"
-                  className="text-primary-normal hover:underline"
+                  className="text-accent-brand-normal hover:underline"
                   target="_blank"
                   rel="noreferrer"
                 >

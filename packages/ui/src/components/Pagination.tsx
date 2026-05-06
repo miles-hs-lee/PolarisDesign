@@ -37,12 +37,12 @@ export const PaginationItem = forwardRef<HTMLElement, PaginationItemProps>(
         ref={ref as never}
         aria-current={active ? 'page' : undefined}
         className={cn(
-          'inline-flex h-9 min-w-9 items-center justify-center rounded-polaris-md px-3 text-polaris-body-sm font-medium transition-colors',
+          'inline-flex h-9 min-w-9 items-center justify-center rounded-polaris-md px-3 text-polaris-body2 font-medium transition-colors',
           'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
           'disabled:opacity-50 disabled:pointer-events-none aria-disabled:opacity-50 aria-disabled:pointer-events-none',
           active
-            ? 'bg-primary-normal text-label-inverse'
-            : 'text-label-normal hover:bg-primary-normal-subtle',
+            ? 'bg-accent-brand-normal text-label-inverse'
+            : 'text-label-normal hover:bg-accent-brand-normal-subtle',
           className
         )}
         {...buttonProps}

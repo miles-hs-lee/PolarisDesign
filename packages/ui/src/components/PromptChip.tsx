@@ -21,7 +21,7 @@ export const PromptChip = forwardRef<HTMLButtonElement, PromptChipProps>(
       className={cn(
         'group inline-flex items-start gap-2 rounded-polaris-lg',
         'bg-background-normal border border-line-neutral px-4 py-3 text-left',
-        'text-polaris-body-sm font-polaris text-label-normal',
+        'text-polaris-body2 font-polaris text-label-normal',
         'hover:border-brand-secondary hover:bg-ai-hover transition-colors',
         'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-secondary',
         'shadow-polaris-xs',

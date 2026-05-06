@@ -24,7 +24,7 @@ export const DescriptionList = forwardRef<HTMLDListElement, DescriptionListProps
       ref={ref}
       data-layout={layout}
       className={cn(
-        'font-polaris text-polaris-body-sm',
+        'font-polaris text-polaris-body2',
         layout === 'stacked' && 'flex flex-col gap-3',
         layout === 'inline' && 'flex flex-col gap-3 sm:grid sm:grid-cols-[max-content_1fr] sm:gap-x-6 sm:gap-y-2',
         layout === 'inline-strict' && 'grid grid-cols-[max-content_1fr] gap-x-6 gap-y-2',

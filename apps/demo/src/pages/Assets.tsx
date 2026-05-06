@@ -198,7 +198,7 @@ function CopyButton({ value }: { value: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 1500);
       }}
-      className="!h-7 gap-1 text-polaris-meta"
+      className="!h-7 gap-1 text-polaris-caption1"
     >
       <Copy className="h-3.5 w-3.5" aria-hidden="true" />
       {copied ? '복사됨' : '복사'}
@@ -231,10 +231,10 @@ function PolarisAssetCard({
       </div>
       <CardBody className="!py-3">
         <div className="flex items-center justify-between gap-2 mb-1">
-          <span className="text-polaris-body-sm font-semibold truncate">{label}</span>
+          <span className="text-polaris-body2 font-semibold truncate">{label}</span>
           <CopyButton value={url} />
         </div>
-        <code className="block text-polaris-meta text-label-alternative font-polaris-mono truncate" title={name}>
+        <code className="block text-polaris-caption1 text-label-alternative font-polaris-mono truncate" title={name}>
           {name}
         </code>
       </CardBody>
@@ -251,8 +251,8 @@ function LucideIconCard({ name, icon: Icon }: { name: string; icon: LucideIcon }
         aria-label={`Copy lucide icon name: ${name}`}
         className="group !h-auto !flex-col items-center gap-1.5 !p-3 border border-line-neutral hover:border-brand-primary"
       >
-        <Icon className="h-5 w-5 text-label-normal group-hover:text-primary-normal" aria-hidden="true" />
-        <span className="text-polaris-meta text-label-alternative truncate w-full text-center">{name}</span>
+        <Icon className="h-5 w-5 text-label-normal group-hover:text-accent-brand-normal" aria-hidden="true" />
+        <span className="text-polaris-caption1 text-label-alternative truncate w-full text-center">{name}</span>
       </Button>
     </SimpleTooltip>
   );
@@ -265,9 +265,9 @@ function LucideIconCard({ name, icon: Icon }: { name: string; icon: LucideIcon }
 function PolarisLogosSection() {
   return (
     <section>
-      <h2 className="text-polaris-h5 mb-1">폴라리스 로고</h2>
-      <p className="text-polaris-body-sm text-label-neutral mb-4">
-        폴라리스 오피스 공식 워드마크와 favicon. <code className="font-polaris-mono text-polaris-body-sm bg-background-alternative px-1 rounded-polaris-sm">polink-static-contents.polarisoffice.com</code>에 호스팅된 SVG를 그대로 참조합니다.
+      <h2 className="text-polaris-heading3 mb-1">폴라리스 로고</h2>
+      <p className="text-polaris-body2 text-label-neutral mb-4">
+        폴라리스 오피스 공식 워드마크와 favicon. <code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">polink-static-contents.polarisoffice.com</code>에 호스팅된 SVG를 그대로 참조합니다.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {POLARIS_LOGOS.map((logo) => (
@@ -288,11 +288,11 @@ function PolarisLogosSection() {
 function PolarisIconsSection() {
   return (
     <section>
-      <h2 className="text-polaris-h5 mb-1">폴라리스 자체 제작 아이콘</h2>
-      <p className="text-polaris-body-sm text-label-neutral mb-4">
+      <h2 className="text-polaris-heading3 mb-1">폴라리스 자체 제작 아이콘</h2>
+      <p className="text-polaris-body2 text-label-neutral mb-4">
         폴라리스 오피스 페이지에서 발견된 자체 제작 SVG 아이콘. 새 아이콘이 필요하기 전에 이쪽을 먼저 확인 — 브랜드 일관성 유지에 가장 안전합니다.
         <span className="block mt-1 text-label-alternative">
-          ⚠️ 디자인 팀에 전체 아이콘 라이브러리 요청은 <code className="font-polaris-mono text-polaris-meta bg-background-alternative px-1 rounded-polaris-sm">docs/design-assets-v07.md</code> 참조.
+          ⚠️ 디자인 팀에 전체 아이콘 라이브러리 요청은 <code className="font-polaris-mono text-polaris-caption1 bg-background-alternative px-1 rounded-polaris-sm">docs/design-assets-v07.md</code> 참조.
         </span>
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -313,9 +313,9 @@ function PolarisIconsSection() {
 function NovaBackgroundsSection() {
   return (
     <section>
-      <h2 className="text-polaris-h5 mb-1">NOVA 코스믹 시각 자산</h2>
-      <p className="text-polaris-body-sm text-label-neutral mb-4">
-        NOVA 워크스페이스 hero에 사용하는 우주 테마 배경 SVG. <Link to="/nova" className="text-primary-normal hover:underline">/nova 라우트</Link>의 hero 영역에서 같은 자산을 볼 수 있습니다.
+      <h2 className="text-polaris-heading3 mb-1">NOVA 코스믹 시각 자산</h2>
+      <p className="text-polaris-body2 text-label-neutral mb-4">
+        NOVA 워크스페이스 hero에 사용하는 우주 테마 배경 SVG. <Link to="/nova" className="text-accent-brand-normal hover:underline">/nova 라우트</Link>의 hero 영역에서 같은 자산을 볼 수 있습니다.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {NOVA_BACKGROUNDS.map((bg) => (
@@ -336,8 +336,8 @@ function NovaBackgroundsSection() {
 function AIModelLogosSection() {
   return (
     <section>
-      <h2 className="text-polaris-h5 mb-1">통합 AI 모델 로고</h2>
-      <p className="text-polaris-body-sm text-label-neutral mb-4">
+      <h2 className="text-polaris-heading3 mb-1">통합 AI 모델 로고</h2>
+      <p className="text-polaris-body2 text-label-neutral mb-4">
         NOVA가 통합한 외부 LLM 로고들. AI 모델 선택 UI에서 사용 (NOVA 워크스페이스 select 등).
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -364,9 +364,9 @@ function LucideSection({ filter }: { filter: string }) {
 
   return (
     <section>
-      <h2 className="text-polaris-h5 mb-1">lucide 아이콘 (fallback)</h2>
-      <p className="text-polaris-body-sm text-label-neutral mb-4">
-        브랜드 마크가 아닌 일반 UI 아이콘은 <a href="https://lucide.dev" target="_blank" rel="noreferrer" className="text-primary-normal hover:underline">lucide-react</a>를 사용합니다. 24×24 viewBox · 1.5px stroke · `currentColor`로 색이 자동 적용 (text-label-normal 등).
+      <h2 className="text-polaris-heading3 mb-1">lucide 아이콘 (fallback)</h2>
+      <p className="text-polaris-body2 text-label-neutral mb-4">
+        브랜드 마크가 아닌 일반 UI 아이콘은 <a href="https://lucide.dev" target="_blank" rel="noreferrer" className="text-accent-brand-normal hover:underline">lucide-react</a>를 사용합니다. 24×24 viewBox · 1.5px stroke · `currentColor`로 색이 자동 적용 (text-label-normal 등).
         <span className="block mt-1 text-label-alternative">
           아이콘 클릭 시 컴포넌트명이 클립보드에 복사됩니다 — 그대로 import해서 사용.
         </span>
@@ -376,9 +376,9 @@ function LucideSection({ filter }: { filter: string }) {
           <div key={cat.title}>
             <div className="flex items-baseline justify-between mb-1">
               <h3 className="text-polaris-heading-sm">{cat.title}</h3>
-              <span className="text-polaris-meta text-label-alternative">{cat.icons.length}개</span>
+              <span className="text-polaris-caption1 text-label-alternative">{cat.icons.length}개</span>
             </div>
-            <p className="text-polaris-meta text-label-alternative mb-3">{cat.description}</p>
+            <p className="text-polaris-caption1 text-label-alternative mb-3">{cat.description}</p>
             <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 gap-2">
               {cat.icons.map((i) => (
                 <LucideIconCard key={i.name} name={i.name} icon={i.icon} />
@@ -387,7 +387,7 @@ function LucideSection({ filter }: { filter: string }) {
           </div>
         ))}
         {filtered.length === 0 && (
-          <p className="text-polaris-body-sm text-label-alternative text-center py-12">검색 결과가 없습니다.</p>
+          <p className="text-polaris-body2 text-label-alternative text-center py-12">검색 결과가 없습니다.</p>
         )}
       </div>
     </section>
@@ -405,8 +405,8 @@ export default function Assets() {
     <div className="max-w-6xl mx-auto px-6 py-12 space-y-12">
       <header>
         <Badge variant="primary" className="mb-4">시스템 레퍼런스</Badge>
-        <h1 className="text-polaris-h2 mb-3">디자인 자산</h1>
-        <p className="text-polaris-body text-label-neutral max-w-2xl">
+        <h1 className="text-polaris-title mb-3">디자인 자산</h1>
+        <p className="text-polaris-body1 text-label-neutral max-w-2xl">
           폴라리스 자체 제작 자산 + lucide-react 아이콘을 한 페이지에서 미리 보고 복사할 수 있는 레퍼런스. 새 자산이 필요할 때 <strong>먼저 폴라리스에서 찾고, 없으면 lucide</strong>를 쓰는 게 브랜드 일관성을 지키는 가장 빠른 길입니다.
         </p>
       </header>
@@ -418,8 +418,8 @@ export default function Assets() {
 
       <div className="border-t border-line-neutral pt-8">
         <div className="flex items-center justify-between gap-4 mb-6">
-          <p className="text-polaris-body-sm text-label-alternative">
-            아래는 lucide-react 아이콘 모음. 카테고리별로 자주 쓰는 것만 추렸습니다 — 전체 1500+ 아이콘은 <a href="https://lucide.dev" target="_blank" rel="noreferrer" className="text-primary-normal hover:underline">lucide.dev</a> 참고.
+          <p className="text-polaris-body2 text-label-alternative">
+            아래는 lucide-react 아이콘 모음. 카테고리별로 자주 쓰는 것만 추렸습니다 — 전체 1500+ 아이콘은 <a href="https://lucide.dev" target="_blank" rel="noreferrer" className="text-accent-brand-normal hover:underline">lucide.dev</a> 참고.
           </p>
           <div className="relative w-64 shrink-0">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-label-alternative pointer-events-none" aria-hidden="true" />

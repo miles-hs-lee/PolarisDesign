@@ -46,7 +46,7 @@ export const CardTitle = forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTM
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn('text-polaris-h5 text-label-normal', className)}
+      className={cn('text-polaris-heading3 text-label-normal', className)}
       {...props}
     />
   )
@@ -57,7 +57,7 @@ export const CardDescription = forwardRef<HTMLParagraphElement, React.HTMLAttrib
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
-      className={cn('text-polaris-body-sm text-label-neutral', className)}
+      className={cn('text-polaris-body2 text-label-neutral', className)}
       {...props}
     />
   )

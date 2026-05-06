@@ -67,7 +67,7 @@ export const AlertTitle = forwardRef<HTMLHeadingElement, React.HTMLAttributes<HT
   ({ className, ...props }, ref) => (
     <h5
       ref={ref}
-      className={cn('text-polaris-body-sm font-semibold mb-0.5', className)}
+      className={cn('text-polaris-body2 font-semibold mb-0.5', className)}
       {...props}
     />
   )
@@ -78,7 +78,7 @@ export const AlertDescription = forwardRef<HTMLParagraphElement, React.HTMLAttri
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
-      className={cn('text-polaris-body-sm text-label-neutral', className)}
+      className={cn('text-polaris-body2 text-label-neutral', className)}
       {...props}
     />
   )

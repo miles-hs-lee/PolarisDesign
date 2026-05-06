@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/cn';
 
 const badgeVariants = cva(
-  'inline-flex items-center gap-1 rounded-polaris-pill px-2.5 py-0.5 text-polaris-meta font-semibold',
+  'inline-flex items-center gap-1 rounded-polaris-pill px-2.5 py-0.5 text-polaris-caption1 font-semibold',
   {
     variants: {
       variant: {
@@ -33,7 +33,7 @@ const badgeVariants = cva(
     compoundVariants: [
       // Subtle (default)
       { variant: 'neutral',   tone: 'subtle', class: 'bg-neutral-100 text-label-neutral' },
-      { variant: 'primary',   tone: 'subtle', class: 'bg-primary-normal-subtle text-primary-normal' },
+      { variant: 'primary',   tone: 'subtle', class: 'bg-accent-brand-normal-subtle text-accent-brand-normal' },
       { variant: 'secondary', tone: 'subtle', class: 'bg-ai-hover text-ai-normal' },
       { variant: 'success',   tone: 'subtle', class: 'bg-status-success/15 text-status-success' },
       { variant: 'warning',   tone: 'subtle', class: 'bg-status-warning/20 text-status-warning' },
@@ -46,7 +46,7 @@ const badgeVariants = cva(
       { variant: 'hwp',       tone: 'subtle', class: 'bg-file-hwp/15 text-file-hwp' },
       // Solid (filled)
       { variant: 'neutral',   tone: 'solid', class: 'bg-neutral-1000 text-neutral-0' },
-      { variant: 'primary',   tone: 'solid', class: 'bg-primary-normal text-label-inverse' },
+      { variant: 'primary',   tone: 'solid', class: 'bg-accent-brand-normal text-label-inverse' },
       { variant: 'secondary', tone: 'solid', class: 'bg-ai-normal text-label-inverse' },
       { variant: 'success',   tone: 'solid', class: 'bg-status-success text-label-inverse' },
       { variant: 'warning',   tone: 'solid', class: 'bg-status-warning text-label-inverse' },

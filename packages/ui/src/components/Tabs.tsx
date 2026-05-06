@@ -26,7 +26,7 @@ export const TabsTrigger = forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      'inline-flex items-center justify-center whitespace-nowrap rounded-polaris-sm px-3 py-1.5 text-polaris-body-sm font-medium font-polaris transition-colors',
+      'inline-flex items-center justify-center whitespace-nowrap rounded-polaris-sm px-3 py-1.5 text-polaris-body2 font-medium font-polaris transition-colors',
       'text-label-neutral hover:text-label-normal',
       'data-[state=active]:bg-background-normal data-[state=active]:text-label-normal data-[state=active]:shadow-polaris-xs',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary',

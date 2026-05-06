@@ -97,14 +97,14 @@ function ColorAccentIcon({
 
 /** Letter inside an outlined square — 문자 테두리. */
 const OutlinedLetter = (
-  <span className="inline-flex h-4 w-4 items-center justify-center border-2 border-fg-primary rounded-polaris-sm text-polaris-meta font-bold leading-none">
+  <span className="inline-flex h-4 w-4 items-center justify-center border-2 border-fg-primary rounded-polaris-sm text-polaris-caption1 font-bold leading-none">
     A
   </span>
 );
 
 /** Two-line text icon for the 단어 개수 button. */
 const WordCountIcon = (
-  <span className="text-polaris-meta font-bold leading-tight text-center">
+  <span className="text-polaris-caption1 font-bold leading-tight text-center">
     ABC{'\n'}123
   </span>
 );
@@ -123,9 +123,9 @@ function EditorChrome() {
   return (
     <div className="flex items-center gap-2 h-12 px-3 border-b border-line-neutral bg-background-normal">
       <Button variant="ghost" size="sm" aria-label="Menu" className="!h-9 !w-9 !px-0 shrink-0">
-        <Menu className="h-5 w-5 text-primary-normal" />
+        <Menu className="h-5 w-5 text-accent-brand-normal" />
       </Button>
-      <div className="flex items-center gap-1.5 text-polaris-body-sm min-w-0">
+      <div className="flex items-center gap-1.5 text-polaris-body2 min-w-0">
         <span className="truncate">NewDocument 2026-05-05 063559.docx</span>
         <ChevronDown className="h-4 w-4 text-label-alternative shrink-0" aria-hidden="true" />
       </div>
@@ -134,7 +134,7 @@ function EditorChrome() {
       </Button>
       <SimpleTooltip label="저장됨">
         <Button variant="ghost" size="sm" aria-label="저장" className="!h-8 !w-8 !px-0 shrink-0">
-          <Save className="h-4 w-4 text-primary-normal" />
+          <Save className="h-4 w-4 text-accent-brand-normal" />
         </Button>
       </SimpleTooltip>
       <div className="ml-auto flex items-center gap-1 shrink-0">
@@ -181,7 +181,7 @@ function HomeRibbon() {
       <RibbonGroup>
         <RibbonSplitButton
           size="lg"
-          icon={<Clipboard className="h-6 w-6 text-primary-normal" />}
+          icon={<Clipboard className="h-6 w-6 text-accent-brand-normal" />}
           tooltip="붙여넣기 (⌘V)"
           menuLabel="붙여넣기 옵션"
           menu={
@@ -217,7 +217,7 @@ function HomeRibbon() {
         <RibbonStack>
           <RibbonRow>
             <Select value={fontFamily} onValueChange={setFontFamily}>
-              <SelectTrigger className="!h-6 w-32 !px-2 text-polaris-body-sm">
+              <SelectTrigger className="!h-6 w-32 !px-2 text-polaris-body2">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -228,7 +228,7 @@ function HomeRibbon() {
               </SelectContent>
             </Select>
             <Select value={fontSize} onValueChange={setFontSize}>
-              <SelectTrigger className="!h-6 w-16 ml-0.5 !px-1.5 !gap-1 text-polaris-body-sm">
+              <SelectTrigger className="!h-6 w-16 ml-0.5 !px-1.5 !gap-1 text-polaris-body2">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -385,7 +385,7 @@ function InsertRibbon() {
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<ImageIcon className="h-6 w-6 text-status-success" />}
-            overlay={<Globe className="h-3 w-3 absolute -bottom-1 -right-1 text-primary-normal bg-background-normal rounded-polaris-pill" />}
+            overlay={<Globe className="h-3 w-3 absolute -bottom-1 -right-1 text-accent-brand-normal bg-background-normal rounded-polaris-pill" />}
           />
         }>온라인{'\n'}그림</RibbonButton>
       </RibbonGroup>
@@ -451,10 +451,10 @@ function LayoutRibbon() {
         <RibbonMenuButton icon={<SplitSquareVertical className="h-6 w-6 text-status-danger" />} menu={<><DropdownMenuItem>페이지 나누기</DropdownMenuItem><DropdownMenuItem>단 나누기</DropdownMenuItem><DropdownMenuItem>구역 나누기</DropdownMenuItem></>}>나누기</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-primary-normal" />}>페이지{'\n'}설정</RibbonButton>
+        <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-accent-brand-normal" />}>페이지{'\n'}설정</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-primary-normal" />}>레이아웃{'\n'}설정</RibbonButton>
+        <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-accent-brand-normal" />}>레이아웃{'\n'}설정</RibbonButton>
       </RibbonGroup>
       <RibbonSeparator />
       {/* Image-related — disabled until selection */}
@@ -531,7 +531,7 @@ function ReviewRibbon() {
       </RibbonGroup>
       <RibbonGroup>
         <Select value={reviewView} onValueChange={setReviewView}>
-          <SelectTrigger className="!h-8 w-36 text-polaris-body-sm">
+          <SelectTrigger className="!h-8 w-36 text-polaris-body2">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -657,7 +657,7 @@ function AIToolsRibbon() {
 function PlaceholderTab({ value, label }: { value: string; label: string }) {
   return (
     <RibbonContent value={value}>
-      <div className="px-4 py-3 text-polaris-body-sm text-label-alternative">{label} (생략)</div>
+      <div className="px-4 py-3 text-polaris-body2 text-label-alternative">{label} (생략)</div>
     </RibbonContent>
   );
 }
@@ -698,8 +698,8 @@ function NewDocPane() {
           >
             <FileIconBadge type={doc.type} size="md" />
             <span className="flex flex-col items-start min-w-0">
-              <span className="text-polaris-body-sm font-semibold">{doc.title}</span>
-              <span className="text-polaris-meta text-label-alternative truncate">{doc.desc}</span>
+              <span className="text-polaris-body2 font-semibold">{doc.title}</span>
+              <span className="text-polaris-caption1 text-label-alternative truncate">{doc.desc}</span>
             </span>
           </Button>
         </li>
@@ -712,7 +712,7 @@ function OpenDocPane() {
   const places: Array<{ icon: LucideIcon; iconClass: string; label: string }> = [
     { icon: History, iconClass: 'text-label-alternative', label: '최근 문서' },
     { icon: Monitor, iconClass: 'text-label-alternative', label: '내 컴퓨터' },
-    { icon: HardDrive, iconClass: 'text-primary-normal', label: '폴라리스 드라이브' },
+    { icon: HardDrive, iconClass: 'text-accent-brand-normal', label: '폴라리스 드라이브' },
     { icon: UsersRound, iconClass: 'text-status-success', label: '공유 문서' },
     { icon: Star, iconClass: 'text-status-warning fill-status-warning', label: '중요 문서' },
   ];
@@ -727,11 +727,11 @@ function OpenDocPane() {
               variant="ghost"
               className={cn(
                 '!h-auto w-full !justify-start !py-3 !px-4 gap-3 rounded-polaris-md text-left',
-                active ? 'bg-primary-normal-subtle hover:bg-primary-normal-subtle' : 'hover:bg-background-alternative'
+                active ? 'bg-accent-brand-normal-subtle hover:bg-accent-brand-normal-subtle' : 'hover:bg-background-alternative'
               )}
             >
               <Icon className={cn('h-5 w-5 shrink-0', place.iconClass)} aria-hidden="true" />
-              <span className="text-polaris-body-sm font-medium">{place.label}</span>
+              <span className="text-polaris-body2 font-medium">{place.label}</span>
             </Button>
           </li>
         );
@@ -743,7 +743,7 @@ function OpenDocPane() {
 function DownloadPane() {
   return (
     <div className="space-y-3 max-w-md">
-      <p className="text-polaris-body-sm text-label-neutral">
+      <p className="text-polaris-body2 text-label-neutral">
         현재 문서를 로컬에 다운로드합니다. 형식을 선택하세요.
       </p>
       <ul className="space-y-1">
@@ -754,7 +754,7 @@ function DownloadPane() {
               className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-background-alternative text-left"
             >
               <FileIconBadge type={type} size="md" />
-              <span className="text-polaris-body-sm font-medium">
+              <span className="text-polaris-body2 font-medium">
                 {type.toUpperCase()}으로 다운로드
               </span>
             </Button>
@@ -768,11 +768,11 @@ function DownloadPane() {
 function SaveToDrivePane() {
   return (
     <div className="space-y-4 max-w-md">
-      <p className="text-polaris-body-sm text-label-neutral">
+      <p className="text-polaris-body2 text-label-neutral">
         폴라리스 드라이브의 위치를 선택하세요. 변경 사항이 자동으로 동기화됩니다.
       </p>
       <Input label="파일 이름" defaultValue="NewDocument 2026-05-05 063559" />
-      <div className="flex items-center gap-2 px-3 py-2 rounded-polaris-md border border-line-neutral bg-background-alternative text-polaris-body-sm">
+      <div className="flex items-center gap-2 px-3 py-2 rounded-polaris-md border border-line-neutral bg-background-alternative text-polaris-body2">
         <FolderIcon className="h-4 w-4 text-label-alternative" aria-hidden="true" />
         <span className="text-label-neutral">/내 드라이브/문서</span>
       </div>
@@ -784,14 +784,14 @@ function SaveToDrivePane() {
 function SharePane() {
   return (
     <div className="space-y-4 max-w-md">
-      <p className="text-polaris-body-sm text-label-neutral">
+      <p className="text-polaris-body2 text-label-neutral">
         링크 또는 이메일로 다른 사람과 함께 편집할 수 있습니다.
       </p>
       <Input label="공유할 사람" placeholder="이메일 주소를 입력하세요" />
       <div className="flex items-center justify-between px-3 py-2.5 rounded-polaris-md border border-line-neutral">
         <div className="flex items-center gap-2">
           <UsersRound className="h-4 w-4 text-label-alternative" aria-hidden="true" />
-          <span className="text-polaris-body-sm">링크가 있는 모든 사람</span>
+          <span className="text-polaris-body2">링크가 있는 모든 사람</span>
         </div>
         <Badge variant="neutral">보기 전용</Badge>
       </div>
@@ -819,7 +819,7 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
             aria-label="문서로 돌아가기"
             className="!h-9 !w-9 !px-0"
           >
-            <ArrowLeft className="h-5 w-5 text-primary-normal" />
+            <ArrowLeft className="h-5 w-5 text-accent-brand-normal" />
           </Button>
         </div>
         <nav aria-label="파일 메뉴" className="px-2 pb-4">
@@ -831,7 +831,7 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
                   onClick={() => setPane(item.id)}
                   aria-current={pane === item.id ? 'page' : undefined}
                   className={cn(
-                    'w-full !justify-start !px-3 !py-2 !h-auto rounded-polaris-md text-left text-polaris-body-sm font-normal',
+                    'w-full !justify-start !px-3 !py-2 !h-auto rounded-polaris-md text-left text-polaris-body2 font-normal',
                     pane === item.id
                       ? '!bg-background-alternative !font-semibold !text-label-normal'
                       : '!text-label-neutral hover:!bg-background-alternative'
@@ -847,7 +847,7 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
 
       {/* Right detail pane */}
       <main className="flex-1 px-8 py-6 overflow-y-auto">
-        <h1 className="text-polaris-h4 mb-6 text-label-normal">{current?.label}</h1>
+        <h1 className="text-polaris-heading2 mb-6 text-label-normal">{current?.label}</h1>
         {pane === 'new' && <NewDocPane />}
         {pane === 'open' && <OpenDocPane />}
         {pane === 'download' && <DownloadPane />}
@@ -918,18 +918,18 @@ export default function PolarisOffice() {
 
       <div className="px-6 py-6 max-w-4xl mx-auto">
         <Card variant="padded">
-          <div className="flex items-center gap-2 mb-4 text-polaris-meta text-label-alternative">
+          <div className="flex items-center gap-2 mb-4 text-polaris-caption1 text-label-alternative">
             <Badge variant="secondary">데모</Badge>
             현재 탭: {activeTab}
           </div>
-          <h1 className="text-polaris-h2 mb-4 text-label-normal">
+          <h1 className="text-polaris-title mb-4 text-label-normal">
             폴라리스 오피스 리본 재현
           </h1>
-          <p className="text-polaris-body text-label-neutral mb-2">
-            이 화면은 <code className="font-polaris-mono text-polaris-body-sm bg-background-alternative px-1 rounded-polaris-sm">@polaris/ui/ribbon</code>의 컴포넌트만으로 구성된
+          <p className="text-polaris-body1 text-label-neutral mb-2">
+            이 화면은 <code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">@polaris/ui/ribbon</code>의 컴포넌트만으로 구성된
             폴라리스 오피스 워드 에디터의 리본 메뉴 모형입니다.
           </p>
-          <p className="text-polaris-body-sm text-label-alternative">
+          <p className="text-polaris-body2 text-label-alternative">
             상단의 탭(파일·홈·삽입·레이아웃·검토·보기·펜·AI 도구)을 클릭해 그룹과 컨트롤 구성을 확인할 수 있습니다.
             아이콘은 lucide-react의 best-effort 매칭이며, 폴라리스 토큰(`brand.*`, `status.*`, `fg.*`)만 사용해 색을 입혔습니다.
           </p>

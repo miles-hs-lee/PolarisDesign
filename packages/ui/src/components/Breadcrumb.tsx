@@ -8,7 +8,7 @@ export const Breadcrumb = forwardRef<HTMLElement, React.HTMLAttributes<HTMLEleme
     <nav
       ref={ref}
       aria-label="Breadcrumb"
-      className={cn('font-polaris text-polaris-body-sm', className)}
+      className={cn('font-polaris text-polaris-body2', className)}
       {...props}
     />
   )

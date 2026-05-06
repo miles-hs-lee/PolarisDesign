@@ -98,7 +98,7 @@ export const ToastTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Title
     ref={ref}
-    className={cn('text-polaris-body-sm font-semibold', className)}
+    className={cn('text-polaris-body2 font-semibold', className)}
     {...props}
   />
 ));
@@ -110,7 +110,7 @@ export const ToastDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Description
     ref={ref}
-    className={cn('text-polaris-meta opacity-90', className)}
+    className={cn('text-polaris-caption1 opacity-90', className)}
     {...props}
   />
 ));
@@ -123,7 +123,7 @@ export const ToastAction = forwardRef<
   <ToastPrimitive.Action
     ref={ref}
     className={cn(
-      'ml-auto inline-flex h-8 shrink-0 items-center justify-center rounded-polaris-md border border-current px-3 text-polaris-meta font-semibold hover:bg-current/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current',
+      'ml-auto inline-flex h-8 shrink-0 items-center justify-center rounded-polaris-md border border-current px-3 text-polaris-caption1 font-semibold hover:bg-current/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current',
       className
     )}
     {...props}

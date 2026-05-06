@@ -11,7 +11,7 @@ export const DropdownMenuRadioGroup = DropdownPrimitive.RadioGroup;
 export const DropdownMenuSub = DropdownPrimitive.Sub;
 
 const itemBase =
-  'relative flex cursor-pointer select-none items-center gap-2 rounded-polaris-sm px-2.5 py-1.5 text-polaris-body-sm font-polaris text-label-normal outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-primary-normal-subtle data-[highlighted]:text-primary-normal';
+  'relative flex cursor-pointer select-none items-center gap-2 rounded-polaris-sm px-2.5 py-1.5 text-polaris-body2 font-polaris text-label-normal outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-accent-brand-normal-subtle data-[highlighted]:text-accent-brand-normal';
 
 export const DropdownMenuContent = forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Content>,
@@ -60,7 +60,7 @@ export const DropdownMenuLabel = forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownPrimitive.Label
     ref={ref}
-    className={cn('px-2.5 py-1.5 text-polaris-meta font-semibold uppercase tracking-wider text-label-alternative', className)}
+    className={cn('px-2.5 py-1.5 text-polaris-caption1 font-semibold uppercase tracking-wider text-label-alternative', className)}
     {...props}
   />
 ));

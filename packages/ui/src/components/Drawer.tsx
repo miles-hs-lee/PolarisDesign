@@ -76,7 +76,7 @@ export const DrawerContent = forwardRef<
         <DialogPrimitive.Close
           className={cn(
             'absolute right-4 top-4 rounded-polaris-sm text-label-alternative',
-            'hover:text-label-normal hover:bg-primary-normal-subtle p-1',
+            'hover:text-label-normal hover:bg-accent-brand-normal-subtle p-1',
             'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary'
           )}
         >
@@ -113,7 +113,7 @@ export const DrawerTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn('text-polaris-h5 text-label-normal', className)}
+    className={cn('text-polaris-heading3 text-label-normal', className)}
     {...props}
   />
 ));
@@ -125,7 +125,7 @@ export const DrawerDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-polaris-body-sm text-label-neutral', className)}
+    className={cn('text-polaris-body2 text-label-neutral', className)}
     {...props}
   />
 ));

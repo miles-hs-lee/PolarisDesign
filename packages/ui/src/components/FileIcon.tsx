@@ -18,7 +18,7 @@ const fileIconVariants = cva(
       size: {
         sm: 'h-7 w-7 rounded-polaris-sm text-[9px]',
         md: 'h-10 w-10 rounded-polaris-md text-[11px]',
-        lg: 'h-12 w-12 rounded-polaris-lg text-polaris-meta',
+        lg: 'h-12 w-12 rounded-polaris-lg text-polaris-caption1',
       },
     },
     defaultVariants: { size: 'md' },

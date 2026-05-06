@@ -20,7 +20,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {label && (
           <label
             htmlFor={id}
-            className="text-polaris-body-sm font-medium text-label-normal"
+            className="text-polaris-body2 font-medium text-label-normal"
           >
             {label}
           </label>
@@ -32,7 +32,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           aria-invalid={isError || undefined}
           aria-describedby={messageId}
           className={cn(
-            'px-3 py-2 rounded-polaris-md text-polaris-body-sm font-polaris',
+            'px-3 py-2 rounded-polaris-md text-polaris-body2 font-polaris',
             'bg-background-normal text-label-normal placeholder:text-label-alternative',
             'border border-line-normal resize-vertical',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:border-brand-primary',
@@ -46,7 +46,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           <p
             id={messageId}
             className={cn(
-              'text-polaris-meta',
+              'text-polaris-caption1',
               isError ? 'text-status-danger' : 'text-label-alternative'
             )}
           >

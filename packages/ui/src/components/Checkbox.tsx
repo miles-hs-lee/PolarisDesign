@@ -35,8 +35,8 @@ export const Checkbox = forwardRef<
         'peer inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-polaris-sm border border-line-normal bg-background-normal text-label-inverse transition-colors',
         'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
         'disabled:cursor-not-allowed disabled:opacity-50',
-        'data-[state=checked]:bg-primary-normal data-[state=checked]:border-brand-primary',
-        'data-[state=indeterminate]:bg-primary-normal data-[state=indeterminate]:border-brand-primary',
+        'data-[state=checked]:bg-accent-brand-normal data-[state=checked]:border-brand-primary',
+        'data-[state=indeterminate]:bg-accent-brand-normal data-[state=indeterminate]:border-brand-primary',
         isError && 'border-status-danger focus-visible:outline-status-danger',
         className
       )}
@@ -61,7 +61,7 @@ export const Checkbox = forwardRef<
         {label && (
           <label
             htmlFor={id}
-            className="text-polaris-body-sm text-label-normal cursor-pointer select-none"
+            className="text-polaris-body2 text-label-normal cursor-pointer select-none"
           >
             {label}
           </label>
@@ -70,7 +70,7 @@ export const Checkbox = forwardRef<
           <p
             id={messageId}
             className={cn(
-              'text-polaris-meta',
+              'text-polaris-caption1',
               isError ? 'text-status-danger' : 'text-label-alternative'
             )}
           >

@@ -216,11 +216,11 @@ export default function NovaWorkspace() {
         <NovaHeroBackground />
         <div className="max-w-5xl mx-auto px-6 pt-12 pb-10">
           <header className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-polaris-pill bg-ai-hover text-ai-normal text-polaris-meta font-semibold mb-4 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-polaris-pill bg-ai-hover text-ai-normal text-polaris-caption1 font-semibold mb-4 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> AI · NOVA
             </div>
-            <h1 className="text-polaris-h2 mb-3">NOVA 워크스페이스</h1>
-            <p className="text-polaris-body text-label-neutral max-w-2xl mx-auto">
+            <h1 className="text-polaris-title mb-3">NOVA 워크스페이스</h1>
+            <p className="text-polaris-body1 text-label-neutral max-w-2xl mx-auto">
               AI에게 무엇이든 묻고 결과를 한 곳에 모아보세요. 응답은 길이/톤을 조절할 수 있고,
               자주 쓰는 프롬프트는 저장됩니다.
             </p>
@@ -234,7 +234,7 @@ export default function NovaWorkspace() {
           </div>
 
           {/* Settings row: Select + Tooltip */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-3 mb-8 text-polaris-body-sm">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-3 mb-8 text-polaris-body2">
             <div className="flex items-center gap-2">
               <span className="text-label-alternative">응답 길이</span>
               <SimpleTooltip label="응답의 분량을 조절합니다. 보통 = 한 화면 분량.">
@@ -380,7 +380,7 @@ export default function NovaWorkspace() {
               </div>
               <div className="p-4">
                 <h3 className="text-polaris-heading-sm mb-1">{f.title}</h3>
-                <p className="text-polaris-body-sm text-label-neutral line-clamp-2">{f.desc}</p>
+                <p className="text-polaris-body2 text-label-neutral line-clamp-2">{f.desc}</p>
               </div>
             </Card>
           ))}
@@ -428,7 +428,7 @@ export default function NovaWorkspace() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-                <CardTitle className="!text-polaris-body-sm line-clamp-2">{r.prompt}</CardTitle>
+                <CardTitle className="!text-polaris-body2 line-clamp-2">{r.prompt}</CardTitle>
                 <CardDescription>
                   {r.when} · {r.tokens > 0 ? `${r.tokens.toLocaleString()} tokens` : '이미지 생성'}
                   {r.starred && (
@@ -439,7 +439,7 @@ export default function NovaWorkspace() {
                 </CardDescription>
               </CardHeader>
               <CardBody className="!pt-0 flex-1">
-                <p className="text-polaris-body-sm text-label-neutral line-clamp-4">{r.snippet}</p>
+                <p className="text-polaris-body2 text-label-neutral line-clamp-4">{r.snippet}</p>
               </CardBody>
             </Card>
           ))}

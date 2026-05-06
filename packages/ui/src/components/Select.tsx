@@ -16,7 +16,7 @@ export const SelectTrigger = forwardRef<
     className={cn(
       'inline-flex h-10 w-full items-center justify-between gap-2 rounded-polaris-md',
       'border border-line-normal bg-background-normal px-3 py-2',
-      'text-polaris-body-sm font-polaris text-label-normal whitespace-nowrap',
+      'text-polaris-body2 font-polaris text-label-normal whitespace-nowrap',
       'data-[placeholder]:text-label-alternative',
       '[&>span]:truncate [&>span]:block [&>span]:min-w-0',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:border-brand-primary',
@@ -67,7 +67,7 @@ export const SelectLabel = forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn('px-2.5 py-1.5 text-polaris-meta font-semibold uppercase tracking-wider text-label-alternative', className)}
+    className={cn('px-2.5 py-1.5 text-polaris-caption1 font-semibold uppercase tracking-wider text-label-alternative', className)}
     {...props}
   />
 ));
@@ -81,8 +81,8 @@ export const SelectItem = forwardRef<
     ref={ref}
     className={cn(
       'relative flex cursor-pointer select-none items-center rounded-polaris-sm py-1.5 pl-7 pr-2.5',
-      'text-polaris-body-sm font-polaris text-label-normal outline-none',
-      'data-[highlighted]:bg-primary-normal-subtle data-[highlighted]:text-primary-normal',
+      'text-polaris-body2 font-polaris text-label-normal outline-none',
+      'data-[highlighted]:bg-accent-brand-normal-subtle data-[highlighted]:text-accent-brand-normal',
       'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className
     )}

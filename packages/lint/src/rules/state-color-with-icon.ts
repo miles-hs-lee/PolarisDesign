@@ -34,15 +34,14 @@ const rule: Rule.RuleModule = {
   },
   create(context) {
     function checkJSXAttribute(node: Rule.Node) {
-      // Narrow to className attribute only.
-      if (node.type !== 'JSXAttribute') return;
-      // Cast through unknown so we can poke at JSX node shape without
-      // pulling in @types/eslint-jsx (this rule already runs against
-      // ESLint's experimental JSX node types in our existing rules).
+      // ESLint's `Rule.Node` doesn't include the JSX node type union; we
+      // cast through unknown to poke at the attribute shape. Narrowing
+      // by a type literal would fail the typescript-eslint check, so
+      // we just inspect the runtime shape.
       const attr = node as unknown as {
-        name: { name: string };
-        value: { type: string; value?: unknown; expression?: { type: string } };
-        parent: { type: string; children?: { type: string; openingElement?: { name?: { name: string } } }[] };
+        name?: { name?: string };
+        value?: { type: string; value?: unknown; expression?: { type: string } };
+        parent?: { type: string; children?: { type: string; openingElement?: { name?: { name: string } } }[] };
       };
       if (!attr.name || attr.name.name !== 'className') return;
       if (!attr.value) return;

@@ -102,7 +102,7 @@ export const CommandInput = forwardRef<
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        'flex h-11 w-full bg-transparent py-3 text-polaris-body-sm outline-none',
+        'flex h-11 w-full bg-transparent py-3 text-polaris-body2 outline-none',
         'placeholder:text-label-alternative disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
@@ -130,7 +130,7 @@ export const CommandEmpty = forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className={cn('py-6 text-center text-polaris-body-sm text-label-alternative', className)}
+    className={cn('py-6 text-center text-polaris-body2 text-label-alternative', className)}
     {...props}
   />
 ));
@@ -144,7 +144,7 @@ export const CommandGroup = forwardRef<
     ref={ref}
     className={cn(
       'overflow-hidden text-label-normal',
-      '[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-polaris-meta [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider [&_[cmdk-group-heading]]:text-label-alternative',
+      '[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-polaris-caption1 [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider [&_[cmdk-group-heading]]:text-label-alternative',
       className
     )}
     {...props}
@@ -171,9 +171,9 @@ export const CommandItem = forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-pointer select-none items-center gap-2 rounded-polaris-sm px-2.5 py-1.5 text-polaris-body-sm outline-none',
+      'relative flex cursor-pointer select-none items-center gap-2 rounded-polaris-sm px-2.5 py-1.5 text-polaris-body2 outline-none',
       'data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
-      'data-[selected=true]:bg-primary-normal-subtle data-[selected=true]:text-primary-normal',
+      'data-[selected=true]:bg-accent-brand-normal-subtle data-[selected=true]:text-accent-brand-normal',
       className
     )}
     {...props}
@@ -187,7 +187,7 @@ export const CommandShortcut = ({
 }: React.HTMLAttributes<HTMLSpanElement>) => (
   <span
     className={cn(
-      'ml-auto text-polaris-meta tracking-widest text-label-alternative',
+      'ml-auto text-polaris-caption1 tracking-widest text-label-alternative',
       className
     )}
     {...props}

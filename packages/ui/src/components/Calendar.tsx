@@ -24,39 +24,39 @@ export function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       locale={locale}
-      className={cn('p-3 font-polaris text-polaris-body-sm text-label-normal', className)}
+      className={cn('p-3 font-polaris text-polaris-body2 text-label-normal', className)}
       classNames={{
         months: 'flex flex-col sm:flex-row gap-4',
         month: 'flex flex-col gap-3',
         month_caption: 'flex justify-center pt-1 relative items-center',
-        caption_label: 'text-polaris-body-sm font-semibold',
+        caption_label: 'text-polaris-body2 font-semibold',
         nav: 'flex items-center justify-between absolute inset-x-1 top-1',
         button_previous: cn(
-          'inline-flex h-7 w-7 items-center justify-center rounded-polaris-sm text-label-alternative hover:bg-primary-normal-subtle hover:text-label-normal',
+          'inline-flex h-7 w-7 items-center justify-center rounded-polaris-sm text-label-alternative hover:bg-accent-brand-normal-subtle hover:text-label-normal',
           'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary'
         ),
         button_next: cn(
-          'inline-flex h-7 w-7 items-center justify-center rounded-polaris-sm text-label-alternative hover:bg-primary-normal-subtle hover:text-label-normal',
+          'inline-flex h-7 w-7 items-center justify-center rounded-polaris-sm text-label-alternative hover:bg-accent-brand-normal-subtle hover:text-label-normal',
           'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary'
         ),
         month_grid: 'w-full border-collapse',
         weekdays: 'flex',
-        weekday: 'text-label-alternative w-9 text-polaris-meta font-normal',
+        weekday: 'text-label-alternative w-9 text-polaris-caption1 font-normal',
         week: 'flex w-full mt-1',
         day: 'relative p-0 text-center w-9 h-9',
         day_button: cn(
-          'inline-flex h-9 w-9 items-center justify-center rounded-polaris-md text-polaris-body-sm font-normal transition-colors',
-          'hover:bg-primary-normal-subtle hover:text-primary-normal',
+          'inline-flex h-9 w-9 items-center justify-center rounded-polaris-md text-polaris-body2 font-normal transition-colors',
+          'hover:bg-accent-brand-normal-subtle hover:text-accent-brand-normal',
           'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
           'aria-selected:opacity-100'
         ),
-        selected: '[&>button]:bg-primary-normal [&>button]:text-label-inverse [&>button]:hover:bg-primary-strong [&>button]:hover:text-label-inverse',
-        today: '[&>button]:font-semibold [&>button]:text-primary-normal',
+        selected: '[&>button]:bg-accent-brand-normal [&>button]:text-label-inverse [&>button]:hover:bg-accent-brand-strong [&>button]:hover:text-label-inverse',
+        today: '[&>button]:font-semibold [&>button]:text-accent-brand-normal',
         outside: '[&>button]:text-label-alternative [&>button]:opacity-50',
         disabled: '[&>button]:text-label-alternative [&>button]:opacity-50 [&>button]:pointer-events-none',
         range_start: '[&>button]:rounded-r-none',
         range_end: '[&>button]:rounded-l-none',
-        range_middle: '[&>button]:rounded-none [&>button]:bg-primary-normal-subtle [&>button]:text-primary-normal',
+        range_middle: '[&>button]:rounded-none [&>button]:bg-accent-brand-normal-subtle [&>button]:text-accent-brand-normal',
         hidden: 'invisible',
         ...classNames,
       }}

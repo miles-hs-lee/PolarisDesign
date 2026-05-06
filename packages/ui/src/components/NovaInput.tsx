@@ -104,7 +104,7 @@ export const NovaInput = forwardRef<HTMLInputElement, NovaInputProps>(
             placeholder={placeholder}
             disabled={disabled}
             className={cn(
-              'flex-1 bg-transparent border-none outline-none text-polaris-body-sm font-polaris text-label-normal placeholder:text-label-alternative min-w-0',
+              'flex-1 bg-transparent border-none outline-none text-polaris-body2 font-polaris text-label-normal placeholder:text-label-alternative min-w-0',
               className
             )}
             {...props}

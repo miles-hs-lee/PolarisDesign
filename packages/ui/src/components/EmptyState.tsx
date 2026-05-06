@@ -32,7 +32,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
         <div className="flex flex-col gap-1 max-w-md">
           <h3 className="text-polaris-heading-sm text-label-normal">{title}</h3>
           {description && (
-            <p className="text-polaris-body-sm text-label-neutral">{description}</p>
+            <p className="text-polaris-body2 text-label-neutral">{description}</p>
           )}
         </div>
         {action && <div className="mt-2">{action}</div>}

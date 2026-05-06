@@ -8,10 +8,10 @@ const avatarVariants = cva(
   {
     variants: {
       size: {
-        sm: 'h-7 w-7 text-polaris-meta',
-        md: 'h-9 w-9 text-polaris-body-sm',
-        lg: 'h-11 w-11 text-polaris-body',
-        xl: 'h-14 w-14 text-polaris-h5',
+        sm: 'h-7 w-7 text-polaris-caption1',
+        md: 'h-9 w-9 text-polaris-body2',
+        lg: 'h-11 w-11 text-polaris-body1',
+        xl: 'h-14 w-14 text-polaris-heading3',
       },
     },
     defaultVariants: { size: 'md' },
@@ -53,7 +53,7 @@ export const AvatarFallback = forwardRef<
   <AvatarPrimitive.Fallback
     ref={ref}
     className={cn(
-      'flex h-full w-full items-center justify-center bg-primary-normal text-label-inverse font-semibold',
+      'flex h-full w-full items-center justify-center bg-accent-brand-normal text-label-inverse font-semibold',
       className
     )}
     {...props}

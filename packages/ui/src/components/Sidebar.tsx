@@ -66,7 +66,7 @@ export const SidebarSection = forwardRef<HTMLDivElement, SidebarSectionProps>(
     return (
       <div ref={ref} className={cn('py-1.5', className)} {...props}>
         {title && !collapsed && (
-          <div className="px-3 py-1 text-polaris-meta font-semibold uppercase tracking-wider text-label-alternative">
+          <div className="px-3 py-1 text-polaris-caption1 font-semibold uppercase tracking-wider text-label-alternative">
             {title}
           </div>
         )}
@@ -102,10 +102,10 @@ export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
           aria-current={active ? 'page' : undefined}
           className={cn(
             'flex w-full items-center gap-2.5 rounded-polaris-md px-2.5 py-1.5',
-            'text-polaris-body-sm font-medium font-polaris text-label-neutral',
-            'hover:bg-primary-normal-subtle hover:text-label-normal transition-colors',
+            'text-polaris-body2 font-medium font-polaris text-label-neutral',
+            'hover:bg-accent-brand-normal-subtle hover:text-label-normal transition-colors',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary',
-            active && 'bg-primary-normal-subtle text-primary-normal',
+            active && 'bg-accent-brand-normal-subtle text-accent-brand-normal',
             collapsed && 'justify-center',
             className
           )}
