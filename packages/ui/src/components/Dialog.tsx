@@ -8,6 +8,17 @@ export const DialogTrigger = DialogPrimitive.Trigger;
 export const DialogPortal = DialogPrimitive.Portal;
 export const DialogClose = DialogPrimitive.Close;
 
+/**
+ * Dialog — v0.7-rc.1 spec (DESIGN.md §4 "Modals & Dialogs").
+ *
+ * - Background: `--layer-surface` (raised surface, distinct from page bg)
+ * - Border-radius: `--radius-xl` (24px) — emphasis modal per spec
+ * - Overlay: `--layer-overlay` (`rgba(0,0,0,0.5)`)
+ * - Shadow: `--shadow-lg`
+ * - Z-index: `--z-modal` (400) for content, `--z-dim` (300) for overlay
+ * - Padding: `--spacing-lg` (24)
+ * - Max-width: 480px (default), `max-w-lg` for compatibility
+ */
 export const DialogOverlay = forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
@@ -15,8 +26,8 @@ export const DialogOverlay = forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm',
-      'data-[state=open]:opacity-100 data-[state=closed]:opacity-0 transition-opacity duration-150',
+      'fixed inset-0 z-polaris-dim bg-layer-overlay',
+      'data-[state=open]:opacity-100 data-[state=closed]:opacity-0 transition-opacity duration-polaris-fast',
       className
     )}
     {...props}
@@ -33,11 +44,13 @@ export const DialogContent = forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2',
-        'w-[calc(100vw-2rem)] max-w-lg p-6',
-        'bg-background-normal text-label-normal border border-line-neutral rounded-polaris-xl shadow-polaris-lg',
+        'fixed left-1/2 top-1/2 z-polaris-modal -translate-x-1/2 -translate-y-1/2',
+        'w-[calc(100vw-2rem)] max-w-[480px] p-polaris-lg',
+        'bg-layer-surface text-label-normal rounded-polaris-xl shadow-polaris-lg',
         'focus-visible:outline-none',
-        'data-[state=open]:opacity-100 data-[state=closed]:opacity-0 transition-opacity duration-150',
+        'data-[state=open]:opacity-100 data-[state=closed]:opacity-0',
+        'data-[state=open]:translate-y-[calc(-50%+0px)] data-[state=closed]:translate-y-[calc(-50%+8px)]',
+        'transition-all duration-polaris-slow ease-polaris-out',
         className
       )}
       {...props}
@@ -45,9 +58,9 @@ export const DialogContent = forwardRef<
       {children}
       <DialogPrimitive.Close
         className={cn(
-          'absolute right-4 top-4 rounded-polaris-sm text-label-alternative',
-          'hover:text-label-normal hover:bg-primary-normal-subtle p-1',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary'
+          'absolute right-4 top-4 rounded-polaris-sm text-label-alternative p-1',
+          'hover:text-label-normal hover:bg-interaction-hover',
+          'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-focus-ring/40'
         )}
       >
         <X className="h-4 w-4" aria-hidden="true" />
@@ -59,7 +72,7 @@ export const DialogContent = forwardRef<
 DialogContent.displayName = 'DialogContent';
 
 export const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex flex-col gap-1.5 mb-4', className)} {...props} />
+  <div className={cn('flex flex-col gap-polaris-3xs mb-polaris-sm', className)} {...props} />
 );
 
 export const DialogTitle = forwardRef<
@@ -68,7 +81,7 @@ export const DialogTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn('text-polaris-h5 text-label-normal', className)}
+    className={cn('text-polaris-heading3 text-label-normal', className)}
     {...props}
   />
 ));
@@ -80,7 +93,7 @@ export const DialogDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-polaris-body-sm text-label-neutral', className)}
+    className={cn('text-polaris-body2 text-label-neutral', className)}
     {...props}
   />
 ));
@@ -88,7 +101,7 @@ DialogDescription.displayName = 'DialogDescription';
 
 export const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-2 gap-2 mt-6', className)}
+    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end gap-polaris-2xs mt-polaris-lg', className)}
     {...props}
   />
 );

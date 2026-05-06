@@ -15,12 +15,14 @@ export type ToastPosition =
   | 'bottom-center';
 
 const POSITION: Record<ToastPosition, string> = {
+  // v0.7-rc.1: 50px top/bottom from screen edge, centered horizontally
+  // for the spec's primary placements per DESIGN.md §4.
   'top-right':     'top-4 right-4 items-end',
   'top-left':      'top-4 left-4 items-start',
-  'top-center':    'top-4 left-1/2 -translate-x-1/2 items-center',
+  'top-center':    'top-[50px] left-1/2 -translate-x-1/2 items-center',
   'bottom-right':  'bottom-4 right-4 items-end',
   'bottom-left':   'bottom-4 left-4 items-start',
-  'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2 items-center',
+  'bottom-center': 'bottom-[50px] left-1/2 -translate-x-1/2 items-center',
 };
 
 export interface ToastViewportProps
@@ -36,7 +38,7 @@ export const ToastViewport = forwardRef<
   <ToastPrimitive.Viewport
     ref={ref}
     className={cn(
-      'fixed z-[100] flex flex-col gap-2 max-w-sm w-full outline-none',
+      'fixed z-polaris-toast flex flex-col gap-polaris-2xs max-w-sm w-full outline-none',
       POSITION[position],
       className
     )}
@@ -45,16 +47,29 @@ export const ToastViewport = forwardRef<
 ));
 ToastViewport.displayName = 'ToastViewport';
 
+/**
+ * Toast variants (v0.7-rc.1 — DESIGN.md §4).
+ *
+ * Spec defines a single dark, glass-blur toast surface for ALL types
+ * — only the icon color changes between success/fail/info/warning.
+ * The base style is `bg-layer-overlay backdrop-blur-md`, white text,
+ * 48px height, 12px radius, z-toast.
+ *
+ * The variants below set an accent border-left (left edge of the
+ * toast) to convey type at a glance, while the surface stays uniform.
+ * `neutral` is unchanged from rc.0 (no accent border).
+ */
 const toastVariants = cva(
-  'group pointer-events-auto relative flex w-full items-center gap-3 overflow-hidden rounded-polaris-md border-l-[3px] p-4 pr-8 shadow-polaris-md font-polaris',
+  // Base — dark glass per spec. h-12 (48px), p-3 (12px), r-12 (md).
+  'group pointer-events-auto relative flex w-full items-center gap-polaris-2xs overflow-hidden rounded-polaris-md p-polaris-xs pr-polaris-2xl min-h-12 shadow-polaris-md font-polaris bg-layer-overlay backdrop-blur-md text-static-white text-polaris-body2 font-medium',
   {
     variants: {
       variant: {
-        info: 'bg-status-info/10 border-status-info text-label-normal',
-        success: 'bg-status-success/10 border-status-success text-label-normal',
-        warning: 'bg-status-warning/15 border-status-warning text-label-normal',
-        danger: 'bg-status-danger/10 border-status-danger text-label-normal',
-        neutral: 'bg-background-normal border-line-normal text-label-normal',
+        info:    'border-l-[3px] border-state-info',
+        success: 'border-l-[3px] border-state-success',
+        warning: 'border-l-[3px] border-state-warning',
+        danger:  'border-l-[3px] border-state-error',
+        neutral: '',
       },
     },
     defaultVariants: { variant: 'neutral' },
