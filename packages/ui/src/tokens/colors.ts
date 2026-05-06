@@ -73,6 +73,125 @@ export const text = {
   onStatus:  { light: '#FFFFFF', dark: '#FFFFFF' },
 } as const satisfies Record<string, ColorPair>;
 
+/* ================================================================== *
+ * 9-step ramps (v1 spec, 2026.05)
+ *
+ * Each brand color now ships as a full 9-step ramp (5 / 10 / 20 / 30 /
+ * 40 / 50 / 60 / 70 / 80). Step 50 matches `brandPalette.<name>.light`
+ * — both are exported so consumers can pick whichever fits their
+ * context (single-token alias for simple buttons, ramp for chart
+ * categories or hover/pressed nuances).
+ *
+ * Light mode only — design team hasn't supplied a dark-mode ramp yet.
+ * ================================================================== */
+
+export type Ramp9 = Readonly<{
+  '5':  string;
+  '10': string;
+  '20': string;
+  '30': string;
+  '40': string;
+  '50': string;
+  '60': string;
+  '70': string;
+  '80': string;
+}>;
+
+/** PO Blue — primary brand color, also the Word file-type accent. */
+export const bluePalette = {
+  '5':  '#E8F2FE',
+  '10': '#D9EAFF',
+  '20': '#BBD8FD',
+  '30': '#8EBFFC',
+  '40': '#60A5FA',
+  '50': '#1D7FF9',
+  '60': '#186CD3',
+  '70': '#1458AD',
+  '80': '#0F4588',
+} as const satisfies Ramp9;
+
+/** PO Dark Blue — BI / corporate communication only (not for UI). */
+export const darkBluePalette = {
+  '5':  '#E5ECF8',
+  '10': '#D1DFF7',
+  '20': '#B2C7EA',
+  '30': '#7FA2DC',
+  '40': '#4C70CE',
+  '50': '#0046B9',
+  '60': '#003B9D',
+  '70': '#003081',
+  '80': '#002665',
+} as const satisfies Ramp9;
+
+/** Sheet — XLSX file-type accent. */
+export const greenPalette = {
+  '5':  '#EDF7E8',
+  '10': '#DCF1D1',
+  '20': '#CAE8BA',
+  '30': '#A8D98D',
+  '40': '#B5CA5F',
+  '50': '#51B41B',
+  '60': '#449916',
+  '70': '#387D12',
+  '80': '#2C620E',
+} as const satisfies Ramp9;
+
+/** Slide — PPTX file-type accent. */
+export const orangePalette = {
+  '5':  '#FEF3E5',
+  '10': '#FDE5C8',
+  '20': '#FEDBB2',
+  '30': '#FEC47F',
+  '40': '#FDAC4C',
+  '50': '#FD8900',
+  '60': '#D77400',
+  '70': '#B05F00',
+  '80': '#8A4B00',
+} as const satisfies Ramp9;
+
+/** PDF — file-type accent. */
+export const redPalette = {
+  '5':  '#FEEEEE',
+  '10': '#FFE3E3',
+  '20': '#FDCECE',
+  '30': '#FCADAD',
+  '40': '#FA8C8C',
+  '50': '#F95C5C',
+  '60': '#D34E4E',
+  '70': '#AD4040',
+  '80': '#883232',
+} as const satisfies Ramp9;
+
+/** AI Purple — AI / NOVA surfaces only. Never use on general product UI. */
+export const purplePalette = {
+  '5':  '#F5F1FD',
+  '10': '#EDE5FE',
+  '20': '#E0D1FF',
+  '30': '#C6A9FF',
+  '40': '#9075EC',
+  '50': '#6F3AD0',
+  '60': '#602BC1',
+  '70': '#511BB2',
+  '80': '#3E0F8D',
+} as const satisfies Ramp9;
+
+/** Gray ramp — UI backbone (text, lines, surfaces, interaction states).
+ *  9 steps, 10 (lightest) → 90 (darkest). Note this scale uses different
+ *  step numbers from the legacy `neutral` 12-step scale — both exports
+ *  coexist; `grayRamp` matches the v1 design spec, `neutral` is kept for
+ *  backward compatibility. New code should prefer `grayRamp`. */
+export const grayRamp = {
+  '10': '#F7F8F9',
+  '20': '#F2F4F6',
+  '30': '#E8EBED',
+  '40': '#C9CDD2',
+  '50': '#B3B8BD',
+  '60': '#9EA4AA',
+  '70': '#72787F',
+  '80': '#454C53',
+  '90': '#26282B',
+} as const satisfies Record<string, string>;
+
 export const colors = {
   brandPalette,
   brand,
@@ -81,4 +200,12 @@ export const colors = {
   neutral,
   surface,
   text,
+  // 9-step ramps
+  bluePalette,
+  darkBluePalette,
+  greenPalette,
+  orangePalette,
+  redPalette,
+  purplePalette,
+  grayRamp,
 } as const;

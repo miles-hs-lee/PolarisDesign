@@ -28,6 +28,12 @@ import {
   radius,
   shadow,
   fontFamily,
+  bluePalette,
+  greenPalette,
+  orangePalette,
+  redPalette,
+  purplePalette,
+  grayRamp,
   type ColorPair,
 } from '../src/tokens';
 
@@ -73,6 +79,25 @@ function emitColorBlock(mode: 'light' | 'dark'): string {
   return lines.join('\n');
 }
 
+/** Emit the v1 9-step ramps (light only — design team hasn't supplied
+ *  a dark-mode ramp yet). Each step gets its own custom property:
+ *  `--polaris-blue-50`, `--polaris-purple-30`, etc. */
+function emitRampBlock(): string {
+  const ramps: Array<[string, Record<string, string>]> = [
+    ['blue',   bluePalette],
+    ['green',  greenPalette],
+    ['orange', orangePalette],
+    ['red',    redPalette],
+    ['purple', purplePalette],
+    ['gray',   grayRamp],
+  ];
+  return ramps
+    .flatMap(([name, ramp]) =>
+      Object.entries(ramp).map(([step, hex]) => `  --polaris-${name}-${step}: ${hex};`)
+    )
+    .join('\n');
+}
+
 function emitRadiusBlock(): string {
   // Radius is mode-independent.
   return Object.entries(radius)
@@ -99,6 +124,8 @@ function emitShadowBlock(mode: 'light' | 'dark'): string {
 const lightBlock = `:root,
 [data-theme="light"] {
 ${emitColorBlock('light')}
+
+${emitRampBlock()}
 
 ${emitRadiusBlock()}
 

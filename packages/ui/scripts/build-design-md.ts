@@ -36,6 +36,12 @@ import {
   fontFamily,
   textStyle,
   spacing,
+  bluePalette,
+  greenPalette,
+  orangePalette,
+  redPalette,
+  purplePalette,
+  grayRamp,
 } from '../src/tokens';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -48,7 +54,23 @@ const camelToKebab = (s: string) => s.replace(/[A-Z]/g, (m) => '-' + m.toLowerCa
 function emitColors(): string {
   // Map Polaris's nested color groups to flat Stitch token names. Light
   // values only — dark pairs live in tokens.ts.
+  // 9-step ramps go first so consumers see the full color system before
+  // semantic aliases.
   const colors: Record<string, string> = {};
+
+  const ramps: Array<[string, Record<string, string>]> = [
+    ['blue',   bluePalette],
+    ['green',  greenPalette],
+    ['orange', orangePalette],
+    ['red',    redPalette],
+    ['purple', purplePalette],
+    ['gray',   grayRamp],
+  ];
+  for (const [name, ramp] of ramps) {
+    for (const [step, hex] of Object.entries(ramp)) {
+      colors[`${name}-${step}`] = hex;
+    }
+  }
 
   // Base palette → primary/secondary/accent group names Stitch recommends.
   // Polaris's `brand.primary` (blue) becomes `primary`; `brand.secondary`

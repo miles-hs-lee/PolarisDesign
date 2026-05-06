@@ -4,6 +4,60 @@ name: Polaris Design System
 description: Internal design system for Polaris Office's vibe-coding-ops React/Next.js services. 4-color brand palette + NOVA purple, Pretendard typography, Tailwind 4px spacing baseline, Radix UI primitives.
 
 colors:
+  blue-5: "#E8F2FE"
+  blue-10: "#D9EAFF"
+  blue-20: "#BBD8FD"
+  blue-30: "#8EBFFC"
+  blue-40: "#60A5FA"
+  blue-50: "#1D7FF9"
+  blue-60: "#186CD3"
+  blue-70: "#1458AD"
+  blue-80: "#0F4588"
+  green-5: "#EDF7E8"
+  green-10: "#DCF1D1"
+  green-20: "#CAE8BA"
+  green-30: "#A8D98D"
+  green-40: "#B5CA5F"
+  green-50: "#51B41B"
+  green-60: "#449916"
+  green-70: "#387D12"
+  green-80: "#2C620E"
+  orange-5: "#FEF3E5"
+  orange-10: "#FDE5C8"
+  orange-20: "#FEDBB2"
+  orange-30: "#FEC47F"
+  orange-40: "#FDAC4C"
+  orange-50: "#FD8900"
+  orange-60: "#D77400"
+  orange-70: "#B05F00"
+  orange-80: "#8A4B00"
+  red-5: "#FEEEEE"
+  red-10: "#FFE3E3"
+  red-20: "#FDCECE"
+  red-30: "#FCADAD"
+  red-40: "#FA8C8C"
+  red-50: "#F95C5C"
+  red-60: "#D34E4E"
+  red-70: "#AD4040"
+  red-80: "#883232"
+  purple-5: "#F5F1FD"
+  purple-10: "#EDE5FE"
+  purple-20: "#E0D1FF"
+  purple-30: "#C6A9FF"
+  purple-40: "#9075EC"
+  purple-50: "#6F3AD0"
+  purple-60: "#602BC1"
+  purple-70: "#511BB2"
+  purple-80: "#3E0F8D"
+  gray-10: "#F7F8F9"
+  gray-20: "#F2F4F6"
+  gray-30: "#E8EBED"
+  gray-40: "#C9CDD2"
+  gray-50: "#B3B8BD"
+  gray-60: "#9EA4AA"
+  gray-70: "#72787F"
+  gray-80: "#454C53"
+  gray-90: "#26282B"
   primary: "#1D7FF9"
   primary-hover: "#1458AD"
   primary-subtle: "#E8F2FE"
@@ -98,10 +152,14 @@ typography:
     lineHeight: 1.333
 
 rounded:
+  2xs: 2px
+  xs: 4px
   sm: 6px
-  md: 10px
-  lg: 14px
-  xl: 20px
+  md: 8px
+  lg: 12px
+  xl: 16px
+  2xl: 24px
+  pill: 9999px
   full: 9999px
 
 spacing:

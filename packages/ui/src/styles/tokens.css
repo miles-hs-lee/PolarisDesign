@@ -56,10 +56,69 @@
   --polaris-text-on-brand: #FFFFFF;
   --polaris-text-on-status: #FFFFFF;
 
+  --polaris-blue-5: #E8F2FE;
+  --polaris-blue-10: #D9EAFF;
+  --polaris-blue-20: #BBD8FD;
+  --polaris-blue-30: #8EBFFC;
+  --polaris-blue-40: #60A5FA;
+  --polaris-blue-50: #1D7FF9;
+  --polaris-blue-60: #186CD3;
+  --polaris-blue-70: #1458AD;
+  --polaris-blue-80: #0F4588;
+  --polaris-green-5: #EDF7E8;
+  --polaris-green-10: #DCF1D1;
+  --polaris-green-20: #CAE8BA;
+  --polaris-green-30: #A8D98D;
+  --polaris-green-40: #B5CA5F;
+  --polaris-green-50: #51B41B;
+  --polaris-green-60: #449916;
+  --polaris-green-70: #387D12;
+  --polaris-green-80: #2C620E;
+  --polaris-orange-5: #FEF3E5;
+  --polaris-orange-10: #FDE5C8;
+  --polaris-orange-20: #FEDBB2;
+  --polaris-orange-30: #FEC47F;
+  --polaris-orange-40: #FDAC4C;
+  --polaris-orange-50: #FD8900;
+  --polaris-orange-60: #D77400;
+  --polaris-orange-70: #B05F00;
+  --polaris-orange-80: #8A4B00;
+  --polaris-red-5: #FEEEEE;
+  --polaris-red-10: #FFE3E3;
+  --polaris-red-20: #FDCECE;
+  --polaris-red-30: #FCADAD;
+  --polaris-red-40: #FA8C8C;
+  --polaris-red-50: #F95C5C;
+  --polaris-red-60: #D34E4E;
+  --polaris-red-70: #AD4040;
+  --polaris-red-80: #883232;
+  --polaris-purple-5: #F5F1FD;
+  --polaris-purple-10: #EDE5FE;
+  --polaris-purple-20: #E0D1FF;
+  --polaris-purple-30: #C6A9FF;
+  --polaris-purple-40: #9075EC;
+  --polaris-purple-50: #6F3AD0;
+  --polaris-purple-60: #602BC1;
+  --polaris-purple-70: #511BB2;
+  --polaris-purple-80: #3E0F8D;
+  --polaris-gray-10: #F7F8F9;
+  --polaris-gray-20: #F2F4F6;
+  --polaris-gray-30: #E8EBED;
+  --polaris-gray-40: #C9CDD2;
+  --polaris-gray-50: #B3B8BD;
+  --polaris-gray-60: #9EA4AA;
+  --polaris-gray-70: #72787F;
+  --polaris-gray-80: #454C53;
+  --polaris-gray-90: #26282B;
+
+  --polaris-radius-2xs: 2px;
+  --polaris-radius-xs: 4px;
   --polaris-radius-sm: 6px;
-  --polaris-radius-md: 10px;
-  --polaris-radius-lg: 14px;
-  --polaris-radius-xl: 20px;
+  --polaris-radius-md: 8px;
+  --polaris-radius-lg: 12px;
+  --polaris-radius-xl: 16px;
+  --polaris-radius-2xl: 24px;
+  --polaris-radius-pill: 9999px;
   --polaris-radius-full: 9999px;
 
   --polaris-font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
@@ -69,6 +128,7 @@
   --polaris-shadow-sm: 0 2px 6px rgba(15, 15, 35, 0.08);
   --polaris-shadow-md: 0 8px 20px rgba(15, 15, 35, 0.10);
   --polaris-shadow-lg: 0 20px 40px rgba(15, 15, 35, 0.14);
+  --polaris-shadow-ai: 0 8px 32px rgba(111, 58, 208, 0.18), 0 2px 6px rgba(111, 58, 208, 0.10);
 }
 
 [data-theme="dark"] {
@@ -123,4 +183,5 @@
   --polaris-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.45);
   --polaris-shadow-md: 0 8px 20px rgba(0, 0, 0, 0.50);
   --polaris-shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.60);
+  --polaris-shadow-ai: 0 8px 32px rgba(155, 133, 255, 0.30), 0 2px 6px rgba(155, 133, 255, 0.18);
 }
