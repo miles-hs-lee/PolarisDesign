@@ -30,13 +30,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           aria-invalid={isError || undefined}
           aria-describedby={messageId}
+          // v1 spec (2026.05): 36px height, 8px radius, 1px line.normal
+          // border, focus = 1px PO Blue + 3px outer glow at 25% alpha.
           className={cn(
-            'h-10 px-3 rounded-polaris-md text-polaris-body-sm font-polaris',
+            'h-9 px-3 rounded-polaris-md text-polaris-body-sm font-polaris',
             'bg-surface-raised text-fg-primary placeholder:text-fg-muted',
-            'border border-surface-border-strong',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:border-brand-primary',
+            'border border-line-normal',
+            'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand-primary/25 focus-visible:border-brand-primary',
             'disabled:opacity-50 disabled:cursor-not-allowed',
-            isError && 'border-status-danger focus-visible:ring-status-danger focus-visible:border-status-danger',
+            isError && 'border-status-danger focus-visible:ring-status-danger/25 focus-visible:border-status-danger',
             className
           )}
           {...props}

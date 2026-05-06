@@ -19,7 +19,8 @@ describe('Button', () => {
 
   it('applies size classes', () => {
     render(<Button size="lg">Big</Button>);
-    expect(screen.getByRole('button')).toHaveClass('h-12');
+    // v0.7 spec: lg = 40px height
+    expect(screen.getByRole('button')).toHaveClass('h-10');
   });
 
   it('forwards ref to the underlying element', () => {

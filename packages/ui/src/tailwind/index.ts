@@ -203,11 +203,18 @@ const polarisPreset: Partial<Config> = {
         },
       },
 
+      // 8-level v1 spec scale + `full` deprecated alias for `pill`.
+      // Class form: `rounded-polaris-md`, `rounded-polaris-pill`, etc.
       borderRadius: {
+        'polaris-2xs':  'var(--polaris-radius-2xs)',
+        'polaris-xs':   'var(--polaris-radius-xs)',
         'polaris-sm':   'var(--polaris-radius-sm)',
         'polaris-md':   'var(--polaris-radius-md)',
         'polaris-lg':   'var(--polaris-radius-lg)',
         'polaris-xl':   'var(--polaris-radius-xl)',
+        'polaris-2xl':  'var(--polaris-radius-2xl)',
+        'polaris-pill': 'var(--polaris-radius-pill)',
+        /** @deprecated Use `polaris-pill` (codemod target). */
         'polaris-full': 'var(--polaris-radius-full)',
       },
 
@@ -216,6 +223,8 @@ const polarisPreset: Partial<Config> = {
         'polaris-sm': 'var(--polaris-shadow-sm)',
         'polaris-md': 'var(--polaris-shadow-md)',
         'polaris-lg': 'var(--polaris-shadow-lg)',
+        // AI Purple glow — for prompt composers / response cards only.
+        'polaris-ai': 'var(--polaris-shadow-ai)',
       },
 
       fontFamily: {

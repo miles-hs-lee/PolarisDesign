@@ -85,10 +85,15 @@
   --color-neutral-1000: var(--polaris-neutral-1000);
 
   /* === Border radius === */
+  --radius-polaris-2xs:  var(--polaris-radius-2xs);
+  --radius-polaris-xs:   var(--polaris-radius-xs);
   --radius-polaris-sm:   var(--polaris-radius-sm);
   --radius-polaris-md:   var(--polaris-radius-md);
   --radius-polaris-lg:   var(--polaris-radius-lg);
   --radius-polaris-xl:   var(--polaris-radius-xl);
+  --radius-polaris-2xl:  var(--polaris-radius-2xl);
+  --radius-polaris-pill: var(--polaris-radius-pill);
+  /* deprecated alias of polaris-pill */
   --radius-polaris-full: var(--polaris-radius-full);
 
   /* === Shadow === */
@@ -96,6 +101,7 @@
   --shadow-polaris-sm: var(--polaris-shadow-sm);
   --shadow-polaris-md: var(--polaris-shadow-md);
   --shadow-polaris-lg: var(--polaris-shadow-lg);
+  --shadow-polaris-ai: var(--polaris-shadow-ai);
 
   /* === Font family === */
   --font-polaris:      var(--polaris-font-sans);
