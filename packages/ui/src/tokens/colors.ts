@@ -307,74 +307,167 @@ export const grayRamp = {
 /* ================================================================== *
  * v1 spec semantic tokens (2026.05)
  *
- * Design team's spec uses a different naming convention from our v0.6
- * `surface.*` / `text.*` aliases. Both are kept — old names continue
- * to work but new code (and the v0.7 codemod target) should use
- * `label.*` / `background.*` / `line.*` / `fill.*` / `primary.*` / `ai.*`.
+ * Aligned with the design team's `DESIGN.md` reference (v0.7-rc.1).
+ * Dark-mode hex uses the spec's grayscale-centered palette, replacing
+ * the rc.0 purple-tinted scale (`#1B1B2A` etc.).
  *
- * Light values match the spec PDF exactly. Dark values are derived
- * from our v0.6 neutral dark scale (design team will revise once they
- * publish dark-mode hex).
+ * Token groups in spec order:
+ *   label.*         text + icon foreground
+ *   background.*    page-level base, disabled
+ *   layer.*         surface/overlay (NEW in rc.1)
+ *   interaction.*   hover, pressed
+ *   fill.*          tinted surfaces (neutral / normal / strong)
+ *   line.*          borders + dividers (neutral / normal / strong / disabled)
+ *   accentBrand.*   PO Blue brand accent + bg variants
+ *   accentAction.*  Black "action" button (NEW in rc.1)
+ *   focus.*         focus-ring
+ *   staticColors.*  mode-invariant white/black
+ *   state.*         success / warning / error / info / new + bg variants
+ *
+ * Legacy v0.7-rc.0 groups (`primary.*`, `ai.*`) are kept as aliases.
  * ================================================================== */
 
-/** Text color tokens (spec: "label"). Use these in place of `text.primary` /
- *  `text.secondary` / `text.muted` in new code. */
+/** Text + icon foreground tokens (spec: "label"). */
 export const label = {
   /** 1차 텍스트 (primary copy, headlines). */
-  normal:      { light: '#26282B', dark: '#FFFFFF' },
+  normal:      { light: '#26282B', dark: '#D8D8D8' },
   /** 본문 / 2차 (body copy, secondary text). */
-  neutral:     { light: '#454C53', dark: '#D5D5DE' },
-  /** 3차, 캡션 (tertiary, captions). */
-  alternative: { light: '#72787F', dark: '#B4B4C8' },
-  /** Placeholder, disabled (assistive). */
-  assistive:   { light: '#9EA4AA', dark: '#6B6B85' },
+  neutral:     { light: '#454C53', dark: '#9E9E9E' },
+  /** 3차 (tertiary, captions). 14px 본문 4.46:1 (15px+ 권장). */
+  alternative: { light: '#72787F', dark: '#797979' },
+  /** Placeholder, hint (assistive). */
+  assistive:   { light: '#9EA4AA', dark: '#6B6B6B' },
   /** 진한 배경 위 텍스트 (on dark / on-brand surfaces). */
-  inverse:     { light: '#FFFFFF', dark: '#0B0B12' },
+  inverse:     { light: '#FFFFFF', dark: '#232323' },
+  /** v0.7-rc.1 NEW — disabled label / icon. */
+  disabled:    { light: '#C9CDD2', dark: '#595959' },
 } as const satisfies Record<string, ColorPair>;
 
-/** Surface tokens (spec: "background"). */
+/** Page-level background tokens (spec: "background"). */
 export const background = {
-  /** 기본 배경 (cards, modals, navbar). */
-  normal:      { light: '#FFFFFF', dark: '#1B1B2A' },
-  /** 대체 배경 (canvas, sidebar — slightly tinted). */
-  alternative: { light: '#F7F8F9', dark: '#0B0B12' },
+  /** v0.7-rc.1 — page / canvas root background. Was `normal` in rc.0. */
+  base:        { light: '#FFFFFF', dark: '#232323' },
+  /** v0.7-rc.1 NEW — disabled button / input background. */
+  disabled:    { light: '#F2F4F6', dark: '#2D2D2D' },
+  /** @deprecated rc.0 alias of `base`. */
+  normal:      { light: '#FFFFFF', dark: '#232323' },
+  /** @deprecated rc.0 alias. Use `fill.neutral` for tinted page backgrounds. */
+  alternative: { light: '#F7F8F9', dark: '#2D2D2D' },
 } as const satisfies Record<string, ColorPair>;
 
-/** Border / divider tokens (spec: "line"). */
-export const line = {
-  /** 기본 구분선 (dividers, list separators). */
-  neutral: { light: '#E8EBED', dark: '#232336' },
-  /** 인풋 보더, 강한 라인 (input outlines, strong borders). */
-  normal:  { light: '#C9CDD2', dark: '#2D2D45' },
-} as const satisfies Record<string, ColorPair>;
-
-/** Fill tokens for hover surfaces / filled chips (spec: "fill"). */
-export const fill = {
-  /** 호버 / 채워진 칩. Same hex as `interaction.hover`. */
-  normal: { light: '#F2F4F6', dark: '#1B1B2A' },
+/** Layer tokens (spec: "layer"). v0.7-rc.1 NEW — separates raised
+ *  surfaces (cards, dialogs, dropdowns) from the page background. */
+export const layer = {
+  /** Cards, dialogs, dropdowns, popovers. */
+  surface: { light: '#FFFFFF', dark: '#282828' },
+  /** Modal / popup dim layer. Same hex in both modes per spec. */
+  overlay: { light: 'rgba(0, 0, 0, 0.5)', dark: 'rgba(0, 0, 0, 0.5)' },
 } as const satisfies Record<string, ColorPair>;
 
 /** Interaction state tokens (spec: "interaction"). */
 export const interaction = {
   /** Hover surface. */
-  hover: { light: '#F2F4F6', dark: '#1B1B2A' },
+  hover:   { light: '#F2F4F6', dark: '#4A4A4A' },
+  /** v0.7-rc.1 NEW — pressed / active surface. */
+  pressed: { light: '#E8EBED', dark: '#595959' },
 } as const satisfies Record<string, ColorPair>;
 
-/** Primary brand tokens (spec: "primary"). Aliases `brand.primary*`. */
-export const primary = {
-  /** PO Blue — 기본 강조색 (buttons, links, focus). */
-  normal: brand.primary,
+/** Fill tokens (spec: "fill") — three intensities of tinted surfaces. */
+export const fill = {
+  /** v0.7-rc.1 NEW — base tinted surface (sidebars, chrome wells). */
+  neutral: { light: '#F7F8F9', dark: '#2D2D2D' },
+  /** Generic component bg (Tertiary buttons, filled chips). */
+  normal:  { light: '#F2F4F6', dark: '#3B3B3B' },
+  /** v0.7-rc.1 NEW — emphasized fill (selected items, strong surfaces). */
+  strong:  { light: '#E8EBED', dark: '#595959' },
+} as const satisfies Record<string, ColorPair>;
+
+/** Border / divider tokens (spec: "line") — four intensities. */
+export const line = {
+  /** 약한 구분선 (list separators, subtle dividers). */
+  neutral:  { light: '#E8EBED', dark: '#3B3B3B' },
+  /** 일반 보더 (inputs, default borders). */
+  normal:   { light: '#C9CDD2', dark: '#595959' },
+  /** v0.7-rc.1 NEW — strong divider, prominent borders. */
+  strong:   { light: '#B3B8BD', dark: '#6B6B6B' },
+  /** v0.7-rc.1 NEW — disabled border. */
+  disabled: { light: '#F2F4F6', dark: '#2D2D2D' },
+} as const satisfies Record<string, ColorPair>;
+
+/** Brand accent tokens (spec: "accent.brand"). PO Blue.
+ *  v0.7-rc.0 used `primary.*`; that namespace is kept as an alias below. */
+export const accentBrand = {
+  /** PO Blue — 기본 강조색 (CTAs, links, focus). 3.85:1 — 14px 이하 본문 단독 사용 금지. */
+  normal:  { light: '#1D7FF9', dark: '#1D7FF9' },
   /** PO Blue strong — hover / pressed. */
-  strong: brand.primaryHover,
+  strong:  { light: '#1458AD', dark: '#60A5FA' },
+  /** v0.7-rc.1 NEW — Secondary button background (brand tint). */
+  bg:      { light: '#D9EAFF', dark: '#0B3263' },
+  /** v0.7-rc.1 NEW — Secondary button hover. */
+  bgHover: { light: '#BBD8FD', dark: '#0F4588' },
 } as const satisfies Record<string, ColorPair>;
 
-/** AI surface tokens (spec: "ai"). AI Purple — never on general product UI. */
+/** Action accent tokens (spec: "accent.action"). v0.7-rc.1 NEW.
+ *  Black variant for high-contrast "Primary Dark" buttons (e.g. final
+ *  submit, "Get started" CTAs). Auto-inverts in dark mode. */
+export const accentAction = {
+  normal: { light: '#000000', dark: '#FFFFFF' },
+  strong: { light: '#454C53', dark: '#F2F4F6' },
+} as const satisfies Record<string, ColorPair>;
+
+/** Focus ring (spec: "focus"). v0.7-rc.1 NEW — dedicated semantic.
+ *  Same hex both modes (lighter than accent.brand to read on either
+ *  light or dark surfaces). */
+export const focus = {
+  ring: { light: '#60A5FA', dark: '#60A5FA' },
+} as const satisfies Record<string, ColorPair>;
+
+/** Mode-invariant colors (spec: "static"). v0.7-rc.1 NEW.
+ *  Use when a color should NEVER swap with the theme — e.g. a brand
+ *  logo on a colored background, a "white" send button on AI Purple. */
+export const staticColors = {
+  white: { light: '#FFFFFF', dark: '#FFFFFF' },
+  black: { light: '#000000', dark: '#000000' },
+} as const satisfies Record<string, ColorPair>;
+
+/** State tokens (spec: "state") — success / warning / error / info /
+ *  new. v0.7-rc.1 adds the `bg` variants and the `new` notification dot.
+ *  Replaces / supersedes the legacy `status.*` group. */
+export const state = {
+  /** v0.7-rc.1 NEW — only for "new" notification dots. NOT for error UI. */
+  new:        { light: '#FB4949', dark: '#FB4949' },
+  /** Success text + icon. 2.66:1 — body 단독 사용 금지, 아이콘/뱃지/18px+ Bold만. */
+  success:    { light: '#51B41B', dark: '#51B41B' },
+  /** v0.7-rc.1 NEW — success banner / toast background tint. */
+  successBg:  { light: '#EDF7E8', dark: '#20480A' },
+  /** Warning text + icon. 2.40:1 — body 단독 사용 절대 금지. */
+  warning:    { light: '#FD8900', dark: '#FD8900' },
+  /** v0.7-rc.1 NEW — warning banner / toast background tint. */
+  warningBg:  { light: '#FEF3E5', dark: '#653600' },
+  /** Error text + icon. 3.13:1 — 14px 이하는 아이콘 동반 필수 (WCAG 1.4.1). */
+  error:      { light: '#F95C5C', dark: '#F95C5C' },
+  /** v0.7-rc.1 NEW — error banner / toast background tint. */
+  errorBg:    { light: '#FEEEEE', dark: '#632424' },
+  /** Info text + icon. Same hex as accent.brand.normal. */
+  info:       { light: '#1D7FF9', dark: '#1D7FF9' },
+  /** v0.7-rc.1 NEW — info banner / toast background tint. */
+  infoBg:     { light: '#E8F2FE', dark: '#0B3263' },
+} as const satisfies Record<string, ColorPair>;
+
+/** @deprecated v0.7-rc.0 alias. Use `accentBrand.*` instead. */
+export const primary = {
+  normal: accentBrand.normal,
+  strong: accentBrand.strong,
+} as const satisfies Record<string, ColorPair>;
+
+/** AI surface tokens (Polaris-specific extension — not in DESIGN.md
+ *  but kept for NovaInput / AI buttons). Wraps AI Purple. */
 export const ai = {
   /** AI Purple — AI 액션 버튼, 링크, 강조. */
   normal:  brand.secondary,
   /** AI Purple strong — hover / pressed. */
   strong:  brand.secondaryHover,
-  /** AI 항목의 hover 표면 (light tint). */
+  /** AI hover 표면 (light tint). */
   hover:   brand.secondarySubtle,
   /** AI pressed 표면. */
   pressed: { light: '#E0D1FF', dark: '#3E0F8D' },
@@ -403,12 +496,19 @@ export const colors = {
   yellowPalette,
   // gray (9 steps, 10–90)
   grayRamp,
-  // v1 semantic tokens
+  // v1 semantic tokens (v0.7-rc.1 expanded)
   label,
   background,
-  line,
-  fill,
+  layer,
   interaction,
+  fill,
+  line,
+  accentBrand,
+  accentAction,
+  focus,
+  staticColors,
+  state,
+  // legacy / Polaris-specific
   primary,
   ai,
 } as const;

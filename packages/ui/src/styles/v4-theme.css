@@ -70,6 +70,76 @@
   --color-fg-on-brand:   var(--polaris-text-on-brand);
   --color-fg-on-status:  var(--polaris-text-on-status);
 
+  /* ════════════════════════════════════════════════════════════════ */
+  /* v1 spec semantic tokens (v0.7-rc.1)                                */
+  /* DESIGN.md reference. Use these in new code.                        */
+  /* ════════════════════════════════════════════════════════════════ */
+
+  /* === Label (text + icon) === */
+  --color-label-normal:      var(--polaris-label-normal);
+  --color-label-neutral:     var(--polaris-label-neutral);
+  --color-label-alternative: var(--polaris-label-alternative);
+  --color-label-assistive:   var(--polaris-label-assistive);
+  --color-label-inverse:     var(--polaris-label-inverse);
+  --color-label-disabled:    var(--polaris-label-disabled);
+
+  /* === Background (page-level) === */
+  --color-background-base:        var(--polaris-background-base);
+  --color-background-disabled:    var(--polaris-background-disabled);
+  /* deprecated rc.0 aliases */
+  --color-background-normal:      var(--polaris-background-normal);
+  --color-background-alternative: var(--polaris-background-alternative);
+
+  /* === Layer (raised surfaces) === */
+  --color-layer-surface: var(--polaris-layer-surface);
+  --color-layer-overlay: var(--polaris-layer-overlay);
+
+  /* === Interaction === */
+  --color-interaction-hover:   var(--polaris-interaction-hover);
+  --color-interaction-pressed: var(--polaris-interaction-pressed);
+
+  /* === Fill === */
+  --color-fill-neutral: var(--polaris-fill-neutral);
+  --color-fill-normal:  var(--polaris-fill-normal);
+  --color-fill-strong:  var(--polaris-fill-strong);
+
+  /* === Line === */
+  --color-line-neutral:  var(--polaris-line-neutral);
+  --color-line-normal:   var(--polaris-line-normal);
+  --color-line-strong:   var(--polaris-line-strong);
+  --color-line-disabled: var(--polaris-line-disabled);
+
+  /* === Accent (brand + action) === */
+  --color-accent-brand-normal:    var(--polaris-accent-brand-normal);
+  --color-accent-brand-strong:    var(--polaris-accent-brand-strong);
+  --color-accent-brand-bg:        var(--polaris-accent-brand-bg);
+  --color-accent-brand-bg-hover:  var(--polaris-accent-brand-bg-hover);
+  --color-accent-action-normal:   var(--polaris-accent-action-normal);
+  --color-accent-action-strong:   var(--polaris-accent-action-strong);
+
+  /* === Focus / Static / State === */
+  --color-focus-ring:        var(--polaris-focus-ring);
+  --color-static-white:      var(--polaris-static-white);
+  --color-static-black:      var(--polaris-static-black);
+  --color-state-new:         var(--polaris-state-new);
+  --color-state-success:     var(--polaris-state-success);
+  --color-state-success-bg:  var(--polaris-state-success-bg);
+  --color-state-warning:     var(--polaris-state-warning);
+  --color-state-warning-bg:  var(--polaris-state-warning-bg);
+  --color-state-error:       var(--polaris-state-error);
+  --color-state-error-bg:    var(--polaris-state-error-bg);
+  --color-state-info:        var(--polaris-state-info);
+  --color-state-info-bg:     var(--polaris-state-info-bg);
+
+  /* === Polaris-specific (AI namespace) === */
+  --color-ai-normal:  var(--polaris-ai-normal);
+  --color-ai-strong:  var(--polaris-ai-strong);
+  --color-ai-hover:   var(--polaris-ai-hover);
+  --color-ai-pressed: var(--polaris-ai-pressed);
+  /* deprecated rc.0 alias of accent-brand */
+  --color-primary-normal: var(--polaris-primary-normal);
+  --color-primary-strong: var(--polaris-primary-strong);
+
   /* === Neutral 12-step === */
   --color-neutral-0:    var(--polaris-neutral-0);
   --color-neutral-50:   var(--polaris-neutral-50);

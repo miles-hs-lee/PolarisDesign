@@ -130,18 +130,77 @@ const polarisPreset: Partial<Config> = {
           alternative: token('--polaris-label-alternative'),
           assistive:   token('--polaris-label-assistive'),
           inverse:     token('--polaris-label-inverse'),
+          /** v0.7-rc.1 NEW. */
+          disabled:    token('--polaris-label-disabled'),
         },
         background: {
+          /** v0.7-rc.1 — page-level base bg. */
+          base:        token('--polaris-background-base'),
+          /** v0.7-rc.1 NEW — disabled bg. */
+          disabled:    token('--polaris-background-disabled'),
+          /** @deprecated rc.0 alias of `base`. */
           normal:      token('--polaris-background-normal'),
+          /** @deprecated rc.0 alias. Use `fill.neutral`. */
           alternative: token('--polaris-background-alternative'),
         },
-        line: {
-          neutral: token('--polaris-line-neutral'),
-          normal:  token('--polaris-line-normal'),
+        // v0.7-rc.1 NEW — layer.surface / layer.overlay
+        layer: {
+          surface: token('--polaris-layer-surface'),
+          overlay: token('--polaris-layer-overlay'),
+        },
+        interaction: {
+          hover:   token('--polaris-interaction-hover'),
+          /** v0.7-rc.1 NEW. */
+          pressed: token('--polaris-interaction-pressed'),
         },
         fill: {
-          normal: token('--polaris-fill-normal'),
+          /** v0.7-rc.1 NEW. */
+          neutral: token('--polaris-fill-neutral'),
+          normal:  token('--polaris-fill-normal'),
+          /** v0.7-rc.1 NEW. */
+          strong:  token('--polaris-fill-strong'),
         },
+        line: {
+          neutral:  token('--polaris-line-neutral'),
+          normal:   token('--polaris-line-normal'),
+          /** v0.7-rc.1 NEW. */
+          strong:   token('--polaris-line-strong'),
+          /** v0.7-rc.1 NEW. */
+          disabled: token('--polaris-line-disabled'),
+        },
+        // v0.7-rc.1 — accent.brand / accent.action
+        'accent-brand': {
+          normal:    token('--polaris-accent-brand-normal'),
+          strong:    token('--polaris-accent-brand-strong'),
+          /** v0.7-rc.1 NEW. */
+          bg:        token('--polaris-accent-brand-bg'),
+          /** v0.7-rc.1 NEW. */
+          'bg-hover': token('--polaris-accent-brand-bg-hover'),
+        },
+        'accent-action': {
+          normal: token('--polaris-accent-action-normal'),
+          strong: token('--polaris-accent-action-strong'),
+        },
+        // v0.7-rc.1 NEW — focus, static, state
+        focus: {
+          ring: token('--polaris-focus-ring'),
+        },
+        static: {
+          white: token('--polaris-static-white'),
+          black: token('--polaris-static-black'),
+        },
+        state: {
+          new:           token('--polaris-state-new'),
+          success:       token('--polaris-state-success'),
+          'success-bg':  token('--polaris-state-success-bg'),
+          warning:       token('--polaris-state-warning'),
+          'warning-bg':  token('--polaris-state-warning-bg'),
+          error:         token('--polaris-state-error'),
+          'error-bg':    token('--polaris-state-error-bg'),
+          info:          token('--polaris-state-info'),
+          'info-bg':     token('--polaris-state-info-bg'),
+        },
+        /** @deprecated rc.0 alias of `accent-brand`. */
         primary: {
           normal: token('--polaris-primary-normal'),
           strong: token('--polaris-primary-strong'),
