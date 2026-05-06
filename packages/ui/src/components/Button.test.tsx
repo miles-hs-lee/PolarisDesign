@@ -13,14 +13,14 @@ describe('Button', () => {
   it('applies primary variant classes by default', () => {
     render(<Button>Save</Button>);
     const btn = screen.getByRole('button');
-    expect(btn).toHaveClass('bg-primary-normal');
+    expect(btn).toHaveClass('bg-accent-brand-normal');
     expect(btn).toHaveClass('text-label-inverse');
   });
 
   it('applies size classes', () => {
     render(<Button size="lg">Big</Button>);
-    // v0.7 spec: lg = 40px height
-    expect(screen.getByRole('button')).toHaveClass('h-10');
+    // v0.7-rc.1 spec: lg = 48px height (was rc.0 40px). md = 40px now.
+    expect(screen.getByRole('button')).toHaveClass('h-12');
   });
 
   it('forwards ref to the underlying element', () => {

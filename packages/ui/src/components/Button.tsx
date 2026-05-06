@@ -4,31 +4,76 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';
 import { cn } from '../lib/cn';
 
-// v1 spec (2026.05): 6 variants × 3 sizes.
-// - Sizes follow spec heights (26 / 32 / 40px) with matching radius and
-//   font scale. Each size's radius is applied at the size level so cva
-//   can vary it without a base override.
-// - The new `ai` variant uses AI Purple tokens for AI-context buttons
-//   (NOVA chat, prompt actions). Never use it on general product UI.
+/**
+ * Button — v0.7-rc.1 spec (DESIGN.md §4).
+ *
+ * 7 variants × 6 sizes:
+ *
+ *   variants
+ *     primary    Brand Blue background, white label                 (default)
+ *     secondary  Brand Tint (light blue bg + blue text)
+ *     tertiary   Gray fill (`fill.normal`)                          ← rc.0 "outline"
+ *     ghost      Transparent, hover tint
+ *     dark       Black bg, white label (auto-inverts in dark mode)  NEW in rc.1
+ *     ai         AI Purple — NOVA chat / AI actions only
+ *     danger     Red status — destructive actions
+ *
+ *   sizes (height / h-padding / font / weight / radius)
+ *     xs    24 / 8  / 13 / Medium (500) / xs (4)
+ *     sm    32 / 10 / 14 / Medium (500) / sm (8)
+ *     md    40 / 12 / 14 / Medium (500) / sm (8)   ← default
+ *     lg    48 / 16 / 16 / Bold (700)   / md (12)
+ *     xl    54 / 20 / 16 / Bold (700)   / lg (16)  ← Large CTA per spec
+ *     2xl   64 / 32 / 18 / Bold (700)   / md (12)
+ *
+ * Pill shape: pass `className="rounded-polaris-pill"` — the spec
+ * reserves full-radius for filter chips and avatar buttons rather
+ * than primary actions, so it's not a variant axis here.
+ *
+ * v0.7-rc.0 size aliases (`sm`/`md`/`lg`) are now spec-aligned and
+ * may render at a slightly different size than rc.0. Codemod renames
+ * to closest spec size (sm→xs, md→sm, lg→md) where preservation
+ * matters.
+ */
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 font-polaris font-semibold transition-colors disabled:opacity-50 disabled:pointer-events-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
+  'inline-flex items-center justify-center gap-2 font-polaris transition-colors disabled:opacity-50 disabled:pointer-events-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring',
   {
     variants: {
       variant: {
-        primary:   'bg-primary-normal text-label-inverse hover:bg-primary-strong',
-        secondary: 'bg-ai-normal text-label-inverse hover:bg-ai-strong',
-        ai:        'bg-ai-normal text-label-inverse hover:bg-ai-strong focus-visible:outline-ai-normal',
-        outline:   'bg-background-normal text-label-normal border border-line-normal hover:bg-fill-normal',
-        ghost:     'bg-transparent text-label-normal hover:bg-fill-normal',
-        danger:    'bg-status-danger text-label-inverse hover:bg-status-danger-hover',
+        primary:
+          'bg-accent-brand-normal text-label-inverse hover:bg-accent-brand-strong',
+        secondary:
+          'bg-accent-brand-bg text-accent-brand-normal hover:bg-accent-brand-bg-hover',
+        tertiary:
+          'bg-fill-normal text-label-normal hover:bg-fill-strong',
+        ghost:
+          'bg-transparent text-label-normal hover:bg-interaction-hover',
+        // v0.7-rc.1 NEW — Black "Primary Dark" CTA. Auto-inverts in
+        // dark mode via `accent-action-*` semantic tokens.
+        dark:
+          'bg-accent-action-normal text-static-white hover:bg-accent-action-strong',
+        ai:
+          'bg-ai-normal text-label-inverse hover:bg-ai-strong focus-visible:outline-ai-normal',
+        danger:
+          'bg-state-error text-label-inverse hover:bg-state-error/90',
+        // ───── deprecated aliases ─────
+        /** @deprecated rc.0. Use `tertiary`. */
+        outline:
+          'bg-fill-normal text-label-normal hover:bg-fill-strong',
       },
       size: {
-        // 26 / 10 / radius 6 / 12px
-        sm: 'h-[26px] px-2.5 rounded-polaris-sm text-polaris-meta',
-        // 32 / 14 / radius 8 / 14px
-        md: 'h-8 px-3.5 rounded-polaris-md text-polaris-body-sm',
-        // 40 / 18 / radius 8 / 14px
-        lg: 'h-10 px-[18px] rounded-polaris-md text-polaris-body-sm',
+        // 24 / 8px / Body3 13 / Medium 500 / radius xs (4)
+        xs:    'h-6 px-2 rounded-polaris-xs text-polaris-body3 font-medium',
+        // 32 / 10px / Body2 14 / Medium 500 / radius sm (8)
+        sm:    'h-8 px-2.5 rounded-polaris-sm text-polaris-body2 font-medium',
+        // 40 / 12px / Body2 14 / Medium 500 / radius sm (8)
+        md:    'h-10 px-3 rounded-polaris-sm text-polaris-body2 font-medium',
+        // 48 / 16px / Body1 16 / Bold 700 / radius md (12)
+        lg:    'h-12 px-4 rounded-polaris-md text-polaris-body1 font-bold',
+        // 54 / 20px / Body1 16 / Bold 700 / radius lg (16) — spec "Large CTA"
+        xl:    'h-[54px] px-5 rounded-polaris-lg text-polaris-body1 font-bold',
+        // 64 / 32px / Heading4 18 / Bold 700 / radius md (12)
+        '2xl': 'h-16 px-8 rounded-polaris-md text-polaris-heading4 font-bold',
       },
     },
     defaultVariants: {
