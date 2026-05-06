@@ -250,6 +250,34 @@
   --polaris-shadow-md: 0 8px 20px rgba(15, 15, 35, 0.10);
   --polaris-shadow-lg: 0 20px 40px rgba(15, 15, 35, 0.14);
   --polaris-shadow-ai: 0 8px 32px rgba(111, 58, 208, 0.18), 0 2px 6px rgba(111, 58, 208, 0.10);
+
+  --polaris-spacing-none: 0;
+  --polaris-spacing-4xs: 2px;
+  --polaris-spacing-3xs: 4px;
+  --polaris-spacing-2xs: 8px;
+  --polaris-spacing-xs: 12px;
+  --polaris-spacing-sm: 16px;
+  --polaris-spacing-md: 20px;
+  --polaris-spacing-lg: 24px;
+  --polaris-spacing-xl: 32px;
+  --polaris-spacing-2xl: 40px;
+  --polaris-spacing-3xl: 48px;
+  --polaris-spacing-4xl: 64px;
+
+  --polaris-duration-instant: 100ms;
+  --polaris-duration-fast: 150ms;
+  --polaris-duration-normal: 250ms;
+  --polaris-duration-slow: 350ms;
+  --polaris-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --polaris-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --polaris-ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+  --polaris-z-base: 0;
+  --polaris-z-dropdown: 100;
+  --polaris-z-sticky: 200;
+  --polaris-z-dim: 300;
+  --polaris-z-modal: 400;
+  --polaris-z-toast: 500;
 }
 
 [data-theme="dark"] {

@@ -304,4 +304,35 @@
   --text-polaris-caption: 12px;
   --text-polaris-caption--line-height: 16px;
   --text-polaris-caption--font-weight: 400;
+
+  /* === Spacing (v0.7-rc.1) — class form `p-polaris-md`, `gap-polaris-lg` === */
+  --spacing-polaris-none: var(--polaris-spacing-none);
+  --spacing-polaris-4xs:  var(--polaris-spacing-4xs);
+  --spacing-polaris-3xs:  var(--polaris-spacing-3xs);
+  --spacing-polaris-2xs:  var(--polaris-spacing-2xs);
+  --spacing-polaris-xs:   var(--polaris-spacing-xs);
+  --spacing-polaris-sm:   var(--polaris-spacing-sm);
+  --spacing-polaris-md:   var(--polaris-spacing-md);
+  --spacing-polaris-lg:   var(--polaris-spacing-lg);
+  --spacing-polaris-xl:   var(--polaris-spacing-xl);
+  --spacing-polaris-2xl:  var(--polaris-spacing-2xl);
+  --spacing-polaris-3xl:  var(--polaris-spacing-3xl);
+  --spacing-polaris-4xl:  var(--polaris-spacing-4xl);
+
+  /* === Z-index (v0.7-rc.1) — class form `z-polaris-modal` === */
+  --z-polaris-base:     var(--polaris-z-base);
+  --z-polaris-dropdown: var(--polaris-z-dropdown);
+  --z-polaris-sticky:   var(--polaris-z-sticky);
+  --z-polaris-dim:      var(--polaris-z-dim);
+  --z-polaris-modal:    var(--polaris-z-modal);
+  --z-polaris-toast:    var(--polaris-z-toast);
+
+  /* === Motion (v0.7-rc.1) — `duration-polaris-fast`, `ease-polaris-out` === */
+  --duration-polaris-instant: var(--polaris-duration-instant);
+  --duration-polaris-fast:    var(--polaris-duration-fast);
+  --duration-polaris-normal:  var(--polaris-duration-normal);
+  --duration-polaris-slow:    var(--polaris-duration-slow);
+  --ease-polaris-in-out: var(--polaris-ease-in-out);
+  --ease-polaris-out:    var(--polaris-ease-out);
+  --ease-polaris-in:     var(--polaris-ease-in);
 }

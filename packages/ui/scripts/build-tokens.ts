@@ -28,6 +28,10 @@ import {
   radius,
   shadow,
   fontFamily,
+  spacingNamed,
+  duration,
+  easing,
+  zIndex,
   bluePalette,
   darkBluePalette,
   greenPalette,
@@ -175,6 +179,30 @@ function emitShadowBlock(mode: 'light' | 'dark'): string {
     .join('\n');
 }
 
+/** v0.7-rc.1: spacing / motion / z-index — mode-independent. */
+function emitSpacingBlock(): string {
+  return Object.entries(spacingNamed)
+    .map(([key, value]) => `  --polaris-spacing-${key}: ${value};`)
+    .join('\n');
+}
+
+function emitMotionBlock(): string {
+  const lines: string[] = [];
+  for (const [key, value] of Object.entries(duration)) {
+    lines.push(`  --polaris-duration-${key}: ${value};`);
+  }
+  for (const [key, value] of Object.entries(easing)) {
+    lines.push(`  --polaris-ease-${camelToKebab(key)}: ${value};`);
+  }
+  return lines.join('\n');
+}
+
+function emitZIndexBlock(): string {
+  return Object.entries(zIndex)
+    .map(([key, value]) => `  --polaris-z-${key}: ${value};`)
+    .join('\n');
+}
+
 const lightBlock = `:root,
 [data-theme="light"] {
 ${emitColorBlock('light')}
@@ -186,6 +214,12 @@ ${emitRadiusBlock()}
 ${emitFontFamilyBlock()}
 
 ${emitShadowBlock('light')}
+
+${emitSpacingBlock()}
+
+${emitMotionBlock()}
+
+${emitZIndexBlock()}
 }`;
 
 const darkBlock = `[data-theme="dark"] {

@@ -327,6 +327,49 @@ const polarisPreset: Partial<Config> = {
         'polaris-body-lg':    ['16px', { lineHeight: '24px', fontWeight: '400' }],
         'polaris-caption':    ['12px', { lineHeight: '16px', fontWeight: '700' }],
       },
+
+      // v0.7-rc.1 NEW — spec-named spacing tokens. Class form:
+      // `p-polaris-md`, `gap-polaris-lg`, `mt-polaris-2xl`, etc.
+      // The numeric Tailwind defaults (`p-4`, `gap-6`) keep working.
+      spacing: {
+        'polaris-none': 'var(--polaris-spacing-none)',
+        'polaris-4xs': 'var(--polaris-spacing-4xs)',
+        'polaris-3xs': 'var(--polaris-spacing-3xs)',
+        'polaris-2xs': 'var(--polaris-spacing-2xs)',
+        'polaris-xs':  'var(--polaris-spacing-xs)',
+        'polaris-sm':  'var(--polaris-spacing-sm)',
+        'polaris-md':  'var(--polaris-spacing-md)',
+        'polaris-lg':  'var(--polaris-spacing-lg)',
+        'polaris-xl':  'var(--polaris-spacing-xl)',
+        'polaris-2xl': 'var(--polaris-spacing-2xl)',
+        'polaris-3xl': 'var(--polaris-spacing-3xl)',
+        'polaris-4xl': 'var(--polaris-spacing-4xl)',
+      },
+
+      // v0.7-rc.1 NEW — z-index. Class form: `z-polaris-modal`,
+      // `z-polaris-toast`, etc. Avoid arbitrary `z-[999]` values.
+      zIndex: {
+        'polaris-base':     'var(--polaris-z-base)',
+        'polaris-dropdown': 'var(--polaris-z-dropdown)',
+        'polaris-sticky':   'var(--polaris-z-sticky)',
+        'polaris-dim':      'var(--polaris-z-dim)',
+        'polaris-modal':    'var(--polaris-z-modal)',
+        'polaris-toast':    'var(--polaris-z-toast)',
+      },
+
+      // v0.7-rc.1 NEW — motion. Class form: `duration-polaris-fast`,
+      // `ease-polaris-out`, etc.
+      transitionDuration: {
+        'polaris-instant': 'var(--polaris-duration-instant)',
+        'polaris-fast':    'var(--polaris-duration-fast)',
+        'polaris-normal':  'var(--polaris-duration-normal)',
+        'polaris-slow':    'var(--polaris-duration-slow)',
+      },
+      transitionTimingFunction: {
+        'polaris-in-out': 'var(--polaris-ease-in-out)',
+        'polaris-out':    'var(--polaris-ease-out)',
+        'polaris-in':     'var(--polaris-ease-in)',
+      },
     },
   },
 };
