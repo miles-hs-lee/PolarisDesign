@@ -106,28 +106,90 @@ colors:
   palette-purple: "#6F3AD0"
 
 typography:
+  display:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 60px
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: -0.020em
+  h1:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 40px
+    fontWeight: 700
+    lineHeight: 1.3
+    letterSpacing: -0.018em
+  h2:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 32px
+    fontWeight: 700
+    lineHeight: 1.313
+    letterSpacing: -0.012em
+  h3:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 28px
+    fontWeight: 700
+    lineHeight: 1.286
+    letterSpacing: -0.010em
+  h4:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 24px
+    fontWeight: 700
+    lineHeight: 1.333
+    letterSpacing: -0.005em
+  h5:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 20px
+    fontWeight: 700
+    lineHeight: 1.4
+    letterSpacing: -0.005em
+  body:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 1.5
+    letterSpacing: -0.002em
+  body-sm:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 1.429
+  detail:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 14px
+    fontWeight: 500
+    lineHeight: 1.429
+  meta:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 12px
+    fontWeight: 400
+    lineHeight: 1.333
+  tiny:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 10px
+    fontWeight: 400
+    lineHeight: 1.4
   display-lg:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
-    fontSize: 48px
+    fontSize: 60px
     fontWeight: 700
-    lineHeight: 1.25
-    letterSpacing: -0.025em
+    lineHeight: 1.2
+    letterSpacing: -0.020em
   display-md:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
-    fontSize: 36px
+    fontSize: 32px
     fontWeight: 700
-    lineHeight: 1.222
-    letterSpacing: -0.02em
+    lineHeight: 1.313
+    letterSpacing: -0.012em
   heading-lg:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 24px
-    fontWeight: 600
+    fontWeight: 700
     lineHeight: 1.333
-    letterSpacing: -0.01em
+    letterSpacing: -0.005em
   heading-md:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 20px
-    fontWeight: 600
+    fontWeight: 700
     lineHeight: 1.4
     letterSpacing: -0.005em
   heading-sm:
@@ -140,11 +202,7 @@ typography:
     fontSize: 16px
     fontWeight: 400
     lineHeight: 1.5
-  body-sm:
-    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
-    fontSize: 14px
-    fontWeight: 400
-    lineHeight: 1.429
+    letterSpacing: -0.002em
   caption:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 12px
@@ -225,9 +283,13 @@ Do not mix file-type colors as decorative accents — they carry semantic meanin
 
 ## Typography
 
-Pretendard Variable for both display and body. Korean / Latin / numerals all use the same family. JetBrains Mono for code. Eight named levels — `display-lg` / `display-md` / `heading-lg` / `heading-md` / `heading-sm` / `body-lg` / `body-sm` / `caption`.
+Pretendard Variable for both display and body. Korean / Latin / numerals all use the same family. JetBrains Mono for code.
 
-Line-heights are unitless ratios. Negative letter-spacing on display sizes for tight optical fit; zero on body.
+Eleven named levels (v1 spec): `display` / `h1` / `h2` / `h3` / `h4` / `h5` for heading hierarchy, `body` / `body-sm` for paragraph copy, plus `detail` (14 / Medium), `meta` (12), and `tiny` (10) for fine print and chrome labels. All headings are weight 700 (Bold). Body picks up a slight -0.002em letter-spacing.
+
+Legacy v0.6 names (`display-lg`, `heading-lg`, `body-lg`, `caption`, …) are kept as deprecated aliases that resolve to the same spec values — codemod rewrites them, v0.8 removes them.
+
+Line-heights are unitless ratios. Negative letter-spacing on display / heading sizes for tight optical fit.
 
 Use `text-polaris-*` Tailwind utilities — never inline `font-family` or arbitrary `text-[14px]`. The lint rule `no-direct-font-family` blocks both.
 
@@ -245,7 +307,7 @@ In dark mode, shadows alone don't carry hierarchy — pair with `surface.raised`
 
 ## Shapes
 
-Five radius levels. Inputs / buttons use `md` (10px). Cards use `lg` (14px). Modals use `xl` (20px). `full` for pills, avatars, switch thumbs.
+Eight radius levels (v1 spec, 2026.05): `2xs` (2) / `xs` (4) / `sm` (6) / `md` (8) / `lg` (12) / `xl` (16) / `2xl` (24) / `pill` (9999). Inputs / buttons use `md` (8px). Cards use `lg` (12px). Modals use `xl` (16px) or `2xl` (24px). `pill` for pills, avatars, switch thumbs (the legacy `full` alias keeps working).
 
 Avoid mixing rounded and sharp corners in the same component. Don't introduce new `px` values — extend the scale instead.
 

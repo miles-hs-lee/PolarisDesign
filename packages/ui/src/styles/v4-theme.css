@@ -105,25 +105,84 @@
    * v4 supports compound values via `--text-{name}` plus
    * `--text-{name}--line-height` / `--text-{name}--font-weight` /
    * `--text-{name}--letter-spacing`.
+   *
+   * v1 spec keys (`polaris-h1`, `polaris-body`, `polaris-meta`, …) are
+   * the preferred form. Legacy v0.6 keys (`polaris-display-lg` etc.)
+   * are kept for compile compat — they resolve to the same spec values
+   * so visuals match. Codemod (v0.7) rewrites names; v0.8 removes them.
    */
-  --text-polaris-display-lg: 48px;
-  --text-polaris-display-lg--line-height: 60px;
-  --text-polaris-display-lg--font-weight: 700;
-  --text-polaris-display-lg--letter-spacing: -0.025em;
 
-  --text-polaris-display-md: 36px;
-  --text-polaris-display-md--line-height: 44px;
+  /* ───── v1 spec ───── */
+  --text-polaris-display: 60px;
+  --text-polaris-display--line-height: 72px;
+  --text-polaris-display--font-weight: 700;
+  --text-polaris-display--letter-spacing: -0.020em;
+
+  --text-polaris-h1: 40px;
+  --text-polaris-h1--line-height: 52px;
+  --text-polaris-h1--font-weight: 700;
+  --text-polaris-h1--letter-spacing: -0.018em;
+
+  --text-polaris-h2: 32px;
+  --text-polaris-h2--line-height: 42px;
+  --text-polaris-h2--font-weight: 700;
+  --text-polaris-h2--letter-spacing: -0.012em;
+
+  --text-polaris-h3: 28px;
+  --text-polaris-h3--line-height: 36px;
+  --text-polaris-h3--font-weight: 700;
+  --text-polaris-h3--letter-spacing: -0.010em;
+
+  --text-polaris-h4: 24px;
+  --text-polaris-h4--line-height: 32px;
+  --text-polaris-h4--font-weight: 700;
+  --text-polaris-h4--letter-spacing: -0.005em;
+
+  --text-polaris-h5: 20px;
+  --text-polaris-h5--line-height: 28px;
+  --text-polaris-h5--font-weight: 700;
+  --text-polaris-h5--letter-spacing: -0.005em;
+
+  --text-polaris-body: 16px;
+  --text-polaris-body--line-height: 24px;
+  --text-polaris-body--font-weight: 400;
+  --text-polaris-body--letter-spacing: -0.002em;
+
+  --text-polaris-body-sm: 14px;
+  --text-polaris-body-sm--line-height: 20px;
+  --text-polaris-body-sm--font-weight: 400;
+
+  --text-polaris-detail: 14px;
+  --text-polaris-detail--line-height: 20px;
+  --text-polaris-detail--font-weight: 500;
+
+  --text-polaris-meta: 12px;
+  --text-polaris-meta--line-height: 16px;
+  --text-polaris-meta--font-weight: 400;
+
+  --text-polaris-tiny: 10px;
+  --text-polaris-tiny--line-height: 14px;
+  --text-polaris-tiny--font-weight: 400;
+
+  /* ───── v0.6 deprecated aliases (codemod target) ───── */
+  --text-polaris-display-lg: 60px;
+  --text-polaris-display-lg--line-height: 72px;
+  --text-polaris-display-lg--font-weight: 700;
+  --text-polaris-display-lg--letter-spacing: -0.020em;
+
+  --text-polaris-display-md: 32px;
+  --text-polaris-display-md--line-height: 42px;
   --text-polaris-display-md--font-weight: 700;
-  --text-polaris-display-md--letter-spacing: -0.02em;
+  --text-polaris-display-md--letter-spacing: -0.012em;
 
   --text-polaris-heading-lg: 24px;
   --text-polaris-heading-lg--line-height: 32px;
-  --text-polaris-heading-lg--font-weight: 600;
-  --text-polaris-heading-lg--letter-spacing: -0.01em;
+  --text-polaris-heading-lg--font-weight: 700;
+  --text-polaris-heading-lg--letter-spacing: -0.005em;
 
   --text-polaris-heading-md: 20px;
   --text-polaris-heading-md--line-height: 28px;
-  --text-polaris-heading-md--font-weight: 600;
+  --text-polaris-heading-md--font-weight: 700;
   --text-polaris-heading-md--letter-spacing: -0.005em;
 
   --text-polaris-heading-sm: 16px;
@@ -133,10 +192,7 @@
   --text-polaris-body-lg: 16px;
   --text-polaris-body-lg--line-height: 24px;
   --text-polaris-body-lg--font-weight: 400;
-
-  --text-polaris-body-sm: 14px;
-  --text-polaris-body-sm--line-height: 20px;
-  --text-polaris-body-sm--font-weight: 400;
+  --text-polaris-body-lg--letter-spacing: -0.002em;
 
   --text-polaris-caption: 12px;
   --text-polaris-caption--line-height: 16px;

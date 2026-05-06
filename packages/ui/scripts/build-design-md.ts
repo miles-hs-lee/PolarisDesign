@@ -244,9 +244,13 @@ Do not mix file-type colors as decorative accents — they carry semantic meanin
 
 ## Typography
 
-Pretendard Variable for both display and body. Korean / Latin / numerals all use the same family. JetBrains Mono for code. Eight named levels — \`display-lg\` / \`display-md\` / \`heading-lg\` / \`heading-md\` / \`heading-sm\` / \`body-lg\` / \`body-sm\` / \`caption\`.
+Pretendard Variable for both display and body. Korean / Latin / numerals all use the same family. JetBrains Mono for code.
 
-Line-heights are unitless ratios. Negative letter-spacing on display sizes for tight optical fit; zero on body.
+Eleven named levels (v1 spec): \`display\` / \`h1\` / \`h2\` / \`h3\` / \`h4\` / \`h5\` for heading hierarchy, \`body\` / \`body-sm\` for paragraph copy, plus \`detail\` (14 / Medium), \`meta\` (12), and \`tiny\` (10) for fine print and chrome labels. All headings are weight 700 (Bold). Body picks up a slight -0.002em letter-spacing.
+
+Legacy v0.6 names (\`display-lg\`, \`heading-lg\`, \`body-lg\`, \`caption\`, …) are kept as deprecated aliases that resolve to the same spec values — codemod rewrites them, v0.8 removes them.
+
+Line-heights are unitless ratios. Negative letter-spacing on display / heading sizes for tight optical fit.
 
 Use \`text-polaris-*\` Tailwind utilities — never inline \`font-family\` or arbitrary \`text-[14px]\`. The lint rule \`no-direct-font-family\` blocks both.
 
@@ -264,7 +268,7 @@ In dark mode, shadows alone don't carry hierarchy — pair with \`surface.raised
 
 ## Shapes
 
-Five radius levels. Inputs / buttons use \`md\` (10px). Cards use \`lg\` (14px). Modals use \`xl\` (20px). \`full\` for pills, avatars, switch thumbs.
+Eight radius levels (v1 spec, 2026.05): \`2xs\` (2) / \`xs\` (4) / \`sm\` (6) / \`md\` (8) / \`lg\` (12) / \`xl\` (16) / \`2xl\` (24) / \`pill\` (9999). Inputs / buttons use \`md\` (8px). Cards use \`lg\` (12px). Modals use \`xl\` (16px) or \`2xl\` (24px). \`pill\` for pills, avatars, switch thumbs (the legacy \`full\` alias keeps working).
 
 Avoid mixing rounded and sharp corners in the same component. Don't introduce new \`px\` values — extend the scale instead.
 
