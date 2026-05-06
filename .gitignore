@@ -12,3 +12,8 @@ storybook-static
 # in e2e/__screenshots__/ ARE committed for visual regression diffing.
 playwright-report/
 test-results/
+
+# Figma source file — exceeds GitHub's 100MB file limit. Source of
+# truth lives in the design team's Figma workspace; the .fig export
+# stays local for offline reference.
+figma/*.fig

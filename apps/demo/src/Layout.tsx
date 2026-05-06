@@ -36,6 +36,7 @@ import {
   Layers,
   Palette,
   Image as ImageIcon,
+  AlertTriangle,
   Bell,
   Settings,
   HelpCircle,
@@ -61,6 +62,7 @@ const REFERENCE_NAV: { to: string; label: string; icon: React.ElementType; end?:
   { to: '/components', label: '컴포넌트 카탈로그', icon: Layers },
   { to: '/tokens', label: '디자인 토큰', icon: Palette },
   { to: '/assets', label: '디자인 자산', icon: ImageIcon },
+  { to: '/design-audit', label: '디자인 정의서 비교 (임시)', icon: AlertTriangle },
 ];
 
 export function Layout() {
