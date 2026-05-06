@@ -246,11 +246,13 @@ Do not mix file-type colors as decorative accents — they carry semantic meanin
 
 Pretendard Variable for both display and body. Korean / Latin / numerals all use the same family. JetBrains Mono for code.
 
-Eleven named levels (v1 spec): \`display\` / \`h1\` / \`h2\` / \`h3\` / \`h4\` / \`h5\` for heading hierarchy, \`body\` / \`body-sm\` for paragraph copy, plus \`detail\` (14 / Medium), \`meta\` (12), and \`tiny\` (10) for fine print and chrome labels. All headings are weight 700 (Bold). Body picks up a slight -0.002em letter-spacing.
+Eleven named levels (v0.7-rc.1 spec): \`display\` (40), \`title\` (32), \`heading1\` (28), \`heading2\` (24), \`heading3\` (20), \`heading4\` (18) for heading hierarchy, \`body1\` (16), \`body2\` (14), \`body3\` (13) for paragraph copy, \`caption1\` (12), \`caption2\` (11) for labels and chrome. All headings + captions are weight 700 (Bold). Body is weight 400 (Regular).
 
-Legacy v0.6 names (\`display-lg\`, \`heading-lg\`, \`body-lg\`, \`caption\`, …) are kept as deprecated aliases that resolve to the same spec values — codemod rewrites them, v0.8 removes them.
+Legacy rc.0 names (\`h1\`-\`h5\`, \`body\`, \`detail\`, \`meta\`, \`tiny\`) and v0.6 names (\`display-lg\`, \`heading-lg\`, \`body-lg\`, \`caption\`) are kept as deprecated aliases. Codemod rewrites them.
 
-Line-heights are unitless ratios. Negative letter-spacing on display / heading sizes for tight optical fit.
+Line-heights: 1.4 headings, 1.5 body, 1.3 captions. NO letter-spacing — Pretendard's optical metrics are calibrated at the typeface level.
+
+Mobile (≤ 767px): every level shifts down one step (Display 40→32, Title 32→28, etc.). Body3 / Caption1 / Caption2 unchanged. Auto-applied via media query in \`tokens.css\`.
 
 Use \`text-polaris-*\` Tailwind utilities — never inline \`font-family\` or arbitrary \`text-[14px]\`. The lint rule \`no-direct-font-family\` blocks both.
 

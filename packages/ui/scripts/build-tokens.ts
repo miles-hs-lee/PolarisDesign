@@ -194,7 +194,26 @@ ${emitColorBlock('dark')}
 ${emitShadowBlock('dark')}
 }`;
 
-const css = `${HEADER}\n${lightBlock}\n\n${darkBlock}\n`;
+/* v0.7-rc.1 — mobile type scale per DESIGN.md §3. Each type level
+ * shifts down one step on viewports ≤ 767px. The override targets
+ * Tailwind utility classes generated from the preset's `fontSize`
+ * map, so consumers using `text-polaris-display` etc. get the smaller
+ * sizes automatically without writing media queries themselves.
+ *
+ * Body3 / Caption1 / Caption2 stay unchanged on mobile per spec. */
+const mobileTypographyBlock = `@media (max-width: 767px) {
+  .text-polaris-display  { font-size: 32px; line-height: 44px; }
+  .text-polaris-title    { font-size: 28px; line-height: 40px; }
+  .text-polaris-heading1 { font-size: 24px; line-height: 34px; }
+  .text-polaris-heading2 { font-size: 20px; line-height: 28px; }
+  .text-polaris-heading3 { font-size: 18px; line-height: 26px; }
+  .text-polaris-heading4 { font-size: 16px; line-height: 24px; }
+  .text-polaris-body1    { font-size: 14px; line-height: 21px; }
+  .text-polaris-body2    { font-size: 13px; line-height: 20px; }
+  /* Body3 (13), Caption1 (12), Caption2 (11) — unchanged */
+}`;
+
+const css = `${HEADER}\n${lightBlock}\n\n${darkBlock}\n\n${mobileTypographyBlock}\n`;
 
 writeFileSync(OUTPUT, css);
 console.log(`✓ wrote ${OUTPUT.replace(process.cwd() + '/', '')}`);

@@ -277,33 +277,55 @@ const polarisPreset: Partial<Config> = {
         'polaris-mono': ['var(--polaris-font-mono)'],
       },
 
-      // Type scale — v1 spec keys are the preferred form. Class form:
-      // `text-polaris-h1`, `text-polaris-body`, `text-polaris-meta`, etc.
-      // The v0.6 keys (`polaris-display-lg`, `polaris-heading-lg`, …) are
-      // kept as deprecated aliases that resolve to the same spec values
-      // — visuals match, codemod rewrites the names, v0.8 removes them.
+      // Type scale — v0.7-rc.1 spec names. Class form: `text-polaris-display`,
+      // `text-polaris-title`, `text-polaris-heading1`-`heading4`,
+      // `text-polaris-body1`-`body3`, `text-polaris-caption1`-`caption2`.
+      //
+      // Letter-spacing is intentionally absent — DESIGN.md mandates no
+      // letter-spacing manipulation (Pretendard's optical metrics are
+      // already calibrated). Line-heights: 1.4 headings, 1.5 body, 1.3
+      // captions.
+      //
+      // Mobile type scale (max-width: 767px) is applied as a global CSS
+      // override in tokens.css, NOT through Tailwind utilities — class
+      // names stay stable across viewports.
+      //
+      // rc.0 / v0.6 aliases preserved so old code keeps compiling.
       fontSize: {
-        // ───── v1 spec ─────
-        'polaris-display':    ['60px', { lineHeight: '72px', fontWeight: '700', letterSpacing: '-0.020em' }],
-        'polaris-h1':         ['40px', { lineHeight: '52px', fontWeight: '700', letterSpacing: '-0.018em' }],
-        'polaris-h2':         ['32px', { lineHeight: '42px', fontWeight: '700', letterSpacing: '-0.012em' }],
-        'polaris-h3':         ['28px', { lineHeight: '36px', fontWeight: '700', letterSpacing: '-0.010em' }],
-        'polaris-h4':         ['24px', { lineHeight: '32px', fontWeight: '700', letterSpacing: '-0.005em' }],
-        'polaris-h5':         ['20px', { lineHeight: '28px', fontWeight: '700', letterSpacing: '-0.005em' }],
-        'polaris-body':       ['16px', { lineHeight: '24px', fontWeight: '400', letterSpacing: '-0.002em' }],
-        'polaris-body-sm':    ['14px', { lineHeight: '20px', fontWeight: '400' }],
-        'polaris-detail':     ['14px', { lineHeight: '20px', fontWeight: '500' }],
-        'polaris-meta':       ['12px', { lineHeight: '16px', fontWeight: '400' }],
-        'polaris-tiny':       ['10px', { lineHeight: '14px', fontWeight: '400' }],
+        // ───── v0.7-rc.1 spec names ─────
+        'polaris-display':   ['40px', { lineHeight: '56px', fontWeight: '700' }],
+        'polaris-title':     ['32px', { lineHeight: '44px', fontWeight: '700' }],
+        'polaris-heading1':  ['28px', { lineHeight: '40px', fontWeight: '700' }],
+        'polaris-heading2':  ['24px', { lineHeight: '34px', fontWeight: '700' }],
+        'polaris-heading3':  ['20px', { lineHeight: '28px', fontWeight: '700' }],
+        'polaris-heading4':  ['18px', { lineHeight: '26px', fontWeight: '700' }],
+        'polaris-body1':     ['16px', { lineHeight: '24px', fontWeight: '400' }],
+        'polaris-body2':     ['14px', { lineHeight: '21px', fontWeight: '400' }],
+        'polaris-body3':     ['13px', { lineHeight: '20px', fontWeight: '400' }],
+        'polaris-caption1':  ['12px', { lineHeight: '16px', fontWeight: '700' }],
+        'polaris-caption2':  ['11px', { lineHeight: '14px', fontWeight: '700' }],
 
-        // ───── v0.6 deprecated aliases (codemod target) ─────
-        'polaris-display-lg': ['60px', { lineHeight: '72px', fontWeight: '700', letterSpacing: '-0.020em' }],
-        'polaris-display-md': ['32px', { lineHeight: '42px', fontWeight: '700', letterSpacing: '-0.012em' }],
-        'polaris-heading-lg': ['24px', { lineHeight: '32px', fontWeight: '700', letterSpacing: '-0.005em' }],
-        'polaris-heading-md': ['20px', { lineHeight: '28px', fontWeight: '700', letterSpacing: '-0.005em' }],
+        // ───── rc.0 deprecated aliases (codemod target) ─────
+        // NB: rc.0 `display` was 60px; rc.1 redefines to 40 per spec.
+        'polaris-h1':        ['40px', { lineHeight: '56px', fontWeight: '700' }],
+        'polaris-h2':        ['32px', { lineHeight: '44px', fontWeight: '700' }],
+        'polaris-h3':        ['28px', { lineHeight: '40px', fontWeight: '700' }],
+        'polaris-h4':        ['24px', { lineHeight: '34px', fontWeight: '700' }],
+        'polaris-h5':        ['20px', { lineHeight: '28px', fontWeight: '700' }],
+        'polaris-body':      ['16px', { lineHeight: '24px', fontWeight: '400' }],
+        'polaris-body-sm':   ['14px', { lineHeight: '21px', fontWeight: '400' }],
+        'polaris-detail':    ['14px', { lineHeight: '21px', fontWeight: '500' }],
+        'polaris-meta':      ['12px', { lineHeight: '16px', fontWeight: '700' }],
+        'polaris-tiny':      ['11px', { lineHeight: '14px', fontWeight: '700' }],
+
+        // ───── v0.6 deprecated aliases ─────
+        'polaris-display-lg': ['40px', { lineHeight: '56px', fontWeight: '700' }],
+        'polaris-display-md': ['32px', { lineHeight: '44px', fontWeight: '700' }],
+        'polaris-heading-lg': ['24px', { lineHeight: '34px', fontWeight: '700' }],
+        'polaris-heading-md': ['20px', { lineHeight: '28px', fontWeight: '700' }],
         'polaris-heading-sm': ['16px', { lineHeight: '24px', fontWeight: '600' }],
-        'polaris-body-lg':    ['16px', { lineHeight: '24px', fontWeight: '400', letterSpacing: '-0.002em' }],
-        'polaris-caption':    ['12px', { lineHeight: '16px', fontWeight: '400' }],
+        'polaris-body-lg':    ['16px', { lineHeight: '24px', fontWeight: '400' }],
+        'polaris-caption':    ['12px', { lineHeight: '16px', fontWeight: '700' }],
       },
     },
   },

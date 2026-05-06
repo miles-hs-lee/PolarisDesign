@@ -1,19 +1,36 @@
 /**
- * Typography scale.
+ * Typography scale — v0.7-rc.1 aligned with DESIGN.md spec.
  *
- * v1 spec (2026.05) replaces the v0.6 ad-hoc heading scale with a
- * design-team-defined hierarchy: Display → H1 → H2 → H3 → H4 → H5,
- * Body / Body-sm, plus three "ancillary" levels Detail / Meta / Tiny
- * for fine print, captions, and chrome labels.
+ * Spec scale (11 levels, desktop):
+ *   Display    40px / 700 / 1.4
+ *   Title      32px / 700 / 1.4
+ *   Heading1   28px / 700 / 1.4
+ *   Heading2   24px / 700 / 1.4
+ *   Heading3   20px / 700 / 1.4
+ *   Heading4   18px / 700 / 1.4    ← NEW in rc.1
+ *   Body1      16px / 400 / 1.5
+ *   Body2      14px / 400 / 1.5
+ *   Body3      13px / 400 / 1.5    ← NEW in rc.1
+ *   Caption1   12px / 700 / 1.3    ← weight changed from 400 to 700
+ *   Caption2   11px / 700 / 1.3    ← NEW in rc.1
  *
- * All headings shift to weight=700 (Bold) per the v1 spec — v0.6 used
- * weight=600 (SemiBold) at H4/H5. Body picks up a small -0.002em
- * letter-spacing.
+ * Mobile scale (max-width: 767px) drops one step:
+ *   Display 40→32 / Title 32→28 / Heading1 28→24 / Heading2 24→20 /
+ *   Heading3 20→18 / Heading4 18→16 / Body1 16→14 / Body2 14→13.
+ *   Body3 / Caption1 / Caption2 unchanged.
  *
- * The legacy v0.6 keys (`displayLg`, `headingLg`, `bodyLg`, `caption`,
- * etc.) are kept as deprecated aliases that resolve to the new spec
- * values — existing code keeps compiling and the v0.7 codemod will
- * rename them. Aliases will be removed in v0.8.
+ * Principles (per DESIGN.md §3):
+ * - **No letter-spacing**: Pretendard's optical metrics are already
+ *   tuned. rc.0's `-0.002em` on body and `-0.020em` on display were
+ *   removed.
+ * - **Weight by role**: 700 (Bold) for headings + captions, 400
+ *   (Regular) for body, 500 (Medium) reserved for UI labels.
+ * - **Line-height by role**: 1.4 headings, 1.5 body, 1.3 captions.
+ *
+ * Legacy keys (rc.0: `display`, `h1`-`h5`, `body`, `bodySm`, `detail`,
+ * `meta`, `tiny` / v0.6: `displayLg`, `headingLg`, `bodyLg`, `caption`,
+ * etc.) are kept as deprecated aliases so existing code keeps
+ * compiling. Codemod rewrites them, v0.8 removes the aliases.
  */
 export const fontFamily = {
   sans: '"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif',
@@ -36,51 +53,71 @@ export type TextStyle = {
 
 /**
  * Spec-aligned text styles. New code should use these names — they
- * match the design team's Figma library and DESIGN.md.
+ * match DESIGN.md and the design team's Figma library exactly.
  */
 export const textStyle = {
-  // ───── v1 spec (preferred for new code) ─────
-  /** Display — hero / marketing pages. 60px Bold. */
-  display: { fontSize: '60px', lineHeight: '72px', fontWeight: fontWeight.bold,    letterSpacing: '-0.020em' },
-  /** H1 — top-level page heading. 40px Bold. */
-  h1:      { fontSize: '40px', lineHeight: '52px', fontWeight: fontWeight.bold,    letterSpacing: '-0.018em' },
-  /** H2 — section heading. 32px Bold. */
-  h2:      { fontSize: '32px', lineHeight: '42px', fontWeight: fontWeight.bold,    letterSpacing: '-0.012em' },
-  /** H3 — sub-section heading. 28px Bold. */
-  h3:      { fontSize: '28px', lineHeight: '36px', fontWeight: fontWeight.bold,    letterSpacing: '-0.010em' },
-  /** H4 — card / dialog heading. 24px Bold. */
-  h4:      { fontSize: '24px', lineHeight: '32px', fontWeight: fontWeight.bold,    letterSpacing: '-0.005em' },
-  /** H5 — small heading / list-section title. 20px Bold. */
-  h5:      { fontSize: '20px', lineHeight: '28px', fontWeight: fontWeight.bold,    letterSpacing: '-0.005em' },
-  /** Body — default paragraph copy. 16px Regular, slight tightening. */
-  body:    { fontSize: '16px', lineHeight: '24px', fontWeight: fontWeight.regular, letterSpacing: '-0.002em' },
-  /** Body-sm — secondary copy / dense lists. 14px Regular. */
-  bodySm:  { fontSize: '14px', lineHeight: '20px', fontWeight: fontWeight.regular, letterSpacing: '0' },
-  /** Detail — emphasized fine print / labels. 14px Medium. */
-  detail:  { fontSize: '14px', lineHeight: '20px', fontWeight: fontWeight.medium,  letterSpacing: '0' },
-  /** Meta — captions, timestamps, chip labels. 12px Regular. */
-  meta:    { fontSize: '12px', lineHeight: '16px', fontWeight: fontWeight.regular, letterSpacing: '0' },
-  /** Tiny — chrome labels, badges, breadcrumb separators. 10px Regular. */
-  tiny:    { fontSize: '10px', lineHeight: '14px', fontWeight: fontWeight.regular, letterSpacing: '0' },
+  // ───── v0.7-rc.1 spec names ─────
+  /** Display 40 / 700 / 1.4 — hero / marketing headlines. */
+  display:  { fontSize: '40px', lineHeight: '56px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** Title 32 / 700 / 1.4 — page-level titles. */
+  title:    { fontSize: '32px', lineHeight: '44px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** Heading1 28 / 700 / 1.4 — section headings. */
+  heading1: { fontSize: '28px', lineHeight: '40px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** Heading2 24 / 700 / 1.4 — sub-section headings. */
+  heading2: { fontSize: '24px', lineHeight: '34px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** Heading3 20 / 700 / 1.4 — card titles, group headers. */
+  heading3: { fontSize: '20px', lineHeight: '28px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** Heading4 18 / 700 / 1.4 — tight UI headings. NEW in rc.1. */
+  heading4: { fontSize: '18px', lineHeight: '26px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** Body1 16 / 400 / 1.5 — standard body copy. */
+  body1:    { fontSize: '16px', lineHeight: '24px', fontWeight: fontWeight.regular, letterSpacing: '0' },
+  /** Body2 14 / 400 / 1.5 — secondary body, list items. */
+  body2:    { fontSize: '14px', lineHeight: '21px', fontWeight: fontWeight.regular, letterSpacing: '0' },
+  /** Body3 13 / 400 / 1.5 — dense UI text, tooltips. NEW in rc.1. */
+  body3:    { fontSize: '13px', lineHeight: '20px', fontWeight: fontWeight.regular, letterSpacing: '0' },
+  /** Caption1 12 / 700 / 1.3 — labels, badges, tags. */
+  caption1: { fontSize: '12px', lineHeight: '16px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** Caption2 11 / 700 / 1.3 — micro labels, timestamps. NEW in rc.1. */
+  caption2: { fontSize: '11px', lineHeight: '14px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
 
-  // ───── v0.6 deprecated aliases (kept for compile compat) ─────
-  // Resolve to the same values as the v1 spec keys above so consumers
-  // get the new visuals immediately. The v0.7 codemod rewrites these
-  // to the spec names and v0.8 will remove them.
+  // ───── v0.7-rc.0 deprecated aliases ─────
+  // NB: rc.0's `display` was 60px; rc.1 redefines it to 40 per spec.
+  // Consumers depending on a 60px display level need to migrate to
+  // a custom larger size — none in our workspace use it visually.
+  /** @deprecated rc.0. Use `title` (32) for page titles. */
+  h1:       { fontSize: '40px', lineHeight: '56px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** @deprecated rc.0. Use `title` (32). */
+  h2:       { fontSize: '32px', lineHeight: '44px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** @deprecated rc.0. Use `heading1`. */
+  h3:       { fontSize: '28px', lineHeight: '40px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** @deprecated rc.0. Use `heading2`. */
+  h4:       { fontSize: '24px', lineHeight: '34px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** @deprecated rc.0. Use `heading3`. */
+  h5:       { fontSize: '20px', lineHeight: '28px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** @deprecated rc.0. Use `body1`. */
+  body:     { fontSize: '16px', lineHeight: '24px', fontWeight: fontWeight.regular, letterSpacing: '0' },
+  /** @deprecated rc.0. Use `body2`. */
+  bodySm:   { fontSize: '14px', lineHeight: '21px', fontWeight: fontWeight.regular, letterSpacing: '0' },
+  /** @deprecated rc.0. Use `body2` with `font-medium` (500) where 14/Medium intended. */
+  detail:   { fontSize: '14px', lineHeight: '21px', fontWeight: fontWeight.medium,  letterSpacing: '0' },
+  /** @deprecated rc.0. Use `caption1` (now weight 700). */
+  meta:     { fontSize: '12px', lineHeight: '16px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** @deprecated rc.0. Use `caption2` (11/700). rc.0 was 10/400. */
+  tiny:     { fontSize: '11px', lineHeight: '14px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
 
-  /** @deprecated Use `display`. */
-  displayLg: { fontSize: '60px', lineHeight: '72px', fontWeight: fontWeight.bold,    letterSpacing: '-0.020em' },
-  /** @deprecated Use `h2`. */
-  displayMd: { fontSize: '32px', lineHeight: '42px', fontWeight: fontWeight.bold,    letterSpacing: '-0.012em' },
-  /** @deprecated Use `h4`. */
-  headingLg: { fontSize: '24px', lineHeight: '32px', fontWeight: fontWeight.bold,    letterSpacing: '-0.005em' },
-  /** @deprecated Use `h5`. */
-  headingMd: { fontSize: '20px', lineHeight: '28px', fontWeight: fontWeight.bold,    letterSpacing: '-0.005em' },
-  /** @deprecated No direct spec equivalent — use `body` with `font-semibold`,
-   *  or `h5` for a true small heading. */
+  // ───── v0.6 deprecated aliases (still working) ─────
+  /** @deprecated v0.6. Use `display` (40). rc.0 was 60. */
+  displayLg: { fontSize: '40px', lineHeight: '56px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** @deprecated v0.6. Use `title` (32). */
+  displayMd: { fontSize: '32px', lineHeight: '44px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** @deprecated v0.6. Use `heading2`. */
+  headingLg: { fontSize: '24px', lineHeight: '34px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** @deprecated v0.6. Use `heading3`. */
+  headingMd: { fontSize: '20px', lineHeight: '28px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
+  /** @deprecated v0.6. No direct match — use `body1` font-semibold or `heading4`. */
   headingSm: { fontSize: '16px', lineHeight: '24px', fontWeight: fontWeight.semibold, letterSpacing: '0' },
-  /** @deprecated Use `body`. */
-  bodyLg:    { fontSize: '16px', lineHeight: '24px', fontWeight: fontWeight.regular, letterSpacing: '-0.002em' },
-  /** @deprecated Use `meta`. */
-  caption:   { fontSize: '12px', lineHeight: '16px', fontWeight: fontWeight.regular, letterSpacing: '0' },
+  /** @deprecated v0.6. Use `body1`. */
+  bodyLg:    { fontSize: '16px', lineHeight: '24px', fontWeight: fontWeight.regular, letterSpacing: '0' },
+  /** @deprecated v0.6. Use `caption1` (now weight 700). */
+  caption:   { fontSize: '12px', lineHeight: '16px', fontWeight: fontWeight.bold,    letterSpacing: '0' },
 } as const satisfies Record<string, TextStyle>;

@@ -118,90 +118,129 @@ colors:
 typography:
   display:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
-    fontSize: 60px
+    fontSize: 40px
     fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: -0.020em
+    lineHeight: 1.4
+  title:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 32px
+    fontWeight: 700
+    lineHeight: 1.375
+  heading1:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 28px
+    fontWeight: 700
+    lineHeight: 1.429
+  heading2:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 24px
+    fontWeight: 700
+    lineHeight: 1.417
+  heading3:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 20px
+    fontWeight: 700
+    lineHeight: 1.4
+  heading4:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 18px
+    fontWeight: 700
+    lineHeight: 1.444
+  body1:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 1.5
+  body2:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 1.5
+  body3:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 13px
+    fontWeight: 400
+    lineHeight: 1.538
+  caption1:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 12px
+    fontWeight: 700
+    lineHeight: 1.333
+  caption2:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 11px
+    fontWeight: 700
+    lineHeight: 1.273
   h1:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 40px
     fontWeight: 700
-    lineHeight: 1.3
-    letterSpacing: -0.018em
+    lineHeight: 1.4
   h2:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 32px
     fontWeight: 700
-    lineHeight: 1.313
-    letterSpacing: -0.012em
+    lineHeight: 1.375
   h3:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 28px
     fontWeight: 700
-    lineHeight: 1.286
-    letterSpacing: -0.010em
+    lineHeight: 1.429
   h4:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 24px
     fontWeight: 700
-    lineHeight: 1.333
-    letterSpacing: -0.005em
+    lineHeight: 1.417
   h5:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 20px
     fontWeight: 700
     lineHeight: 1.4
-    letterSpacing: -0.005em
   body:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 16px
     fontWeight: 400
     lineHeight: 1.5
-    letterSpacing: -0.002em
   body-sm:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 14px
     fontWeight: 400
-    lineHeight: 1.429
+    lineHeight: 1.5
   detail:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 14px
     fontWeight: 500
-    lineHeight: 1.429
+    lineHeight: 1.5
   meta:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 12px
-    fontWeight: 400
+    fontWeight: 700
     lineHeight: 1.333
   tiny:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
-    fontSize: 10px
-    fontWeight: 400
-    lineHeight: 1.4
+    fontSize: 11px
+    fontWeight: 700
+    lineHeight: 1.273
   display-lg:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
-    fontSize: 60px
+    fontSize: 40px
     fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: -0.020em
+    lineHeight: 1.4
   display-md:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 32px
     fontWeight: 700
-    lineHeight: 1.313
-    letterSpacing: -0.012em
+    lineHeight: 1.375
   heading-lg:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 24px
     fontWeight: 700
-    lineHeight: 1.333
-    letterSpacing: -0.005em
+    lineHeight: 1.417
   heading-md:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 20px
     fontWeight: 700
     lineHeight: 1.4
-    letterSpacing: -0.005em
   heading-sm:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 16px
@@ -212,11 +251,10 @@ typography:
     fontSize: 16px
     fontWeight: 400
     lineHeight: 1.5
-    letterSpacing: -0.002em
   caption:
     fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
     fontSize: 12px
-    fontWeight: 400
+    fontWeight: 700
     lineHeight: 1.333
 
 rounded:
@@ -295,11 +333,13 @@ Do not mix file-type colors as decorative accents — they carry semantic meanin
 
 Pretendard Variable for both display and body. Korean / Latin / numerals all use the same family. JetBrains Mono for code.
 
-Eleven named levels (v1 spec): `display` / `h1` / `h2` / `h3` / `h4` / `h5` for heading hierarchy, `body` / `body-sm` for paragraph copy, plus `detail` (14 / Medium), `meta` (12), and `tiny` (10) for fine print and chrome labels. All headings are weight 700 (Bold). Body picks up a slight -0.002em letter-spacing.
+Eleven named levels (v0.7-rc.1 spec): `display` (40), `title` (32), `heading1` (28), `heading2` (24), `heading3` (20), `heading4` (18) for heading hierarchy, `body1` (16), `body2` (14), `body3` (13) for paragraph copy, `caption1` (12), `caption2` (11) for labels and chrome. All headings + captions are weight 700 (Bold). Body is weight 400 (Regular).
 
-Legacy v0.6 names (`display-lg`, `heading-lg`, `body-lg`, `caption`, …) are kept as deprecated aliases that resolve to the same spec values — codemod rewrites them, v0.8 removes them.
+Legacy rc.0 names (`h1`-`h5`, `body`, `detail`, `meta`, `tiny`) and v0.6 names (`display-lg`, `heading-lg`, `body-lg`, `caption`) are kept as deprecated aliases. Codemod rewrites them.
 
-Line-heights are unitless ratios. Negative letter-spacing on display / heading sizes for tight optical fit.
+Line-heights: 1.4 headings, 1.5 body, 1.3 captions. NO letter-spacing — Pretendard's optical metrics are calibrated at the typeface level.
+
+Mobile (≤ 767px): every level shifts down one step (Display 40→32, Title 32→28, etc.). Body3 / Caption1 / Caption2 unchanged. Auto-applied via media query in `tokens.css`.
 
 Use `text-polaris-*` Tailwind utilities — never inline `font-family` or arbitrary `text-[14px]`. The lint rule `no-direct-font-family` blocks both.
 
