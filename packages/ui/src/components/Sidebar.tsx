@@ -20,7 +20,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
           ref={ref}
           aria-label="Sidebar"
           className={cn(
-            'flex flex-col h-full shrink-0 bg-surface-raised border-r border-surface-border',
+            'flex flex-col h-full shrink-0 bg-background-normal border-r border-line-neutral',
             'transition-[width] duration-150',
             className
           )}
@@ -37,7 +37,7 @@ Sidebar.displayName = 'Sidebar';
 
 export const SidebarHeader = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('px-3 py-4 border-b border-surface-border', className)} {...props} />
+    <div ref={ref} className={cn('px-3 py-4 border-b border-line-neutral', className)} {...props} />
   )
 );
 SidebarHeader.displayName = 'SidebarHeader';
@@ -51,7 +51,7 @@ SidebarBody.displayName = 'SidebarBody';
 
 export const SidebarFooter = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('px-3 py-3 border-t border-surface-border', className)} {...props} />
+    <div ref={ref} className={cn('px-3 py-3 border-t border-line-neutral', className)} {...props} />
   )
 );
 SidebarFooter.displayName = 'SidebarFooter';
@@ -66,7 +66,7 @@ export const SidebarSection = forwardRef<HTMLDivElement, SidebarSectionProps>(
     return (
       <div ref={ref} className={cn('py-1.5', className)} {...props}>
         {title && !collapsed && (
-          <div className="px-3 py-1 text-polaris-caption font-semibold uppercase tracking-wider text-fg-muted">
+          <div className="px-3 py-1 text-polaris-meta font-semibold uppercase tracking-wider text-label-alternative">
             {title}
           </div>
         )}
@@ -102,10 +102,10 @@ export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
           aria-current={active ? 'page' : undefined}
           className={cn(
             'flex w-full items-center gap-2.5 rounded-polaris-md px-2.5 py-1.5',
-            'text-polaris-body-sm font-medium font-polaris text-fg-secondary',
-            'hover:bg-brand-primary-subtle hover:text-fg-primary transition-colors',
+            'text-polaris-body-sm font-medium font-polaris text-label-neutral',
+            'hover:bg-primary-normal-subtle hover:text-label-normal transition-colors',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary',
-            active && 'bg-brand-primary-subtle text-brand-primary',
+            active && 'bg-primary-normal-subtle text-primary-normal',
             collapsed && 'justify-center',
             className
           )}

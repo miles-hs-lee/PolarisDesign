@@ -89,6 +89,26 @@ test('rewrites TS member access on text/surface/brand', () => {
   } finally { cleanup(dir); }
 });
 
+test('does NOT rewrite the bare word `caption` in TS — it overlaps with <caption>', () => {
+  // Regression: the codemod used to blindly rewrite `caption` → `meta`,
+  // which broke `<caption>` elements inside Table components.
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'caption.tsx'), `
+      export const X = () => <caption className="text-polaris-caption">Header</caption>;
+      const c = textStyle.caption;
+    `);
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'caption.tsx'), 'utf8');
+    // <caption> stays a <caption>
+    assert.match(out, /<caption /);
+    // Tailwind utility is rewritten
+    assert.match(out, /text-polaris-meta/);
+    // Member access stays as `caption` for safety — user fixes manually
+    assert.match(out, /textStyle\.caption/);
+  } finally { cleanup(dir); }
+});
+
 test('rewrites CSS custom properties', () => {
   const dir = setup();
   try {

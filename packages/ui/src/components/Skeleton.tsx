@@ -5,7 +5,7 @@ export const Skeleton = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('animate-pulse rounded-polaris-md bg-surface-sunken', className)}
+      className={cn('animate-pulse rounded-polaris-md bg-background-alternative', className)}
       {...props}
     />
   )

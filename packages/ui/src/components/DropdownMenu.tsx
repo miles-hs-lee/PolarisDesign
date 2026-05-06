@@ -11,7 +11,7 @@ export const DropdownMenuRadioGroup = DropdownPrimitive.RadioGroup;
 export const DropdownMenuSub = DropdownPrimitive.Sub;
 
 const itemBase =
-  'relative flex cursor-pointer select-none items-center gap-2 rounded-polaris-sm px-2.5 py-1.5 text-polaris-body-sm font-polaris text-fg-primary outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-brand-primary-subtle data-[highlighted]:text-brand-primary';
+  'relative flex cursor-pointer select-none items-center gap-2 rounded-polaris-sm px-2.5 py-1.5 text-polaris-body-sm font-polaris text-label-normal outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-primary-normal-subtle data-[highlighted]:text-primary-normal';
 
 export const DropdownMenuContent = forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Content>,
@@ -22,8 +22,8 @@ export const DropdownMenuContent = forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        'z-50 min-w-[10rem] overflow-hidden rounded-polaris-md border border-surface-border bg-surface-raised p-1 shadow-polaris-md',
-        'text-fg-primary',
+        'z-50 min-w-[10rem] overflow-hidden rounded-polaris-md border border-line-neutral bg-background-normal p-1 shadow-polaris-md',
+        'text-label-normal',
         className
       )}
       {...props}
@@ -60,7 +60,7 @@ export const DropdownMenuLabel = forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownPrimitive.Label
     ref={ref}
-    className={cn('px-2.5 py-1.5 text-polaris-caption font-semibold uppercase tracking-wider text-fg-muted', className)}
+    className={cn('px-2.5 py-1.5 text-polaris-meta font-semibold uppercase tracking-wider text-label-alternative', className)}
     {...props}
   />
 ));
@@ -131,7 +131,7 @@ export const DropdownMenuSubContent = forwardRef<
   <DropdownPrimitive.SubContent
     ref={ref}
     className={cn(
-      'z-50 min-w-[10rem] overflow-hidden rounded-polaris-md border border-surface-border bg-surface-raised p-1 shadow-polaris-md',
+      'z-50 min-w-[10rem] overflow-hidden rounded-polaris-md border border-line-neutral bg-background-normal p-1 shadow-polaris-md',
       className
     )}
     {...props}

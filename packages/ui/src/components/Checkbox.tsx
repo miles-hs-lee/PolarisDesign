@@ -32,11 +32,11 @@ export const Checkbox = forwardRef<
       aria-invalid={isError || undefined}
       aria-describedby={messageId}
       className={cn(
-        'peer inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-polaris-sm border border-surface-border-strong bg-surface-raised text-fg-on-brand transition-colors',
+        'peer inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-polaris-sm border border-line-normal bg-background-normal text-label-inverse transition-colors',
         'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
         'disabled:cursor-not-allowed disabled:opacity-50',
-        'data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary',
-        'data-[state=indeterminate]:bg-brand-primary data-[state=indeterminate]:border-brand-primary',
+        'data-[state=checked]:bg-primary-normal data-[state=checked]:border-brand-primary',
+        'data-[state=indeterminate]:bg-primary-normal data-[state=indeterminate]:border-brand-primary',
         isError && 'border-status-danger focus-visible:outline-status-danger',
         className
       )}
@@ -61,7 +61,7 @@ export const Checkbox = forwardRef<
         {label && (
           <label
             htmlFor={id}
-            className="text-polaris-body-sm text-fg-primary cursor-pointer select-none"
+            className="text-polaris-body-sm text-label-normal cursor-pointer select-none"
           >
             {label}
           </label>
@@ -70,8 +70,8 @@ export const Checkbox = forwardRef<
           <p
             id={messageId}
             className={cn(
-              'text-polaris-caption',
-              isError ? 'text-status-danger' : 'text-fg-muted'
+              'text-polaris-meta',
+              isError ? 'text-status-danger' : 'text-label-alternative'
             )}
           >
             {error ?? hint}

@@ -9,17 +9,17 @@ export const Switch = forwardRef<
   <SwitchPrimitive.Root
     ref={ref}
     className={cn(
-      'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-polaris-full border-2 border-transparent transition-colors',
+      'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-polaris-pill border-2 border-transparent transition-colors',
       'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      'data-[state=checked]:bg-brand-primary data-[state=unchecked]:bg-surface-border-strong',
+      'data-[state=checked]:bg-primary-normal data-[state=unchecked]:bg-surface-border-strong',
       className
     )}
     {...props}
   >
     <SwitchPrimitive.Thumb
       className={cn(
-        'pointer-events-none block h-5 w-5 rounded-polaris-full bg-surface-raised shadow-polaris-sm transition-transform',
+        'pointer-events-none block h-5 w-5 rounded-polaris-pill bg-background-normal shadow-polaris-sm transition-transform',
         'data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0'
       )}
     />

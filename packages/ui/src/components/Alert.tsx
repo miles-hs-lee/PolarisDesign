@@ -8,11 +8,11 @@ const alertVariants = cva(
   {
     variants: {
       variant: {
-        info:    'bg-status-info/10 border-status-info text-fg-primary',
-        success: 'bg-status-success/10 border-status-success text-fg-primary',
-        warning: 'bg-status-warning/15 border-status-warning text-fg-primary',
-        danger:  'bg-status-danger/10 border-status-danger text-fg-primary',
-        neutral: 'bg-surface-raised border-surface-border-strong text-fg-primary',
+        info:    'bg-status-info/10 border-status-info text-label-normal',
+        success: 'bg-status-success/10 border-status-success text-label-normal',
+        warning: 'bg-status-warning/15 border-status-warning text-label-normal',
+        danger:  'bg-status-danger/10 border-status-danger text-label-normal',
+        neutral: 'bg-background-normal border-line-normal text-label-normal',
       },
     },
     defaultVariants: { variant: 'info' },
@@ -32,7 +32,7 @@ const ICON_COLORS: Record<NonNullable<VariantProps<typeof alertVariants>['varian
   success: 'text-status-success',
   warning: 'text-status-warning',
   danger:  'text-status-danger',
-  neutral: 'text-fg-secondary',
+  neutral: 'text-label-neutral',
 };
 
 export interface AlertProps
@@ -78,7 +78,7 @@ export const AlertDescription = forwardRef<HTMLParagraphElement, React.HTMLAttri
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
-      className={cn('text-polaris-body-sm text-fg-secondary', className)}
+      className={cn('text-polaris-body-sm text-label-neutral', className)}
       {...props}
     />
   )

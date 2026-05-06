@@ -19,7 +19,7 @@ export const BreadcrumbList = forwardRef<HTMLOListElement, React.OlHTMLAttribute
   ({ className, ...props }, ref) => (
     <ol
       ref={ref}
-      className={cn('flex flex-wrap items-center gap-1.5 text-fg-muted', className)}
+      className={cn('flex flex-wrap items-center gap-1.5 text-label-alternative', className)}
       {...props}
     />
   )
@@ -47,7 +47,7 @@ export const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>
     return (
       <Comp
         ref={ref}
-        className={cn('text-fg-secondary hover:text-fg-primary transition-colors', className)}
+        className={cn('text-label-neutral hover:text-label-normal transition-colors', className)}
         {...props}
       />
     );
@@ -62,7 +62,7 @@ export const BreadcrumbPage = forwardRef<HTMLSpanElement, React.HTMLAttributes<H
       role="link"
       aria-disabled="true"
       aria-current="page"
-      className={cn('text-fg-primary font-medium', className)}
+      className={cn('text-label-normal font-medium', className)}
       {...props}
     />
   )
@@ -77,7 +77,7 @@ export const BreadcrumbSeparator = ({
   <li
     role="presentation"
     aria-hidden="true"
-    className={cn('text-fg-muted [&>svg]:h-3.5 [&>svg]:w-3.5', className)}
+    className={cn('text-label-alternative [&>svg]:h-3.5 [&>svg]:w-3.5', className)}
     {...props}
   >
     {children ?? <ChevronRight />}

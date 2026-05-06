@@ -7,7 +7,7 @@ const CARDS = [
     to: '/nova',
     icon: Sparkles,
     title: 'NOVA 워크스페이스',
-    desc: 'AI 컨텍스트 시연. NovaInput·PromptChip·Select·Tooltip·DropdownMenu가 보라(brand.secondary) 톤으로 묶이는 화면',
+    desc: 'AI 컨텍스트 시연. NovaInput·PromptChip·Select·Tooltip·DropdownMenu가 보라(ai.normal) 톤으로 묶이는 화면',
     badge: 'AI 예시',
     accent: 'secondary' as const,
   },
@@ -50,10 +50,10 @@ export default function Home() {
     <div className="max-w-6xl mx-auto px-6 py-12">
       <section className="mb-12">
         <Badge variant="secondary" className="mb-4">v0.1.0 · 사내 공개 alpha</Badge>
-        <h1 className="text-polaris-display-md mb-3">
+        <h1 className="text-polaris-h2 mb-3">
           Polaris Design System
         </h1>
-        <p className="text-polaris-body-lg text-fg-secondary max-w-2xl">
+        <p className="text-polaris-body text-label-neutral max-w-2xl">
           바이브코딩옵스로 만들어지는 폴라리스 웹 서비스들의 디자인을 일관되게 만드는 시스템.
           토큰·컴포넌트·린트·Claude Code 플러그인까지 묶어서 모델이 우회 못하게 하는 게 목표.
         </p>
@@ -75,17 +75,17 @@ export default function Home() {
                   <div className="flex items-center justify-between mb-3">
                     <span className={cn(
                       'inline-flex h-9 w-9 items-center justify-center rounded-polaris-md',
-                      isAi ? 'bg-brand-secondary-subtle text-brand-secondary' : 'bg-brand-primary-subtle text-brand-primary'
+                      isAi ? 'bg-ai-hover text-ai-normal' : 'bg-primary-normal-subtle text-primary-normal'
                     )}>
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </span>
                     <Badge variant={isAi ? 'secondary' : 'neutral'}>{card.badge}</Badge>
                   </div>
                   <h3 className="text-polaris-heading-sm mb-1.5">{card.title}</h3>
-                  <p className="text-polaris-body-sm text-fg-secondary mb-4">{card.desc}</p>
+                  <p className="text-polaris-body-sm text-label-neutral mb-4">{card.desc}</p>
                   <span className={cn(
                     'inline-flex items-center gap-1 text-polaris-body-sm',
-                    isAi ? 'text-brand-secondary' : 'text-brand-primary'
+                    isAi ? 'text-ai-normal' : 'text-primary-normal'
                   )}>
                     살펴보기 <ArrowRight className="h-4 w-4" aria-hidden="true" />
                   </span>
@@ -101,16 +101,16 @@ export default function Home() {
           <Card className="h-full transition-colors hover:border-brand-primary">
             <CardBody>
               <div className="flex items-center justify-between mb-3">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-polaris-md bg-brand-secondary-subtle text-brand-secondary">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-polaris-md bg-ai-hover text-ai-normal">
                   <Palette className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <Badge variant="secondary">Tokens</Badge>
               </div>
               <h3 className="text-polaris-heading-sm mb-1.5">디자인 토큰</h3>
-              <p className="text-polaris-body-sm text-fg-secondary mb-4">
+              <p className="text-polaris-body-sm text-label-neutral mb-4">
                 4색 브랜드 팔레트와 NOVA 보라, 뉴트럴, 타이포·반경·그림자까지 한 페이지에서.
               </p>
-              <span className="inline-flex items-center gap-1 text-polaris-body-sm text-brand-secondary">
+              <span className="inline-flex items-center gap-1 text-polaris-body-sm text-ai-normal">
                 토큰 보기 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </span>
             </CardBody>
@@ -120,15 +120,15 @@ export default function Home() {
         <Card>
           <CardBody>
             <h3 className="text-polaris-heading-sm mb-3">아키텍처</h3>
-            <ul className="text-polaris-body-sm text-fg-secondary space-y-2">
+            <ul className="text-polaris-body-sm text-label-neutral space-y-2">
               <li>
-                <code className="text-fg-primary font-polaris-mono">@polaris/ui</code> — 토큰 + 37개 컴포넌트
+                <code className="text-label-normal font-polaris-mono">@polaris/ui</code> — 토큰 + 37개 컴포넌트
               </li>
               <li>
-                <code className="text-fg-primary font-polaris-mono">@polaris/lint</code> — 4가지 ESLint 룰
+                <code className="text-label-normal font-polaris-mono">@polaris/lint</code> — 4가지 ESLint 룰
               </li>
               <li>
-                <code className="text-fg-primary font-polaris-mono">polaris-design</code> — Claude Code 플러그인
+                <code className="text-label-normal font-polaris-mono">polaris-design</code> — Claude Code 플러그인
               </li>
             </ul>
           </CardBody>

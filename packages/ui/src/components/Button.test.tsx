@@ -13,8 +13,8 @@ describe('Button', () => {
   it('applies primary variant classes by default', () => {
     render(<Button>Save</Button>);
     const btn = screen.getByRole('button');
-    expect(btn).toHaveClass('bg-brand-primary');
-    expect(btn).toHaveClass('text-fg-on-brand');
+    expect(btn).toHaveClass('bg-primary-normal');
+    expect(btn).toHaveClass('text-label-inverse');
   });
 
   it('applies size classes', () => {

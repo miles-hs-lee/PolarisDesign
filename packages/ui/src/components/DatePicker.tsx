@@ -50,7 +50,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             variant="outline"
             disabled={disabled}
             aria-label={ariaLabel}
-            className={cn('w-full justify-start font-normal', !value && 'text-fg-muted', className)}
+            className={cn('w-full justify-start font-normal', !value && 'text-label-alternative', className)}
           >
             <CalendarIcon className="h-4 w-4" />
             {value ? format(value, formatStr, { locale }) : placeholder}
@@ -111,7 +111,7 @@ export const DateRangePicker = forwardRef<HTMLButtonElement, DateRangePickerProp
             variant="outline"
             disabled={disabled}
             aria-label={ariaLabel}
-            className={cn('w-full justify-start font-normal', !value?.from && 'text-fg-muted', className)}
+            className={cn('w-full justify-start font-normal', !value?.from && 'text-label-alternative', className)}
           >
             <CalendarIcon className="h-4 w-4" />
             {display}

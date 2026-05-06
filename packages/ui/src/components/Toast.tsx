@@ -50,11 +50,11 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        info: 'bg-status-info/10 border-status-info text-fg-primary',
-        success: 'bg-status-success/10 border-status-success text-fg-primary',
-        warning: 'bg-status-warning/15 border-status-warning text-fg-primary',
-        danger: 'bg-status-danger/10 border-status-danger text-fg-primary',
-        neutral: 'bg-surface-raised border-surface-border-strong text-fg-primary',
+        info: 'bg-status-info/10 border-status-info text-label-normal',
+        success: 'bg-status-success/10 border-status-success text-label-normal',
+        warning: 'bg-status-warning/15 border-status-warning text-label-normal',
+        danger: 'bg-status-danger/10 border-status-danger text-label-normal',
+        neutral: 'bg-background-normal border-line-normal text-label-normal',
       },
     },
     defaultVariants: { variant: 'neutral' },
@@ -95,7 +95,7 @@ export const ToastDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Description
     ref={ref}
-    className={cn('text-polaris-caption opacity-90', className)}
+    className={cn('text-polaris-meta opacity-90', className)}
     {...props}
   />
 ));
@@ -108,7 +108,7 @@ export const ToastAction = forwardRef<
   <ToastPrimitive.Action
     ref={ref}
     className={cn(
-      'ml-auto inline-flex h-8 shrink-0 items-center justify-center rounded-polaris-md border border-current px-3 text-polaris-caption font-semibold hover:bg-current/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current',
+      'ml-auto inline-flex h-8 shrink-0 items-center justify-center rounded-polaris-md border border-current px-3 text-polaris-meta font-semibold hover:bg-current/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current',
       className
     )}
     {...props}

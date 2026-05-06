@@ -30,18 +30,18 @@ export const FileCard = forwardRef<HTMLElement, FileCardProps>(
         {...linkProps}
         onClick={onClick}
         className={cn(
-          'flex items-center gap-3 rounded-polaris-md bg-surface-raised border border-surface-border p-3',
+          'flex items-center gap-3 rounded-polaris-md bg-background-normal border border-line-neutral p-3',
           interactive &&
-            'hover:bg-brand-primary-subtle hover:border-surface-border-strong transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary',
+            'hover:bg-primary-normal-subtle hover:border-line-normal transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary',
           className
         )}
         {...props}
       >
         <FileIcon type={type} size="md" />
         <div className="flex-1 min-w-0">
-          <div className="text-polaris-body-sm font-medium text-fg-primary truncate">{name}</div>
+          <div className="text-polaris-body-sm font-medium text-label-normal truncate">{name}</div>
           {meta && (
-            <div className="text-polaris-caption text-fg-muted truncate mt-0.5">{meta}</div>
+            <div className="text-polaris-meta text-label-alternative truncate mt-0.5">{meta}</div>
           )}
         </div>
         {trailing && <div className="shrink-0">{trailing}</div>}

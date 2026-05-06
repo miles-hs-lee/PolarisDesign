@@ -5,8 +5,8 @@
 @tailwind utilities;
 
 html, body {
-  background: var(--polaris-surface-canvas);
-  color: var(--polaris-text-primary);
+  background: var(--polaris-background-alternative);
+  color: var(--polaris-label-normal);
   font-family: var(--polaris-font-sans);
   -webkit-font-smoothing: antialiased;
 }

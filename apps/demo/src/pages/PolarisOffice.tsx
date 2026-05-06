@@ -97,14 +97,14 @@ function ColorAccentIcon({
 
 /** Letter inside an outlined square — 문자 테두리. */
 const OutlinedLetter = (
-  <span className="inline-flex h-4 w-4 items-center justify-center border-2 border-fg-primary rounded-polaris-sm text-polaris-caption font-bold leading-none">
+  <span className="inline-flex h-4 w-4 items-center justify-center border-2 border-fg-primary rounded-polaris-sm text-polaris-meta font-bold leading-none">
     A
   </span>
 );
 
 /** Two-line text icon for the 단어 개수 button. */
 const WordCountIcon = (
-  <span className="text-polaris-caption font-bold leading-tight text-center">
+  <span className="text-polaris-meta font-bold leading-tight text-center">
     ABC{'\n'}123
   </span>
 );
@@ -121,20 +121,20 @@ function OverlayIcon({ base, overlay }: { base: ReactNode; overlay: ReactNode })
 
 function EditorChrome() {
   return (
-    <div className="flex items-center gap-2 h-12 px-3 border-b border-surface-border bg-surface-raised">
+    <div className="flex items-center gap-2 h-12 px-3 border-b border-line-neutral bg-background-normal">
       <Button variant="ghost" size="sm" aria-label="Menu" className="!h-9 !w-9 !px-0 shrink-0">
-        <Menu className="h-5 w-5 text-brand-primary" />
+        <Menu className="h-5 w-5 text-primary-normal" />
       </Button>
       <div className="flex items-center gap-1.5 text-polaris-body-sm min-w-0">
         <span className="truncate">NewDocument 2026-05-05 063559.docx</span>
-        <ChevronDown className="h-4 w-4 text-fg-muted shrink-0" aria-hidden="true" />
+        <ChevronDown className="h-4 w-4 text-label-alternative shrink-0" aria-hidden="true" />
       </div>
       <Button variant="ghost" size="sm" aria-label="즐겨찾기" className="!h-8 !w-8 !px-0 ml-1 shrink-0 hidden sm:inline-flex">
-        <Star className="h-4 w-4 text-fg-muted" />
+        <Star className="h-4 w-4 text-label-alternative" />
       </Button>
       <SimpleTooltip label="저장됨">
         <Button variant="ghost" size="sm" aria-label="저장" className="!h-8 !w-8 !px-0 shrink-0">
-          <Save className="h-4 w-4 text-brand-primary" />
+          <Save className="h-4 w-4 text-primary-normal" />
         </Button>
       </SimpleTooltip>
       <div className="ml-auto flex items-center gap-1 shrink-0">
@@ -181,7 +181,7 @@ function HomeRibbon() {
       <RibbonGroup>
         <RibbonSplitButton
           size="lg"
-          icon={<Clipboard className="h-6 w-6 text-brand-primary" />}
+          icon={<Clipboard className="h-6 w-6 text-primary-normal" />}
           tooltip="붙여넣기 (⌘V)"
           menuLabel="붙여넣기 옵션"
           menu={
@@ -369,14 +369,14 @@ function InsertRibbon() {
   return (
     <RibbonContent value="insert">
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<FilePlus className="h-6 w-6 text-fg-secondary" />}>새{'\n'}페이지</RibbonButton>
+        <RibbonButton size="lg" icon={<FilePlus className="h-6 w-6 text-label-neutral" />}>새{'\n'}페이지</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
         <RibbonButton size="lg" icon={<SeparatorHorizontal className="h-6 w-6 text-status-danger" />}>페이지{'\n'}나누기</RibbonButton>
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Table className="h-6 w-6 text-fg-secondary" />}>표</RibbonButton>
+        <RibbonButton size="lg" icon={<Table className="h-6 w-6 text-label-neutral" />}>표</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
         <RibbonButton size="lg" icon={<ImageIcon className="h-6 w-6 text-status-success" />}>그림</RibbonButton>
@@ -385,12 +385,12 @@ function InsertRibbon() {
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<ImageIcon className="h-6 w-6 text-status-success" />}
-            overlay={<Globe className="h-3 w-3 absolute -bottom-1 -right-1 text-brand-primary bg-surface-raised rounded-polaris-full" />}
+            overlay={<Globe className="h-3 w-3 absolute -bottom-1 -right-1 text-primary-normal bg-background-normal rounded-polaris-pill" />}
           />
         }>온라인{'\n'}그림</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonSplitButton size="lg" icon={<Shapes className="h-6 w-6 text-fg-secondary" />} menuLabel="도형 선택" menu={
+        <RibbonSplitButton size="lg" icon={<Shapes className="h-6 w-6 text-label-neutral" />} menuLabel="도형 선택" menu={
           <>
             <DropdownMenuItem>사각형</DropdownMenuItem>
             <DropdownMenuItem>원</DropdownMenuItem>
@@ -400,18 +400,18 @@ function InsertRibbon() {
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<LinkIcon className="h-6 w-6 text-fg-secondary" />}>하이퍼{'\n'}링크</RibbonButton>
+        <RibbonButton size="lg" icon={<LinkIcon className="h-6 w-6 text-label-neutral" />}>하이퍼{'\n'}링크</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
-            base={<Bookmark className="h-6 w-6 text-fg-secondary" />}
+            base={<Bookmark className="h-6 w-6 text-label-neutral" />}
             overlay={<span className="absolute top-0 left-1/2 -translate-x-1/2 h-2 w-1 bg-status-danger" aria-hidden="true" />}
           />
         }>책갈피</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonSplitButton size="lg" icon={<TextCursorInput className="h-6 w-6 text-fg-secondary" />} menuLabel="텍스트 상자 종류" menu={
+        <RibbonSplitButton size="lg" icon={<TextCursorInput className="h-6 w-6 text-label-neutral" />} menuLabel="텍스트 상자 종류" menu={
           <>
             <DropdownMenuItem>가로 텍스트 상자</DropdownMenuItem>
             <DropdownMenuItem>세로 텍스트 상자</DropdownMenuItem>
@@ -420,7 +420,7 @@ function InsertRibbon() {
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Sigma className="h-6 w-6 text-fg-secondary" />}>기호</RibbonButton>
+        <RibbonButton size="lg" icon={<Sigma className="h-6 w-6 text-label-neutral" />}>기호</RibbonButton>
       </RibbonGroup>
     </RibbonContent>
   );
@@ -436,25 +436,25 @@ function LayoutRibbon() {
   return (
     <RibbonContent value="layout">
       <RibbonGroup>
-        <RibbonMenuButton icon={<LayoutIcon className="h-6 w-6 text-fg-secondary" />} menu={<DropdownMenuItem>좁게 / 보통 / 넓게</DropdownMenuItem>}>여백</RibbonMenuButton>
+        <RibbonMenuButton icon={<LayoutIcon className="h-6 w-6 text-label-neutral" />} menu={<DropdownMenuItem>좁게 / 보통 / 넓게</DropdownMenuItem>}>여백</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton icon={<RotateCw className="h-6 w-6 text-fg-secondary" />} menu={<><DropdownMenuItem>세로</DropdownMenuItem><DropdownMenuItem>가로</DropdownMenuItem></>}>용지{'\n'}방향</RibbonMenuButton>
+        <RibbonMenuButton icon={<RotateCw className="h-6 w-6 text-label-neutral" />} menu={<><DropdownMenuItem>세로</DropdownMenuItem><DropdownMenuItem>가로</DropdownMenuItem></>}>용지{'\n'}방향</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton icon={<Maximize2 className="h-6 w-6 text-fg-secondary" />} menu={<><DropdownMenuItem>A4</DropdownMenuItem><DropdownMenuItem>Letter</DropdownMenuItem></>}>크기</RibbonMenuButton>
+        <RibbonMenuButton icon={<Maximize2 className="h-6 w-6 text-label-neutral" />} menu={<><DropdownMenuItem>A4</DropdownMenuItem><DropdownMenuItem>Letter</DropdownMenuItem></>}>크기</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton icon={<Columns3 className="h-6 w-6 text-fg-secondary" />} menu={<><DropdownMenuItem>1단</DropdownMenuItem><DropdownMenuItem>2단</DropdownMenuItem><DropdownMenuItem>3단</DropdownMenuItem></>}>단</RibbonMenuButton>
+        <RibbonMenuButton icon={<Columns3 className="h-6 w-6 text-label-neutral" />} menu={<><DropdownMenuItem>1단</DropdownMenuItem><DropdownMenuItem>2단</DropdownMenuItem><DropdownMenuItem>3단</DropdownMenuItem></>}>단</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
         <RibbonMenuButton icon={<SplitSquareVertical className="h-6 w-6 text-status-danger" />} menu={<><DropdownMenuItem>페이지 나누기</DropdownMenuItem><DropdownMenuItem>단 나누기</DropdownMenuItem><DropdownMenuItem>구역 나누기</DropdownMenuItem></>}>나누기</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-brand-primary" />}>페이지{'\n'}설정</RibbonButton>
+        <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-primary-normal" />}>페이지{'\n'}설정</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-brand-primary" />}>레이아웃{'\n'}설정</RibbonButton>
+        <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-primary-normal" />}>레이아웃{'\n'}설정</RibbonButton>
       </RibbonGroup>
       <RibbonSeparator />
       {/* Image-related — disabled until selection */}
@@ -521,7 +521,7 @@ function ReviewRibbon() {
         </RibbonToggleGroup>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonSplitButton size="lg" icon={<ListChecks className="h-6 w-6 text-fg-secondary" />} menuLabel="변경내용 표시 옵션" menu={
+        <RibbonSplitButton size="lg" icon={<ListChecks className="h-6 w-6 text-label-neutral" />} menuLabel="변경내용 표시 옵션" menu={
           <>
             <DropdownMenuItem>모든 변경 사항</DropdownMenuItem>
             <DropdownMenuItem>최종본</DropdownMenuItem>
@@ -580,75 +580,75 @@ function AIToolsRibbon() {
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
-            base={<MessageSquare className="h-6 w-6 text-fg-secondary" />}
-            overlay={<Sparkles className="h-3 w-3 absolute -top-1 -left-1 text-brand-secondary" />}
+            base={<MessageSquare className="h-6 w-6 text-label-neutral" />}
+            overlay={<Sparkles className="h-3 w-3 absolute -top-1 -left-1 text-ai-normal" />}
           />
         }>NOVA{'\n'}AI 채팅</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
-            base={<Search className="h-6 w-6 text-fg-secondary" />}
-            overlay={<span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-polaris-full bg-status-danger" aria-hidden="true" />}
+            base={<Search className="h-6 w-6 text-label-neutral" />}
+            overlay={<span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-polaris-pill bg-status-danger" aria-hidden="true" />}
           />
         }>웹{'\n'}검색</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
-            base={<FileText className="h-6 w-6 text-fg-secondary" />}
-            overlay={<Pencil className="h-3 w-3 absolute -bottom-0.5 -right-0.5 text-brand-secondary" />}
+            base={<FileText className="h-6 w-6 text-label-neutral" />}
+            overlay={<Pencil className="h-3 w-3 absolute -bottom-0.5 -right-0.5 text-ai-normal" />}
           />
         }>AI{'\n'}Write</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
-            base={<Languages className="h-6 w-6 text-fg-secondary" />}
-            overlay={<span className="absolute -top-1 -right-1 h-2 w-2 rounded-polaris-full bg-status-danger" aria-hidden="true" />}
+            base={<Languages className="h-6 w-6 text-label-neutral" />}
+            overlay={<span className="absolute -top-1 -right-1 h-2 w-2 rounded-polaris-pill bg-status-danger" aria-hidden="true" />}
           />
         }>번역</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Cloud className="h-6 w-6 text-fg-secondary" />}>워드{'\n'}클라우드</RibbonButton>
+        <RibbonButton size="lg" icon={<Cloud className="h-6 w-6 text-label-neutral" />}>워드{'\n'}클라우드</RibbonButton>
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
-            base={<Mic className="h-6 w-6 text-fg-secondary" />}
-            overlay={<Sparkles className="h-3 w-3 absolute -top-1 -left-1 text-brand-secondary" />}
+            base={<Mic className="h-6 w-6 text-label-neutral" />}
+            overlay={<Sparkles className="h-3 w-3 absolute -top-1 -left-1 text-ai-normal" />}
           />
         }>받아쓰기</RibbonButton>
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<ImagePlus className="h-6 w-6 text-fg-secondary" />}>Text to{'\n'}Image</RibbonButton>
+        <RibbonButton size="lg" icon={<ImagePlus className="h-6 w-6 text-label-neutral" />}>Text to{'\n'}Image</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Box className="h-6 w-6 text-fg-secondary" />}>2D→3D{'\n'}변환</RibbonButton>
+        <RibbonButton size="lg" icon={<Box className="h-6 w-6 text-label-neutral" />}>2D→3D{'\n'}변환</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Eraser2 className="h-6 w-6 text-fg-secondary" />}>배경{'\n'}제거</RibbonButton>
+        <RibbonButton size="lg" icon={<Eraser2 className="h-6 w-6 text-label-neutral" />}>배경{'\n'}제거</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<ImageIcon className="h-6 w-6 text-fg-secondary" />}>배경{'\n'}변경</RibbonButton>
+        <RibbonButton size="lg" icon={<ImageIcon className="h-6 w-6 text-label-neutral" />}>배경{'\n'}변경</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Wand2 className="h-6 w-6 text-fg-secondary" />}>이미지{'\n'}리메이크</RibbonButton>
+        <RibbonButton size="lg" icon={<Wand2 className="h-6 w-6 text-label-neutral" />}>이미지{'\n'}리메이크</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Maximize className="h-6 w-6 text-fg-secondary" />}>이미지{'\n'}확장</RibbonButton>
+        <RibbonButton size="lg" icon={<Maximize className="h-6 w-6 text-label-neutral" />}>이미지{'\n'}확장</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<ZoomIn className="h-6 w-6 text-fg-secondary" />}>해상도{'\n'}향상</RibbonButton>
+        <RibbonButton size="lg" icon={<ZoomIn className="h-6 w-6 text-label-neutral" />}>해상도{'\n'}향상</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<PaletteIcon className="h-6 w-6 text-fg-secondary" />}>스타일{'\n'}변환</RibbonButton>
+        <RibbonButton size="lg" icon={<PaletteIcon className="h-6 w-6 text-label-neutral" />}>스타일{'\n'}변환</RibbonButton>
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<BookOpen className="h-6 w-6 text-brand-secondary" />}>AI 도구{'\n'}사용자 가이드</RibbonButton>
+        <RibbonButton size="lg" icon={<BookOpen className="h-6 w-6 text-ai-normal" />}>AI 도구{'\n'}사용자 가이드</RibbonButton>
       </RibbonGroup>
     </RibbonContent>
   );
@@ -657,7 +657,7 @@ function AIToolsRibbon() {
 function PlaceholderTab({ value, label }: { value: string; label: string }) {
   return (
     <RibbonContent value={value}>
-      <div className="px-4 py-3 text-polaris-body-sm text-fg-muted">{label} (생략)</div>
+      <div className="px-4 py-3 text-polaris-body-sm text-label-alternative">{label} (생략)</div>
     </RibbonContent>
   );
 }
@@ -694,12 +694,12 @@ function NewDocPane() {
         <li key={doc.type}>
           <Button
             variant="ghost"
-            className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-surface-sunken text-left"
+            className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-background-alternative text-left"
           >
             <FileIconBadge type={doc.type} size="md" />
             <span className="flex flex-col items-start min-w-0">
               <span className="text-polaris-body-sm font-semibold">{doc.title}</span>
-              <span className="text-polaris-caption text-fg-muted truncate">{doc.desc}</span>
+              <span className="text-polaris-meta text-label-alternative truncate">{doc.desc}</span>
             </span>
           </Button>
         </li>
@@ -710,9 +710,9 @@ function NewDocPane() {
 
 function OpenDocPane() {
   const places: Array<{ icon: LucideIcon; iconClass: string; label: string }> = [
-    { icon: History, iconClass: 'text-fg-muted', label: '최근 문서' },
-    { icon: Monitor, iconClass: 'text-fg-muted', label: '내 컴퓨터' },
-    { icon: HardDrive, iconClass: 'text-brand-primary', label: '폴라리스 드라이브' },
+    { icon: History, iconClass: 'text-label-alternative', label: '최근 문서' },
+    { icon: Monitor, iconClass: 'text-label-alternative', label: '내 컴퓨터' },
+    { icon: HardDrive, iconClass: 'text-primary-normal', label: '폴라리스 드라이브' },
     { icon: UsersRound, iconClass: 'text-status-success', label: '공유 문서' },
     { icon: Star, iconClass: 'text-status-warning fill-status-warning', label: '중요 문서' },
   ];
@@ -727,7 +727,7 @@ function OpenDocPane() {
               variant="ghost"
               className={cn(
                 '!h-auto w-full !justify-start !py-3 !px-4 gap-3 rounded-polaris-md text-left',
-                active ? 'bg-brand-primary-subtle hover:bg-brand-primary-subtle' : 'hover:bg-surface-sunken'
+                active ? 'bg-primary-normal-subtle hover:bg-primary-normal-subtle' : 'hover:bg-background-alternative'
               )}
             >
               <Icon className={cn('h-5 w-5 shrink-0', place.iconClass)} aria-hidden="true" />
@@ -743,7 +743,7 @@ function OpenDocPane() {
 function DownloadPane() {
   return (
     <div className="space-y-3 max-w-md">
-      <p className="text-polaris-body-sm text-fg-secondary">
+      <p className="text-polaris-body-sm text-label-neutral">
         현재 문서를 로컬에 다운로드합니다. 형식을 선택하세요.
       </p>
       <ul className="space-y-1">
@@ -751,7 +751,7 @@ function DownloadPane() {
           <li key={type}>
             <Button
               variant="ghost"
-              className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-surface-sunken text-left"
+              className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-background-alternative text-left"
             >
               <FileIconBadge type={type} size="md" />
               <span className="text-polaris-body-sm font-medium">
@@ -768,13 +768,13 @@ function DownloadPane() {
 function SaveToDrivePane() {
   return (
     <div className="space-y-4 max-w-md">
-      <p className="text-polaris-body-sm text-fg-secondary">
+      <p className="text-polaris-body-sm text-label-neutral">
         폴라리스 드라이브의 위치를 선택하세요. 변경 사항이 자동으로 동기화됩니다.
       </p>
       <Input label="파일 이름" defaultValue="NewDocument 2026-05-05 063559" />
-      <div className="flex items-center gap-2 px-3 py-2 rounded-polaris-md border border-surface-border bg-surface-sunken text-polaris-body-sm">
-        <FolderIcon className="h-4 w-4 text-fg-muted" aria-hidden="true" />
-        <span className="text-fg-secondary">/내 드라이브/문서</span>
+      <div className="flex items-center gap-2 px-3 py-2 rounded-polaris-md border border-line-neutral bg-background-alternative text-polaris-body-sm">
+        <FolderIcon className="h-4 w-4 text-label-alternative" aria-hidden="true" />
+        <span className="text-label-neutral">/내 드라이브/문서</span>
       </div>
       <Button variant="primary" className="w-full">저장</Button>
     </div>
@@ -784,13 +784,13 @@ function SaveToDrivePane() {
 function SharePane() {
   return (
     <div className="space-y-4 max-w-md">
-      <p className="text-polaris-body-sm text-fg-secondary">
+      <p className="text-polaris-body-sm text-label-neutral">
         링크 또는 이메일로 다른 사람과 함께 편집할 수 있습니다.
       </p>
       <Input label="공유할 사람" placeholder="이메일 주소를 입력하세요" />
-      <div className="flex items-center justify-between px-3 py-2.5 rounded-polaris-md border border-surface-border">
+      <div className="flex items-center justify-between px-3 py-2.5 rounded-polaris-md border border-line-neutral">
         <div className="flex items-center gap-2">
-          <UsersRound className="h-4 w-4 text-fg-muted" aria-hidden="true" />
+          <UsersRound className="h-4 w-4 text-label-alternative" aria-hidden="true" />
           <span className="text-polaris-body-sm">링크가 있는 모든 사람</span>
         </div>
         <Badge variant="neutral">보기 전용</Badge>
@@ -808,9 +808,9 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
     // EditorChrome 높이(h-12 = 48px)를 viewport에서 빼서 backstage가 정확히
     // 그 아래 영역을 차지하도록 inline style 사용. Tailwind 임의값(`h-[…]`)은
     // 폴라리스 lint 룰에 걸리므로 inline style이 더 깔끔.
-    <div className="flex bg-surface-raised" style={{ height: 'calc(100vh - 3rem)' }}>
+    <div className="flex bg-background-normal" style={{ height: 'calc(100vh - 3rem)' }}>
       {/* Left drawer */}
-      <aside className="w-60 shrink-0 border-r border-surface-border bg-surface-canvas flex flex-col">
+      <aside className="w-60 shrink-0 border-r border-line-neutral bg-background-alternative flex flex-col">
         <div className="p-3">
           <Button
             variant="ghost"
@@ -819,7 +819,7 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
             aria-label="문서로 돌아가기"
             className="!h-9 !w-9 !px-0"
           >
-            <ArrowLeft className="h-5 w-5 text-brand-primary" />
+            <ArrowLeft className="h-5 w-5 text-primary-normal" />
           </Button>
         </div>
         <nav aria-label="파일 메뉴" className="px-2 pb-4">
@@ -833,8 +833,8 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
                   className={cn(
                     'w-full !justify-start !px-3 !py-2 !h-auto rounded-polaris-md text-left text-polaris-body-sm font-normal',
                     pane === item.id
-                      ? '!bg-surface-sunken !font-semibold !text-fg-primary'
-                      : '!text-fg-secondary hover:!bg-surface-sunken'
+                      ? '!bg-background-alternative !font-semibold !text-label-normal'
+                      : '!text-label-neutral hover:!bg-background-alternative'
                   )}
                 >
                   {item.label}
@@ -847,7 +847,7 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
 
       {/* Right detail pane */}
       <main className="flex-1 px-8 py-6 overflow-y-auto">
-        <h1 className="text-polaris-heading-lg mb-6 text-fg-primary">{current?.label}</h1>
+        <h1 className="text-polaris-h4 mb-6 text-label-normal">{current?.label}</h1>
         {pane === 'new' && <NewDocPane />}
         {pane === 'open' && <OpenDocPane />}
         {pane === 'download' && <DownloadPane />}
@@ -872,7 +872,7 @@ export default function PolarisOffice() {
   // 숨기고 그 자리에 left drawer + right detail을 표시.
   if (activeTab === 'file') {
     return (
-      <div className="bg-surface-canvas">
+      <div className="bg-background-alternative">
         <EditorChrome />
         <FileBackstage onClose={() => setActiveTab('home')} />
       </div>
@@ -880,7 +880,7 @@ export default function PolarisOffice() {
   }
 
   return (
-    <div className="bg-surface-canvas">
+    <div className="bg-background-alternative">
       <EditorChrome />
 
       <Ribbon className="!border-b-2">
@@ -895,11 +895,11 @@ export default function PolarisOffice() {
             <RibbonTab value="pen">펜</RibbonTab>
             <RibbonTab value="ai" className="relative pr-3">
               AI 도구
-              <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-polaris-full bg-status-danger" aria-hidden="true" />
+              <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-polaris-pill bg-status-danger" aria-hidden="true" />
             </RibbonTab>
             <span className="ml-auto inline-flex items-center pr-2">
               <Button variant="ghost" size="sm" aria-label="리본 접기" className="!h-8 !w-8 !px-0">
-                <ChevronUp className="h-4 w-4 text-fg-muted" />
+                <ChevronUp className="h-4 w-4 text-label-alternative" />
               </Button>
             </span>
           </RibbonTabList>
@@ -918,18 +918,18 @@ export default function PolarisOffice() {
 
       <div className="px-6 py-6 max-w-4xl mx-auto">
         <Card variant="padded">
-          <div className="flex items-center gap-2 mb-4 text-polaris-caption text-fg-muted">
+          <div className="flex items-center gap-2 mb-4 text-polaris-meta text-label-alternative">
             <Badge variant="secondary">데모</Badge>
             현재 탭: {activeTab}
           </div>
-          <h1 className="text-polaris-display-md mb-4 text-fg-primary">
+          <h1 className="text-polaris-h2 mb-4 text-label-normal">
             폴라리스 오피스 리본 재현
           </h1>
-          <p className="text-polaris-body-lg text-fg-secondary mb-2">
-            이 화면은 <code className="font-polaris-mono text-polaris-body-sm bg-surface-sunken px-1 rounded-polaris-sm">@polaris/ui/ribbon</code>의 컴포넌트만으로 구성된
+          <p className="text-polaris-body text-label-neutral mb-2">
+            이 화면은 <code className="font-polaris-mono text-polaris-body-sm bg-background-alternative px-1 rounded-polaris-sm">@polaris/ui/ribbon</code>의 컴포넌트만으로 구성된
             폴라리스 오피스 워드 에디터의 리본 메뉴 모형입니다.
           </p>
-          <p className="text-polaris-body-sm text-fg-muted">
+          <p className="text-polaris-body-sm text-label-alternative">
             상단의 탭(파일·홈·삽입·레이아웃·검토·보기·펜·AI 도구)을 클릭해 그룹과 컨트롤 구성을 확인할 수 있습니다.
             아이콘은 lucide-react의 best-effort 매칭이며, 폴라리스 토큰(`brand.*`, `status.*`, `fg.*`)만 사용해 색을 입혔습니다.
           </p>

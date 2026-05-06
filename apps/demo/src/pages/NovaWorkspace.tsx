@@ -70,13 +70,13 @@ function NovaHeroBackground() {
       <div className="absolute inset-0 bg-gradient-to-br from-brand-secondary-subtle via-surface-canvas to-brand-primary-subtle" />
 
       {/* Glow orbs — soft nebula-like blobs */}
-      <div className="absolute top-0 left-1/4 h-72 w-72 rounded-polaris-full bg-brand-secondary opacity-25 blur-3xl" />
-      <div className="absolute top-1/3 right-1/5 h-72 w-72 rounded-polaris-full bg-polaris-blue opacity-15 blur-3xl" />
-      <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-polaris-full bg-polaris-purple opacity-20 blur-3xl" />
+      <div className="absolute top-0 left-1/4 h-72 w-72 rounded-polaris-pill bg-ai-normal opacity-25 blur-3xl" />
+      <div className="absolute top-1/3 right-1/5 h-72 w-72 rounded-polaris-pill bg-polaris-blue opacity-15 blur-3xl" />
+      <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-polaris-pill bg-polaris-purple opacity-20 blur-3xl" />
 
       {/* Starfield */}
       <svg
-        className="absolute inset-0 w-full h-full text-brand-secondary"
+        className="absolute inset-0 w-full h-full text-ai-normal"
         viewBox="0 0 1200 520"
         preserveAspectRatio="xMidYMid slice"
       >
@@ -216,11 +216,11 @@ export default function NovaWorkspace() {
         <NovaHeroBackground />
         <div className="max-w-5xl mx-auto px-6 pt-12 pb-10">
           <header className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-polaris-full bg-brand-secondary-subtle text-brand-secondary text-polaris-caption font-semibold mb-4 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-polaris-pill bg-ai-hover text-ai-normal text-polaris-meta font-semibold mb-4 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> AI · NOVA
             </div>
-            <h1 className="text-polaris-display-md mb-3">NOVA 워크스페이스</h1>
-            <p className="text-polaris-body-lg text-fg-secondary max-w-2xl mx-auto">
+            <h1 className="text-polaris-h2 mb-3">NOVA 워크스페이스</h1>
+            <p className="text-polaris-body text-label-neutral max-w-2xl mx-auto">
               AI에게 무엇이든 묻고 결과를 한 곳에 모아보세요. 응답은 길이/톤을 조절할 수 있고,
               자주 쓰는 프롬프트는 저장됩니다.
             </p>
@@ -236,9 +236,9 @@ export default function NovaWorkspace() {
           {/* Settings row: Select + Tooltip */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-3 mb-8 text-polaris-body-sm">
             <div className="flex items-center gap-2">
-              <span className="text-fg-muted">응답 길이</span>
+              <span className="text-label-alternative">응답 길이</span>
               <SimpleTooltip label="응답의 분량을 조절합니다. 보통 = 한 화면 분량.">
-                <Info className="h-3.5 w-3.5 text-fg-muted" aria-hidden="true" />
+                <Info className="h-3.5 w-3.5 text-label-alternative" aria-hidden="true" />
               </SimpleTooltip>
               <Select value={length} onValueChange={(v) => setLength(v as Length)}>
                 <SelectTrigger className="!h-9 !w-32">
@@ -253,9 +253,9 @@ export default function NovaWorkspace() {
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-fg-muted">톤</span>
+              <span className="text-label-alternative">톤</span>
               <SimpleTooltip label="응답의 어조. 사내 보고서면 정중함, 메모면 간결을 추천.">
-                <Info className="h-3.5 w-3.5 text-fg-muted" aria-hidden="true" />
+                <Info className="h-3.5 w-3.5 text-label-alternative" aria-hidden="true" />
               </SimpleTooltip>
               <Select value={tone} onValueChange={(v) => setTone(v as Tone)}>
                 <SelectTrigger className="!h-9 !w-32">
@@ -361,7 +361,7 @@ export default function NovaWorkspace() {
               }}
               className="cursor-pointer hover:border-brand-secondary hover:shadow-polaris-md transition-all overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas"
             >
-              <div className="relative h-36 overflow-hidden bg-surface-sunken">
+              <div className="relative h-36 overflow-hidden bg-background-alternative">
                 {f.isNew && (
                   <Badge
                     variant="danger"
@@ -380,7 +380,7 @@ export default function NovaWorkspace() {
               </div>
               <div className="p-4">
                 <h3 className="text-polaris-heading-sm mb-1">{f.title}</h3>
-                <p className="text-polaris-body-sm text-fg-secondary line-clamp-2">{f.desc}</p>
+                <p className="text-polaris-body-sm text-label-neutral line-clamp-2">{f.desc}</p>
               </div>
             </Card>
           ))}
@@ -401,7 +401,7 @@ export default function NovaWorkspace() {
               <CardHeader className="!pb-3">
                 <div className="flex items-start justify-between gap-2 mb-1">
                   <Avatar size="sm">
-                    <AvatarFallback className="!bg-brand-secondary">
+                    <AvatarFallback className="!bg-ai-normal">
                       <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
                     </AvatarFallback>
                   </Avatar>
@@ -439,7 +439,7 @@ export default function NovaWorkspace() {
                 </CardDescription>
               </CardHeader>
               <CardBody className="!pt-0 flex-1">
-                <p className="text-polaris-body-sm text-fg-secondary line-clamp-4">{r.snippet}</p>
+                <p className="text-polaris-body-sm text-label-neutral line-clamp-4">{r.snippet}</p>
               </CardBody>
             </Card>
           ))}

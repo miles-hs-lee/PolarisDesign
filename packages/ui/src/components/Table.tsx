@@ -33,7 +33,7 @@ export const Table = forwardRef<HTMLTableElement, TableProps>(
   ({ className, containerClassName, density = 'comfortable', ...props }, ref) => (
     <div
       className={cn(
-        'w-full overflow-x-auto rounded-polaris-md border border-surface-border',
+        'w-full overflow-x-auto rounded-polaris-md border border-line-neutral',
         containerClassName
       )}
     >
@@ -54,7 +54,7 @@ export const TableHeader = forwardRef<HTMLTableSectionElement, React.HTMLAttribu
   ({ className, ...props }, ref) => (
     <thead
       ref={ref}
-      className={cn('bg-surface-sunken text-fg-secondary', className)}
+      className={cn('bg-background-alternative text-label-neutral', className)}
       {...props}
     />
   )
@@ -76,7 +76,7 @@ export const TableFooter = forwardRef<HTMLTableSectionElement, React.HTMLAttribu
   ({ className, ...props }, ref) => (
     <tfoot
       ref={ref}
-      className={cn('bg-surface-sunken text-fg-secondary border-t border-surface-border', className)}
+      className={cn('bg-background-alternative text-label-neutral border-t border-line-neutral', className)}
       {...props}
     />
   )
@@ -87,7 +87,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTM
   ({ className, ...props }, ref) => (
     <tr
       ref={ref}
-      className={cn('hover:bg-surface-sunken/50 transition-colors', className)}
+      className={cn('hover:bg-background-alternative/50 transition-colors', className)}
       {...props}
     />
   )
@@ -104,7 +104,7 @@ export const TableHead = forwardRef<HTMLTableCellElement, React.ThHTMLAttributes
         className={cn(
           CELL_PAD_X,
           ROW_PAD[density],
-          'text-left font-semibold text-polaris-caption uppercase tracking-wider',
+          'text-left font-semibold text-polaris-meta uppercase tracking-wider',
           className
         )}
         {...props}
@@ -120,7 +120,7 @@ export const TableCell = forwardRef<HTMLTableCellElement, React.TdHTMLAttributes
     return (
       <td
         ref={ref}
-        className={cn(CELL_PAD_X, ROW_PAD[density], 'text-fg-primary', className)}
+        className={cn(CELL_PAD_X, ROW_PAD[density], 'text-label-normal', className)}
         {...props}
       />
     );
@@ -132,7 +132,7 @@ export const TableCaption = forwardRef<HTMLTableCaptionElement, React.HTMLAttrib
   ({ className, ...props }, ref) => (
     <caption
       ref={ref}
-      className={cn('mt-2 text-polaris-caption text-fg-muted', className)}
+      className={cn('mt-2 text-polaris-meta text-label-alternative', className)}
       {...props}
     />
   )

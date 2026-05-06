@@ -84,7 +84,10 @@ const TS_TOKEN_RENAMES = [
   // headingSm intentionally NOT renamed — no clean spec equivalent
   [/\bbodyLg\b/g,    'body'],
   // bodySm stays the same in v0.7
-  [/\bcaption\b/g,   'meta'],
+  // `caption` is intentionally NOT renamed in TS — the word also names
+  // the HTML <caption> element and the React `caption` JSX intrinsic,
+  // so a blind `\bcaption\b` rewrite would mangle table components.
+  // The Tailwind utility `text-polaris-caption` IS rewritten below.
 ];
 
 /** Tailwind class renames. Match on full class names with hyphenated

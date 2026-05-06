@@ -48,7 +48,8 @@ test.describe('Polaris Office ribbon tabs', () => {
       await page.waitForTimeout(150);
       // Snapshot the ribbon region only — canvas content underneath
       // doesn't change between tabs.
-      const ribbon = page.locator('div.bg-surface-raised:not([class*="border-b border-surface-border bg-surface-raised"]) >> nth=0');
+      // v0.7: surface.raised → background.normal, surface.border → line.neutral
+    const ribbon = page.locator('div.bg-background-normal:not([class*="border-b border-line-neutral bg-background-normal"]) >> nth=0');
       await expect(ribbon.first()).toHaveScreenshot(`ribbon-${tab}.png`);
     });
   }

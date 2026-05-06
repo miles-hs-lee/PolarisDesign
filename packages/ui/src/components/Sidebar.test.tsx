@@ -17,8 +17,8 @@ describe('Sidebar', () => {
     );
     const home = screen.getByRole('button', { name: /Home/ });
     expect(home).toHaveAttribute('aria-current', 'page');
-    expect(home).toHaveClass('bg-brand-primary-subtle');
-    expect(home).toHaveClass('text-brand-primary');
+    expect(home).toHaveClass('bg-primary-normal-subtle');
+    expect(home).toHaveClass('text-primary-normal');
 
     const files = screen.getByRole('button', { name: /Files/ });
     expect(files).not.toHaveAttribute('aria-current');

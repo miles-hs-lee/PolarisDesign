@@ -69,7 +69,7 @@ export const NovaInput = forwardRef<HTMLInputElement, NovaInputProps>(
     return (
       <div
         className={cn(
-          'flex flex-col gap-3 rounded-polaris-lg bg-surface-raised',
+          'flex flex-col gap-3 rounded-polaris-lg bg-background-normal',
           'border border-ai-pressed',
           'p-3.5',
           'shadow-polaris-ai',
@@ -104,7 +104,7 @@ export const NovaInput = forwardRef<HTMLInputElement, NovaInputProps>(
             placeholder={placeholder}
             disabled={disabled}
             className={cn(
-              'flex-1 bg-transparent border-none outline-none text-polaris-body-sm font-polaris text-fg-primary placeholder:text-fg-muted min-w-0',
+              'flex-1 bg-transparent border-none outline-none text-polaris-body-sm font-polaris text-label-normal placeholder:text-label-alternative min-w-0',
               className
             )}
             {...props}
@@ -119,7 +119,7 @@ export const NovaInput = forwardRef<HTMLInputElement, NovaInputProps>(
             aria-label={sendLabel}
             className={cn(
               'inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-polaris-pill',
-              'bg-ai-normal text-fg-on-brand',
+              'bg-ai-normal text-label-inverse',
               'hover:bg-ai-strong',
               'disabled:opacity-40 disabled:cursor-not-allowed',
               'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ai-normal',

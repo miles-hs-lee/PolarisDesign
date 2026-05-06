@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/cn';
 
 const badgeVariants = cva(
-  'inline-flex items-center gap-1 rounded-polaris-full px-2.5 py-0.5 text-polaris-caption font-semibold',
+  'inline-flex items-center gap-1 rounded-polaris-pill px-2.5 py-0.5 text-polaris-meta font-semibold',
   {
     variants: {
       variant: {
@@ -32,9 +32,9 @@ const badgeVariants = cva(
     },
     compoundVariants: [
       // Subtle (default)
-      { variant: 'neutral',   tone: 'subtle', class: 'bg-neutral-100 text-fg-secondary' },
-      { variant: 'primary',   tone: 'subtle', class: 'bg-brand-primary-subtle text-brand-primary' },
-      { variant: 'secondary', tone: 'subtle', class: 'bg-brand-secondary-subtle text-brand-secondary' },
+      { variant: 'neutral',   tone: 'subtle', class: 'bg-neutral-100 text-label-neutral' },
+      { variant: 'primary',   tone: 'subtle', class: 'bg-primary-normal-subtle text-primary-normal' },
+      { variant: 'secondary', tone: 'subtle', class: 'bg-ai-hover text-ai-normal' },
       { variant: 'success',   tone: 'subtle', class: 'bg-status-success/15 text-status-success' },
       { variant: 'warning',   tone: 'subtle', class: 'bg-status-warning/20 text-status-warning' },
       { variant: 'danger',    tone: 'subtle', class: 'bg-status-danger/15 text-status-danger' },
@@ -46,17 +46,17 @@ const badgeVariants = cva(
       { variant: 'hwp',       tone: 'subtle', class: 'bg-file-hwp/15 text-file-hwp' },
       // Solid (filled)
       { variant: 'neutral',   tone: 'solid', class: 'bg-neutral-1000 text-neutral-0' },
-      { variant: 'primary',   tone: 'solid', class: 'bg-brand-primary text-fg-on-brand' },
-      { variant: 'secondary', tone: 'solid', class: 'bg-brand-secondary text-fg-on-brand' },
-      { variant: 'success',   tone: 'solid', class: 'bg-status-success text-fg-on-brand' },
-      { variant: 'warning',   tone: 'solid', class: 'bg-status-warning text-fg-on-brand' },
-      { variant: 'danger',    tone: 'solid', class: 'bg-status-danger text-fg-on-brand' },
-      { variant: 'info',      tone: 'solid', class: 'bg-status-info text-fg-on-brand' },
-      { variant: 'docx',      tone: 'solid', class: 'bg-file-docx text-fg-on-brand' },
-      { variant: 'xlsx',      tone: 'solid', class: 'bg-file-xlsx text-fg-on-brand' },
-      { variant: 'pptx',      tone: 'solid', class: 'bg-file-pptx text-fg-on-brand' },
-      { variant: 'pdf',       tone: 'solid', class: 'bg-file-pdf text-fg-on-brand' },
-      { variant: 'hwp',       tone: 'solid', class: 'bg-file-hwp text-fg-on-brand' },
+      { variant: 'primary',   tone: 'solid', class: 'bg-primary-normal text-label-inverse' },
+      { variant: 'secondary', tone: 'solid', class: 'bg-ai-normal text-label-inverse' },
+      { variant: 'success',   tone: 'solid', class: 'bg-status-success text-label-inverse' },
+      { variant: 'warning',   tone: 'solid', class: 'bg-status-warning text-label-inverse' },
+      { variant: 'danger',    tone: 'solid', class: 'bg-status-danger text-label-inverse' },
+      { variant: 'info',      tone: 'solid', class: 'bg-status-info text-label-inverse' },
+      { variant: 'docx',      tone: 'solid', class: 'bg-file-docx text-label-inverse' },
+      { variant: 'xlsx',      tone: 'solid', class: 'bg-file-xlsx text-label-inverse' },
+      { variant: 'pptx',      tone: 'solid', class: 'bg-file-pptx text-label-inverse' },
+      { variant: 'pdf',       tone: 'solid', class: 'bg-file-pdf text-label-inverse' },
+      { variant: 'hwp',       tone: 'solid', class: 'bg-file-hwp text-label-inverse' },
     ],
     defaultVariants: {
       variant: 'neutral',

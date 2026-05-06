@@ -22,10 +22,10 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      <header className="border-b border-surface-border">
+      <header className="border-b border-line-neutral">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="inline-flex h-7 w-7 rounded-polaris-md bg-brand-primary text-fg-on-brand items-center justify-center font-bold text-polaris-caption">
+            <span className="inline-flex h-7 w-7 rounded-polaris-md bg-primary-normal text-label-inverse items-center justify-center font-bold text-polaris-meta">
               P
             </span>
             <span className="text-polaris-heading-sm font-semibold">Polaris App</span>
@@ -37,9 +37,9 @@ export default function Home() {
 
       <section className="max-w-5xl mx-auto px-6 py-12">
         <div className="mb-8">
-          <h1 className="text-polaris-display-md mb-2">시작해보세요</h1>
-          <p className="text-polaris-body-lg text-fg-secondary max-w-2xl">
-            이 페이지는 폴라리스 디자인 시스템 템플릿입니다. <code className="font-polaris-mono text-fg-primary">app/page.tsx</code>를 편집해서 본인 서비스에 맞게 바꾸세요. 모든 색상·폰트·간격은 토큰으로 강제되며 lint가 위반을 자동 차단합니다.
+          <h1 className="text-polaris-h2 mb-2">시작해보세요</h1>
+          <p className="text-polaris-body text-label-neutral max-w-2xl">
+            이 페이지는 폴라리스 디자인 시스템 템플릿입니다. <code className="font-polaris-mono text-label-normal">app/page.tsx</code>를 편집해서 본인 서비스에 맞게 바꾸세요. 모든 색상·폰트·간격은 토큰으로 강제되며 lint가 위반을 자동 차단합니다.
           </p>
         </div>
 
@@ -49,8 +49,8 @@ export default function Home() {
             placeholder="NOVA에게 무엇이든 물어보기"
           />
           {submitted && (
-            <p className="text-polaris-caption text-fg-muted mt-2">
-              마지막 요청: <span className="text-fg-primary">{submitted}</span>
+            <p className="text-polaris-meta text-label-alternative mt-2">
+              마지막 요청: <span className="text-label-normal">{submitted}</span>
             </p>
           )}
         </div>
@@ -91,11 +91,11 @@ export default function Home() {
               <CardDescription>이 템플릿을 본인 서비스로 만들어 가세요</CardDescription>
             </CardHeader>
             <CardBody>
-              <ul className="space-y-2 text-polaris-body-sm text-fg-secondary">
-                <li>• <code className="font-polaris-mono text-fg-primary">app/page.tsx</code>를 편집</li>
-                <li>• 새 라우트는 <code className="font-polaris-mono text-fg-primary">app/&lt;path&gt;/page.tsx</code></li>
-                <li>• 컴포넌트는 <code className="font-polaris-mono text-fg-primary">@polaris/ui</code>에서 import</li>
-                <li>• <code className="font-polaris-mono text-fg-primary">pnpm lint</code>로 토큰 준수 확인</li>
+              <ul className="space-y-2 text-polaris-body-sm text-label-neutral">
+                <li>• <code className="font-polaris-mono text-label-normal">app/page.tsx</code>를 편집</li>
+                <li>• 새 라우트는 <code className="font-polaris-mono text-label-normal">app/&lt;path&gt;/page.tsx</code></li>
+                <li>• 컴포넌트는 <code className="font-polaris-mono text-label-normal">@polaris/ui</code>에서 import</li>
+                <li>• <code className="font-polaris-mono text-label-normal">pnpm lint</code>로 토큰 준수 확인</li>
               </ul>
             </CardBody>
             <CardFooter>
@@ -110,8 +110,8 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-surface-border">
-        <div className="max-w-5xl mx-auto px-6 py-6 text-polaris-caption text-fg-muted text-center">
+      <footer className="border-t border-line-neutral">
+        <div className="max-w-5xl mx-auto px-6 py-6 text-polaris-meta text-label-alternative text-center">
           Polaris Design System · template-next
         </div>
       </footer>

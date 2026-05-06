@@ -17,7 +17,7 @@ export const TooltipContent = forwardRef<
       className={cn(
         'z-50 overflow-hidden rounded-polaris-md',
         'bg-neutral-900 text-neutral-0 px-2.5 py-1.5',
-        'text-polaris-caption font-medium font-polaris',
+        'text-polaris-meta font-medium font-polaris',
         'shadow-polaris-md max-w-xs',
         className
       )}

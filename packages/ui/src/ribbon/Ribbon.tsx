@@ -72,7 +72,7 @@ const LgLabel = ({ children }: { children: ReactNode }) => (
 /** Chevron rendered next to / below a label to signal a dropdown trigger. */
 const TriggerChevron = ({ stacked = false }: { stacked?: boolean }) => (
   <ChevronDown
-    className={cn('h-3 w-3 shrink-0 text-fg-muted', stacked ? 'mt-0' : 'ml-0.5')}
+    className={cn('h-3 w-3 shrink-0 text-label-alternative', stacked ? 'mt-0' : 'ml-0.5')}
     aria-hidden="true"
   />
 );
@@ -84,7 +84,7 @@ export const Ribbon = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEle
     <div
       ref={ref}
       className={cn(
-        'font-polaris text-fg-primary bg-surface-raised border-b border-surface-border',
+        'font-polaris text-label-normal bg-background-normal border-b border-line-neutral',
         className
       )}
       {...props}
@@ -113,7 +113,7 @@ export const RibbonTabList = forwardRef<
       // Tabs can overflow on narrow viewports (Office tabs are 8 items).
       // Allow horizontal scroll, hide the scrollbar on md+ where the
       // tabs usually fit, leave a thin native scrollbar on mobile.
-      'flex items-center gap-4 px-4 h-9 border-b border-surface-border',
+      'flex items-center gap-4 px-4 h-9 border-b border-line-neutral',
       'overflow-x-auto overflow-y-hidden',
       'md:[scrollbar-width:none] md:[&::-webkit-scrollbar]:hidden',
       className
@@ -130,11 +130,11 @@ export const RibbonTab = forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      'relative inline-flex items-center px-1 py-1.5 text-polaris-body-sm text-fg-muted transition-colors',
-      'hover:text-fg-primary',
+      'relative inline-flex items-center px-1 py-1.5 text-polaris-body-sm text-label-alternative transition-colors',
+      'hover:text-label-normal',
       'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
-      'data-[state=active]:text-fg-primary data-[state=active]:font-semibold',
-      'data-[state=active]:after:absolute data-[state=active]:after:inset-x-0 data-[state=active]:after:-bottom-px data-[state=active]:after:h-0.5 data-[state=active]:after:bg-brand-primary',
+      'data-[state=active]:text-label-normal data-[state=active]:font-semibold',
+      'data-[state=active]:after:absolute data-[state=active]:after:inset-x-0 data-[state=active]:after:-bottom-px data-[state=active]:after:h-0.5 data-[state=active]:after:bg-primary-normal',
       className
     )}
     {...props}
@@ -202,7 +202,7 @@ export const RibbonGroup = forwardRef<HTMLDivElement, RibbonGroupProps>(
     >
       <div className="flex items-center justify-center gap-0 flex-1 min-h-16">{children}</div>
       {label && (
-        <div className="mt-0.5 text-center text-polaris-caption text-fg-muted leading-tight whitespace-pre-line">
+        <div className="mt-0.5 text-center text-polaris-meta text-label-alternative leading-tight whitespace-pre-line">
           {label}
         </div>
       )}
@@ -286,18 +286,18 @@ RibbonRowDivider.displayName = 'RibbonRowDivider';
 
 const ribbonButtonStyles = cva(
   cn(
-    'inline-flex items-center justify-center gap-1 rounded-polaris-sm text-fg-primary transition-colors shrink-0',
-    'hover:bg-brand-primary-subtle',
+    'inline-flex items-center justify-center gap-1 rounded-polaris-sm text-label-normal transition-colors shrink-0',
+    'hover:bg-primary-normal-subtle',
     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
     'disabled:opacity-40 disabled:pointer-events-none aria-disabled:opacity-40 aria-disabled:pointer-events-none',
-    'data-[state=on]:bg-brand-primary-subtle data-[state=on]:text-brand-primary'
+    'data-[state=on]:bg-primary-normal-subtle data-[state=on]:text-primary-normal'
   ),
   {
     variants: {
       size: {
         sm: 'h-6 min-w-6 px-0.5 text-polaris-body-sm',
         md: 'h-8 min-w-8 px-2 text-polaris-body-sm',
-        lg: 'flex-col h-16 min-w-14 px-1 py-1 text-polaris-caption gap-0.5',
+        lg: 'flex-col h-16 min-w-14 px-1 py-1 text-polaris-meta gap-0.5',
       },
     },
     defaultVariants: { size: 'sm' },

@@ -35,7 +35,7 @@ DrawerOverlay.displayName = 'DrawerOverlay';
 
 const drawerVariants = cva(
   cn(
-    'fixed z-50 bg-surface-raised text-fg-primary border-surface-border shadow-polaris-lg',
+    'fixed z-50 bg-background-normal text-label-normal border-line-neutral shadow-polaris-lg',
     'flex flex-col',
     'focus-visible:outline-none',
     'transition-transform duration-200 ease-out'
@@ -75,8 +75,8 @@ export const DrawerContent = forwardRef<
       {!hideClose && (
         <DialogPrimitive.Close
           className={cn(
-            'absolute right-4 top-4 rounded-polaris-sm text-fg-muted',
-            'hover:text-fg-primary hover:bg-brand-primary-subtle p-1',
+            'absolute right-4 top-4 rounded-polaris-sm text-label-alternative',
+            'hover:text-label-normal hover:bg-primary-normal-subtle p-1',
             'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary'
           )}
         >
@@ -90,7 +90,7 @@ export const DrawerContent = forwardRef<
 DrawerContent.displayName = 'DrawerContent';
 
 export const DrawerHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex flex-col gap-1.5 px-6 pt-6 pb-4 border-b border-surface-border', className)} {...props} />
+  <div className={cn('flex flex-col gap-1.5 px-6 pt-6 pb-4 border-b border-line-neutral', className)} {...props} />
 );
 DrawerHeader.displayName = 'DrawerHeader';
 
@@ -101,7 +101,7 @@ DrawerBody.displayName = 'DrawerBody';
 
 export const DrawerFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-2 gap-2 px-6 py-4 border-t border-surface-border', className)}
+    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-2 gap-2 px-6 py-4 border-t border-line-neutral', className)}
     {...props}
   />
 );
@@ -113,7 +113,7 @@ export const DrawerTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn('text-polaris-heading-md text-fg-primary', className)}
+    className={cn('text-polaris-h5 text-label-normal', className)}
     {...props}
   />
 ));
@@ -125,7 +125,7 @@ export const DrawerDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-polaris-body-sm text-fg-secondary', className)}
+    className={cn('text-polaris-body-sm text-label-neutral', className)}
     {...props}
   />
 ));

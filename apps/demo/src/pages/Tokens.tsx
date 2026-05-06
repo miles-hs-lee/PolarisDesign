@@ -21,9 +21,9 @@ type ColorPair = { light: string; dark: string };
 
 function ColorSwatch({ name, value }: { name: string; value: ColorPair }) {
   return (
-    <div className="flex items-center gap-3 p-2 rounded-polaris-md hover:bg-surface-sunken">
+    <div className="flex items-center gap-3 p-2 rounded-polaris-md hover:bg-background-alternative">
       <div
-        className="flex h-10 w-20 shrink-0 rounded-polaris-sm overflow-hidden border border-surface-border"
+        className="flex h-10 w-20 shrink-0 rounded-polaris-sm overflow-hidden border border-line-neutral"
         aria-hidden="true"
       >
         <div className="flex-1" style={{ background: value.light }} title={`light ${value.light}`} />
@@ -31,7 +31,7 @@ function ColorSwatch({ name, value }: { name: string; value: ColorPair }) {
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-polaris-body-sm font-semibold truncate">{name}</div>
-        <div className="text-polaris-caption text-fg-muted font-polaris-mono">
+        <div className="text-polaris-meta text-label-alternative font-polaris-mono">
           {value.light} / {value.dark}
         </div>
       </div>
@@ -50,8 +50,8 @@ function ColorSection({
 }) {
   return (
     <section>
-      <h2 className="text-polaris-heading-md mb-1">{title}</h2>
-      {description && <p className="text-polaris-body-sm text-fg-secondary mb-4">{description}</p>}
+      <h2 className="text-polaris-h5 mb-1">{title}</h2>
+      {description && <p className="text-polaris-body-sm text-label-neutral mb-4">{description}</p>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1">
         {Object.entries(tokens).map(([name, value]) => (
           <ColorSwatch key={name} name={name} value={value} />
@@ -66,9 +66,9 @@ export default function Tokens() {
     <div className="max-w-6xl mx-auto px-6 py-12 space-y-12">
       <header>
         <Badge variant="secondary" className="mb-4">@polaris/ui/tokens</Badge>
-        <h1 className="text-polaris-display-md mb-3">디자인 토큰</h1>
-        <p className="text-polaris-body-lg text-fg-secondary max-w-2xl">
-          모든 색상·타이포·반경·그림자는 <code className="font-polaris-mono text-polaris-body-sm bg-surface-sunken px-1 rounded-polaris-sm">@polaris/ui/tokens</code>에서
+        <h1 className="text-polaris-h2 mb-3">디자인 토큰</h1>
+        <p className="text-polaris-body text-label-neutral max-w-2xl">
+          모든 색상·타이포·반경·그림자는 <code className="font-polaris-mono text-polaris-body-sm bg-background-alternative px-1 rounded-polaris-sm">@polaris/ui/tokens</code>에서
           가져옵니다. 라이트/다크 페어로 정의되어 있으며, Tailwind 변수로 자동 매핑됩니다.
         </p>
       </header>
@@ -110,16 +110,16 @@ export default function Tokens() {
       />
 
       <section>
-        <h2 className="text-polaris-heading-md mb-1">타이포그래피</h2>
-        <p className="text-polaris-body-sm text-fg-secondary mb-4">
-          Pretendard Variable 패밀리 + 8단계 스케일. <code className="font-polaris-mono text-polaris-body-sm bg-surface-sunken px-1 rounded-polaris-sm">text-polaris-*</code> 유틸로 사용.
+        <h2 className="text-polaris-h5 mb-1">타이포그래피</h2>
+        <p className="text-polaris-body-sm text-label-neutral mb-4">
+          Pretendard Variable 패밀리 + 8단계 스케일. <code className="font-polaris-mono text-polaris-body-sm bg-background-alternative px-1 rounded-polaris-sm">text-polaris-*</code> 유틸로 사용.
         </p>
         <Card>
           <CardBody>
             <div className="space-y-4">
               {Object.entries(textStyle).map(([name, style]) => (
-                <div key={name} className="flex items-baseline gap-4 border-b border-surface-border last:border-0 pb-3 last:pb-0">
-                  <code className="font-polaris-mono text-polaris-caption text-fg-muted shrink-0 w-24">{name}</code>
+                <div key={name} className="flex items-baseline gap-4 border-b border-line-neutral last:border-0 pb-3 last:pb-0">
+                  <code className="font-polaris-mono text-polaris-meta text-label-alternative shrink-0 w-24">{name}</code>
                   <div
                     style={{
                       fontSize: style.fontSize,
@@ -130,7 +130,7 @@ export default function Tokens() {
                   >
                     The quick brown fox 다람쥐 헌 쳇바퀴
                   </div>
-                  <span className="ml-auto text-polaris-caption text-fg-muted font-polaris-mono whitespace-nowrap">
+                  <span className="ml-auto text-polaris-meta text-label-alternative font-polaris-mono whitespace-nowrap">
                     {style.fontSize} / {style.lineHeight} / {style.fontWeight}
                   </span>
                 </div>
@@ -141,39 +141,39 @@ export default function Tokens() {
       </section>
 
       <section>
-        <h2 className="text-polaris-heading-md mb-1">반경 (Radius)</h2>
-        <p className="text-polaris-body-sm text-fg-secondary mb-4">
-          버튼·카드·인풋의 모서리 반경. <code className="font-polaris-mono text-polaris-body-sm bg-surface-sunken px-1 rounded-polaris-sm">rounded-polaris-*</code> 유틸로 사용.
+        <h2 className="text-polaris-h5 mb-1">반경 (Radius)</h2>
+        <p className="text-polaris-body-sm text-label-neutral mb-4">
+          버튼·카드·인풋의 모서리 반경. <code className="font-polaris-mono text-polaris-body-sm bg-background-alternative px-1 rounded-polaris-sm">rounded-polaris-*</code> 유틸로 사용.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {Object.entries(radius).map(([name, value]) => (
             <div key={name} className="flex flex-col items-center gap-2">
               <div
-                className="h-20 w-20 bg-brand-primary"
+                className="h-20 w-20 bg-primary-normal"
                 style={{ borderRadius: value }}
                 aria-hidden="true"
               />
-              <code className="text-polaris-caption font-polaris-mono">{name}</code>
-              <span className="text-polaris-caption text-fg-muted">{value}</span>
+              <code className="text-polaris-meta font-polaris-mono">{name}</code>
+              <span className="text-polaris-meta text-label-alternative">{value}</span>
             </div>
           ))}
         </div>
       </section>
 
       <section>
-        <h2 className="text-polaris-heading-md mb-1">그림자 (Shadow)</h2>
-        <p className="text-polaris-body-sm text-fg-secondary mb-4">
-          엘레베이션 4단계. 라이트/다크 페어. <code className="font-polaris-mono text-polaris-body-sm bg-surface-sunken px-1 rounded-polaris-sm">shadow-polaris-*</code> 유틸로 사용.
+        <h2 className="text-polaris-h5 mb-1">그림자 (Shadow)</h2>
+        <p className="text-polaris-body-sm text-label-neutral mb-4">
+          엘레베이션 4단계. 라이트/다크 페어. <code className="font-polaris-mono text-polaris-body-sm bg-background-alternative px-1 rounded-polaris-sm">shadow-polaris-*</code> 유틸로 사용.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
           {(Object.keys(shadow.light) as Array<keyof typeof shadow.light>).map((name) => (
             <div key={name} className="flex flex-col items-center gap-3 p-4">
               <div
-                className="h-20 w-full rounded-polaris-md bg-surface-raised"
+                className="h-20 w-full rounded-polaris-md bg-background-normal"
                 style={{ boxShadow: shadow.light[name] }}
                 aria-hidden="true"
               />
-              <code className="text-polaris-caption font-polaris-mono">{name}</code>
+              <code className="text-polaris-meta font-polaris-mono">{name}</code>
             </div>
           ))}
         </div>

@@ -4,14 +4,14 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/cn';
 
 const avatarVariants = cva(
-  'relative flex shrink-0 overflow-hidden rounded-polaris-full bg-surface-sunken',
+  'relative flex shrink-0 overflow-hidden rounded-polaris-pill bg-background-alternative',
   {
     variants: {
       size: {
-        sm: 'h-7 w-7 text-polaris-caption',
+        sm: 'h-7 w-7 text-polaris-meta',
         md: 'h-9 w-9 text-polaris-body-sm',
-        lg: 'h-11 w-11 text-polaris-body-lg',
-        xl: 'h-14 w-14 text-polaris-heading-md',
+        lg: 'h-11 w-11 text-polaris-body',
+        xl: 'h-14 w-14 text-polaris-h5',
       },
     },
     defaultVariants: { size: 'md' },
@@ -53,7 +53,7 @@ export const AvatarFallback = forwardRef<
   <AvatarPrimitive.Fallback
     ref={ref}
     className={cn(
-      'flex h-full w-full items-center justify-center bg-brand-primary text-fg-on-brand font-semibold',
+      'flex h-full w-full items-center justify-center bg-primary-normal text-label-inverse font-semibold',
       className
     )}
     {...props}

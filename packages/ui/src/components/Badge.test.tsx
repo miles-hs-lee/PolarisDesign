@@ -25,7 +25,7 @@ describe('Badge', () => {
         new
       </Badge>
     );
-    expect(screen.getByText('new')).toHaveClass('bg-brand-primary');
-    expect(screen.getByText('new')).toHaveClass('text-fg-on-brand');
+    expect(screen.getByText('new')).toHaveClass('bg-primary-normal');
+    expect(screen.getByText('new')).toHaveClass('text-label-inverse');
   });
 });

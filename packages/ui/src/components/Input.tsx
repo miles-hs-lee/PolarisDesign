@@ -20,7 +20,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={id}
-            className="text-polaris-body-sm font-medium text-fg-primary"
+            className="text-polaris-body-sm font-medium text-label-normal"
           >
             {label}
           </label>
@@ -34,7 +34,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           // border, focus = 1px PO Blue + 3px outer glow at 25% alpha.
           className={cn(
             'h-9 px-3 rounded-polaris-md text-polaris-body-sm font-polaris',
-            'bg-surface-raised text-fg-primary placeholder:text-fg-muted',
+            'bg-background-normal text-label-normal placeholder:text-label-alternative',
             'border border-line-normal',
             'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand-primary/25 focus-visible:border-brand-primary',
             'disabled:opacity-50 disabled:cursor-not-allowed',
@@ -47,8 +47,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <p
             id={messageId}
             className={cn(
-              'text-polaris-caption',
-              isError ? 'text-status-danger' : 'text-fg-muted'
+              'text-polaris-meta',
+              isError ? 'text-status-danger' : 'text-label-alternative'
             )}
           >
             {error ?? hint}

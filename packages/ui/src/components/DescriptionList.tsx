@@ -40,7 +40,7 @@ export const DescriptionTerm = forwardRef<HTMLElement, React.HTMLAttributes<HTML
   ({ className, ...props }, ref) => (
     <dt
       ref={ref as never}
-      className={cn('text-fg-muted', className)}
+      className={cn('text-label-alternative', className)}
       {...props}
     />
   )
@@ -51,7 +51,7 @@ export const DescriptionDetails = forwardRef<HTMLElement, React.HTMLAttributes<H
   ({ className, ...props }, ref) => (
     <dd
       ref={ref as never}
-      className={cn('text-fg-primary', className)}
+      className={cn('text-label-normal', className)}
       {...props}
     />
   )

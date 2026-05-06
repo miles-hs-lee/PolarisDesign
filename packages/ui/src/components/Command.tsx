@@ -40,7 +40,7 @@ export const Command = forwardRef<
   <CommandPrimitive
     ref={ref}
     className={cn(
-      'flex h-full w-full flex-col overflow-hidden rounded-polaris-md bg-surface-raised text-fg-primary font-polaris',
+      'flex h-full w-full flex-col overflow-hidden rounded-polaris-md bg-background-normal text-label-normal font-polaris',
       className
     )}
     {...props}
@@ -82,7 +82,7 @@ export const CommandDialog = ({
         className={cn(
           'fixed left-1/2 top-[20%] z-50 -translate-x-1/2',
           'w-[calc(100vw-2rem)] max-w-lg overflow-hidden',
-          'bg-surface-raised border border-surface-border rounded-polaris-xl shadow-polaris-lg',
+          'bg-background-normal border border-line-neutral rounded-polaris-xl shadow-polaris-lg',
           'focus:outline-none'
         )}
       >
@@ -97,13 +97,13 @@ export const CommandInput = forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
-  <div className="flex items-center border-b border-surface-border px-3" cmdk-input-wrapper="">
-    <Search className="mr-2 h-4 w-4 shrink-0 text-fg-muted" aria-hidden="true" />
+  <div className="flex items-center border-b border-line-neutral px-3" cmdk-input-wrapper="">
+    <Search className="mr-2 h-4 w-4 shrink-0 text-label-alternative" aria-hidden="true" />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
         'flex h-11 w-full bg-transparent py-3 text-polaris-body-sm outline-none',
-        'placeholder:text-fg-muted disabled:cursor-not-allowed disabled:opacity-50',
+        'placeholder:text-label-alternative disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
       {...props}
@@ -130,7 +130,7 @@ export const CommandEmpty = forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className={cn('py-6 text-center text-polaris-body-sm text-fg-muted', className)}
+    className={cn('py-6 text-center text-polaris-body-sm text-label-alternative', className)}
     {...props}
   />
 ));
@@ -143,8 +143,8 @@ export const CommandGroup = forwardRef<
   <CommandPrimitive.Group
     ref={ref}
     className={cn(
-      'overflow-hidden text-fg-primary',
-      '[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-polaris-caption [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider [&_[cmdk-group-heading]]:text-fg-muted',
+      'overflow-hidden text-label-normal',
+      '[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-polaris-meta [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider [&_[cmdk-group-heading]]:text-label-alternative',
       className
     )}
     {...props}
@@ -173,7 +173,7 @@ export const CommandItem = forwardRef<
     className={cn(
       'relative flex cursor-pointer select-none items-center gap-2 rounded-polaris-sm px-2.5 py-1.5 text-polaris-body-sm outline-none',
       'data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
-      'data-[selected=true]:bg-brand-primary-subtle data-[selected=true]:text-brand-primary',
+      'data-[selected=true]:bg-primary-normal-subtle data-[selected=true]:text-primary-normal',
       className
     )}
     {...props}
@@ -187,7 +187,7 @@ export const CommandShortcut = ({
 }: React.HTMLAttributes<HTMLSpanElement>) => (
   <span
     className={cn(
-      'ml-auto text-polaris-caption tracking-widest text-fg-muted',
+      'ml-auto text-polaris-meta tracking-widest text-label-alternative',
       className
     )}
     {...props}

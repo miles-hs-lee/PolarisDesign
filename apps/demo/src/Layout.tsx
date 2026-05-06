@@ -36,7 +36,6 @@ import {
   Layers,
   Palette,
   Image as ImageIcon,
-  AlertTriangle,
   Bell,
   Settings,
   HelpCircle,
@@ -62,7 +61,6 @@ const REFERENCE_NAV: { to: string; label: string; icon: React.ElementType; end?:
   { to: '/components', label: '컴포넌트 카탈로그', icon: Layers },
   { to: '/tokens', label: '디자인 토큰', icon: Palette },
   { to: '/assets', label: '디자인 자산', icon: ImageIcon },
-  { to: '/design-audit', label: '디자인 정의서 비교 (임시)', icon: AlertTriangle },
 ];
 
 export function Layout() {
@@ -93,7 +91,7 @@ export function Layout() {
   return (
     <TooltipProvider delayDuration={200}>
       <ToastProvider swipeDirection="right">
-        <div className="min-h-screen flex bg-surface-canvas text-fg-primary font-polaris">
+        <div className="min-h-screen flex bg-background-alternative text-label-normal font-polaris">
           {/* Sidebar — desktop persistent, mobile drawer */}
           {mobileOpen && (
             <div
@@ -115,7 +113,7 @@ export function Layout() {
             <SidebarHeader>
               <div className="flex items-center justify-between gap-2">
                 <NavLink to="/" className="flex items-center gap-2 min-w-0">
-                  <span className="inline-flex h-8 w-8 shrink-0 rounded-polaris-md bg-brand-primary text-fg-on-brand items-center justify-center font-bold text-polaris-body-sm">
+                  <span className="inline-flex h-8 w-8 shrink-0 rounded-polaris-md bg-primary-normal text-label-inverse items-center justify-center font-bold text-polaris-body-sm">
                     P
                   </span>
                   <span className="text-polaris-heading-sm font-semibold truncate">Polaris</span>
@@ -164,7 +162,7 @@ export function Layout() {
             </SidebarBody>
             <SidebarFooter>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-polaris-caption text-fg-muted truncate">크레딧 6,805</span>
+                <span className="text-polaris-meta text-label-alternative truncate">크레딧 6,805</span>
                 <Button variant="outline" size="sm" onClick={toggleTheme} className="!px-2.5">
                   {theme === 'dark' ? '☀' : '🌙'}
                 </Button>
@@ -185,18 +183,18 @@ export function Layout() {
                 <MenuIcon className="h-4 w-4" />
               </Button>
               <NavbarBrand className="md:hidden">
-                <span className="inline-flex h-7 w-7 rounded-polaris-md bg-brand-primary text-fg-on-brand items-center justify-center font-bold text-polaris-caption">
+                <span className="inline-flex h-7 w-7 rounded-polaris-md bg-primary-normal text-label-inverse items-center justify-center font-bold text-polaris-meta">
                   P
                 </span>
                 <span className="text-polaris-heading-sm font-semibold">Polaris</span>
               </NavbarBrand>
               <NavbarNav>
                 <div className="hidden md:block relative w-full max-w-md">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-fg-muted pointer-events-none z-10" aria-hidden="true" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-label-alternative pointer-events-none z-10" aria-hidden="true" />
                   <Input
                     type="search"
                     placeholder="문서·계약·NOVA 응답 검색"
-                    className="pl-9 !h-9 bg-surface-sunken border-surface-border"
+                    className="pl-9 !h-9 bg-background-alternative border-line-neutral"
                   />
                 </div>
               </NavbarNav>
@@ -211,7 +209,7 @@ export function Layout() {
                     <Bell className="h-4 w-4" />
                     <span
                       aria-hidden="true"
-                      className="absolute top-1 right-1 inline-flex h-1.5 w-1.5 rounded-polaris-full bg-status-danger"
+                      className="absolute top-1 right-1 inline-flex h-1.5 w-1.5 rounded-polaris-pill bg-status-danger"
                     />
                   </Button>
                 </SimpleTooltip>
@@ -226,7 +224,7 @@ export function Layout() {
                       variant="ghost"
                       size="sm"
                       aria-label="사용자 메뉴"
-                      className="!h-8 !w-8 !px-0 !rounded-polaris-full"
+                      className="!h-8 !w-8 !px-0 !rounded-polaris-pill"
                     >
                       <Avatar size="sm">
                         <AvatarFallback>이</AvatarFallback>
@@ -235,7 +233,7 @@ export function Layout() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="min-w-48">
                     <DropdownMenuLabel>이해석</DropdownMenuLabel>
-                    <div className="px-2.5 pb-1.5 text-polaris-caption text-fg-muted">miles@polaris.example</div>
+                    <div className="px-2.5 pb-1.5 text-polaris-meta text-label-alternative">miles@polaris.example</div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={() => alert('계정 설정')}>
                       <User className="h-4 w-4" /> 계정 설정
@@ -256,12 +254,12 @@ export function Layout() {
               <Outlet />
             </main>
 
-            <footer className="border-t border-surface-border">
-              <div className="max-w-6xl mx-auto px-6 py-6 text-polaris-caption text-fg-muted flex flex-wrap items-center justify-between gap-3">
+            <footer className="border-t border-line-neutral">
+              <div className="max-w-6xl mx-auto px-6 py-6 text-polaris-meta text-label-alternative flex flex-wrap items-center justify-between gap-3">
                 <div>Polaris Design System · v0.1.0</div>
                 <a
                   href="https://github.com/miles-hs-lee/PolarisDesign"
-                  className="text-brand-primary hover:underline"
+                  className="text-primary-normal hover:underline"
                   target="_blank"
                   rel="noreferrer"
                 >

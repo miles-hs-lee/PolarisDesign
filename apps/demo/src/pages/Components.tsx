@@ -201,9 +201,9 @@ export default function Components() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
-      <header className="mb-10 pb-4 border-b border-surface-border">
-        <h1 className="text-polaris-heading-lg mb-1">Polaris Components</h1>
-        <p className="text-polaris-body-sm text-fg-muted">
+      <header className="mb-10 pb-4 border-b border-line-neutral">
+        <h1 className="text-polaris-h4 mb-1">Polaris Components</h1>
+        <p className="text-polaris-body-sm text-label-alternative">
           37개 컴포넌트(Tier 0 + Tier 1 + Tier 2 + Tier 2.5 + Tier 3 + Tier 4)의 variant·상태·조합을 한 페이지에서 검증
         </p>
       </header>
@@ -246,7 +246,7 @@ export default function Components() {
               <CardDescription>2026년 1분기 매출 및 비용 분석 자료</CardDescription>
             </CardHeader>
             <CardBody>
-              <p className="text-polaris-body-sm text-fg-secondary">
+              <p className="text-polaris-body-sm text-label-neutral">
                 NOVA가 자동 생성한 요약: 전 분기 대비 매출 12% 증가, 영업이익 8% 증가.
               </p>
             </CardBody>
@@ -261,7 +261,7 @@ export default function Components() {
               <CardDescription>최근 활동 기반</CardDescription>
             </CardHeader>
             <CardBody>
-              <ul className="space-y-1.5 text-polaris-body-sm text-fg-secondary">
+              <ul className="space-y-1.5 text-polaris-body-sm text-label-neutral">
                 <li>• 회의록을 한 장 분량으로 요약</li>
                 <li>• 보고서 표지 이미지 생성</li>
                 <li>• 영문 번역 초안 작성</li>
@@ -366,17 +366,17 @@ export default function Components() {
         <div className="flex items-end gap-3 flex-wrap">
           <div className="flex flex-col items-center gap-1">
             <FileIcon type="docx" size="sm" />
-            <span className="text-polaris-caption text-fg-muted">sm</span>
+            <span className="text-polaris-meta text-label-alternative">sm</span>
           </div>
           {(['docx', 'xlsx', 'pptx', 'pdf', 'hwp'] as const).map((t) => (
             <div key={t} className="flex flex-col items-center gap-1">
               <FileIcon type={t} size="md" />
-              <span className="text-polaris-caption text-fg-muted">{t}</span>
+              <span className="text-polaris-meta text-label-alternative">{t}</span>
             </div>
           ))}
           <div className="flex flex-col items-center gap-1">
             <FileIcon type="docx" size="lg" />
-            <span className="text-polaris-caption text-fg-muted">lg</span>
+            <span className="text-polaris-meta text-label-alternative">lg</span>
           </div>
         </div>
       </Section>
@@ -403,8 +403,8 @@ export default function Components() {
             }}
           />
           {submitted && (
-            <p className="text-polaris-caption text-fg-muted mt-2">
-              마지막 요청: <span className="text-fg-primary">{submitted}</span>
+            <p className="text-polaris-meta text-label-alternative mt-2">
+              마지막 요청: <span className="text-label-normal">{submitted}</span>
             </p>
           )}
         </div>
@@ -464,7 +464,7 @@ export default function Components() {
       <Section title="15. Select (Tier 1)">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
           <div>
-            <label className="text-polaris-body-sm font-medium text-fg-primary mb-1.5 block">정렬</label>
+            <label className="text-polaris-body-sm font-medium text-label-normal mb-1.5 block">정렬</label>
             <Select defaultValue="recent">
               <SelectTrigger>
                 <SelectValue placeholder="정렬 기준 선택" />
@@ -480,7 +480,7 @@ export default function Components() {
             </Select>
           </div>
           <div>
-            <label className="text-polaris-body-sm font-medium text-fg-primary mb-1.5 block">파일 형식</label>
+            <label className="text-polaris-body-sm font-medium text-label-normal mb-1.5 block">파일 형식</label>
             <Select>
               <SelectTrigger>
                 <SelectValue placeholder="형식 선택" />
@@ -498,14 +498,14 @@ export default function Components() {
       </Section>
 
       <Section title="16. Sidebar (Tier 1)">
-        <div className="rounded-polaris-lg border border-surface-border overflow-hidden h-96 flex">
+        <div className="rounded-polaris-lg border border-line-neutral overflow-hidden h-96 flex">
           <Sidebar width="14rem">
             <SidebarHeader>
               <div className="flex items-center gap-2">
-                <span className="inline-flex h-8 w-8 rounded-polaris-md bg-brand-primary text-fg-on-brand items-center justify-center font-bold text-polaris-body-sm">P</span>
+                <span className="inline-flex h-8 w-8 rounded-polaris-md bg-primary-normal text-label-inverse items-center justify-center font-bold text-polaris-body-sm">P</span>
                 <div className="min-w-0">
                   <div className="text-polaris-body-sm font-semibold truncate">Polaris Office</div>
-                  <div className="text-polaris-caption text-fg-muted truncate">Hae-Seok Lee</div>
+                  <div className="text-polaris-meta text-label-alternative truncate">Hae-Seok Lee</div>
                 </div>
               </div>
             </SidebarHeader>
@@ -522,11 +522,11 @@ export default function Components() {
               </SidebarSection>
             </SidebarBody>
             <SidebarFooter>
-              <div className="text-polaris-caption text-fg-muted">크레딧 6,805</div>
+              <div className="text-polaris-meta text-label-alternative">크레딧 6,805</div>
             </SidebarFooter>
           </Sidebar>
-          <div className="flex-1 bg-surface-canvas p-4 text-polaris-body-sm text-fg-muted">
-            메인 영역 — 활성 항목(홈)이 brand.primary.subtle 배경으로 강조됩니다.
+          <div className="flex-1 bg-background-alternative p-4 text-polaris-body-sm text-label-alternative">
+            메인 영역 — 활성 항목(홈)이 primary.normal.subtle 배경으로 강조됩니다.
           </div>
         </div>
       </Section>
@@ -535,13 +535,13 @@ export default function Components() {
         <Card className="overflow-hidden !p-0">
           <Navbar className="border-b-0">
             <NavbarBrand>
-              <span className="inline-flex h-7 w-7 rounded-polaris-md bg-brand-primary text-fg-on-brand items-center justify-center font-bold text-polaris-caption">P</span>
+              <span className="inline-flex h-7 w-7 rounded-polaris-md bg-primary-normal text-label-inverse items-center justify-center font-bold text-polaris-meta">P</span>
               <span className="text-polaris-heading-sm font-semibold">Polaris Office</span>
             </NavbarBrand>
             <NavbarNav>
-              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium bg-brand-primary-subtle text-brand-primary">홈</a>
-              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-fg-secondary hover:bg-brand-primary-subtle">드라이브</a>
-              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-fg-secondary hover:bg-brand-primary-subtle">NOVA</a>
+              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium bg-primary-normal-subtle text-primary-normal">홈</a>
+              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-label-neutral hover:bg-primary-normal-subtle">드라이브</a>
+              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body-sm font-medium text-label-neutral hover:bg-primary-normal-subtle">NOVA</a>
             </NavbarNav>
             <NavbarActions>
               <SimpleTooltip label="알림" side="bottom">
@@ -597,7 +597,7 @@ export default function Components() {
                   <Checkbox checked="indeterminate" />
                   일부 항목 선택됨 (indeterminate)
                 </label>
-                <label className="flex items-center gap-2 text-polaris-body-sm text-fg-muted">
+                <label className="flex items-center gap-2 text-polaris-body-sm text-label-alternative">
                   <Checkbox disabled />
                   비활성 상태
                 </label>
@@ -612,7 +612,7 @@ export default function Components() {
                   알림 받기
                   <Switch checked={notifications} onCheckedChange={setNotifications} />
                 </label>
-                <label className="flex items-center justify-between text-polaris-body-sm text-fg-muted">
+                <label className="flex items-center justify-between text-polaris-body-sm text-label-alternative">
                   마케팅 수신 (비활성)
                   <Switch disabled />
                 </label>
@@ -626,7 +626,7 @@ export default function Components() {
         <Card>
           <CardBody>
             <div className="flex items-center gap-3 mb-4">
-              <Skeleton className="h-10 w-10 rounded-polaris-full" />
+              <Skeleton className="h-10 w-10 rounded-polaris-pill" />
               <div className="flex-1 space-y-2">
                 <Skeleton className="h-4 w-1/3" />
                 <Skeleton className="h-3 w-1/2" />
@@ -672,7 +672,7 @@ export default function Components() {
               <PaginationItem onClick={() => setPage(12)} active={page === 12}>12</PaginationItem>
               <PaginationNext onClick={() => setPage((p) => Math.min(12, p + 1))} disabled={page === 12} />
             </Pagination>
-            <p className="mt-3 text-polaris-caption text-fg-muted text-center">현재 페이지: {page} / 12</p>
+            <p className="mt-3 text-polaris-meta text-label-alternative text-center">현재 페이지: {page} / 12</p>
           </CardBody>
         </Card>
       </Section>
@@ -718,15 +718,15 @@ export default function Components() {
       <Section title="25. Stack / HStack / VStack (Tier 2.5)">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card variant="padded">
-            <p className="text-polaris-caption text-fg-muted mb-3">VStack gap=2</p>
+            <p className="text-polaris-meta text-label-alternative mb-3">VStack gap=2</p>
             <VStack gap={2}>
-              <div className="bg-brand-primary-subtle text-brand-primary px-3 py-1.5 rounded-polaris-md text-polaris-body-sm">A</div>
-              <div className="bg-brand-primary-subtle text-brand-primary px-3 py-1.5 rounded-polaris-md text-polaris-body-sm">B</div>
-              <div className="bg-brand-primary-subtle text-brand-primary px-3 py-1.5 rounded-polaris-md text-polaris-body-sm">C</div>
+              <div className="bg-primary-normal-subtle text-primary-normal px-3 py-1.5 rounded-polaris-md text-polaris-body-sm">A</div>
+              <div className="bg-primary-normal-subtle text-primary-normal px-3 py-1.5 rounded-polaris-md text-polaris-body-sm">B</div>
+              <div className="bg-primary-normal-subtle text-primary-normal px-3 py-1.5 rounded-polaris-md text-polaris-body-sm">C</div>
             </VStack>
           </Card>
           <Card variant="padded">
-            <p className="text-polaris-caption text-fg-muted mb-3">HStack gap=3 align=center</p>
+            <p className="text-polaris-meta text-label-alternative mb-3">HStack gap=3 align=center</p>
             <HStack gap={3} align="center">
               <Avatar size="sm"><AvatarFallback>P</AvatarFallback></Avatar>
               <span className="text-polaris-body-sm">홍길동</span>
@@ -741,8 +741,8 @@ export default function Components() {
       </Section>
 
       <Section title="26. Container — 반응형 max-width + padding">
-        <div className="bg-surface-sunken rounded-polaris-md py-4">
-          <Container size="md" className="bg-brand-primary-subtle py-4 rounded-polaris-md text-center">
+        <div className="bg-background-alternative rounded-polaris-md py-4">
+          <Container size="md" className="bg-primary-normal-subtle py-4 rounded-polaris-md text-center">
             <p className="text-polaris-body-sm">size="md" — max-w-screen-md, mx-auto, px 반응형</p>
           </Container>
         </div>
@@ -751,7 +751,7 @@ export default function Components() {
       <Section title="27. Table primitive + density (Tier 2.5)">
         <Card>
           <CardBody>
-            <p className="text-polaris-caption text-fg-muted mb-3">density="compact"</p>
+            <p className="text-polaris-meta text-label-alternative mb-3">density="compact"</p>
             <Table density="compact">
               <TableHeader>
                 <TableRow>
@@ -799,7 +799,7 @@ export default function Components() {
                   <DrawerDescription>Radix Dialog 위에 side variant만 추가한 단순한 패널입니다.</DrawerDescription>
                 </DrawerHeader>
                 <DrawerBody>
-                  <p className="text-polaris-body-sm text-fg-secondary">
+                  <p className="text-polaris-body-sm text-label-neutral">
                     테이블 행 inspector, 필터 패널, 모바일 navigation drawer 등에 사용. focus trap·overlay·Esc 닫기는 Dialog와 동일.
                   </p>
                 </DrawerBody>
@@ -865,14 +865,14 @@ export default function Components() {
             <h3 className="text-polaris-heading-sm mb-3">DatePicker (single)</h3>
             <DatePicker value={pickedDate} onChange={setPickedDate} />
             {pickedDate && (
-              <p className="mt-2 text-polaris-caption text-fg-muted">선택: {pickedDate.toLocaleDateString('ko-KR')}</p>
+              <p className="mt-2 text-polaris-meta text-label-alternative">선택: {pickedDate.toLocaleDateString('ko-KR')}</p>
             )}
           </Card>
           <Card variant="padded">
             <h3 className="text-polaris-heading-sm mb-3">DateRangePicker</h3>
             <DateRangePicker value={pickedRange} onChange={setPickedRange} />
             {pickedRange?.from && (
-              <p className="mt-2 text-polaris-caption text-fg-muted">
+              <p className="mt-2 text-polaris-meta text-label-alternative">
                 {pickedRange.from.toLocaleDateString('ko-KR')}
                 {pickedRange.to ? ` ~ ${pickedRange.to.toLocaleDateString('ko-KR')}` : ''}
               </p>
@@ -883,8 +883,8 @@ export default function Components() {
 
       <Section title="32. CommandPalette (Tier 3, experimental)">
         <Card variant="padded">
-          <p className="text-polaris-body-sm text-fg-secondary mb-3">
-            <kbd className="px-1.5 py-0.5 rounded-polaris-sm border border-surface-border bg-surface-sunken text-polaris-caption">⌘K</kbd> 또는 아래 버튼으로 열기.
+          <p className="text-polaris-body-sm text-label-neutral mb-3">
+            <kbd className="px-1.5 py-0.5 rounded-polaris-sm border border-line-neutral bg-background-alternative text-polaris-meta">⌘K</kbd> 또는 아래 버튼으로 열기.
           </p>
           <Button variant="outline" onClick={() => setCmdOpen(true)}>명령 열기</Button>
           <CommandDialog open={cmdOpen} onOpenChange={setCmdOpen}>
@@ -1068,7 +1068,7 @@ export default function Components() {
             </div>
           </Ribbon>
           <CardBody>
-            <p className="text-polaris-caption text-fg-muted">
+            <p className="text-polaris-meta text-label-alternative">
               현재 마크: {mdMarks.length === 0 ? '(없음)' : mdMarks.join(', ')}
             </p>
           </CardBody>
@@ -1101,7 +1101,7 @@ export default function Components() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-10">
-      <h2 className="text-polaris-heading-md mb-4 text-fg-primary">{title}</h2>
+      <h2 className="text-polaris-h5 mb-4 text-label-normal">{title}</h2>
       {children}
     </section>
   );

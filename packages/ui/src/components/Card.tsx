@@ -20,7 +20,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <Comp
         ref={ref}
         className={cn(
-          'rounded-polaris-lg border border-surface-border bg-surface-raised shadow-polaris-sm',
+          'rounded-polaris-lg border border-line-neutral bg-background-normal shadow-polaris-sm',
           variant === 'padded' && 'px-5 py-4',
           className
         )}
@@ -46,7 +46,7 @@ export const CardTitle = forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTM
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn('text-polaris-heading-md text-fg-primary', className)}
+      className={cn('text-polaris-h5 text-label-normal', className)}
       {...props}
     />
   )
@@ -57,7 +57,7 @@ export const CardDescription = forwardRef<HTMLParagraphElement, React.HTMLAttrib
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
-      className={cn('text-polaris-body-sm text-fg-secondary', className)}
+      className={cn('text-polaris-body-sm text-label-neutral', className)}
       {...props}
     />
   )

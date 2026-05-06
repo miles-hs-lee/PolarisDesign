@@ -5,7 +5,7 @@ import { cn } from '../lib/cn';
 export type FileType = 'docx' | 'hwp' | 'xlsx' | 'pptx' | 'pdf';
 
 const fileIconVariants = cva(
-  'inline-flex items-center justify-center font-bold text-fg-on-brand select-none shrink-0 font-polaris tracking-tight',
+  'inline-flex items-center justify-center font-bold text-label-inverse select-none shrink-0 font-polaris tracking-tight',
   {
     variants: {
       type: {
@@ -18,7 +18,7 @@ const fileIconVariants = cva(
       size: {
         sm: 'h-7 w-7 rounded-polaris-sm text-[9px]',
         md: 'h-10 w-10 rounded-polaris-md text-[11px]',
-        lg: 'h-12 w-12 rounded-polaris-lg text-polaris-caption',
+        lg: 'h-12 w-12 rounded-polaris-lg text-polaris-meta',
       },
     },
     defaultVariants: { size: 'md' },

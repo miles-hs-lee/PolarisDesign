@@ -35,7 +35,7 @@ export const DialogContent = forwardRef<
       className={cn(
         'fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2',
         'w-[calc(100vw-2rem)] max-w-lg p-6',
-        'bg-surface-raised text-fg-primary border border-surface-border rounded-polaris-xl shadow-polaris-lg',
+        'bg-background-normal text-label-normal border border-line-neutral rounded-polaris-xl shadow-polaris-lg',
         'focus-visible:outline-none',
         'data-[state=open]:opacity-100 data-[state=closed]:opacity-0 transition-opacity duration-150',
         className
@@ -45,8 +45,8 @@ export const DialogContent = forwardRef<
       {children}
       <DialogPrimitive.Close
         className={cn(
-          'absolute right-4 top-4 rounded-polaris-sm text-fg-muted',
-          'hover:text-fg-primary hover:bg-brand-primary-subtle p-1',
+          'absolute right-4 top-4 rounded-polaris-sm text-label-alternative',
+          'hover:text-label-normal hover:bg-primary-normal-subtle p-1',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary'
         )}
       >
@@ -68,7 +68,7 @@ export const DialogTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn('text-polaris-heading-md text-fg-primary', className)}
+    className={cn('text-polaris-h5 text-label-normal', className)}
     {...props}
   />
 ));
@@ -80,7 +80,7 @@ export const DialogDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-polaris-body-sm text-fg-secondary', className)}
+    className={cn('text-polaris-body-sm text-label-neutral', className)}
     {...props}
   />
 ));

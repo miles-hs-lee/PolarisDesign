@@ -15,12 +15,12 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary:   'bg-brand-primary text-fg-on-brand hover:bg-brand-primary-hover',
-        secondary: 'bg-brand-secondary text-fg-on-brand hover:bg-brand-secondary-hover',
-        ai:        'bg-ai-normal text-fg-on-brand hover:bg-ai-strong focus-visible:outline-ai-normal',
-        outline:   'bg-surface-raised text-fg-primary border border-line-normal hover:bg-fill-normal',
-        ghost:     'bg-transparent text-fg-primary hover:bg-fill-normal',
-        danger:    'bg-status-danger text-fg-on-brand hover:bg-status-danger-hover',
+        primary:   'bg-primary-normal text-label-inverse hover:bg-primary-strong',
+        secondary: 'bg-ai-normal text-label-inverse hover:bg-ai-strong',
+        ai:        'bg-ai-normal text-label-inverse hover:bg-ai-strong focus-visible:outline-ai-normal',
+        outline:   'bg-background-normal text-label-normal border border-line-normal hover:bg-fill-normal',
+        ghost:     'bg-transparent text-label-normal hover:bg-fill-normal',
+        danger:    'bg-status-danger text-label-inverse hover:bg-status-danger-hover',
       },
       size: {
         // 26 / 10 / radius 6 / 12px

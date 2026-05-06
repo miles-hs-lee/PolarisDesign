@@ -41,8 +41,8 @@ export const PaginationItem = forwardRef<HTMLElement, PaginationItemProps>(
           'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
           'disabled:opacity-50 disabled:pointer-events-none aria-disabled:opacity-50 aria-disabled:pointer-events-none',
           active
-            ? 'bg-brand-primary text-fg-on-brand'
-            : 'text-fg-primary hover:bg-brand-primary-subtle',
+            ? 'bg-primary-normal text-label-inverse'
+            : 'text-label-normal hover:bg-primary-normal-subtle',
           className
         )}
         {...buttonProps}
@@ -85,7 +85,7 @@ export const PaginationEllipsis = forwardRef<HTMLSpanElement, React.HTMLAttribut
     <span
       ref={ref}
       aria-hidden="true"
-      className={cn('inline-flex h-9 min-w-9 items-center justify-center text-fg-muted', className)}
+      className={cn('inline-flex h-9 min-w-9 items-center justify-center text-label-alternative', className)}
       {...props}
     >
       <MoreHorizontal className="h-4 w-4" />
