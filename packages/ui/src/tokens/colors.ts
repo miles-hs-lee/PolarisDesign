@@ -85,8 +85,17 @@ export const text = {
  * Light mode only — design team hasn't supplied a dark-mode ramp yet.
  * ================================================================== */
 
-export type Ramp9 = Readonly<{
-  '5':  string;
+/**
+ * 10-step ramp shape per v1 spec (`primitive-color-palette` reference).
+ * Steps run `05` (lightest tint) → `90` (darkest shade). The leading-zero
+ * `'05'` matches the spec sheet exactly so search/copy from the design
+ * artefact lands on the right key.
+ *
+ * The `'5'` (no leading zero) key is preserved as a deprecated alias for
+ * each ramp so v0.7-rc.0 callers keep compiling — codemod rewrites it.
+ */
+export type Ramp10 = Readonly<{
+  '05': string;
   '10': string;
   '20': string;
   '30': string;
@@ -95,11 +104,14 @@ export type Ramp9 = Readonly<{
   '60': string;
   '70': string;
   '80': string;
+  '90': string;
+  /** @deprecated alias of `'05'`. Codemod rewrites `'5'` → `'05'`. */
+  '5': string;
 }>;
 
 /** PO Blue — primary brand color, also the Word file-type accent. */
 export const bluePalette = {
-  '5':  '#E8F2FE',
+  '05': '#E8F2FE',
   '10': '#D9EAFF',
   '20': '#BBD8FD',
   '30': '#8EBFFC',
@@ -108,37 +120,43 @@ export const bluePalette = {
   '60': '#186CD3',
   '70': '#1458AD',
   '80': '#0F4588',
-} as const satisfies Ramp9;
+  '90': '#0B3263',
+  '5':  '#E8F2FE',
+} as const satisfies Ramp10;
 
 /** PO Dark Blue — BI / corporate communication only (not for UI). */
 export const darkBluePalette = {
-  '5':  '#E5ECF8',
+  '05': '#E5ECF8',
   '10': '#D1DFF7',
   '20': '#B2C7EA',
   '30': '#7FA2DC',
-  '40': '#4C70CE',
+  '40': '#4C7DCE',
   '50': '#0046B9',
   '60': '#003B9D',
   '70': '#003081',
   '80': '#002665',
-} as const satisfies Ramp9;
+  '90': '#001C4A',
+  '5':  '#E5ECF8',
+} as const satisfies Ramp10;
 
-/** Sheet — XLSX file-type accent. */
+/** Sheet — XLSX file-type accent. Also `--state-success` source. */
 export const greenPalette = {
-  '5':  '#EDF7E8',
+  '05': '#EDF7E8',
   '10': '#DCF1D1',
   '20': '#CAE8BA',
   '30': '#A8D98D',
-  '40': '#B5CA5F',
+  '40': '#85CA5F',
   '50': '#51B41B',
   '60': '#449916',
   '70': '#387D12',
   '80': '#2C620E',
-} as const satisfies Ramp9;
+  '90': '#20480A',
+  '5':  '#EDF7E8',
+} as const satisfies Ramp10;
 
-/** Slide — PPTX file-type accent. */
+/** Slide — PPTX file-type accent. Also `--state-warning` source. */
 export const orangePalette = {
-  '5':  '#FEF3E5',
+  '05': '#FEF3E5',
   '10': '#FDE5C8',
   '20': '#FEDBB2',
   '30': '#FEC47F',
@@ -147,11 +165,13 @@ export const orangePalette = {
   '60': '#D77400',
   '70': '#B05F00',
   '80': '#8A4B00',
-} as const satisfies Ramp9;
+  '90': '#653600',
+  '5':  '#FEF3E5',
+} as const satisfies Ramp10;
 
-/** PDF — file-type accent. */
+/** PDF — file-type accent. Also `--state-error` source. */
 export const redPalette = {
-  '5':  '#FEEEEE',
+  '05': '#FEEEEE',
   '10': '#FFE3E3',
   '20': '#FDCECE',
   '30': '#FCADAD',
@@ -160,20 +180,112 @@ export const redPalette = {
   '60': '#D34E4E',
   '70': '#AD4040',
   '80': '#883232',
-} as const satisfies Ramp9;
+  '90': '#632424',
+  '5':  '#FEEEEE',
+} as const satisfies Ramp10;
 
 /** AI Purple — AI / NOVA surfaces only. Never use on general product UI. */
 export const purplePalette = {
-  '5':  '#F5F1FD',
+  '05': '#F5F1FD',
   '10': '#EDE5FE',
   '20': '#E0D1FF',
   '30': '#C6A9FF',
-  '40': '#9075EC',
+  '40': '#9D75EC',
   '50': '#6F3AD0',
   '60': '#602BC1',
   '70': '#511BB2',
   '80': '#3E0F8D',
-} as const satisfies Ramp9;
+  '90': '#20075C',
+  '5':  '#F5F1FD',
+} as const satisfies Ramp10;
+
+/* ================================================================== *
+ * Supplementary palettes (v1 spec, 2026.05)
+ *
+ * These are NOT brand colors — they're the secondary palette the
+ * design team reserves for charts, plan badges, file-type extensions,
+ * notes, and other accents that need their own hue without diluting
+ * the five brand colors. Use sparingly.
+ * ================================================================== */
+
+/** Sky Blue — plan badges and accents (lighter, friendlier than PO Blue). */
+export const skyBluePalette = {
+  '05': '#E9F7FD',
+  '10': '#D6F0FE',
+  '20': '#BFE7FB',
+  '30': '#95D7F9',
+  '40': '#6AC7F7',
+  '50': '#2BAFF4',
+  '60': '#2494CF',
+  '70': '#1E7AAA',
+  '80': '#176085',
+  '90': '#114661',
+  '5':  '#E9F7FD',
+} as const satisfies Ramp10;
+
+/** Blue (supplementary) — links and accents in dense UIs. Distinct from
+ *  PO Blue (`bluePalette`); reach for this when PO Blue would visually
+ *  conflict with brand-strong elements on the same surface. */
+export const blueSupplementaryPalette = {
+  '05': '#EDEEFC',
+  '10': '#DEE0FF',
+  '20': '#C9CDF7',
+  '30': '#A5ADF2',
+  '40': '#818CEC',
+  '50': '#4C5BE5',
+  '60': '#404DC2',
+  '70': '#353F9F',
+  '80': '#29317D',
+  '90': '#1E245B',
+  '5':  '#EDEEFC',
+} as const satisfies Ramp10;
+
+/** Violet — supplementary purple for charts and tags. Distinct from
+ *  AI Purple (`purplePalette`); never use Violet for AI / NOVA. */
+export const violetPalette = {
+  '05': '#EEECF9',
+  '10': '#E0DAF8',
+  '20': '#CEC7ED',
+  '30': '#ADA3E2',
+  '40': '#8C7ED7',
+  '50': '#5C47C6',
+  '60': '#4E3CA8',
+  '70': '#40318A',
+  '80': '#32266C',
+  '90': '#241C4F',
+  '5':  '#EEECF9',
+} as const satisfies Ramp10;
+
+/** Cyan — image format and media-related accents. */
+export const cyanPalette = {
+  '05': '#E6F9FD',
+  '10': '#D2F4FA',
+  '20': '#ABEBF6',
+  '30': '#66DAF2',
+  '40': '#33CDED',
+  '50': '#00BADB',
+  '60': '#0095B1',
+  '70': '#00758E',
+  '80': '#005C70',
+  '90': '#003F4D',
+  '5':  '#E6F9FD',
+} as const satisfies Ramp10;
+
+/** Yellow — note format and highlight colors. Reserved: do NOT use
+ *  for `--state-warning` (orange owns that role). */
+export const yellowPalette = {
+  '05': '#FFFAEB',
+  '10': '#FCEFCA',
+  '20': '#FAE6AF',
+  '30': '#FCDA7B',
+  '40': '#F8C22E',
+  '50': '#F2B50B',
+  '60': '#D79E00',
+  '70': '#B08100',
+  '80': '#8A6500',
+  '90': '#654A00',
+  '5':  '#FFFAEB',
+} as const satisfies Ramp10;
 
 /** Gray ramp — UI backbone (text, lines, surfaces, interaction states).
  *  9 steps, 10 (lightest) → 90 (darkest). Note this scale uses different
@@ -276,13 +388,20 @@ export const colors = {
   neutral,
   surface,
   text,
-  // 9-step ramps
+  // 10-step ramps (brand)
   bluePalette,
   darkBluePalette,
   greenPalette,
   orangePalette,
   redPalette,
   purplePalette,
+  // 10-step ramps (supplementary, v0.7-rc.1)
+  skyBluePalette,
+  blueSupplementaryPalette,
+  violetPalette,
+  cyanPalette,
+  yellowPalette,
+  // gray (9 steps, 10–90)
   grayRamp,
   // v1 semantic tokens
   label,

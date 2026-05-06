@@ -25,6 +25,27 @@ function token(varName: string): string {
   return fn as unknown as string;
 }
 
+/** Builds a 10-step ramp object (`05` → `90`) for the Tailwind palette
+ *  given a CSS-var prefix like `--polaris-blue`. Includes the legacy
+ *  `5` (no leading zero) key as a deprecated alias of `05` so v0.7-rc.0
+ *  classes (`bg-blue-5`) keep resolving. */
+function ramp10(prefix: string) {
+  return {
+    '05': token(`${prefix}-05`),
+    '10': token(`${prefix}-10`),
+    '20': token(`${prefix}-20`),
+    '30': token(`${prefix}-30`),
+    '40': token(`${prefix}-40`),
+    '50': token(`${prefix}-50`),
+    '60': token(`${prefix}-60`),
+    '70': token(`${prefix}-70`),
+    '80': token(`${prefix}-80`),
+    '90': token(`${prefix}-90`),
+    /** @deprecated alias of `05`. v0.8 removes. */
+    '5':  token(`${prefix}-5`),
+  };
+}
+
 const polarisPreset: Partial<Config> = {
   theme: {
     extend: {
@@ -132,64 +153,29 @@ const polarisPreset: Partial<Config> = {
           pressed: token('--polaris-ai-pressed'),
         },
 
-        // 9-step ramps — for chart categories, hover/pressed nuances,
-        // or anywhere the semantic alias above isn't expressive enough.
-        // Class form: `bg-blue-50`, `text-purple-70`, etc.
-        blue: {
-          5:  token('--polaris-blue-5'),
-          10: token('--polaris-blue-10'),
-          20: token('--polaris-blue-20'),
-          30: token('--polaris-blue-30'),
-          40: token('--polaris-blue-40'),
-          50: token('--polaris-blue-50'),
-          60: token('--polaris-blue-60'),
-          70: token('--polaris-blue-70'),
-          80: token('--polaris-blue-80'),
-        },
-        green: {
-          5:  token('--polaris-green-5'),
-          10: token('--polaris-green-10'),
-          20: token('--polaris-green-20'),
-          30: token('--polaris-green-30'),
-          40: token('--polaris-green-40'),
-          50: token('--polaris-green-50'),
-          60: token('--polaris-green-60'),
-          70: token('--polaris-green-70'),
-          80: token('--polaris-green-80'),
-        },
-        orange: {
-          5:  token('--polaris-orange-5'),
-          10: token('--polaris-orange-10'),
-          20: token('--polaris-orange-20'),
-          30: token('--polaris-orange-30'),
-          40: token('--polaris-orange-40'),
-          50: token('--polaris-orange-50'),
-          60: token('--polaris-orange-60'),
-          70: token('--polaris-orange-70'),
-          80: token('--polaris-orange-80'),
-        },
-        red: {
-          5:  token('--polaris-red-5'),
-          10: token('--polaris-red-10'),
-          20: token('--polaris-red-20'),
-          30: token('--polaris-red-30'),
-          40: token('--polaris-red-40'),
-          50: token('--polaris-red-50'),
-          60: token('--polaris-red-60'),
-          70: token('--polaris-red-70'),
-          80: token('--polaris-red-80'),
-        },
-        purple: {
-          5:  token('--polaris-purple-5'),
-          10: token('--polaris-purple-10'),
-          20: token('--polaris-purple-20'),
-          30: token('--polaris-purple-30'),
-          40: token('--polaris-purple-40'),
-          50: token('--polaris-purple-50'),
-          60: token('--polaris-purple-60'),
-          70: token('--polaris-purple-70'),
-          80: token('--polaris-purple-80'),
-        },
+        // 10-step primitive ramps. Class form: `bg-blue-50`, `text-purple-70`,
+        // `bg-yellow-30`, etc. Each ramp covers 05 (lightest tint) → 90
+        // (darkest shade); brand ramps inherit `--state-success/-warning/-error`
+        // semantic aliases (e.g. green-50 == state-success).
+        //
+        // The `5` (no leading zero) key on each is a deprecated alias of
+        // `05` — v0.7-rc.0 classes (`bg-blue-5`) still resolve. Codemod
+        // rewrites them; v0.8 removes the alias.
+        blue:                ramp10('--polaris-blue'),
+        'dark-blue':         ramp10('--polaris-dark-blue'),
+        green:               ramp10('--polaris-green'),
+        orange:              ramp10('--polaris-orange'),
+        red:                 ramp10('--polaris-red'),
+        purple:              ramp10('--polaris-purple'),
+        // Supplementary palettes (v0.7-rc.1) — chart categories, plan
+        // badges, file-type extensions. Avoid mixing with brand colors
+        // on the same surface.
+        'sky-blue':          ramp10('--polaris-sky-blue'),
+        'blue-supplementary': ramp10('--polaris-blue-supplementary'),
+        violet:              ramp10('--polaris-violet'),
+        cyan:                ramp10('--polaris-cyan'),
+        yellow:              ramp10('--polaris-yellow'),
+        // Gray runs 10 → 90 (no 05 in spec).
         gray: {
           10: token('--polaris-gray-10'),
           20: token('--polaris-gray-20'),

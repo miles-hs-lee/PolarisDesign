@@ -29,10 +29,16 @@ import {
   shadow,
   fontFamily,
   bluePalette,
+  darkBluePalette,
   greenPalette,
   orangePalette,
   redPalette,
   purplePalette,
+  skyBluePalette,
+  blueSupplementaryPalette,
+  violetPalette,
+  cyanPalette,
+  yellowPalette,
   grayRamp,
   label,
   background,
@@ -93,17 +99,36 @@ function emitColorBlock(mode: 'light' | 'dark'): string {
   return lines.join('\n');
 }
 
-/** Emit the v1 9-step ramps (light only — design team hasn't supplied
- *  a dark-mode ramp yet). Each step gets its own custom property:
- *  `--polaris-blue-50`, `--polaris-purple-30`, etc. */
+/** Emit primitive ramps (light only — design team hasn't supplied a
+ *  dark-mode ramp yet). Each step gets its own custom property:
+ *  `--polaris-blue-50`, `--polaris-purple-30`, `--polaris-blue-90`, etc.
+ *
+ *  v0.7-rc.1: brand ramps gain step `90` (darkest) and an `05`
+ *  leading-zero key matching the design sheet. The legacy `5` key is
+ *  emitted as a deprecated CSS variable for backward compat. Five new
+ *  supplementary families (Sky Blue, Blue, Violet, Cyan, Yellow) are
+ *  added per the primitive palette reference.
+ *
+ *  `dark-blue` (BI / corporate) is also emitted now; previously it
+ *  lived only in the TS export.
+ */
 function emitRampBlock(): string {
   const ramps: Array<[string, Record<string, string>]> = [
-    ['blue',   bluePalette],
-    ['green',  greenPalette],
-    ['orange', orangePalette],
-    ['red',    redPalette],
-    ['purple', purplePalette],
-    ['gray',   grayRamp],
+    // brand (5 colors + dark blue)
+    ['blue',      bluePalette],
+    ['dark-blue', darkBluePalette],
+    ['green',     greenPalette],
+    ['orange',    orangePalette],
+    ['red',       redPalette],
+    ['purple',    purplePalette],
+    // supplementary (v0.7-rc.1) — charts, plan badges, file-type extensions
+    ['sky-blue',         skyBluePalette],
+    ['blue-supplementary', blueSupplementaryPalette],
+    ['violet',           violetPalette],
+    ['cyan',             cyanPalette],
+    ['yellow',           yellowPalette],
+    // ui backbone
+    ['gray',             grayRamp],
   ];
   return ramps
     .flatMap(([name, ramp]) =>
