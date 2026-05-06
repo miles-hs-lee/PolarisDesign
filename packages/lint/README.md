@@ -85,6 +85,28 @@ npx polaris-audit [target-dir]
 
 종료 코드: 위반 0건이면 0, 있으면 1 (CI에서 활용 가능).
 
+## `polaris-codemod-v07` CLI
+
+v0.6 → v0.7 토큰명·Tailwind 클래스·CSS 변수 일괄 변환:
+
+```sh
+# 사전 확인 (변경하지 않음)
+npx polaris-codemod-v07 src
+
+# 적용
+npx polaris-codemod-v07 --apply src
+
+# CI: 마이그레이션이 남아 있으면 실패
+npx polaris-codemod-v07 --check src
+```
+
+처리 항목 (자세한 매핑은 [v0.6→v0.7 가이드](../../docs/migration/v0.6-to-v0.7.md) 참조):
+- TS/TSX 토큰 멤버 접근: `text.primary` → `label.normal` 등
+- Tailwind 유틸리티: `text-fg-primary` → `text-label-normal`, `rounded-polaris-full` → `rounded-polaris-pill`
+- CSS 커스텀 속성: `--polaris-text-primary` → `--polaris-label-normal`
+
+`node_modules`, `dist`, `.next`, `.turbo` 등은 자동으로 건너뜁니다. 동적으로 조립된 클래스명(`\`text-${tone}-primary\``)은 처리되지 않으니 codemod 적용 후 IDE에서 정의되지 않은 import를 함께 정리하세요.
+
 ## 개발
 
 ```sh

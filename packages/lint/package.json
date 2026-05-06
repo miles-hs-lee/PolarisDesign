@@ -17,13 +17,14 @@
     "bin"
   ],
   "bin": {
-    "polaris-audit": "./bin/polaris-audit.mjs"
+    "polaris-audit": "./bin/polaris-audit.mjs",
+    "polaris-codemod-v07": "./bin/polaris-codemod-v07.mjs"
   },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
-    "test": "node test/run-tests.mjs",
+    "test": "node test/run-tests.mjs && node --test test/codemod-v07.test.mjs",
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
