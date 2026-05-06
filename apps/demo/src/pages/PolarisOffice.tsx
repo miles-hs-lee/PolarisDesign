@@ -14,6 +14,8 @@ import {
   Badge,
   Button,
   Card,
+  Input,
+  FileIcon as FileIconBadge,
   Select,
   SelectTrigger,
   SelectValue,
@@ -21,6 +23,7 @@ import {
   SelectItem,
   SimpleTooltip,
   DropdownMenuItem,
+  cn,
 } from '@polaris/ui';
 import {
   Ribbon,
@@ -40,8 +43,9 @@ import {
   RibbonToggleItem,
 } from '@polaris/ui/ribbon';
 import {
-  // chrome
+  // chrome + file backstage
   Menu, Star, Save, ChevronDown, ChevronUp, Monitor, UsersRound, Bell,
+  ArrowLeft, HardDrive, Folder as FolderIcon,
   // home tab
   Clipboard, Scissors, Copy, Brush,
   Bold, Italic, Underline, Strikethrough, Subscript, Superscript,
@@ -659,6 +663,202 @@ function PlaceholderTab({ value, label }: { value: string; label: string }) {
 }
 
 /* ================================================================== *
+ * 파일 탭 — Office "backstage view". Unlike other tabs which render
+ * controls inside the ribbon panel, the file tab takes over the full
+ * window. Left drawer = sections; right pane = section content.
+ * ================================================================== */
+
+type FilePane = 'new' | 'open' | 'download' | 'save-drive' | 'share';
+
+const FILE_NAV: Array<{ id: FilePane; label: string }> = [
+  { id: 'new', label: '새 문서' },
+  { id: 'open', label: '문서 열기' },
+  { id: 'download', label: '다운로드' },
+  { id: 'save-drive', label: '폴라리스 드라이브에 저장' },
+  { id: 'share', label: '공유하기' },
+];
+
+function NewDocPane() {
+  const docs: Array<{
+    type: 'docx' | 'xlsx' | 'pptx';
+    title: string;
+    desc: string;
+  }> = [
+    { type: 'docx', title: '워드', desc: 'docx 확장자의 워드 문서를 만듭니다.' },
+    { type: 'xlsx', title: '시트', desc: 'xlsx 확장자의 시트 문서를 만듭니다.' },
+    { type: 'pptx', title: '슬라이드', desc: 'pptx 확장자의 슬라이드 문서를 만듭니다.' },
+  ];
+  return (
+    <ul className="space-y-1">
+      {docs.map((doc) => (
+        <li key={doc.type}>
+          <Button
+            variant="ghost"
+            className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-surface-sunken text-left"
+          >
+            <FileIconBadge type={doc.type} size="md" />
+            <span className="flex flex-col items-start min-w-0">
+              <span className="text-polaris-body-sm font-semibold">{doc.title}</span>
+              <span className="text-polaris-caption text-fg-muted truncate">{doc.desc}</span>
+            </span>
+          </Button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function OpenDocPane() {
+  const places: Array<{ icon: LucideIcon; iconClass: string; label: string }> = [
+    { icon: History, iconClass: 'text-fg-muted', label: '최근 문서' },
+    { icon: Monitor, iconClass: 'text-fg-muted', label: '내 컴퓨터' },
+    { icon: HardDrive, iconClass: 'text-brand-primary', label: '폴라리스 드라이브' },
+    { icon: UsersRound, iconClass: 'text-status-success', label: '공유 문서' },
+    { icon: Star, iconClass: 'text-status-warning fill-status-warning', label: '중요 문서' },
+  ];
+  return (
+    <ul className="space-y-1">
+      {places.map((place, idx) => {
+        const Icon = place.icon;
+        const active = idx === 0 || idx === 2; // demo: 최근 문서 + 폴라리스 드라이브 highlighted
+        return (
+          <li key={place.label}>
+            <Button
+              variant="ghost"
+              className={cn(
+                '!h-auto w-full !justify-start !py-3 !px-4 gap-3 rounded-polaris-md text-left',
+                active ? 'bg-brand-primary-subtle hover:bg-brand-primary-subtle' : 'hover:bg-surface-sunken'
+              )}
+            >
+              <Icon className={cn('h-5 w-5 shrink-0', place.iconClass)} aria-hidden="true" />
+              <span className="text-polaris-body-sm font-medium">{place.label}</span>
+            </Button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function DownloadPane() {
+  return (
+    <div className="space-y-3 max-w-md">
+      <p className="text-polaris-body-sm text-fg-secondary">
+        현재 문서를 로컬에 다운로드합니다. 형식을 선택하세요.
+      </p>
+      <ul className="space-y-1">
+        {(['docx', 'pdf'] as const).map((type) => (
+          <li key={type}>
+            <Button
+              variant="ghost"
+              className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-surface-sunken text-left"
+            >
+              <FileIconBadge type={type} size="md" />
+              <span className="text-polaris-body-sm font-medium">
+                {type.toUpperCase()}으로 다운로드
+              </span>
+            </Button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function SaveToDrivePane() {
+  return (
+    <div className="space-y-4 max-w-md">
+      <p className="text-polaris-body-sm text-fg-secondary">
+        폴라리스 드라이브의 위치를 선택하세요. 변경 사항이 자동으로 동기화됩니다.
+      </p>
+      <Input label="파일 이름" defaultValue="NewDocument 2026-05-05 063559" />
+      <div className="flex items-center gap-2 px-3 py-2 rounded-polaris-md border border-surface-border bg-surface-sunken text-polaris-body-sm">
+        <FolderIcon className="h-4 w-4 text-fg-muted" aria-hidden="true" />
+        <span className="text-fg-secondary">/내 드라이브/문서</span>
+      </div>
+      <Button variant="primary" className="w-full">저장</Button>
+    </div>
+  );
+}
+
+function SharePane() {
+  return (
+    <div className="space-y-4 max-w-md">
+      <p className="text-polaris-body-sm text-fg-secondary">
+        링크 또는 이메일로 다른 사람과 함께 편집할 수 있습니다.
+      </p>
+      <Input label="공유할 사람" placeholder="이메일 주소를 입력하세요" />
+      <div className="flex items-center justify-between px-3 py-2.5 rounded-polaris-md border border-surface-border">
+        <div className="flex items-center gap-2">
+          <UsersRound className="h-4 w-4 text-fg-muted" aria-hidden="true" />
+          <span className="text-polaris-body-sm">링크가 있는 모든 사람</span>
+        </div>
+        <Badge variant="neutral">보기 전용</Badge>
+      </div>
+      <Button variant="outline" className="w-full">링크 복사</Button>
+    </div>
+  );
+}
+
+function FileBackstage({ onClose }: { onClose: () => void }) {
+  const [pane, setPane] = useState<FilePane>('new');
+  const current = FILE_NAV.find((n) => n.id === pane);
+
+  return (
+    // EditorChrome 높이(h-12 = 48px)를 viewport에서 빼서 backstage가 정확히
+    // 그 아래 영역을 차지하도록 inline style 사용. Tailwind 임의값(`h-[…]`)은
+    // 폴라리스 lint 룰에 걸리므로 inline style이 더 깔끔.
+    <div className="flex bg-surface-raised" style={{ height: 'calc(100vh - 3rem)' }}>
+      {/* Left drawer */}
+      <aside className="w-60 shrink-0 border-r border-surface-border bg-surface-canvas flex flex-col">
+        <div className="p-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            aria-label="문서로 돌아가기"
+            className="!h-9 !w-9 !px-0"
+          >
+            <ArrowLeft className="h-5 w-5 text-brand-primary" />
+          </Button>
+        </div>
+        <nav aria-label="파일 메뉴" className="px-2 pb-4">
+          <ul className="space-y-0.5">
+            {FILE_NAV.map((item) => (
+              <li key={item.id}>
+                <Button
+                  variant="ghost"
+                  onClick={() => setPane(item.id)}
+                  aria-current={pane === item.id ? 'page' : undefined}
+                  className={cn(
+                    'w-full !justify-start !px-3 !py-2 !h-auto rounded-polaris-md text-left text-polaris-body-sm font-normal',
+                    pane === item.id
+                      ? '!bg-surface-sunken !font-semibold !text-fg-primary'
+                      : '!text-fg-secondary hover:!bg-surface-sunken'
+                  )}
+                >
+                  {item.label}
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+
+      {/* Right detail pane */}
+      <main className="flex-1 px-8 py-6 overflow-y-auto">
+        <h1 className="text-polaris-heading-lg mb-6 text-fg-primary">{current?.label}</h1>
+        {pane === 'new' && <NewDocPane />}
+        {pane === 'open' && <OpenDocPane />}
+        {pane === 'download' && <DownloadPane />}
+        {pane === 'save-drive' && <SaveToDrivePane />}
+        {pane === 'share' && <SharePane />}
+      </main>
+    </div>
+  );
+}
+
+/* ================================================================== *
  * Main page — composes the chrome, the tabbed ribbon, and a canvas
  * placeholder. Only `activeTab` lives at this level; per-tab state is
  * encapsulated in each tab component.
@@ -666,6 +866,18 @@ function PlaceholderTab({ value, label }: { value: string; label: string }) {
 
 export default function PolarisOffice() {
   const [activeTab, setActiveTab] = useState('home');
+
+  // 파일 탭은 다른 탭과 달리 ribbon 영역이 아닌 backstage view로 화면을
+  // 가져갑니다 (Office 패턴). EditorChrome은 유지하되 ribbon + canvas는
+  // 숨기고 그 자리에 left drawer + right detail을 표시.
+  if (activeTab === 'file') {
+    return (
+      <div className="bg-surface-canvas">
+        <EditorChrome />
+        <FileBackstage onClose={() => setActiveTab('home')} />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-surface-canvas">
