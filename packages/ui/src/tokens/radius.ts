@@ -1,26 +1,33 @@
 /**
- * Border-radius scale aligned with the v1 design spec.
+ * Border-radius scale — v0.7-rc.1 aligned with DESIGN.md spec.
  *
- * v1 (8 steps): 2xs / xs / sm / md / lg★ / xl / 2xl / pill
- *   ★ lg = 12px is the default for cards.
+ * Spec scale (8 steps): xs (4) / sm (8) / md★ (12) / lg (16) / xl (24)
+ * / 2xl (38) / pill (9999), plus our `2xs` (2) for fine-tuning chrome.
  *
- * v0.6 backward-compat aliases are kept so existing code keeps
- * compiling — `radius.full` (9999px) is now an alias for `pill`.
- * Note: `radius.md` changes from 10px → 8px between v0.6 and v0.7;
- * `radius.lg` changes from 14px → 12px. Codemod handles renames in
- * Tailwind class names (`rounded-polaris-md`/`-lg`) but visual values
- * shift slightly.
+ *   ★ md = 12px — DEFAULT for buttons, cards, modals.
  *
- * @deprecated `full` will be removed in v0.8 — migrate to `pill`.
+ * v0.7-rc.1 shifts every step up one size relative to rc.0:
+ *   sm  6  → 8   (input fields)
+ *   md  8  → 12  (button / card / modal default)
+ *   lg  12 → 16  (large buttons 54h, section cards)
+ *   xl  16 → 24  (강조 modals)
+ *   2xl 24 → 38  (bottom sheets)
+ *
+ * Components that reference `rounded-polaris-md` / `-lg` get the new
+ * (more rounded) values automatically — codemod isn't needed for the
+ * Tailwind class names, only for the visual baselines (refreshed in
+ * step 9). Consumers wanting the rc.0 values can pin to 0.7.0-rc.0.
+ *
+ * `full` (9999px) stays as the deprecated alias of `pill`.
  */
 export const radius = {
   '2xs': '2px',
   xs:    '4px',
-  sm:    '6px',
-  md:    '8px',
-  lg:    '12px',
-  xl:    '16px',
-  '2xl': '24px',
+  sm:    '8px',
+  md:    '12px',
+  lg:    '16px',
+  xl:    '24px',
+  '2xl': '38px',
   pill:  '9999px',
   /** @deprecated Use `pill` (semantically identical, 9999px). */
   full:  '9999px',

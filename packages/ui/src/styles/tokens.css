@@ -234,11 +234,11 @@
 
   --polaris-radius-2xs: 2px;
   --polaris-radius-xs: 4px;
-  --polaris-radius-sm: 6px;
-  --polaris-radius-md: 8px;
-  --polaris-radius-lg: 12px;
-  --polaris-radius-xl: 16px;
-  --polaris-radius-2xl: 24px;
+  --polaris-radius-sm: 8px;
+  --polaris-radius-md: 12px;
+  --polaris-radius-lg: 16px;
+  --polaris-radius-xl: 24px;
+  --polaris-radius-2xl: 38px;
   --polaris-radius-pill: 9999px;
   --polaris-radius-full: 9999px;
 

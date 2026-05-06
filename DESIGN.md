@@ -222,11 +222,11 @@ typography:
 rounded:
   2xs: 2px
   xs: 4px
-  sm: 6px
-  md: 8px
-  lg: 12px
-  xl: 16px
-  2xl: 24px
+  sm: 8px
+  md: 12px
+  lg: 16px
+  xl: 24px
+  2xl: 38px
   pill: 9999px
   full: 9999px
 
