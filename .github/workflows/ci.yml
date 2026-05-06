@@ -40,6 +40,11 @@ jobs:
         # this step fails — forcing the contributor to commit the regen.
         run: git diff --exit-code packages/ui/src/styles/tokens.css || (echo "::error::tokens.css is out of sync — run 'pnpm --filter @polaris/ui build:tokens' and commit the result" && exit 1)
 
+      - name: Verify DESIGN.md sync (Stitch spec matches generator output)
+        # build also runs `build:design-md`. Same drift-detection as
+        # tokens.css — DESIGN.md is auto-generated from tokens.ts.
+        run: git diff --exit-code DESIGN.md || (echo "::error::DESIGN.md is out of sync — run 'pnpm --filter @polaris/ui build:design-md' and commit the result" && exit 1)
+
       - name: Verify root version sync
         # Root package.json isn't in the changesets fixed group (it's not
         # a workspace member), so we sync it via a post-version script.

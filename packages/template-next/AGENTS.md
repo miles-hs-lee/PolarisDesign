@@ -4,6 +4,17 @@ Codex / Cursor / 기타 코드 에이전트가 이 프로젝트(이 템플릿에
 
 원본은 [`@polaris/PolarisDesign/AGENTS.md`](https://github.com/miles-hs-lee/PolarisDesign/blob/main/AGENTS.md). 시스템 전체 맥락이 필요하면 그쪽을 보세요.
 
+## 0. 시작 전 — DESIGN.md를 1차 spec으로 읽기
+
+작업 시작 전에 두 DESIGN.md를 모두 읽으세요:
+
+1. **시스템 spec** — 폴라리스 모노레포 루트의 [`DESIGN.md`](https://github.com/miles-hs-lee/PolarisDesign/blob/main/DESIGN.md) ([Stitch 형식](https://stitch.withgoogle.com/docs/design-md/specification/)). 토큰·타이포·기본 컴포넌트가 기계가 읽는 YAML과 사람이 읽는 prose로 정의되어 있습니다.
+2. **제품 spec** — 이 프로젝트 root의 [`DESIGN.md`](DESIGN.md). 이 제품 고유의 색상·레이아웃·composite 컴포넌트가 적혀 있습니다.
+
+제품 DESIGN.md의 `{polaris.<group>.<name>}` reference는 시스템 DESIGN.md의 토큰을 가리킵니다. **두 파일은 함께 읽어야 의미가 완성**됩니다.
+
+DESIGN.md에 없는 사항을 결정해야 한다면 우선 사용자에게 확인. 임의로 추가하거나 우회하지 마세요.
+
 ## 이 프로젝트의 정체
 
 이 앱은 **`@polaris/ui` 디자인 시스템 위에 만들어진 폴라리스 웹 서비스**입니다. 따라서:

@@ -45,8 +45,9 @@
     "src/styles/v4-theme.css"
   ],
   "scripts": {
-    "build": "pnpm build:tokens && tsup",
+    "build": "pnpm build:tokens && pnpm build:design-md && tsup",
     "build:tokens": "tsx scripts/build-tokens.ts",
+    "build:design-md": "tsx scripts/build-design-md.ts",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run && node --test 'test/**/*.test.mjs'",

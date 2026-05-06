@@ -2,6 +2,18 @@
 
 이 파일은 **Codex / Cursor / 기타 코드 에이전트**가 이 프로젝트(또는 이 프로젝트의 디자인 시스템을 적용하는 다른 프로젝트)에서 작업할 때 따라야 할 절차를 담습니다. Claude Code는 같은 내용을 [`packages/plugin/skills/polaris-web/SKILL.md`](packages/plugin/skills/polaris-web/SKILL.md)와 PostToolUse 훅으로 강제하지만, 다른 에이전트는 이 파일을 읽고 자가 강제해야 합니다.
 
+## 0. 시작 전 — DESIGN.md를 1차 spec으로 읽기
+
+작업 시작 전에 다음 두 파일이 있으면 **반드시** 먼저 읽으세요:
+
+1. **시스템 spec (auto-generated)** — 저장소 루트의 [`DESIGN.md`](DESIGN.md). 폴라리스 시스템의 토큰·타이포·컴포넌트 표준이 [Stitch DESIGN.md 형식](https://stitch.withgoogle.com/docs/design-md/specification/)으로 정의되어 있습니다. YAML front matter는 기계가 읽고 prose는 사람이 읽지만, 에이전트는 **둘 다** 읽어야 합니다.
+2. **제품 spec (있으면)** — 작업 중인 프로젝트 root의 `DESIGN.md`. 그 제품 고유의 컴포넌트·색상·레이아웃 결정이 적혀 있습니다 (예: [`packages/template-next/DESIGN.md`](packages/template-next/DESIGN.md)).
+
+규칙:
+- DESIGN.md의 토큰 값과 prose 가이드는 **권장이 아니라 spec**입니다. 우회하려면 사용자에게 확인.
+- 제품 DESIGN.md의 토큰 reference(`{polaris.colors.primary}` 등)는 시스템 DESIGN.md의 토큰을 가리킵니다. 두 파일은 함께 읽어야 의미가 완성됩니다.
+- 시스템 DESIGN.md는 `tokens.ts`에서 자동 생성되므로 직접 편집하지 마세요. 토큰을 바꿔야 하면 `packages/ui/src/tokens/*.ts`를 수정 후 `pnpm --filter @polaris/ui build:design-md`.
+
 ## 어떤 프로젝트에서 적용되나
 
 **Polaris Office 웹 서비스**(React/Next.js 앱)를 만들거나 수정할 때만 이 규칙을 따릅니다. 무관한 React 프로젝트에는 적용하지 마세요.
@@ -152,8 +164,9 @@ pnpm lint --fix
 
 ## 추가 자료
 
+- [DESIGN.md](DESIGN.md) — 시스템 spec (Stitch 형식, auto-generated)
 - [메인 README](README.md) — 시스템 전체 개요
-- [tokens.md](tokens.md) — 토큰 사양
+- [tokens.md](tokens.md) — 토큰 사양 (사람용 reference)
 - 라이브 데모: https://miles-hs-lee.github.io/PolarisDesign/
 - 컴포넌트 카탈로그: https://miles-hs-lee.github.io/PolarisDesign/#/components
 - 디자인 토큰: https://miles-hs-lee.github.io/PolarisDesign/#/tokens

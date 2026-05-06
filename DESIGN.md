@@ -1,0 +1,211 @@
+---
+version: alpha
+name: Polaris Design System
+description: Internal design system for Polaris Office's vibe-coding-ops React/Next.js services. 4-color brand palette + NOVA purple, Pretendard typography, Tailwind 4px spacing baseline, Radix UI primitives.
+
+colors:
+  primary: "#2B7FFF"
+  primary-hover: "#1E66DB"
+  primary-subtle: "#E8EFFF"
+  secondary: "#7C5CFF"
+  secondary-hover: "#6B47FF"
+  secondary-subtle: "#F3EFFF"
+  file-docx: "#2B7FFF"
+  file-hwp: "#2B7FFF"
+  file-xlsx: "#1FAE53"
+  file-pptx: "#F37021"
+  file-pdf: "#E5413A"
+  status-success: "#16A34A"
+  status-success-hover: "#138A3F"
+  status-warning: "#EAB308"
+  status-warning-hover: "#C99B0A"
+  status-danger: "#DC2626"
+  status-danger-hover: "#B91C1C"
+  status-info: "#2563EB"
+  status-info-hover: "#1D4ED8"
+  neutral-0: "#FFFFFF"
+  neutral-50: "#FAFAFB"
+  neutral-100: "#F4F4F7"
+  neutral-200: "#E8E8EE"
+  neutral-300: "#D5D5DE"
+  neutral-400: "#B5B5C4"
+  neutral-500: "#8C8CA0"
+  neutral-600: "#6E6E84"
+  neutral-700: "#4F4F63"
+  neutral-800: "#2F2F40"
+  neutral-900: "#1A1A26"
+  neutral-1000: "#0B0B12"
+  surface-canvas: "#FAFAFB"
+  surface-raised: "#FFFFFF"
+  surface-sunken: "#F4F4F7"
+  surface-border: "#E8E8EE"
+  surface-border-strong: "#D5D5DE"
+  text-primary: "#0B0B12"
+  text-secondary: "#4F4F63"
+  text-muted: "#8C8CA0"
+  text-on-brand: "#FFFFFF"
+  text-on-status: "#FFFFFF"
+  palette-blue: "#2B7FFF"
+  palette-green: "#1FAE53"
+  palette-orange: "#F37021"
+  palette-red: "#E5413A"
+  palette-purple: "#7C5CFF"
+
+typography:
+  display-lg:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 48px
+    fontWeight: 700
+    lineHeight: 1.25
+    letterSpacing: -0.025em
+  display-md:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 36px
+    fontWeight: 700
+    lineHeight: 1.222
+    letterSpacing: -0.02em
+  heading-lg:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 24px
+    fontWeight: 600
+    lineHeight: 1.333
+    letterSpacing: -0.01em
+  heading-md:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 20px
+    fontWeight: 600
+    lineHeight: 1.4
+    letterSpacing: -0.005em
+  heading-sm:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 16px
+    fontWeight: 600
+    lineHeight: 1.5
+  body-lg:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 1.5
+  body-sm:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 1.429
+  caption:
+    fontFamily: "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, sans-serif"
+    fontSize: 12px
+    fontWeight: 400
+    lineHeight: 1.333
+
+rounded:
+  sm: 6px
+  md: 10px
+  lg: 14px
+  xl: 20px
+  full: 9999px
+
+spacing:
+  xs: 4px
+  sm: 8px
+  md: 16px
+  lg: 32px
+  xl: 64px
+  gutter: 24px
+
+components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.text-on-brand}"
+    rounded: "{rounded.md}"
+    padding: 12px
+  button-primary-hover:
+    backgroundColor: "{colors.primary-hover}"
+  button-secondary:
+    backgroundColor: "{colors.secondary-subtle}"
+    textColor: "{colors.secondary}"
+    rounded: "{rounded.md}"
+    padding: 12px
+  card:
+    backgroundColor: "{colors.surface-raised}"
+    textColor: "{colors.text-primary}"
+    rounded: "{rounded.lg}"
+    padding: 20px
+  input:
+    backgroundColor: "{colors.surface-raised}"
+    textColor: "{colors.text-primary}"
+    rounded: "{rounded.md}"
+    padding: 8px
+  badge:
+    backgroundColor: "{colors.primary-subtle}"
+    textColor: "{colors.primary}"
+    rounded: "{rounded.full}"
+    padding: 4px
+---
+
+# Polaris Design System
+
+> **Auto-generated.** This file is produced by `packages/ui/scripts/build-design-md.ts` from `packages/ui/src/tokens/*.ts`. Edit those source modules instead — CI fails on drift.
+>
+> The spec follows the [Stitch DESIGN.md format](https://stitch.withgoogle.com/docs/design-md/specification/) so any agent or tool that consumes the format (Stitch, Figma Tokens Studio, Style Dictionary downstream) can use Polaris's tokens directly.
+
+## Overview
+
+Polaris is the design system shared across Polaris Office's vibe-coding-ops services — services that LLMs help generate. The system's promise is **token-first, anti-bypass**: model output is constrained by tokens, components, and lint rules so screens stay visually consistent across every service in the company.
+
+The tone is calm and professional with a 4-color brand identity (blue / green / orange / red — same palette the Polaris Office logo uses) plus a single NOVA purple reserved for AI / generative contexts. Documents always feel like Polaris.
+
+## Colors
+
+The palette is rooted in Polaris's 4-color brand identity. Each base color doubles as its file-type signal (DOCX = blue, XLSX = green, PPTX = orange, PDF = red). A NOVA purple is reserved for AI features.
+
+- **Primary (Polaris Blue, #2B7FFF):** Headlines of action — buttons, links, focus, active nav. Same hex as `fileType.docx`.
+- **Secondary (NOVA Purple, #7C5CFF):** AI / generative contexts only. Pairs with sparkle iconography. Never mix primary and secondary on the same screen — pick by context.
+- **Status (success / warning / danger / info):** Reserved for system feedback. Each has a hover variant.
+- **Neutral (12 steps, 0 → 1000):** Light/dark inverted by `data-theme`. `surface.canvas` (page bg), `surface.raised` (cards/modals), `text.primary` / `text.secondary` / `text.muted` are the everyday aliases; reach for those before the raw scale.
+
+Do not mix file-type colors as decorative accents — they carry semantic meaning (document type signals).
+
+## Typography
+
+Pretendard Variable for both display and body. Korean / Latin / numerals all use the same family. JetBrains Mono for code. Eight named levels — `display-lg` / `display-md` / `heading-lg` / `heading-md` / `heading-sm` / `body-lg` / `body-sm` / `caption`.
+
+Line-heights are unitless ratios. Negative letter-spacing on display sizes for tight optical fit; zero on body.
+
+Use `text-polaris-*` Tailwind utilities — never inline `font-family` or arbitrary `text-[14px]`. The lint rule `no-direct-font-family` blocks both.
+
+## Layout
+
+4px base scale, Tailwind defaults. Container widths cap at 1200px (xl). Mobile-first; `sm: 640`, `md: 768`, `lg: 1024`, `xl: 1280`, `2xl: 1536`.
+
+No semantic spacing tokens (e.g., `spacing.gutter`, `spacing.section-y`) — Tailwind's numeric scale is already the standard, and abstracting on top of it raises the bar without payoff. Arbitrary values like `p-[13px]` are blocked by lint.
+
+## Elevation & Depth
+
+Four shadow levels for light mode (`xs`, `sm`, `md`, `lg`) plus a darker dark-mode pair. The `shadow-polaris-*` Tailwind utilities pick the right pair via `data-theme`. Use `xs` for hover lifts, `sm` for cards, `md` for menus / toasts, `lg` for modals.
+
+In dark mode, shadows alone don't carry hierarchy — pair with `surface.raised` tonal layers (cards sit on a slightly lighter surface than the canvas).
+
+## Shapes
+
+Five radius levels. Inputs / buttons use `md` (10px). Cards use `lg` (14px). Modals use `xl` (20px). `full` for pills, avatars, switch thumbs.
+
+Avoid mixing rounded and sharp corners in the same component. Don't introduce new `px` values — extend the scale instead.
+
+## Components
+
+The component layer is the `@polaris/ui` package — 37 React components built on Radix UI primitives. Tokens in this file describe the **base atoms** (button / card / input / badge); the package contains the full set (Dialog / Tabs / Form / FileCard / Toast / Tooltip / Sidebar / Navbar / Ribbon / etc.).
+
+Reach for the package first. If a primitive is missing, compose with token-only inline styling — never reach for raw hex or styled-components.
+
+For editor / document products, the `@polaris/ui/ribbon` subpath ships an Office-style ribbon family (Tabs / Group / Stack / Row / Button / SplitButton / MenuButton / ToggleGroup / Separator / RowDivider).
+
+## Do's and Don'ts
+
+- **Do** import from `@polaris/ui`, `@polaris/ui/form`, or `@polaris/ui/ribbon` — every component is token-correct out of the box.
+- **Do** use the `text.primary` / `surface.raised` / `brand.primary` style aliases. The raw `neutral.700` / `palette-blue` exist for advanced cases only.
+- **Do** pair status colors with their hover variants for any interactive surface (buttons, cells).
+- **Do** use `brand.secondary` (NOVA purple) only inside AI features. Mixing it with `brand.primary` on the same screen muddies hierarchy.
+- **Don't** introduce raw hex values, `rgb(...)`, or named CSS colors — `@polaris/lint`'s `no-hardcoded-color` blocks them.
+- **Don't** use Tailwind arbitrary values (`bg-[#xxx]`, `p-[13px]`, `font-['Inter']`) — the lint rule `no-arbitrary-tailwind` blocks them.
+- **Don't** write native `<button>` / `<input>` / `<dialog>` in feature code — `prefer-polaris-component` requires the Polaris equivalents.
+- **Don't** edit this file by hand. Edit `packages/ui/src/tokens/*.ts` and run `pnpm --filter @polaris/ui build:design-md`.
