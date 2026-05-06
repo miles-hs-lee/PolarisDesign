@@ -9,22 +9,22 @@
 
 :root,
 [data-theme="light"] {
-  --polaris-blue: #2B7FFF;
-  --polaris-green: #1FAE53;
-  --polaris-orange: #F37021;
-  --polaris-red: #E5413A;
-  --polaris-purple: #7C5CFF;
-  --polaris-brand-primary: #2B7FFF;
-  --polaris-brand-primary-hover: #1E66DB;
-  --polaris-brand-primary-subtle: #E8EFFF;
-  --polaris-brand-secondary: #7C5CFF;
-  --polaris-brand-secondary-hover: #6B47FF;
-  --polaris-brand-secondary-subtle: #F3EFFF;
-  --polaris-file-docx: #2B7FFF;
-  --polaris-file-hwp: #2B7FFF;
-  --polaris-file-xlsx: #1FAE53;
-  --polaris-file-pptx: #F37021;
-  --polaris-file-pdf: #E5413A;
+  --polaris-blue: #1D7FF9;
+  --polaris-green: #51B41B;
+  --polaris-orange: #FD8900;
+  --polaris-red: #F95C5C;
+  --polaris-purple: #6F3AD0;
+  --polaris-brand-primary: #1D7FF9;
+  --polaris-brand-primary-hover: #1458AD;
+  --polaris-brand-primary-subtle: #E8F2FE;
+  --polaris-brand-secondary: #6F3AD0;
+  --polaris-brand-secondary-hover: #511BB2;
+  --polaris-brand-secondary-subtle: #F5F1FD;
+  --polaris-file-docx: #1D7FF9;
+  --polaris-file-hwp: #1D7FF9;
+  --polaris-file-xlsx: #51B41B;
+  --polaris-file-pptx: #FD8900;
+  --polaris-file-pdf: #F95C5C;
   --polaris-status-success: #16A34A;
   --polaris-status-success-hover: #138A3F;
   --polaris-status-warning: #EAB308;

@@ -1,21 +1,26 @@
 export type ColorMode = 'light' | 'dark';
 export type ColorPair = { readonly light: string; readonly dark: string };
 
+// Light values from "Polaris Office Design System v1 (2026.05)" spec
+// (PO Blue / Sheet Green / Slide Orange / PDF Red / AI Purple). Dark
+// values are kept from the v0.6 best-effort scheme — design team has
+// not supplied dark-mode hex yet, and the v0.6 dark values still pass
+// our contrast checks against the new light values.
 export const brandPalette = {
-  blue:   { light: '#2B7FFF', dark: '#5C9FFF' },
-  green:  { light: '#1FAE53', dark: '#3FCB72' },
-  orange: { light: '#F37021', dark: '#FF8F4D' },
-  red:    { light: '#E5413A', dark: '#FF6962' },
-  purple: { light: '#7C5CFF', dark: '#9B85FF' },
+  blue:   { light: '#1D7FF9', dark: '#5C9FFF' },
+  green:  { light: '#51B41B', dark: '#3FCB72' },
+  orange: { light: '#FD8900', dark: '#FF8F4D' },
+  red:    { light: '#F95C5C', dark: '#FF6962' },
+  purple: { light: '#6F3AD0', dark: '#9B85FF' },
 } as const satisfies Record<string, ColorPair>;
 
 export const brand = {
   primary:         brandPalette.blue,
-  primaryHover:    { light: '#1E66DB', dark: '#7AA5F5' },
-  primarySubtle:   { light: '#E8EFFF', dark: '#1A2238' },
+  primaryHover:    { light: '#1458AD', dark: '#7AA5F5' },  // PO Blue 70 (primary-strong)
+  primarySubtle:   { light: '#E8F2FE', dark: '#1A2238' },  // PO Blue 5
   secondary:       brandPalette.purple,
-  secondaryHover:  { light: '#6B47FF', dark: '#A896FF' },
-  secondarySubtle: { light: '#F3EFFF', dark: '#2A2247' },
+  secondaryHover:  { light: '#511BB2', dark: '#A896FF' },  // AI Purple 70 (ai-strong)
+  secondarySubtle: { light: '#F5F1FD', dark: '#2A2247' },  // AI Purple 5 (ai-hover)
 } as const satisfies Record<string, ColorPair>;
 
 export const fileType = {
