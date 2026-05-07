@@ -10,6 +10,7 @@
   },
   "changesets": [
     "v0-7-0-design-spec-alignment",
-    "v0-7-0-rc-1-design-md-full-alignment"
+    "v0-7-0-rc-1-design-md-full-alignment",
+    "v0-7-0-rc-2-design-assets"
   ]
 }

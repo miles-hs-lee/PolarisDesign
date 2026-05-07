@@ -233,6 +233,8 @@ The tone is calm and professional with a 4-color brand identity (blue / green / 
 
 ## Colors
 
+![Color spec](assets/figma-spec/foundation/color.png)
+
 The palette is rooted in Polaris's 4-color brand identity. Each base color doubles as its file-type signal (DOCX = blue, XLSX = green, PPTX = orange, PDF = red). A NOVA purple is reserved for AI features.
 
 - **Primary (Polaris Blue, #2B7FFF):** Headlines of action — buttons, links, focus, active nav. Same hex as \`fileType.docx\`.
@@ -243,6 +245,8 @@ The palette is rooted in Polaris's 4-color brand identity. Each base color doubl
 Do not mix file-type colors as decorative accents — they carry semantic meaning (document type signals).
 
 ## Typography
+
+![Typography spec](assets/figma-spec/foundation/typography.png)
 
 Pretendard Variable for both display and body. Korean / Latin / numerals all use the same family. JetBrains Mono for code.
 
@@ -258,6 +262,8 @@ Use \`text-polaris-*\` Tailwind utilities — never inline \`font-family\` or ar
 
 ## Layout
 
+![Grid spec](assets/figma-spec/foundation/grid.png)
+
 4px base scale, Tailwind defaults. Container widths cap at 1200px (xl). Mobile-first; \`sm: 640\`, \`md: 768\`, \`lg: 1024\`, \`xl: 1280\`, \`2xl: 1536\`.
 
 No semantic spacing tokens (e.g., \`spacing.gutter\`, \`spacing.section-y\`) — Tailwind's numeric scale is already the standard, and abstracting on top of it raises the bar without payoff. Arbitrary values like \`p-[13px]\` are blocked by lint.
@@ -270,11 +276,23 @@ In dark mode, shadows alone don't carry hierarchy — pair with \`surface.raised
 
 ## Shapes
 
-Eight radius levels (v1 spec, 2026.05): \`2xs\` (2) / \`xs\` (4) / \`sm\` (6) / \`md\` (8) / \`lg\` (12) / \`xl\` (16) / \`2xl\` (24) / \`pill\` (9999). Inputs / buttons use \`md\` (8px). Cards use \`lg\` (12px). Modals use \`xl\` (16px) or \`2xl\` (24px). \`pill\` for pills, avatars, switch thumbs (the legacy \`full\` alias keeps working).
+![Radius spec](assets/figma-spec/foundation/radius.png)
+
+Eight radius levels (v0.7-rc.1+ spec): \`2xs\` (2) / \`xs\` (4) / \`sm\` (8) / \`md\` (12) / \`lg\` (16) / \`xl\` (24) / \`2xl\` (38) / \`pill\` (9999). Inputs use \`sm\` (8px). Buttons / cards / modals default to \`md\` (12px). Large CTAs use \`lg\` (16px), emphasis modals \`xl\` (24px), bottom sheets \`2xl\` (38px). \`pill\` for pills / avatars / switch thumbs (the legacy \`full\` alias keeps working).
 
 Avoid mixing rounded and sharp corners in the same component. Don't introduce new \`px\` values — extend the scale instead.
 
+## Iconography
+
+![Iconography spec](assets/figma-spec/theme/iconography.png)
+
+65 monochrome UI icons × 3 sizes (18 / 24 / 32 px) ship via \`@polaris/ui/icons\` — each component renders the design-team SVG and accepts \`size\` (number) + \`className\` (Tailwind \`text-{token}\` recolors). 29 multi-color file-type icons ship via \`@polaris/ui/file-icons\`. Logos via \`@polaris/ui/logos\` (\`PolarisLogo\` 3 variants × 2 tones, \`NovaLogo\` 2 tones).
+
+\`@polaris/lint\`'s \`prefer-polaris-icon\` rule (warn) suggests polaris equivalents over \`lucide-react\` named imports.
+
 ## Components
+
+![Button spec](assets/figma-spec/components/action-button.png) ![Input spec](assets/figma-spec/components/action-input.png)
 
 The component layer is the \`@polaris/ui\` package — 37 React components built on Radix UI primitives. Tokens in this file describe the **base atoms** (button / card / input / badge); the package contains the full set (Dialog / Tabs / Form / FileCard / Toast / Tooltip / Sidebar / Navbar / Ribbon / etc.).
 

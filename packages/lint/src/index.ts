@@ -5,6 +5,7 @@ import noArbitraryTailwind from './rules/no-arbitrary-tailwind';
 import noDirectFontFamily from './rules/no-direct-font-family';
 import preferPolarisComponent from './rules/prefer-polaris-component';
 import stateColorWithIcon from './rules/state-color-with-icon';
+import preferPolarisIcon from './rules/prefer-polaris-icon';
 
 const meta = {
   name: '@polaris/lint',
@@ -17,6 +18,7 @@ const rules = {
   'no-direct-font-family': noDirectFontFamily,
   'prefer-polaris-component': preferPolarisComponent,
   'state-color-with-icon': stateColorWithIcon,
+  'prefer-polaris-icon': preferPolarisIcon,
 } as const;
 
 const plugin: ESLint.Plugin = {
@@ -44,6 +46,9 @@ const recommended: Linter.Config[] = [
       // v0.7-rc.1: warn (not error) — heuristic; suppress per-line if
       // an icon companion is present but undetected.
       '@polaris/state-color-with-icon': 'warn',
+      // v0.7-rc.2: warn — lucide-react is still installed for icons
+      // polaris doesn't cover. Suppress per-line where needed.
+      '@polaris/prefer-polaris-icon': 'warn',
     },
   },
 ];

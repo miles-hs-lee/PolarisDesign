@@ -8,6 +8,7 @@ import NovaWorkspace from './pages/NovaWorkspace';
 import PolarisOffice from './pages/PolarisOffice';
 import Tokens from './pages/Tokens';
 import Assets from './pages/Assets';
+import Icons from './pages/Icons';
 
 export function App() {
   return (
@@ -22,6 +23,7 @@ export function App() {
           <Route path="polaris-office" element={<PolarisOffice />} />
           <Route path="tokens" element={<Tokens />} />
           <Route path="assets" element={<Assets />} />
+          <Route path="icons" element={<Icons />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

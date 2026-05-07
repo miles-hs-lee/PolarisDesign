@@ -14,6 +14,7 @@ const ROUTES = [
   { path: '/#/', name: 'home' },
   { path: '/#/components', name: 'components-catalog' },
   { path: '/#/tokens', name: 'tokens' },
+  { path: '/#/icons', name: 'icons-catalog' },
   { path: '/#/assets', name: 'assets' },
   { path: '/#/polaris-office', name: 'polaris-office' },
   { path: '/#/nova', name: 'nova-workspace' },
