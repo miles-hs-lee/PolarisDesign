@@ -11,12 +11,16 @@ assets/
 │   ├── theme/           Iconography
 │   └── components/      Button · Input · Tabs · … (13개)
 │
-└── svg/                 런타임 자산 (SVG, 컴포넌트 빌드 소스)
-    ├── icons/           UI 아이콘 (65종 × 18/24/32 px)
-    ├── file-icons/32/   파일 타입 아이콘 (29종, 32px 마스터)
-    └── logos/
-        ├── polaris-office/  Polaris Office 로고 (favicon · symbol-144 · horizontal · horizontal-negative)
-        └── nova/            NOVA AI 로고 (original · white)
+├── svg/                 런타임 자산 (SVG, 컴포넌트 빌드 소스)
+│   ├── icons/           UI 아이콘 (65종 × 18/24/32 px)
+│   ├── file-icons/32/   파일 타입 아이콘 (29종, 32px 마스터)
+│   └── logos/
+│       ├── polaris-office/  Polaris Office 로고 (favicon · symbol-144 · horizontal · horizontal-negative)
+│       └── nova/            NOVA AI 로고 (original · white)
+│
+└── ribbon/              Office 리본 전용 아이콘 (멀티컬러 baked-in)
+    ├── big/             57종 × 32 px — RibbonButton size="lg" 용 (icon-over-label)
+    └── small/           34종 × 16 px — RibbonButton size="sm/md" 용 (icon-only / icon-before-label)
 ```
 
 모든 디렉토리/파일명은 **kebab-case 소문자**. 한국어 파일명은 영문으로 정규화 (`가로.svg` → `horizontal.svg`).
@@ -70,6 +74,7 @@ pnpm --filter @polaris/ui test
 | `svg/icons/*` | `packages/ui/src/icons/*.tsx` (gitignored) |
 | `svg/file-icons/32/*` | `packages/ui/src/file-icons/*.tsx` (gitignored) |
 | `svg/logos/*/*` | `packages/ui/src/logos/*.tsx` (gitignored) |
+| `ribbon/{big,small}/*` | `packages/ui/src/ribbon-icons/*.tsx` (gitignored) |
 | `figma-spec/**/*.png` | (배포 안 함, 문서 참조 용도) |
 
 ## 색상 처리 정책

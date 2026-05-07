@@ -46,6 +46,11 @@
       "import": "./dist/logos/index.js",
       "require": "./dist/logos/index.cjs"
     },
+    "./ribbon-icons": {
+      "types": "./dist/ribbon-icons/index.d.ts",
+      "import": "./dist/ribbon-icons/index.js",
+      "require": "./dist/ribbon-icons/index.cjs"
+    },
     "./styles/tokens.css": "./src/styles/tokens.css",
     "./styles/v4-theme.css": "./src/styles/v4-theme.css"
   },
@@ -60,19 +65,20 @@
     "src/styles/v4-theme.css"
   ],
   "scripts": {
-    "build": "pnpm build:tokens && pnpm build:design-md && pnpm build:icons && pnpm build:file-icons && pnpm build:logos && tsup",
+    "build": "pnpm build:tokens && pnpm build:design-md && pnpm build:icons && pnpm build:file-icons && pnpm build:logos && pnpm build:ribbon-icons && tsup",
     "build:tokens": "tsx scripts/build-tokens.ts",
     "build:design-md": "tsx scripts/build-design-md.ts",
     "build:icons": "tsx scripts/build-icons.ts",
     "build:file-icons": "tsx scripts/build-file-icons.ts",
     "build:logos": "tsx scripts/build-logos.ts",
+    "build:ribbon-icons": "tsx scripts/build-ribbon-icons.ts",
     "normalize:icons": "tsx scripts/normalize-icon-names.ts",
     "dev": "tsup --watch",
     "typecheck": "pnpm gen:sources && tsc --noEmit",
     "test": "pnpm gen:sources && vitest run && node --test 'test/**/*.test.mjs'",
     "test:watch": "vitest",
-    "clean": "rm -rf dist .turbo src/icons src/file-icons src/logos",
-    "gen:sources": "pnpm build:tokens && pnpm build:icons && pnpm build:file-icons && pnpm build:logos",
+    "clean": "rm -rf dist .turbo src/icons src/file-icons src/logos src/ribbon-icons",
+    "gen:sources": "pnpm build:tokens && pnpm build:icons && pnpm build:file-icons && pnpm build:logos && pnpm build:ribbon-icons",
     "prepare": "pnpm gen:sources"
   },
   "dependencies": {

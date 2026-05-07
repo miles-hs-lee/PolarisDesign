@@ -43,33 +43,55 @@ import {
   RibbonToggleItem,
 } from '@polaris/ui/ribbon';
 import {
-  // chrome + file backstage
+  // chrome + file backstage (no polaris ribbon-icon equivalents)
   Menu, Star, Save, ChevronDown, ChevronUp, Monitor, UsersRound, Bell,
   ArrowLeft, HardDrive, Folder as FolderIcon,
-  // home tab
-  Clipboard, Scissors, Copy, Brush,
-  Bold, Italic, Underline, Strikethrough, Subscript, Superscript,
-  Highlighter, Type, Eraser, SquareUser,
-  List, ListOrdered, ListTree, IndentDecrease, IndentIncrease,
-  PaintBucket, ArrowLeftRight,
-  AlignLeft, AlignCenter, AlignRight, AlignJustify, WrapText,
-  ChevronsUpDown, CornerDownLeft, Pilcrow, AlignVerticalSpaceBetween,
-  Pencil, Search, Replace, CaseSensitive, AArrowUp, AArrowDown,
-  // insert tab
-  FilePlus, SeparatorHorizontal, Table, Image as ImageIcon,
-  Globe, Shapes, Link as LinkIcon, Bookmark, TextCursorInput, Sigma,
-  // layout tab
-  Columns3, RotateCw, Maximize2, SplitSquareVertical, Settings,
-  Layout as LayoutIcon, Move, Group, ArrowUpToLine, ArrowDownToLine,
-  // review tab
-  Check, X as XIcon, ChevronLeft, ChevronRight,
-  MessageSquarePlus, MessageSquare, History, ListChecks,
-  // AI tab
-  Sparkles, Languages, Cloud, Mic, ImagePlus, Box,
-  Eraser as Eraser2, Wand2, Maximize, ZoomIn, Palette as PaletteIcon,
-  BookOpen, FileText,
+  // home tab (no equivalents — keep lucide)
+  Clipboard,
+  Highlighter, Type, SquareUser,
+  ArrowLeftRight, WrapText,
+  ChevronsUpDown, CornerDownLeft, Pilcrow,
+  Pencil, Search,
+  // insert tab (no equivalents)
+  SeparatorHorizontal,
+  // layout tab (no equivalents)
+  Move,
+  // review tab (no equivalents — generic check / close / nav)
+  Check, X as XIcon, ChevronLeft, ChevronRight, History,
+  // AI tab (no equivalents — keep generic)
+  Sparkles, Cloud,
   type LucideIcon,
 } from 'lucide-react';
+
+// v0.7+ — design-team ribbon icons (multi-color, native sizes 16/32)
+import {
+  // home tab — small (16) text formatting
+  CutIcon, CopyIcon, CopyFormatIcon,
+  BoldIcon, ItalicIcon, Underline01Icon as UnderlineIcon,
+  StrikethroughIcon, SubscriptIcon, SuperscriptIcon,
+  ClearformatIcon,
+  BulletIcon, NumberingIcon, MultilevelIcon,
+  DentIcon, IndentIcon,
+  FillcolorIcon,
+  AlignleftIcon, AligncenterIcon, AlignrightIcon, JustifyIcon,
+  LinespacingIcon,
+  FontSizeLargeIcon, FontSizeSmallIcon,
+  ChangecaseIcon, FindIcon, TextReplaceIcon,
+  // insert / layout — big (32)
+  TableIcon, ImageIcon as RibbonImageIcon, ImageOnlineIcon, ShapeIcon,
+  HyperlinkIcon, BookmarkIcon, HorizontaltextboxIcon, SymbolIcon,
+  PageColumnIcon, Roatateright90Icon, PagescaleIcon, PagesplitIcon,
+  SetpageIcon, SetlayoutIcon, GroupIcon,
+  MoveforwardIcon, MovebackwardIcon, NewpageIcon, Algnleft01Icon,
+  // review — big (32)
+  MemoNewIcon, MemoPaneIcon, TrackChangesIcon, WordcountIcon,
+  ChangePreviousIcon, ChangeNextIcon,
+  // AI — big (32)
+  TranslateIcon, AiGuideIcon,
+  AiRecordIcon, AiTextToImageIcon, Ai2dto3dIcon,
+  AiBgdeleteIcon, AiRemakeIcon, AiExpansionIcon, AiQualityIcon,
+  AiStyleIcon, AiTemplateIcon, AiWriteIcon,
+} from '@polaris/ui/ribbon-icons';
 
 /* ================================================================== *
  * Composite icons used by ribbon buttons. These are demo-specific
@@ -195,12 +217,12 @@ function HomeRibbon() {
           붙여넣기
         </RibbonSplitButton>
         <RibbonStack className="ml-0.5">
-          <RibbonButton size="sm" disabled icon={<Scissors className="h-3.5 w-3.5" />}>잘라내기</RibbonButton>
-          <RibbonButton size="sm" disabled icon={<Copy className="h-3.5 w-3.5" />}>복사</RibbonButton>
+          <RibbonButton size="sm" disabled icon={<CutIcon size={14} />}>잘라내기</RibbonButton>
+          <RibbonButton size="sm" disabled icon={<CopyIcon size={14} />}>복사</RibbonButton>
           <RibbonSplitButton
             size="sm"
             disabled
-            icon={<Brush className="h-3.5 w-3.5" />}
+            icon={<CopyFormatIcon size={14} />}
             tooltip="서식 복사"
             menuLabel="서식 복사 옵션"
             menu={<DropdownMenuItem>서식 복사 잠금</DropdownMenuItem>}
@@ -238,12 +260,12 @@ function HomeRibbon() {
               </SelectContent>
             </Select>
             <RibbonRowDivider />
-            <RibbonButton tooltip="글자 크게" icon={<AArrowUp className="h-4 w-4" />} />
-            <RibbonButton tooltip="글자 작게" icon={<AArrowDown className="h-4 w-4" />} />
+            <RibbonButton tooltip="글자 크게" icon={<FontSizeLargeIcon />} />
+            <RibbonButton tooltip="글자 작게" icon={<FontSizeSmallIcon />} />
             <RibbonRowDivider />
             <RibbonSplitButton
               tooltip="대소문자"
-              icon={<CaseSensitive className="h-4 w-4" />}
+              icon={<ChangecaseIcon />}
               menuLabel="대소문자 옵션"
               menu={
                 <>
@@ -256,12 +278,12 @@ function HomeRibbon() {
           </RibbonRow>
           <RibbonRow>
             <RibbonToggleGroup type="multiple" value={marks} onValueChange={setMarks}>
-              <RibbonToggleItem value="bold" tooltip="굵게 (⌘B)" icon={<Bold className="h-4 w-4" />} />
-              <RibbonToggleItem value="italic" tooltip="기울임 (⌘I)" icon={<Italic className="h-4 w-4" />} />
-              <RibbonToggleItem value="underline" tooltip="밑줄 (⌘U)" icon={<Underline className="h-4 w-4" />} />
+              <RibbonToggleItem value="bold" tooltip="굵게 (⌘B)" icon={<BoldIcon />} />
+              <RibbonToggleItem value="italic" tooltip="기울임 (⌘I)" icon={<ItalicIcon />} />
+              <RibbonToggleItem value="underline" tooltip="밑줄 (⌘U)" icon={<UnderlineIcon />} />
             </RibbonToggleGroup>
             <RibbonSplitButton
-              icon={<Strikethrough className="h-4 w-4" />}
+              icon={<StrikethroughIcon />}
               tooltip="취소선"
               menuLabel="취소선 옵션"
               menu={
@@ -272,15 +294,15 @@ function HomeRibbon() {
               }
             />
             <RibbonRowDivider />
-            <RibbonButton tooltip="아래 첨자" icon={<Subscript className="h-4 w-4" />} />
-            <RibbonButton tooltip="위 첨자" icon={<Superscript className="h-4 w-4" />} />
+            <RibbonButton tooltip="아래 첨자" icon={<SubscriptIcon />} />
+            <RibbonButton tooltip="위 첨자" icon={<SuperscriptIcon />} />
             <RibbonRowDivider />
             <RibbonButton tooltip="글자 색" icon={<ColorAccentIcon icon={Type} barClass="bg-status-danger" />} />
             <RibbonButton tooltip="형광펜" icon={<ColorAccentIcon icon={Highlighter} iconClass="text-status-warning" barClass="bg-status-warning" />} />
             <RibbonRowDivider />
             <RibbonButton tooltip="문자 강조 표시" icon={<SquareUser className="h-4 w-4" />} />
             <RibbonButton tooltip="문자 테두리" icon={OutlinedLetter} />
-            <RibbonButton tooltip="서식 지우기" icon={<Eraser className="h-4 w-4" />} />
+            <RibbonButton tooltip="서식 지우기" icon={<ClearformatIcon />} />
           </RibbonRow>
         </RibbonStack>
       </RibbonGroup>
@@ -291,13 +313,13 @@ function HomeRibbon() {
       <RibbonGroup>
         <RibbonStack>
           <RibbonRow>
-            <RibbonSplitButton tooltip="글머리 기호" icon={<List className="h-4 w-4" />} menuLabel="글머리 기호" menu={<DropdownMenuItem>· — ▪</DropdownMenuItem>} />
-            <RibbonSplitButton tooltip="번호 매기기" icon={<ListOrdered className="h-4 w-4" />} menuLabel="번호 매기기" menu={<DropdownMenuItem>1. 2. 3.</DropdownMenuItem>} />
-            <RibbonSplitButton tooltip="다단계 목록" icon={<ListTree className="h-4 w-4" />} menuLabel="다단계 목록" menu={<DropdownMenuItem>1.1.1</DropdownMenuItem>} />
+            <RibbonSplitButton tooltip="글머리 기호" icon={<BulletIcon />} menuLabel="글머리 기호" menu={<DropdownMenuItem>· — ▪</DropdownMenuItem>} />
+            <RibbonSplitButton tooltip="번호 매기기" icon={<NumberingIcon />} menuLabel="번호 매기기" menu={<DropdownMenuItem>1. 2. 3.</DropdownMenuItem>} />
+            <RibbonSplitButton tooltip="다단계 목록" icon={<MultilevelIcon />} menuLabel="다단계 목록" menu={<DropdownMenuItem>1.1.1</DropdownMenuItem>} />
           </RibbonRow>
           <RibbonRow>
-            <RibbonButton tooltip="내어쓰기" icon={<IndentDecrease className="h-4 w-4" />} />
-            <RibbonButton tooltip="들여쓰기" icon={<IndentIncrease className="h-4 w-4" />} />
+            <RibbonButton tooltip="내어쓰기" icon={<DentIcon />} />
+            <RibbonButton tooltip="들여쓰기" icon={<IndentIcon />} />
           </RibbonRow>
         </RibbonStack>
       </RibbonGroup>
@@ -307,7 +329,7 @@ function HomeRibbon() {
       {/* Fill / character spacing */}
       <RibbonGroup>
         <RibbonRow>
-          <RibbonSplitButton tooltip="채우기 색" icon={<PaintBucket className="h-4 w-4" />} menuLabel="채우기 색" menu={<DropdownMenuItem>색 선택…</DropdownMenuItem>} />
+          <RibbonSplitButton tooltip="채우기 색" icon={<FillcolorIcon />} menuLabel="채우기 색" menu={<DropdownMenuItem>색 선택…</DropdownMenuItem>} />
           <RibbonSplitButton tooltip="문자 간격" icon={<ArrowLeftRight className="h-4 w-4" />} menuLabel="문자 간격" menu={<DropdownMenuItem>좁게 / 보통 / 넓게</DropdownMenuItem>} />
         </RibbonRow>
       </RibbonGroup>
@@ -319,17 +341,17 @@ function HomeRibbon() {
         <RibbonStack>
           <RibbonRow>
             <RibbonToggleGroup type="single" value={align} onValueChange={(v) => v && setAlign(v)}>
-              <RibbonToggleItem value="left" tooltip="왼쪽 정렬" icon={<AlignLeft className="h-4 w-4" />} />
-              <RibbonToggleItem value="center" tooltip="가운데 정렬" icon={<AlignCenter className="h-4 w-4" />} />
-              <RibbonToggleItem value="right" tooltip="오른쪽 정렬" icon={<AlignRight className="h-4 w-4" />} />
-              <RibbonToggleItem value="justify" tooltip="양쪽 정렬" icon={<AlignJustify className="h-4 w-4" />} />
+              <RibbonToggleItem value="left" tooltip="왼쪽 정렬" icon={<AlignleftIcon />} />
+              <RibbonToggleItem value="center" tooltip="가운데 정렬" icon={<AligncenterIcon />} />
+              <RibbonToggleItem value="right" tooltip="오른쪽 정렬" icon={<AlignrightIcon />} />
+              <RibbonToggleItem value="justify" tooltip="양쪽 정렬" icon={<JustifyIcon />} />
               <RibbonToggleItem value="distribute" tooltip="배분 정렬" icon={<WrapText className="h-4 w-4" />} />
             </RibbonToggleGroup>
           </RibbonRow>
           <RibbonRow>
             <RibbonSplitButton tooltip="줄 간격" icon={<ChevronsUpDown className="h-4 w-4" />} menuLabel="줄 간격" menu={<DropdownMenuItem>1.0 / 1.5 / 2.0</DropdownMenuItem>} />
-            <RibbonSplitButton tooltip="단락 간격" icon={<AlignVerticalSpaceBetween className="h-4 w-4" />} menuLabel="단락 간격" menu={<DropdownMenuItem>0 / 6 / 12pt</DropdownMenuItem>} />
-            <RibbonButton tooltip="단락 들여쓰기" icon={<IndentIncrease className="h-4 w-4" />} />
+            <RibbonSplitButton tooltip="단락 간격" icon={<LinespacingIcon />} menuLabel="단락 간격" menu={<DropdownMenuItem>0 / 6 / 12pt</DropdownMenuItem>} />
+            <RibbonButton tooltip="단락 들여쓰기" icon={<IndentIcon />} />
             <RibbonButton tooltip="단락 기호 표시" icon={<Pilcrow className="h-4 w-4" />} />
             <RibbonButton tooltip="줄바꿈 표시" icon={<CornerDownLeft className="h-4 w-4" />} />
           </RibbonRow>
@@ -350,7 +372,7 @@ function HomeRibbon() {
           <RibbonSplitButton size="sm" icon={<Search className="h-4 w-4" />} tooltip="찾기" menuLabel="찾기 옵션" menu={<DropdownMenuItem>고급 찾기…</DropdownMenuItem>}>
             찾기
           </RibbonSplitButton>
-          <RibbonButton size="sm" icon={<Replace className="h-4 w-4" />} tooltip="바꾸기">
+          <RibbonButton size="sm" icon={<TextReplaceIcon />} tooltip="바꾸기">
             바꾸기
           </RibbonButton>
         </RibbonStack>
@@ -369,28 +391,23 @@ function InsertRibbon() {
   return (
     <RibbonContent value="insert">
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<FilePlus className="h-6 w-6 text-label-neutral" />}>새{'\n'}페이지</RibbonButton>
+        <RibbonButton size="lg" icon={<NewpageIcon size={24} />}>새{'\n'}페이지</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
         <RibbonButton size="lg" icon={<SeparatorHorizontal className="h-6 w-6 text-status-danger" />}>페이지{'\n'}나누기</RibbonButton>
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Table className="h-6 w-6 text-label-neutral" />}>표</RibbonButton>
+        <RibbonButton size="lg" icon={<TableIcon size={24} />}>표</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<ImageIcon className="h-6 w-6 text-status-success" />}>그림</RibbonButton>
+        <RibbonButton size="lg" icon={<RibbonImageIcon size={24} />}>그림</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={
-          <OverlayIcon
-            base={<ImageIcon className="h-6 w-6 text-status-success" />}
-            overlay={<Globe className="h-3 w-3 absolute -bottom-1 -right-1 text-accent-brand-normal bg-background-normal rounded-polaris-pill" />}
-          />
-        }>온라인{'\n'}그림</RibbonButton>
+        <RibbonButton size="lg" icon={<ImageOnlineIcon size={24} />}>온라인{'\n'}그림</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonSplitButton size="lg" icon={<Shapes className="h-6 w-6 text-label-neutral" />} menuLabel="도형 선택" menu={
+        <RibbonSplitButton size="lg" icon={<ShapeIcon size={24} />} menuLabel="도형 선택" menu={
           <>
             <DropdownMenuItem>사각형</DropdownMenuItem>
             <DropdownMenuItem>원</DropdownMenuItem>
@@ -400,18 +417,18 @@ function InsertRibbon() {
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<LinkIcon className="h-6 w-6 text-label-neutral" />}>하이퍼{'\n'}링크</RibbonButton>
+        <RibbonButton size="lg" icon={<HyperlinkIcon size={24} />}>하이퍼{'\n'}링크</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
-            base={<Bookmark className="h-6 w-6 text-label-neutral" />}
+            base={<BookmarkIcon size={24} />}
             overlay={<span className="absolute top-0 left-1/2 -translate-x-1/2 h-2 w-1 bg-status-danger" aria-hidden="true" />}
           />
         }>책갈피</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonSplitButton size="lg" icon={<TextCursorInput className="h-6 w-6 text-label-neutral" />} menuLabel="텍스트 상자 종류" menu={
+        <RibbonSplitButton size="lg" icon={<HorizontaltextboxIcon size={24} />} menuLabel="텍스트 상자 종류" menu={
           <>
             <DropdownMenuItem>가로 텍스트 상자</DropdownMenuItem>
             <DropdownMenuItem>세로 텍스트 상자</DropdownMenuItem>
@@ -420,7 +437,7 @@ function InsertRibbon() {
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Sigma className="h-6 w-6 text-label-neutral" />}>기호</RibbonButton>
+        <RibbonButton size="lg" icon={<SymbolIcon size={24} />}>기호</RibbonButton>
       </RibbonGroup>
     </RibbonContent>
   );
@@ -436,25 +453,25 @@ function LayoutRibbon() {
   return (
     <RibbonContent value="layout">
       <RibbonGroup>
-        <RibbonMenuButton icon={<LayoutIcon className="h-6 w-6 text-label-neutral" />} menu={<DropdownMenuItem>좁게 / 보통 / 넓게</DropdownMenuItem>}>여백</RibbonMenuButton>
+        <RibbonMenuButton icon={<SetlayoutIcon size={24} />} menu={<DropdownMenuItem>좁게 / 보통 / 넓게</DropdownMenuItem>}>여백</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton icon={<RotateCw className="h-6 w-6 text-label-neutral" />} menu={<><DropdownMenuItem>세로</DropdownMenuItem><DropdownMenuItem>가로</DropdownMenuItem></>}>용지{'\n'}방향</RibbonMenuButton>
+        <RibbonMenuButton icon={<Roatateright90Icon size={24} />} menu={<><DropdownMenuItem>세로</DropdownMenuItem><DropdownMenuItem>가로</DropdownMenuItem></>}>용지{'\n'}방향</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton icon={<Maximize2 className="h-6 w-6 text-label-neutral" />} menu={<><DropdownMenuItem>A4</DropdownMenuItem><DropdownMenuItem>Letter</DropdownMenuItem></>}>크기</RibbonMenuButton>
+        <RibbonMenuButton icon={<PagescaleIcon size={24} />} menu={<><DropdownMenuItem>A4</DropdownMenuItem><DropdownMenuItem>Letter</DropdownMenuItem></>}>크기</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton icon={<Columns3 className="h-6 w-6 text-label-neutral" />} menu={<><DropdownMenuItem>1단</DropdownMenuItem><DropdownMenuItem>2단</DropdownMenuItem><DropdownMenuItem>3단</DropdownMenuItem></>}>단</RibbonMenuButton>
+        <RibbonMenuButton icon={<PageColumnIcon size={24} />} menu={<><DropdownMenuItem>1단</DropdownMenuItem><DropdownMenuItem>2단</DropdownMenuItem><DropdownMenuItem>3단</DropdownMenuItem></>}>단</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton icon={<SplitSquareVertical className="h-6 w-6 text-status-danger" />} menu={<><DropdownMenuItem>페이지 나누기</DropdownMenuItem><DropdownMenuItem>단 나누기</DropdownMenuItem><DropdownMenuItem>구역 나누기</DropdownMenuItem></>}>나누기</RibbonMenuButton>
+        <RibbonMenuButton icon={<PagesplitIcon size={24} />} menu={<><DropdownMenuItem>페이지 나누기</DropdownMenuItem><DropdownMenuItem>단 나누기</DropdownMenuItem><DropdownMenuItem>구역 나누기</DropdownMenuItem></>}>나누기</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-accent-brand-normal" />}>페이지{'\n'}설정</RibbonButton>
+        <RibbonButton size="lg" icon={<SetpageIcon size={24} />}>페이지{'\n'}설정</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Settings className="h-6 w-6 text-accent-brand-normal" />}>레이아웃{'\n'}설정</RibbonButton>
+        <RibbonButton size="lg" icon={<SetpageIcon size={24} />}>레이아웃{'\n'}설정</RibbonButton>
       </RibbonGroup>
       <RibbonSeparator />
       {/* Image-related — disabled until selection */}
@@ -465,19 +482,19 @@ function LayoutRibbon() {
         <RibbonMenuButton disabled icon={<WrapText className="h-6 w-6" />} menu={<DropdownMenuItem>옵션</DropdownMenuItem>}>텍스트{'\n'}줄 바꿈</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton disabled icon={<Group className="h-6 w-6" />} menu={<DropdownMenuItem>그룹/해제</DropdownMenuItem>}>그룹</RibbonMenuButton>
+        <RibbonMenuButton disabled icon={<GroupIcon size={24} />} menu={<DropdownMenuItem>그룹/해제</DropdownMenuItem>}>그룹</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton disabled icon={<ArrowUpToLine className="h-6 w-6" />} menu={<DropdownMenuItem>맨 앞으로</DropdownMenuItem>}>앞으로{'\n'}가져오기</RibbonMenuButton>
+        <RibbonMenuButton disabled icon={<MoveforwardIcon size={24} />} menu={<DropdownMenuItem>맨 앞으로</DropdownMenuItem>}>앞으로{'\n'}가져오기</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton disabled icon={<ArrowDownToLine className="h-6 w-6" />} menu={<DropdownMenuItem>맨 뒤로</DropdownMenuItem>}>뒤로{'\n'}보내기</RibbonMenuButton>
+        <RibbonMenuButton disabled icon={<MovebackwardIcon size={24} />} menu={<DropdownMenuItem>맨 뒤로</DropdownMenuItem>}>뒤로{'\n'}보내기</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton disabled icon={<AlignLeft className="h-6 w-6" />} menu={<DropdownMenuItem>왼쪽/오른쪽/위/아래</DropdownMenuItem>}>맞춤</RibbonMenuButton>
+        <RibbonMenuButton disabled icon={<Algnleft01Icon size={24} />} menu={<DropdownMenuItem>왼쪽/오른쪽/위/아래</DropdownMenuItem>}>맞춤</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton disabled icon={<RotateCw className="h-6 w-6" />} menu={<><DropdownMenuItem>90° 회전</DropdownMenuItem><DropdownMenuItem>180° 회전</DropdownMenuItem></>}>회전</RibbonMenuButton>
+        <RibbonMenuButton disabled icon={<Roatateright90Icon size={24} />} menu={<><DropdownMenuItem>90° 회전</DropdownMenuItem><DropdownMenuItem>180° 회전</DropdownMenuItem></>}>회전</RibbonMenuButton>
       </RibbonGroup>
     </RibbonContent>
   );
@@ -500,7 +517,7 @@ function ReviewRibbon() {
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<MessageSquarePlus className="h-6 w-6 text-status-warning" />}>새{'\n'}메모</RibbonButton>
+        <RibbonButton size="lg" icon={<MemoNewIcon size={24} />}>새{'\n'}메모</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
         <RibbonSplitButton size="lg" disabled icon={<XIcon className="h-6 w-6" />} menuLabel="삭제 옵션" menu={<><DropdownMenuItem>삭제</DropdownMenuItem><DropdownMenuItem>모두 삭제</DropdownMenuItem></>}>삭제</RibbonSplitButton>
@@ -512,16 +529,16 @@ function ReviewRibbon() {
         <RibbonButton size="lg" disabled icon={<ChevronRight className="h-6 w-6" />}>다음</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<MessageSquare className="h-6 w-6 text-status-warning" />}>메모{'\n'}표시</RibbonButton>
+        <RibbonButton size="lg" icon={<MemoPaneIcon size={24} />}>메모{'\n'}표시</RibbonButton>
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
         <RibbonToggleGroup type="multiple" value={trackChanges} onValueChange={setTrackChanges}>
-          <RibbonToggleItem value="track" size="lg" tooltip="변경내용 추적" icon={<History className="h-6 w-6 text-status-danger" />}>변경내용{'\n'}추적</RibbonToggleItem>
+          <RibbonToggleItem value="track" size="lg" tooltip="변경내용 추적" icon={<TrackChangesIcon size={24} />}>변경내용{'\n'}추적</RibbonToggleItem>
         </RibbonToggleGroup>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonSplitButton size="lg" icon={<ListChecks className="h-6 w-6 text-label-neutral" />} menuLabel="변경내용 표시 옵션" menu={
+        <RibbonSplitButton size="lg" icon={<WordcountIcon size={24} />} menuLabel="변경내용 표시 옵션" menu={
           <>
             <DropdownMenuItem>모든 변경 사항</DropdownMenuItem>
             <DropdownMenuItem>최종본</DropdownMenuItem>
@@ -580,7 +597,7 @@ function AIToolsRibbon() {
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
-            base={<MessageSquare className="h-6 w-6 text-label-neutral" />}
+            base={<MemoPaneIcon size={24} />}
             overlay={<Sparkles className="h-3 w-3 absolute -top-1 -left-1 text-ai-normal" />}
           />
         }>NOVA{'\n'}AI 채팅</RibbonButton>
@@ -596,7 +613,7 @@ function AIToolsRibbon() {
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
-            base={<FileText className="h-6 w-6 text-label-neutral" />}
+            base={<AiWriteIcon size={24} />}
             overlay={<Pencil className="h-3 w-3 absolute -bottom-0.5 -right-0.5 text-ai-normal" />}
           />
         }>AI{'\n'}Write</RibbonButton>
@@ -604,7 +621,7 @@ function AIToolsRibbon() {
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
-            base={<Languages className="h-6 w-6 text-label-neutral" />}
+            base={<TranslateIcon size={24} />}
             overlay={<span className="absolute -top-1 -right-1 h-2 w-2 rounded-polaris-pill bg-status-danger" aria-hidden="true" />}
           />
         }>번역</RibbonButton>
@@ -616,39 +633,39 @@ function AIToolsRibbon() {
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
-            base={<Mic className="h-6 w-6 text-label-neutral" />}
+            base={<AiRecordIcon size={24} />}
             overlay={<Sparkles className="h-3 w-3 absolute -top-1 -left-1 text-ai-normal" />}
           />
         }>받아쓰기</RibbonButton>
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<ImagePlus className="h-6 w-6 text-label-neutral" />}>Text to{'\n'}Image</RibbonButton>
+        <RibbonButton size="lg" icon={<AiTextToImageIcon size={24} />}>Text to{'\n'}Image</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Box className="h-6 w-6 text-label-neutral" />}>2D→3D{'\n'}변환</RibbonButton>
+        <RibbonButton size="lg" icon={<Ai2dto3dIcon size={24} />}>2D→3D{'\n'}변환</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Eraser2 className="h-6 w-6 text-label-neutral" />}>배경{'\n'}제거</RibbonButton>
+        <RibbonButton size="lg" icon={<AiBgdeleteIcon size={24} />}>배경{'\n'}제거</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<ImageIcon className="h-6 w-6 text-label-neutral" />}>배경{'\n'}변경</RibbonButton>
+        <RibbonButton size="lg" icon={<RibbonImageIcon size={24} />}>배경{'\n'}변경</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Wand2 className="h-6 w-6 text-label-neutral" />}>이미지{'\n'}리메이크</RibbonButton>
+        <RibbonButton size="lg" icon={<AiRemakeIcon size={24} />}>이미지{'\n'}리메이크</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<Maximize className="h-6 w-6 text-label-neutral" />}>이미지{'\n'}확장</RibbonButton>
+        <RibbonButton size="lg" icon={<AiExpansionIcon size={24} />}>이미지{'\n'}확장</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<ZoomIn className="h-6 w-6 text-label-neutral" />}>해상도{'\n'}향상</RibbonButton>
+        <RibbonButton size="lg" icon={<AiQualityIcon size={24} />}>해상도{'\n'}향상</RibbonButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<PaletteIcon className="h-6 w-6 text-label-neutral" />}>스타일{'\n'}변환</RibbonButton>
+        <RibbonButton size="lg" icon={<AiStyleIcon size={24} />}>스타일{'\n'}변환</RibbonButton>
       </RibbonGroup>
       <RibbonSeparator />
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<BookOpen className="h-6 w-6 text-ai-normal" />}>AI 도구{'\n'}사용자 가이드</RibbonButton>
+        <RibbonButton size="lg" icon={<AiGuideIcon size={24} />}>AI 도구{'\n'}사용자 가이드</RibbonButton>
       </RibbonGroup>
     </RibbonContent>
   );

@@ -2,17 +2,19 @@ import { useMemo, useState } from 'react';
 import { Input } from '@polaris/ui';
 import * as PolarisIcons from '@polaris/ui/icons';
 import * as PolarisFileIcons from '@polaris/ui/file-icons';
+import * as PolarisRibbonIcons from '@polaris/ui/ribbon-icons';
 import { PolarisLogo, NovaLogo } from '@polaris/ui/logos';
 import { SearchIcon } from '@polaris/ui/icons';
 
 /**
  * Icon catalog page — visual reference for the design-team SVG set
- * shipped via @polaris/ui/icons, /file-icons, /logos.
+ * shipped via @polaris/ui/icons, /file-icons, /ribbon-icons, /logos.
  *
- * Three sections:
+ * Four sections:
  *   1. UI icons       — 65 monochrome icons × 3 sizes (18/24/32)
  *   2. File icons     — 29 multi-color file-type icons
- *   3. Logos          — Polaris Office (3 variants × 2 tones) + Nova (2 tones)
+ *   3. Ribbon icons   — 91 multi-color icons (57 big × 32 + 34 small × 16)
+ *   4. Logos          — Polaris Office (3 variants × 2 tones) + Nova (2 tones)
  */
 export default function IconsPage() {
   const [query, setQuery] = useState('');
@@ -38,6 +40,17 @@ export default function IconsPage() {
   const fileEntries = useMemo(() => {
     return Object.entries(PolarisFileIcons.FILE_ICON_REGISTRY).map(([slug, Component]) => ({
       slug,
+      Component: Component as React.ForwardRefExoticComponent<{ size?: number }>,
+    }));
+  }, []);
+
+  const ribbonEntries = useMemo(() => {
+    return Object.entries(PolarisRibbonIcons.RIBBON_ICON_REGISTRY).map(([slug, Component]) => ({
+      slug,
+      // Big icons (32 native) start with prefixes that match assets/ribbon/big/;
+      // small icons (16 native) match the small/ folder. Since the registry
+      // doesn't keep the category, infer via slug heuristics — the MANIFEST
+      // is the canonical source if a stricter lookup is ever needed.
       Component: Component as React.ForwardRefExoticComponent<{ size?: number }>,
     }));
   }, []);
@@ -123,7 +136,58 @@ export default function IconsPage() {
         </div>
       </Section>
 
-      <Section title="4. Logos" subtitle="Polaris Office (3 variants × tones) + Nova (default · white)">
+      <Section
+        title="4. Ribbon Icons"
+        subtitle={`${ribbonEntries.length} icons · 57 big × 32 + 34 small × 16 · Office 리본 전용 (lg 버튼 32 / sm·md 버튼 16) · 멀티컬러 baked-in`}
+      >
+        <div className="space-y-polaris-md">
+          {/* Big — 32 px native, used by lg ribbon buttons (icon-over-label) */}
+          <div className="space-y-polaris-2xs">
+            <h3 className="text-polaris-heading4 text-label-normal">
+              Big <span className="text-polaris-caption1 text-label-alternative">— 32 px (lg 버튼)</span>
+            </h3>
+            <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-polaris-2xs">
+              {ribbonEntries
+                .filter(({ slug }) => PolarisRibbonIcons.RIBBON_ICON_BIG_SLUGS.has(slug))
+                .map(({ slug, Component }) => (
+                  <div
+                    key={slug}
+                    className="flex flex-col items-center gap-polaris-2xs p-polaris-sm rounded-polaris-md border border-line-neutral"
+                  >
+                    <Component size={32} />
+                    <code className="text-polaris-caption2 text-label-alternative font-polaris-mono break-all text-center">
+                      {slug}
+                    </code>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          {/* Small — 16 px native, used by sm/md ribbon buttons (icon-only or icon-before-label) */}
+          <div className="space-y-polaris-2xs">
+            <h3 className="text-polaris-heading4 text-label-normal">
+              Small <span className="text-polaris-caption1 text-label-alternative">— 16 px (sm·md 버튼)</span>
+            </h3>
+            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-polaris-2xs">
+              {ribbonEntries
+                .filter(({ slug }) => PolarisRibbonIcons.RIBBON_ICON_SMALL_SLUGS.has(slug))
+                .map(({ slug, Component }) => (
+                  <div
+                    key={slug}
+                    className="flex flex-col items-center gap-polaris-2xs p-polaris-2xs rounded-polaris-sm border border-line-neutral"
+                  >
+                    <Component />
+                    <code className="text-polaris-caption2 text-label-alternative font-polaris-mono break-all text-center">
+                      {slug}
+                    </code>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section title="5. Logos" subtitle="Polaris Office (3 variants × tones) + Nova (default · white)">
         <div className="space-y-polaris-lg">
           {/* Polaris Office */}
           <div className="space-y-polaris-2xs">

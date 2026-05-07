@@ -10,6 +10,7 @@ export default defineConfig({
     'src/icons/index.ts',
     'src/file-icons/index.ts',
     'src/logos/index.ts',
+    'src/ribbon-icons/index.ts',
   ],
   format: ['esm', 'cjs'],
   dts: true,
@@ -31,6 +32,7 @@ export default defineConfig({
       'dist/icons/index.js', 'dist/icons/index.cjs',
       'dist/file-icons/index.js', 'dist/file-icons/index.cjs',
       'dist/logos/index.js', 'dist/logos/index.cjs',
+      'dist/ribbon-icons/index.js', 'dist/ribbon-icons/index.cjs',
     ];
     for (const file of targets) {
       const content = fs.readFileSync(file, 'utf8');

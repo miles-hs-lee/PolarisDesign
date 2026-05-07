@@ -30,6 +30,7 @@ export default defineConfig({
       { find: '@polaris/ui/icons',      replacement: path.join(uiSrc, 'icons/index.ts') },
       { find: '@polaris/ui/file-icons', replacement: path.join(uiSrc, 'file-icons/index.ts') },
       { find: '@polaris/ui/logos',      replacement: path.join(uiSrc, 'logos/index.ts') },
+      { find: '@polaris/ui/ribbon-icons', replacement: path.join(uiSrc, 'ribbon-icons/index.ts') },
       { find: /^@polaris\/ui$/,         replacement: path.join(uiSrc, 'index.ts') },
     ],
   },
