@@ -14,7 +14,7 @@
  * `MANIFEST.json`. Auto-generated; do not edit by hand. Run
  * `pnpm build:file-icons` to refresh.
  */
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -159,8 +159,15 @@ function main() {
     });
   }
 
-  rmSync(OUT_ROOT, { recursive: true, force: true });
+  // Idempotent + concurrency-safe — see build-ribbon-icons.ts for rationale.
   mkdirSync(OUT_ROOT, { recursive: true });
+
+  const expected = new Set([
+    'types.ts',
+    'index.ts',
+    'MANIFEST.json',
+    ...entries.map((e) => `${e.slug}.tsx`),
+  ]);
 
   writeFileSync(join(OUT_ROOT, 'types.ts'), emitTypesFile(entries.map((e) => e.slug)));
   for (const entry of entries) {
@@ -169,7 +176,20 @@ function main() {
   writeFileSync(join(OUT_ROOT, 'index.ts'), emitIndex(entries));
   writeFileSync(join(OUT_ROOT, 'MANIFEST.json'), emitManifest(entries));
 
+  pruneOrphans(OUT_ROOT, expected);
+
   console.log(`✓ wrote ${entries.length} file-icon components → packages/ui/src/file-icons/`);
+}
+
+/** Best-effort orphan removal for files in `dir` not in `expected`.
+ *  Tolerates races with parallel generator invocations. */
+function pruneOrphans(dir: string, expected: Set<string>): void {
+  try {
+    for (const f of readdirSync(dir)) {
+      if (expected.has(f)) continue;
+      try { unlinkSync(join(dir, f)); } catch { /* parallel run already pruned */ }
+    }
+  } catch { /* dir vanished mid-prune — next run repairs */ }
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

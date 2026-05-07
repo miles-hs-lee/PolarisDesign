@@ -21,7 +21,7 @@
  * icon = drop the new SVG into `assets/svg/icons/{size}/`, run
  * `pnpm normalize:icons` (if from Figma export), then `build:icons`.
  */
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, rmSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, unlinkSync, statSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -239,25 +239,42 @@ function main() {
     iconEntries.push(buildEntry(slug));
   }
 
-  // Recreate output dir
-  rmSync(OUT_ROOT, { recursive: true, force: true });
+  // Idempotent + concurrency-safe — see build-ribbon-icons.ts for rationale.
+  // Don't rm the dir wholesale; mkdir is a noop if it exists, then we
+  // overwrite each file (atomic per file on POSIX) and best-effort prune
+  // orphans, tolerating races with parallel generator invocations.
   mkdirSync(OUT_ROOT, { recursive: true });
 
-  // Emit types.ts (shared)
-  writeFileSync(join(OUT_ROOT, 'types.ts'), emitTypesFile());
+  const expected = new Set([
+    'types.ts',
+    'index.ts',
+    'MANIFEST.json',
+    ...iconEntries.map((e) => `${e.slug}.tsx`),
+  ]);
 
-  // Emit one .tsx per icon
+  writeFileSync(join(OUT_ROOT, 'types.ts'), emitTypesFile());
   for (const entry of iconEntries) {
     writeFileSync(join(OUT_ROOT, `${entry.slug}.tsx`), emitIconComponent(entry));
   }
-
-  // Emit index + manifest
   writeFileSync(join(OUT_ROOT, 'index.ts'), emitIndex(iconEntries));
   writeFileSync(join(OUT_ROOT, 'MANIFEST.json'), emitManifest(iconEntries));
+
+  pruneOrphans(OUT_ROOT, expected);
 
   console.log(
     `✓ wrote ${iconEntries.length} icon components → packages/ui/src/icons/`
   );
+}
+
+/** Best-effort orphan removal for files in `dir` not in `expected`.
+ *  Tolerates races with parallel generator invocations. */
+function pruneOrphans(dir: string, expected: Set<string>): void {
+  try {
+    for (const f of readdirSync(dir)) {
+      if (expected.has(f)) continue;
+      try { unlinkSync(join(dir, f)); } catch { /* parallel run already pruned */ }
+    }
+  } catch { /* dir vanished mid-prune — next run repairs */ }
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

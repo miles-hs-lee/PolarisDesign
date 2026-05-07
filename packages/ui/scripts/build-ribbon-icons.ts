@@ -26,7 +26,7 @@
  * gitignored; regenerated from `assets/ribbon/` at install time
  * (via the `prepare` hook).
  */
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, statSync, unlinkSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -224,14 +224,42 @@ function main() {
     seen.set(e.slug, e);
   }
 
-  rmSync(OUT_ROOT, { recursive: true, force: true });
+  // Idempotent + concurrency-safe: don't rm the dir wholesale (a parallel
+  // generator invocation — e.g. CI running multiple package typecheck
+  // scripts in parallel — would hit ENOTEMPTY mid-write). Instead, mkdir
+  // (recursive = noop if exists), overwrite each file, then prune
+  // orphans by comparing the on-disk set to the expected set.
   mkdirSync(OUT_ROOT, { recursive: true });
+
+  const expected = new Set([
+    'types.ts',
+    'index.ts',
+    'MANIFEST.json',
+    ...all.map((e) => `${e.slug}.tsx`),
+  ]);
+
   writeFileSync(join(OUT_ROOT, 'types.ts'), emitTypesFile());
   for (const entry of all) {
     writeFileSync(join(OUT_ROOT, `${entry.slug}.tsx`), emitComponent(entry));
   }
   writeFileSync(join(OUT_ROOT, 'index.ts'), emitIndex(all));
   writeFileSync(join(OUT_ROOT, 'MANIFEST.json'), emitManifest(all));
+
+  // Prune stale files (best-effort; ignore errors caused by parallel
+  // runs unlinking the same orphan).
+  try {
+    for (const f of readdirSync(OUT_ROOT)) {
+      if (expected.has(f)) continue;
+      try {
+        const stat = statSync(join(OUT_ROOT, f));
+        if (stat.isFile()) unlinkSync(join(OUT_ROOT, f));
+      } catch {
+        /* race — another invocation already removed it */
+      }
+    }
+  } catch {
+    /* dir disappeared mid-prune (extremely unlikely) — next run repairs */
+  }
 
   console.log(
     `✓ wrote ${all.length} ribbon-icon components (${big.length} big + ${small.length} small) → packages/ui/src/ribbon-icons/`

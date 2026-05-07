@@ -16,7 +16,7 @@
  * to recolor them. `width`/`height` props scale uniformly while
  * preserving aspect ratio (each variant has its own intrinsic size).
  */
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -204,13 +204,30 @@ export { NovaLogo, type NovaLogoProps } from './nova';
 }
 
 function main() {
-  rmSync(OUT_ROOT, { recursive: true, force: true });
+  // Idempotent + concurrency-safe — see build-ribbon-icons.ts for rationale.
   mkdirSync(OUT_ROOT, { recursive: true });
+
+  const expected = new Set(['types.ts', 'polaris.tsx', 'nova.tsx', 'index.ts']);
+
   writeFileSync(join(OUT_ROOT, 'types.ts'), emitTypes());
   writeFileSync(join(OUT_ROOT, 'polaris.tsx'), emitPolaris());
   writeFileSync(join(OUT_ROOT, 'nova.tsx'), emitNova());
   writeFileSync(join(OUT_ROOT, 'index.ts'), emitIndex());
+
+  pruneOrphans(OUT_ROOT, expected);
+
   console.log('✓ wrote PolarisLogo + NovaLogo → packages/ui/src/logos/');
+}
+
+/** Best-effort orphan removal for files in `dir` not in `expected`.
+ *  Tolerates races with parallel generator invocations. */
+function pruneOrphans(dir: string, expected: Set<string>): void {
+  try {
+    for (const f of readdirSync(dir)) {
+      if (expected.has(f)) continue;
+      try { unlinkSync(join(dir, f)); } catch { /* parallel run already pruned */ }
+    }
+  } catch { /* dir vanished mid-prune — next run repairs */ }
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
