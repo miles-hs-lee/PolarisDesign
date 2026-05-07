@@ -12,6 +12,34 @@
 
 ---
 
+## [0.7.2] — 2026-05-07
+
+🐛 **Hotfix** — Tailwind alias 누락으로 시스템 전반의 hover / active 배경이 silently broken이던 버그 정정.
+
+### 증상
+
+리본 버튼에 마우스를 올려도 light blue hover indicator가 보이지 않음 (사용자 보고: "리본 메뉴의 호버가 표시 안되는데?").
+
+### 영향 범위
+
+12+ 컴포넌트가 `bg-accent-brand-normal-subtle` 클래스를 hover / active state에 사용 중이었으나, 해당 클래스가 v0.7 Tailwind 토큰 맵에 정의되지 않아 빌드 CSS에 emit되지 않음:
+
+`Sidebar`, `Pagination`, `Calendar`, `Drawer`, `Command`, `Badge`, `Select`, `DropdownMenu`, `FileCard`, `Ribbon` (포함 `RibbonButton` lg / `RibbonToggleItem` data-state=on / `RibbonTab` active).
+
+이 버그는 이전부터 존재해왔으며 0.7.0의 토큰 재정렬 이후 표면화. 단위 테스트는 className 문자열만 검증하므로 통과. 시각 회귀 테스트는 정적 스크린샷이라 hover state를 캡처하지 않아 미발견.
+
+### 수정
+
+`packages/ui/src/tailwind/index.ts`의 `accent-brand` family에 `'normal-subtle'` 키를 추가, 기존 `--polaris-brand-primary-subtle` CSS 변수(light `#E8F2FE` / dark `#1A2238`)에 매핑. 12+ 컴포넌트의 hover / active 배경이 즉시 복구 — call site 변경 없음.
+
+향후 정리(v0.8): `accent-brand-bg`, `accent-brand-bg-hover`, `accent-brand-normal-subtle` 등 brand-tinted background 토큰을 단일 canonical 명명으로 통합하면서 이 deprecated 별칭 제거 예정.
+
+### 패키지 버전
+
+@polaris/ui · @polaris/lint · @polaris/plugin · polaris-template-next · demo + root: 0.7.1 → 0.7.2.
+
+---
+
 ## [0.7.1] — 2026-05-07
 
 v0.7.0 위에 누적된 **additive 패치** — breaking 없음, 디자인 시스템에 ribbon 아이콘 셋 추가 + 폴라리스 오피스 데모를 실제 제품 ribbon에 1:1 매칭. RC 두 번(rc.0 / rc.1)을 거쳐 정식 릴리스.

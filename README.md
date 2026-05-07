@@ -118,7 +118,8 @@ CI는 `.github/workflows/ci.yml`, 데모 배포는 `.github/workflows/deploy.yml
 | v0.5.0 | Ribbon family (subpath `@polaris/ui/ribbon`) |
 | v0.6.0 | Ribbon 정비 + 데모 SPA 통합 + Vite source alias HMR |
 | v0.7.0 | DESIGN.md 완전 정렬 + 19 시맨틱 토큰 + 4 토큰 시스템 + 디자인팀 SVG 자산 통합 |
-| **v0.7.1 (현재)** | **`@polaris/ui/ribbon-icons` 91종 (57 big × 32 + 34 small × 16) + 폴라리스 오피스 데모 재구성 + SVG id 격리** |
+| v0.7.1 | `@polaris/ui/ribbon-icons` 91종 (57 big × 32 + 34 small × 16) + 폴라리스 오피스 데모 재구성 + SVG id 격리 |
+| **v0.7.2 (현재)** | **🐛 hotfix — `accent-brand-normal-subtle` Tailwind alias 누락으로 12+ 컴포넌트 hover/active 배경이 silently broken이던 버그 정정** |
 | v0.7.x | DataPagination, lucide → polaris 아이콘 잔여 마이그레이션 (template-next 완료, demo 진행 중) |
 | v0.8.0 | v0.6/rc/v0.7 deprecated alias 제거, Pretendard local |
 | v1.0 | Combobox, NumberInput, AvatarGroup, Slider, CodeBlock 안정화, Badge variant BREAKING, 사인오프 |
