@@ -56,10 +56,24 @@
 
 ---
 
+## ✅ v0.7.1 — Ribbon 아이콘 셋 + 폴라리스 오피스 데모 재구성 (완료)
+
+v0.7.0 위에 누적된 추가. **breaking 없음**, 디자인 시스템에 ribbon 아이콘 셋 추가.
+
+- **`@polaris/ui/ribbon-icons` 신규 서브패스** — 91 디자인팀 아이콘 (57 big × 32 + 34 small × 16). `RIBBON_ICON_REGISTRY`, `RIBBON_ICON_BIG_SLUGS`, `RIBBON_ICON_SMALL_SLUGS` Set 동적 lookup.
+- **폴라리스 오피스 데모 페이지 재구성** — 홈/삽입/레이아웃/검토/AI 도구 5개 탭을 실제 폴라리스 오피스 워드 리본과 1:1 매칭. lucide best-effort → 91/91 디자인팀 아이콘.
+- **SVG id 격리** — 4종 generator (`build-icons`, `build-file-icons`, `build-logos`, `build-ribbon-icons`)가 SVG 본문의 모든 `id="..."` 정의 + `url(#...)` / `href="#..."` 참조를 슬러그 prefix로 다시 작성. Figma 자동 ID 충돌 해소.
+- **Ribbon 폰트 weight 정정** — `text-polaris-caption1`이 spec상 weight 700이지만 Office 실제 ribbon은 regular. `RibbonButton` lg + `RibbonStack` 라벨 + `RibbonTab` active 상태 모두 정정.
+- **Generator concurrency-safe** — `pnpm -r typecheck`처럼 동일 출력 dir에 대한 병렬 invocation에서 `ENOTEMPTY` 경쟁 상태 해소.
+- **template-next lint 게이트** — `--max-warnings=0` 적용. 3 warnings (`Plus`, `Search`, `Image`)는 polaris 등가물로 swap.
+- **컴포넌트 네이밍 정리** — Figma compound concat 슬러그를 사람이 읽기 쉬운 PascalCase로 (예: `Aligncenter` → `AlignCenter`, `Wordcount` → `WordCount`, `Rotateright90` → `RotateRight90`).
+
+---
+
 ## v0.7.x — 작은 패치 + 마이그레이션 도우미
 
 - **DataPagination 고수준 wrapper** (v0.5.x에서 미해결 carry-over)
-- **lucide → polaris 잔여 마이그레이션** — `@polaris/lint`의 `prefer-polaris-icon` warning 해소. 데모 95건, template-next 3건.
+- **lucide → polaris 잔여 마이그레이션** — `@polaris/lint`의 `prefer-polaris-icon` warning 해소. ✅ template-next 완료(0.7.1), 데모는 80여건 잔여.
 - **prefer-polaris-icon auto-fix** — 단순 케이스(named import 1:1)는 `--fix`로 자동 변환.
 - **codemod 적용 범위 가드** — `@polaris/ui/src/{tokens,styles,tailwind}` 자동 제외.
 - **Form/Calendar/Command stable화** — v0.4 experimental 상태 평가 후 stable 또는 제거 결정.

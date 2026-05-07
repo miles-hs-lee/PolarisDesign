@@ -298,11 +298,11 @@ The component layer is the \`@polaris/ui\` package — 37 React components built
 
 Reach for the package first. If a primitive is missing, compose with token-only inline styling — never reach for raw hex or styled-components.
 
-For editor / document products, the \`@polaris/ui/ribbon\` subpath ships an Office-style ribbon family (Tabs / Group / Stack / Row / Button / SplitButton / MenuButton / ToggleGroup / Separator / RowDivider).
+For editor / document products, the \`@polaris/ui/ribbon\` subpath ships an Office-style ribbon family (Tabs / Group / Stack / Row / Button / SplitButton / MenuButton / ToggleGroup / Separator / RowDivider). The companion subpath \`@polaris/ui/ribbon-icons\` ships 91 multi-color design-team icons sized for ribbon buttons (57 big × 32 + 34 small × 16); use \`BoldIcon\`/\`PasteIcon\`/\`AiChatIcon\` etc. inside \`RibbonButton\` rather than reaching for \`@polaris/ui/icons\` (which is monochrome and tuned for general UI).
 
 ## Do's and Don'ts
 
-- **Do** import from \`@polaris/ui\`, \`@polaris/ui/form\`, or \`@polaris/ui/ribbon\` — every component is token-correct out of the box.
+- **Do** import from \`@polaris/ui\`, \`@polaris/ui/form\`, \`@polaris/ui/ribbon\`, or \`@polaris/ui/ribbon-icons\` — every component / icon is token-correct out of the box.
 - **Do** use the \`text.primary\` / \`surface.raised\` / \`brand.primary\` style aliases. The raw \`neutral.700\` / \`palette-blue\` exist for advanced cases only.
 - **Do** pair status colors with their hover variants for any interactive surface (buttons, cells).
 - **Do** use \`brand.secondary\` (NOVA purple) only inside AI features. Mixing it with \`brand.primary\` on the same screen muddies hierarchy.
