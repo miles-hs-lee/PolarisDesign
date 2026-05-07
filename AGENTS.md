@@ -60,50 +60,84 @@ import {
   RibbonButton, RibbonMenuButton, RibbonSplitButton,
   RibbonToggleGroup, RibbonToggleItem,
 } from '@polaris/ui/ribbon';
+
+// v0.7+ — 디자인팀 SVG 자산 (65 UI 아이콘 + 29 파일 + 로고)
+import { ArrowDownIcon, ChevronRightIcon, SearchIcon } from '@polaris/ui/icons';
+import { DocxIcon, FolderIcon, ZipIcon } from '@polaris/ui/file-icons';
+import { PolarisLogo, NovaLogo } from '@polaris/ui/logos';
 ```
 
 native `<button>`, `<input>`, `<textarea>`, `<select>`, `<dialog>`은 **feature 코드에서 금지**. ESLint 룰 `@polaris/prefer-polaris-component`가 차단합니다 (단, `<button type="submit">`는 form-control 패턴이라 허용).
 
-### 2. 색상은 토큰만
+### 2. 색상 — v0.7 spec 토큰 우선
 
-| 사용처 | 권장 |
-|---|---|
-| Tailwind 클래스 | `bg-brand-primary`, `text-fg-primary`, `border-surface-border`, `bg-status-danger`, `text-file-pdf`, `bg-neutral-100` |
-| CSS 변수 | `var(--polaris-brand-primary)`, `var(--polaris-text-primary)` |
-| TS 토큰 | `import { brand, status, fileType } from '@polaris/ui/tokens';` |
+**v0.7부터 시맨틱 토큰이 spec 명명으로 재정렬됐습니다.** 새 코드는 아래 표 기준 사용. v0.6 / rc.0 alias는 여전히 작동하지만 v0.8에서 제거 예정 (codemod로 자동 변환 가능: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`).
+
+| 역할 | Tailwind class | TS 토큰 |
+|---|---|---|
+| 1차 텍스트 | `text-label-normal` | `label.normal` |
+| 보조 텍스트 | `text-label-neutral` | `label.neutral` |
+| Placeholder | `text-label-assistive` | `label.assistive` |
+| 비활성 | `text-label-disabled` | `label.disabled` |
+| 페이지 배경 | `bg-background-base` | `background.base` |
+| Card / Dialog 표면 | `bg-layer-surface` | `layer.surface` |
+| Modal dim | `bg-layer-overlay` | `layer.overlay` |
+| Hover 표면 | `bg-interaction-hover` | `interaction.hover` |
+| 보더 (약/일반/강조) | `border-line-{neutral,normal,strong}` | `line.*` |
+| Brand 강조 (CTA) | `bg-accent-brand-normal` / `text-accent-brand-normal` | `accentBrand.normal` |
+| Brand hover | `bg-accent-brand-strong` | `accentBrand.strong` |
+| Brand 틴트 | `bg-accent-brand-bg` | `accentBrand.bg` |
+| Black 버튼 | `bg-accent-action-normal text-static-white` | `accentAction.normal` |
+| 포커스 | `ring-focus-ring` | `focus.ring` |
+| 상태 텍스트/아이콘 | `text-state-{success,warning,error,info}` | `state.*` |
+| 상태 배너 배경 | `bg-state-{}-bg` | `state.{}Bg` |
+| AI / NOVA | `bg-ai-normal` (+ `shadow-polaris-ai`) | `ai.normal` |
+
+```ts
+import { label, background, layer, line, accentBrand, state, ai } from '@polaris/ui/tokens';
+```
 
 **금지**:
 - hex/rgb/hsl 직접 사용 (`#fff`, `rgb(...)`, `hsl(...)`)
 - inline style의 CSS named color (`style={{ color: 'red' }}`)
 - Tailwind 임의값 (`bg-[#fff]`, `text-[red]`, `border-[#ccc]`)
+- WCAG 1.4.1 위반: `state-error`/`-warning`/`-success` 작은 텍스트 단독 사용 (반드시 아이콘 동반 또는 18px+ Bold)
 
-### 3. AI / NOVA 컨텍스트는 `brand-secondary` (보라)
+### 3. AI / NOVA 컨텍스트는 `ai.*` 토큰 (보라)
 
-- AI 기능(생성/요약/자동완성/NOVA 진입점) → `bg-brand-secondary`, `text-brand-secondary`
-- 일반 기능 → `bg-brand-primary`, `text-brand-primary`
+- AI 기능(생성/요약/자동완성/NOVA 진입점) → `bg-ai-normal text-label-inverse` + `shadow-polaris-ai` (퍼플 글로우)
+- 일반 기능 → `bg-accent-brand-normal`
 - 같은 화면에서 둘을 섞지 마세요
 
-### 4. 파일 타입 색상은 파일 표상 컨텍스트 전용
+### 4. 파일 타입 색상 — 컴포넌트 사용
 
-- DOCX/HWP → `text-file-docx`, `bg-file-docx` (파랑)
-- XLSX → `text-file-xlsx` (초록)
-- PPTX → `text-file-pptx` (주황)
-- PDF → `text-file-pdf` (빨강)
+29개 파일 타입 SVG가 `@polaris/ui` 에서 제공됩니다:
 
-차트나 일반 데이터 시각화에 차용 금지.
+```ts
+<FileIcon type="docx" size={40} />              // dispatcher
+import { DocxIcon, XlsxIcon } from '@polaris/ui/file-icons';  // direct import (tree-shaking)
+```
 
-### 5. 타이포그래피
+색상은 SVG 안에 baked-in. `text-file-*` 같은 v0.6 alias 클래스는 여전히 작동하지만 새 코드는 컴포넌트 사용.
+
+### 5. 타이포그래피 (v0.7 spec)
 
 - 패밀리: `font-polaris` (Tailwind) 또는 `var(--polaris-font-sans)` (CSS)
-- 스케일: `text-polaris-display-lg`, `text-polaris-heading-md`, `text-polaris-body-lg`, `text-polaris-caption`
+- 스케일: `text-polaris-display` (40) / `-title` (32) / `-heading1`~`-heading4` (28/24/20/18) / `-body1`~`-body3` (16/14/13) / `-caption1` (12) / `-caption2` (11)
+- 모든 heading + caption은 weight 700. body는 400.
+- 모바일 (≤767px) 자동 한 단계 축소 (tokens.css의 @media)
+- v0.6 / rc.0 alias (`text-polaris-display-lg`, `-h1`~`-h5`, `-body`, `-meta`, `-tiny`) 도 작동하지만 새 코드는 spec 이름 사용.
 - `font-family: ...` 직접 지정 금지
 - `font-['Inter']` Tailwind 임의값 금지
+- letter-spacing 수정 금지 — Pretendard 자체 메트릭 사용
 
-### 6. 스페이싱·반경·그림자
+### 6. 스페이싱·반경·그림자·모션·z-index
 
-- 스페이싱: Tailwind 기본 (`p-4`, `m-6`, `gap-2`). `p-[13px]` 같은 임의값 금지
-- 반경: `rounded-polaris-sm/md/lg/xl/full`
-- 그림자: `shadow-polaris-xs/sm/md/lg`
+- **Spacing**: `p-polaris-{4xs,3xs,2xs,xs,sm,md,lg,xl,2xl,3xl,4xl}` (named) 또는 Tailwind 기본 (`p-4`, `gap-6`). `p-[13px]` 같은 임의값 금지.
+- **Radius**: `rounded-polaris-{2xs,xs,sm,md,lg,xl,2xl,pill}`. **기본값 `md` (12px)** — Button/Card/Modal default. Input은 `sm` (8). Large CTA `lg` (16). Modal `xl` (24).
+- **Shadow**: `shadow-polaris-{xs,sm,md,lg,ai}`. AI 표면 (NovaInput / AI response 카드)은 `ai` (퍼플 글로우).
+- **Motion**: `duration-polaris-{instant,fast,normal,slow}` + `ease-polaris-{in-out,out,in}`.
+- **Z-index**: `z-polaris-{base,dropdown,sticky,dim,modal,toast}`. `z-[숫자]` 임의값 금지.
 
 ### 7. 마침 검증
 

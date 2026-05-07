@@ -10,7 +10,7 @@ v0.7.0-rc.1 — DESIGN.md + primitive-color-palette 완전 정렬
 
 rc.0 출시 후 디자인팀의 더 상세한 정의서(`DESIGN.md` + `primitive-color-palette.html`)를 받아 9단계 reconciliation 수행. 사용자 피드백 단계 전이라 alias 부담 없이 spec 완전 정렬.
 
-마이그레이션: [`docs/migration/v0.6-to-v0.7-rc.1.md`](https://github.com/miles-hs-lee/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7-rc.1.md)
+마이그레이션: [`docs/migration/v0.6-to-v0.7.md`](https://github.com/miles-hs-lee/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md)
 Codemod (v0.6 / rc.0 모두 대응): `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`
 
 ### Highlights

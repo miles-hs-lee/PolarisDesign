@@ -68,10 +68,12 @@
     "build:logos": "tsx scripts/build-logos.ts",
     "normalize:icons": "tsx scripts/normalize-icon-names.ts",
     "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run && node --test 'test/**/*.test.mjs'",
+    "typecheck": "pnpm gen:sources && tsc --noEmit",
+    "test": "pnpm gen:sources && vitest run && node --test 'test/**/*.test.mjs'",
     "test:watch": "vitest",
-    "clean": "rm -rf dist .turbo"
+    "clean": "rm -rf dist .turbo src/icons src/file-icons src/logos",
+    "gen:sources": "pnpm build:tokens && pnpm build:icons && pnpm build:file-icons && pnpm build:logos",
+    "prepare": "pnpm gen:sources"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.2",

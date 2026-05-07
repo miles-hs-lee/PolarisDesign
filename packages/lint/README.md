@@ -100,7 +100,7 @@ npx polaris-codemod-v07 --apply src
 npx polaris-codemod-v07 --check src
 ```
 
-처리 항목 (자세한 매핑은 [v0.6→v0.7-rc.1 가이드](../../docs/migration/v0.6-to-v0.7-rc.1.md) 참조):
+처리 항목 (자세한 매핑은 [v0.6→v0.7 가이드](../../docs/migration/v0.6-to-v0.7.md) 참조):
 - TS/TSX 토큰 멤버 접근: `text.primary` → `label.normal` 등
 - Tailwind 유틸리티: `text-fg-primary` → `text-label-normal`, `rounded-polaris-full` → `rounded-polaris-pill`
 - CSS 커스텀 속성: `--polaris-text-primary` → `--polaris-label-normal`

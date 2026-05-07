@@ -4,13 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm sync:figma-spec && vite --port 5173 --host",
-    "build": "pnpm sync:figma-spec && tsc --noEmit && vite build",
+    "dev": "pnpm sync:figma-spec && pnpm prep:ui && vite --port 5173 --host",
+    "build": "pnpm sync:figma-spec && pnpm prep:ui && tsc --noEmit && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
+    "typecheck": "pnpm prep:ui-sources && tsc --noEmit",
+    "lint": "pnpm prep:ui-sources && eslint .",
     "optimize-images": "node scripts/optimize-nova-images.mjs",
-    "sync:figma-spec": "rm -rf public/figma-spec && cp -r ../../assets/figma-spec public/figma-spec"
+    "sync:figma-spec": "rm -rf public/figma-spec && cp -r ../../assets/figma-spec public/figma-spec",
+    "prep:ui-sources": "pnpm --filter @polaris/ui gen:sources",
+    "prep:ui": "pnpm --filter @polaris/ui build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

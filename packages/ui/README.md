@@ -55,20 +55,33 @@ export default {
 } satisfies Config;
 ```
 
-이후 다음 클래스가 자동 생성됩니다:
+이후 다음 클래스가 자동 생성됩니다 (v0.7 spec 명명):
 
 | 카테고리 | 클래스 |
 |---|---|
-| 브랜드 | `bg-brand-primary`, `bg-brand-secondary`, `bg-brand-secondary-subtle`, `bg-polaris-blue/green/orange/red/purple` |
-| 파일 | `bg-file-docx`, `text-file-pdf`, … |
-| 상태 | `bg-status-success`, `text-status-danger`, … |
-| 표면 | `bg-surface-canvas`, `border-surface-border`, `bg-surface-sunken` |
-| 전경 | `text-fg-primary`, `text-fg-on-brand`, … (`fg`로 시작 — `text-` 유틸리티 prefix와 충돌 회피) |
-| 뉴트럴 | `bg-neutral-0` ~ `bg-neutral-1000` |
+| 라벨 (텍스트/아이콘) | `text-label-{normal,neutral,alternative,assistive,inverse,disabled}` |
+| 배경 (페이지) | `bg-background-{base,disabled}` |
+| 레이어 (raised) | `bg-layer-surface`, `bg-layer-overlay` |
+| 인터랙션 | `bg-interaction-{hover,pressed}` |
+| Fill | `bg-fill-{neutral,normal,strong}` |
+| 보더 | `border-line-{neutral,normal,strong,disabled}` |
+| Brand 액센트 | `bg-accent-brand-{normal,strong,bg,bg-hover}`, `text-accent-brand-normal` |
+| Black 액션 | `bg-accent-action-{normal,strong}` (다크모드 자동 반전) |
+| 포커스 / Static | `ring-focus-ring`, `bg-static-white`, `bg-static-black` |
+| 상태 | `bg-state-{success,warning,error,info,new}`, `bg-state-{}-bg` |
+| AI / NOVA | `bg-ai-{normal,strong,hover,pressed}` |
+| 컬러 램프 (10단계) | `bg-blue-{05,10,...,90}`, `bg-purple-50`, `bg-green-30`, etc. |
+| 서브 팔레트 (rc.1) | `bg-sky-blue-50`, `bg-violet-50`, `bg-cyan-50`, `bg-yellow-50`, `bg-blue-supplementary-50` |
+| Gray | `bg-gray-{10,20,...,90}` |
 | 폰트 | `font-polaris`, `font-polaris-mono` |
-| 폰트 크기 | `text-polaris-display-lg`, `text-polaris-heading-md`, `text-polaris-body-lg`, `text-polaris-caption`, … |
-| 반경 | `rounded-polaris-sm/md/lg/xl/full` |
-| 그림자 | `shadow-polaris-xs/sm/md/lg` |
+| 폰트 크기 | `text-polaris-{display,title,heading1-4,body1-3,caption1-2}` |
+| Spacing (named) | `p-polaris-{4xs,3xs,2xs,xs,sm,md,lg,xl,2xl,3xl,4xl}` (named) + Tailwind 기본 |
+| 반경 | `rounded-polaris-{2xs,xs,sm,md,lg,xl,2xl,pill}` (default `md` 12px) |
+| 그림자 | `shadow-polaris-{xs,sm,md,lg,ai}` (`ai` = AI 표면 보라 글로우) |
+| Z-index | `z-polaris-{base,dropdown,sticky,dim,modal,toast}` |
+| Motion | `duration-polaris-{instant,fast,normal,slow}`, `ease-polaris-{in-out,out,in}` |
+
+v0.6 / rc.0 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-raised`, `bg-status-danger`, `text-polaris-display-lg` 등)는 deprecated alias로 작동. v0.8에서 제거. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`.
 
 ## 컴포넌트 (37개)
 
@@ -116,7 +129,23 @@ import {
   RibbonButton, RibbonMenuButton, RibbonSplitButton,
   RibbonToggleGroup, RibbonToggleItem,
 } from '@polaris/ui/ribbon';
+
+// v0.7+ — 디자인팀 SVG 자산
+// UI 아이콘 65종 × 18/24/32 px (모노크롬, currentColor)
+import { ArrowDownIcon, ChevronRightIcon, SearchIcon, BellIcon } from '@polaris/ui/icons';
+<ArrowDownIcon size={16} className="text-label-neutral" />
+
+// 파일 타입 29종 (멀티컬러 baked-in)
+import { DocxIcon, FolderIcon, ZipIcon } from '@polaris/ui/file-icons';
+<DocxIcon size={40} />
+
+// 로고
+import { PolarisLogo, NovaLogo } from '@polaris/ui/logos';
+<PolarisLogo variant="horizontal" size={32} />
+<NovaLogo tone="white" />
 ```
+
+전체 아이콘 카탈로그: [`/icons` 페이지](https://miles-hs-lee.github.io/PolarisDesign/#/icons).
 
 ### 글로벌 Provider
 

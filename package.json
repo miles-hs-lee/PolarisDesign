@@ -1,7 +1,7 @@
 {
   "name": "polaris-design",
   "private": true,
-  "version": "0.6.1",
+  "version": "0.7.0-rc.2",
   "packageManager": "pnpm@10.33.2",
   "engines": {
     "node": ">=20"
