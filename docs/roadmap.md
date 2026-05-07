@@ -18,6 +18,54 @@
 
 ---
 
+## ✅ v0.6.0 — Ribbon 정비 + 데모 통합 (완료)
+
+- `RibbonMenuButton`, `RibbonRowDivider` 추가
+- `RibbonSplitButton` lg vertical 분할, scrollbar 숨김으로 panel 높이 통일
+- disabled split의 menu trigger도 차단, icon-only 버튼 aria-label 자동 fallback
+- PolarisOffice 데모 탭별 컴포넌트 분리
+- Storybook 제거 → 컴포넌트 카탈로그(SPA) + `/tokens` 라우트로 통일
+- 데모 vite alias로 `@polaris/ui` source 직접 import (별도 빌드 없이 HMR)
+
+---
+
+## ✅ v0.7.0 — DESIGN.md 완전 정렬 + 디자인팀 자산 통합 (완료)
+
+디자인팀 v1 (2026.05) 정의서 — `DESIGN.md` + `primitive-color-palette` — 에 토큰 명명·값·컴포넌트 스펙 완전 정렬. 8개 누적 changeset 통합.
+
+추가:
+- **시맨틱 토큰 19개 신설** — `label.*` (6) / `background.*` (4) / `layer.*` (2 NEW) / `interaction.*` (pressed NEW) / `fill.*` (neutral·strong NEW) / `line.*` (strong·disabled NEW) / `accentBrand.*` (bg·bgHover NEW) / `accentAction.*` (Black 버튼, NEW) / `focus.ring` / `staticColors.*` / `state.*` (new + bg variants 4 NEW)
+- **컬러 primitive 확장** — 10단계 (`05`/`90`) × 11 family. 5 supplementary 신설 (Sky Blue / Blue / Violet / Cyan / Yellow). Gray ramp.
+- **다크 모드 그레이스케일 재작성** — 퍼플 틴트 → 단색 그레이.
+- **Radius 스케일 한 단계 시프트** — `md` 8→12 (default), `lg` 12→16, `xl` 16→24, `2xl` 24→38.
+- **Typography 11레벨 spec 명명** — `display`(40)/`title`(32)/`heading1-4`(28/24/20/18)/`body1-3`(16/14/13)/`caption1-2`(12/11). Caption weight 700, body letter-spacing 제거. 모바일(≤767px) 자동 축소.
+- **새 토큰 시스템 4개** — Spacing (12 named, `4xs`–`4xl`) · Z-index (6 levels) · Motion (duration × 4 + easing × 3) · Breakpoint (semantic).
+- **Button 6 사이즈** — 24/32/40/48/54/64 + Black variant (`accentAction.*`).
+- **Input 52px floating title**, **Modal 24r layer.surface**, **Toast dark+blur 48h**.
+- **디자인팀 SVG 자산 통합**:
+  - `@polaris/ui/icons` — 65 UI 아이콘 × 18/24/32 px (currentColor)
+  - `@polaris/ui/file-icons` — 29 파일 타입 (multi-color baked-in)
+  - `@polaris/ui/logos` — `PolarisLogo` (3 variants × 2 tones) + `NovaLogo` (2 tones)
+  - `<FileIcon>` 색깔 사각형 → 디자인팀 실제 SVG로 완전 교체 (5 → 29 타입)
+  - `@polaris/ui` 내부 lucide-react → 폴라리스 아이콘 교체 (있는 것만)
+- **자동 codemod** — `polaris-codemod-v07` (v0.6/rc.0/rc.1/rc.2 → v0.7)
+- **신규 lint 룰 2개** — `state-color-with-icon` (WCAG 1.4.1) + `prefer-polaris-icon` (lucide-react 마이그레이션 유도)
+- **Tokens 페이지 자동화** — `colors` export iterate로 새 그룹 추가 시 자동 반영. figma-spec PNG 인라인.
+
+마이그레이션: [`docs/migration/v0.6-to-v0.7.md`](migration/v0.6-to-v0.7.md).
+
+---
+
+## v0.7.x — 작은 패치 + 마이그레이션 도우미
+
+- **DataPagination 고수준 wrapper** (v0.5.x에서 미해결 carry-over)
+- **lucide → polaris 잔여 마이그레이션** — `@polaris/lint`의 `prefer-polaris-icon` warning 해소. 데모 95건, template-next 3건.
+- **prefer-polaris-icon auto-fix** — 단순 케이스(named import 1:1)는 `--fix`로 자동 변환.
+- **codemod 적용 범위 가드** — `@polaris/ui/src/{tokens,styles,tailwind}` 자동 제외.
+- **Form/Calendar/Command stable화** — v0.4 experimental 상태 평가 후 stable 또는 제거 결정.
+
+---
+
 ## v0.5.x — 사용자 검증된 우선순위 (피드백 기반)
 
 ### High-impact (사이클 초반에 처리)
@@ -115,7 +163,17 @@ v0.4 사용자 보고 — `app-user-manager.tsx`, `price-book-activate-button.ts
 
 ---
 
-## v0.6+ — 큰 작업 (RFC 후 진행)
+## v0.8.0 — Deprecated alias 제거 (BREAKING)
+
+- v0.6 / rc.0 / rc.1 토큰 이름 alias 모두 제거 — `text.primary`, `surface.raised`, `brand.primary`, `bg-fg-*`, `text-polaris-h1` 등.
+- `polaris-codemod-v07` 가 마이그레이션 마무리해야 통과.
+- `@polaris/lint` deprecated alias warning 룰 추가 (v0.7.1 부터 운영, v0.8에서 error 승격).
+- Pretendard local hosting (CDN 졸업) — 폰트 로딩 안정성 확보.
+- v0.4 experimental (Calendar / DatePicker / CommandPalette) 결정 — stable promote 또는 별도 패키지 분리.
+
+---
+
+## v0.9 — 신규 컴포넌트 (RFC 후)
 
 - **DataTable** — sortable + filterable + virtualized. tanstack-table 위 또는 자체. v0.5 Table sticky+sortable 작업의 다음 단계.
 - **Combobox** — 검색 가능 select. 200+ option 매핑 케이스.
@@ -123,16 +181,16 @@ v0.4 사용자 보고 — `app-user-manager.tsx`, `price-book-activate-button.ts
 - **AvatarGroup** — collaborator 표시.
 - **Slider/Range** — 가격/좌석 수 필터.
 - **CodeBlock** — JSON debug view, RPC 결과.
-- **Calendar/DatePicker/CommandPalette stable화** — 0.4 experimental → 사용자 피드백 후 API 확정.
+
+---
 
 ## v1.0 — 사인오프
 
-- 모든 v0.5 high-impact 항목 완료
+- 모든 v0.5–v0.7 carry-over 완료
 - Tier 분류 + stability badge 정착
 - 사내 npm registry publish + 첫 파일럿 baseline 측정
 - Badge variant 축 BREAKING 재구성 (v0.4 RFC 보류 결정)
-- Pretendard local hosting (CDN 졸업)
-- 시각 회귀 테스트 (Playwright) 통합
+- 시각 회귀 테스트 (Playwright) CI 통합 ✓ (v0.7 시점에 28 baselines 운영 중 — 사이즈 안정화 후 stable 마크)
 - 다중 스택 지원 검토 (사내 두 번째 스택 사용처가 의미 있을 때만)
 
 ---
