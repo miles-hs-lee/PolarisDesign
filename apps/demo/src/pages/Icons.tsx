@@ -10,11 +10,12 @@ import { SearchIcon } from '@polaris/ui/icons';
  * Icon catalog page — visual reference for the design-team SVG set
  * shipped via @polaris/ui/icons, /file-icons, /ribbon-icons, /logos.
  *
- * Four sections:
+ * Five sections:
  *   1. UI icons       — 65 monochrome icons × 3 sizes (18/24/32)
- *   2. File icons     — 29 multi-color file-type icons
- *   3. Ribbon icons   — 91 multi-color icons (57 big × 32 + 34 small × 16)
- *   4. Logos          — Polaris Office (3 variants × 2 tones) + Nova (2 tones)
+ *   2. Size compare   — same icon at 18/24/32 (designer hand-tunes per grid)
+ *   3. File icons     — 29 multi-color file-type icons
+ *   4. Ribbon icons   — 91 multi-color icons (57 big × 32 + 34 small × 16)
+ *   5. Logos          — Polaris Office (3 variants × 2 tones) + Nova (2 tones)
  */
 export default function IconsPage() {
   const [query, setQuery] = useState('');

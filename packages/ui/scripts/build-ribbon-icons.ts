@@ -26,7 +26,7 @@
  * gitignored; regenerated from `assets/ribbon/` at install time
  * (via the `prepare` hook).
  */
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, statSync, unlinkSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -44,10 +44,21 @@ interface RibbonIconEntry {
 }
 
 function pascalCase(slug: string): string {
-  return slug
+  const pascal = slug
     .split('-')
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join('');
+  // JS identifiers can't start with a digit. If a future Figma export
+  // produces e.g. "2d-3d" → "2dTo3d", that's an invalid component name
+  // and the build would emit a file that fails at parse time. Reject
+  // here with a clear error so the offending slug is obvious.
+  if (/^[0-9]/.test(pascal)) {
+    throw new Error(
+      `Invalid slug '${slug}': PascalCase form starts with a digit ('${pascal}'). ` +
+      `Rename the source SVG so its slug starts with a letter (e.g. 'ai-${slug}').`
+    );
+  }
+  return pascal;
 }
 
 function extractInner(svg: string): string {
@@ -245,25 +256,23 @@ function main() {
   writeFileSync(join(OUT_ROOT, 'index.ts'), emitIndex(all));
   writeFileSync(join(OUT_ROOT, 'MANIFEST.json'), emitManifest(all));
 
-  // Prune stale files (best-effort; ignore errors caused by parallel
-  // runs unlinking the same orphan).
-  try {
-    for (const f of readdirSync(OUT_ROOT)) {
-      if (expected.has(f)) continue;
-      try {
-        const stat = statSync(join(OUT_ROOT, f));
-        if (stat.isFile()) unlinkSync(join(OUT_ROOT, f));
-      } catch {
-        /* race — another invocation already removed it */
-      }
-    }
-  } catch {
-    /* dir disappeared mid-prune (extremely unlikely) — next run repairs */
-  }
+  pruneOrphans(OUT_ROOT, expected);
 
   console.log(
     `✓ wrote ${all.length} ribbon-icon components (${big.length} big + ${small.length} small) → packages/ui/src/ribbon-icons/`
   );
+}
+
+/** Best-effort orphan removal for files in `dir` not in `expected`.
+ *  Tolerates races with parallel generator invocations (mirrors the
+ *  helper in build-icons / build-file-icons / build-logos). */
+function pruneOrphans(dir: string, expected: Set<string>): void {
+  try {
+    for (const f of readdirSync(dir)) {
+      if (expected.has(f)) continue;
+      try { unlinkSync(join(dir, f)); } catch { /* parallel run already pruned */ }
+    }
+  } catch { /* dir vanished mid-prune — next run repairs */ }
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

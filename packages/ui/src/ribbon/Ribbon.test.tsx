@@ -160,3 +160,72 @@ describe('RibbonToggleGroup', () => {
     expect(left).toHaveAttribute('aria-checked', 'false');
   });
 });
+
+/**
+ * Smoke tests for `@polaris/ui/ribbon-icons`. These don't exercise every
+ * one of the 91 icons — that would be redundant with the snapshot test
+ * for the icon catalog page. Instead they lock the contract that the
+ * generator (`packages/ui/scripts/build-ribbon-icons.ts`) produces:
+ *   - components are real React components that mount as <svg>
+ *   - small (16) and big (32) icons emit their native viewBox so consumers
+ *     can scale via the `size` prop without distortion
+ *   - the registry exports stay in sync with the BIG/SMALL slug Sets
+ *
+ * If `extractInner`, `pascalCase`, or the emit functions in the generator
+ * regress, these break before the demo or downstream consumers do.
+ */
+describe('RibbonIcons (smoke)', () => {
+  it('renders a small (16 native) icon with viewBox 0 0 16 16', async () => {
+    const { BoldIcon } = await import('../ribbon-icons');
+    const { container } = render(<BoldIcon data-testid="bold" />);
+    const svg = container.querySelector('svg');
+    expect(svg).not.toBeNull();
+    expect(svg).toHaveAttribute('viewBox', '0 0 16 16');
+    // Default size = native (16)
+    expect(svg).toHaveAttribute('width', '16');
+    expect(svg).toHaveAttribute('height', '16');
+  });
+
+  it('renders a big (32 native) icon with viewBox 0 0 32 32', async () => {
+    const { PasteIcon } = await import('../ribbon-icons');
+    const { container } = render(<PasteIcon />);
+    const svg = container.querySelector('svg');
+    expect(svg).not.toBeNull();
+    expect(svg).toHaveAttribute('viewBox', '0 0 32 32');
+    expect(svg).toHaveAttribute('width', '32');
+    expect(svg).toHaveAttribute('height', '32');
+  });
+
+  it('honors the size prop (uniform scale) without changing viewBox', async () => {
+    const { AiChatIcon } = await import('../ribbon-icons');
+    const { container } = render(<AiChatIcon size={20} />);
+    const svg = container.querySelector('svg');
+    expect(svg).toHaveAttribute('width', '20');
+    expect(svg).toHaveAttribute('height', '20');
+    // viewBox stays at the icon's native master so paths don't distort.
+    expect(svg).toHaveAttribute('viewBox', '0 0 32 32');
+  });
+
+  it('integrates with RibbonButton (icon prop accepts a ribbon-icon)', async () => {
+    const { BoldIcon } = await import('../ribbon-icons');
+    render(
+      wrap(
+        <RibbonButton icon={<BoldIcon />} tooltip="굵게" />
+      )
+    );
+    expect(screen.getByRole('button', { name: '굵게' })).toBeInTheDocument();
+  });
+
+  it('keeps RIBBON_ICON_REGISTRY in sync with BIG / SMALL slug Sets', async () => {
+    const { RIBBON_ICON_REGISTRY, RIBBON_ICON_BIG_SLUGS, RIBBON_ICON_SMALL_SLUGS } =
+      await import('../ribbon-icons');
+    const registrySlugs = new Set(Object.keys(RIBBON_ICON_REGISTRY));
+    const union = new Set([...RIBBON_ICON_BIG_SLUGS, ...RIBBON_ICON_SMALL_SLUGS]);
+    expect(registrySlugs).toEqual(union);
+    // The two Sets must be disjoint — a slug belongs to exactly one native
+    // size. (Generator throws on collision; this is the runtime mirror.)
+    for (const big of RIBBON_ICON_BIG_SLUGS) {
+      expect(RIBBON_ICON_SMALL_SLUGS.has(big)).toBe(false);
+    }
+  });
+});

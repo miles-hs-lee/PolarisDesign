@@ -99,8 +99,18 @@ Ribbon.displayName = 'Ribbon';
 export const RibbonTabs = forwardRef<
   React.ElementRef<typeof TabsPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Root ref={ref} className={cn('flex flex-col', className)} {...props} />
+>(({ className, activationMode = 'manual', ...props }, ref) => (
+  // `manual` matches Office's actual ribbon a11y pattern: arrow keys move
+  // focus across tabs without immediately switching the visible panel.
+  // Screen-reader users can survey tabs without losing their current
+  // panel; pressing Space/Enter then commits. Pass activationMode="automatic"
+  // explicitly to opt back into Radix's default.
+  <TabsPrimitive.Root
+    ref={ref}
+    activationMode={activationMode}
+    className={cn('flex flex-col', className)}
+    {...props}
+  />
 ));
 RibbonTabs.displayName = 'RibbonTabs';
 

@@ -15,7 +15,7 @@ import {
   Button,
   Card,
   Input,
-  FileIcon as FileIconBadge,
+  FileIcon,
   Select,
   SelectTrigger,
   SelectValue,
@@ -784,7 +784,7 @@ function NewDocPane() {
             variant="ghost"
             className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-background-alternative text-left"
           >
-            <FileIconBadge type={doc.type} size={40} />
+            <FileIcon type={doc.type} size={40} />
             <span className="flex flex-col items-start min-w-0">
               <span className="text-polaris-body2">{doc.title}</span>
               <span className="text-polaris-caption1 text-label-alternative truncate">{doc.desc}</span>
@@ -841,7 +841,7 @@ function DownloadPane() {
               variant="ghost"
               className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-background-alternative text-left"
             >
-              <FileIconBadge type={type} size={40} />
+              <FileIcon type={type} size={40} />
               <span className="text-polaris-body2">
                 {type.toUpperCase()}으로 다운로드
               </span>
@@ -893,10 +893,19 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
   const current = FILE_NAV.find((n) => n.id === pane);
 
   return (
-    // EditorChrome 높이(h-12 = 48px)를 viewport에서 빼서 backstage가 정확히
-    // 그 아래 영역을 차지하도록 inline style 사용. Tailwind 임의값(`h-[…]`)은
-    // 폴라리스 lint 룰에 걸리므로 inline style이 더 깔끔.
-    <div className="flex bg-background-normal" style={{ height: 'calc(100vh - 3rem)' }}>
+    // EditorChrome 높이(h-12 = 48px = 3rem)를 viewport에서 빼서 backstage가
+    // 정확히 그 아래 영역을 차지. Tailwind 임의값(`h-[calc(...)]`)은 폴라리스
+    // lint 룰에 걸리므로 CSS 변수로 height를 노출 (의미 있는 이름) + 인라인
+    // style로 적용. 만약 향후 chrome 높이가 토큰화되면 이 var만 갱신.
+    <div
+      className="flex bg-background-normal"
+      style={
+        {
+          '--editor-chrome-h': '3rem',
+          height: 'calc(100vh - var(--editor-chrome-h))',
+        } as React.CSSProperties
+      }
+    >
       {/* Left drawer */}
       <aside className="w-60 shrink-0 border-r border-line-neutral bg-background-alternative flex flex-col">
         <div className="p-3">
@@ -1028,7 +1037,8 @@ export default function PolarisOffice() {
           </p>
           <p className="text-polaris-body2 text-label-alternative">
             상단의 탭(파일·홈·삽입·레이아웃·검토·보기·펜·AI 도구)을 클릭해 그룹과 컨트롤 구성을 확인할 수 있습니다.
-            아이콘은 lucide-react의 best-effort 매칭이며, 폴라리스 토큰(`brand.*`, `status.*`, `fg.*`)만 사용해 색을 입혔습니다.
+            아이콘은 디자인팀 ribbon-icon 세트(<code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">@polaris/ui/ribbon-icons</code>) 91종을 사용하며,
+            모든 색상은 v0.7 시맨틱 토큰(<code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">accentBrand.*</code>·<code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">state.*</code>·<code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">label.*</code>)으로 입혀졌습니다.
           </p>
         </Card>
       </div>
