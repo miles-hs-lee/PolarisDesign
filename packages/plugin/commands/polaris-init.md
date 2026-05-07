@@ -14,19 +14,21 @@ npx -y tiged miles-hs-lee/PolarisDesign/packages/template-next $ARGUMENTS
 cd $ARGUMENTS
 ```
 
-이 한 줄이면 다음이 모두 세팅된 상태로 시작합니다:
+이 한 줄이면 다음이 모두 세팅된 상태로 시작합니다 (v0.7+):
 - Next.js 15 (App Router) + TypeScript
-- `@polaris/ui` + `@polaris/lint` 사전 통합
+- `@polaris/ui` + `@polaris/lint` 사전 통합 (v0.7 spec 토큰)
 - Tailwind preset + tokens.css 자동 import
+- 디자인팀 SVG 자산 — `@polaris/ui/icons` (65) · `/file-icons` (29) · `/logos` (Polaris + Nova) 즉시 사용 가능
 - Pretendard 폰트 (CDN)
 - `app/layout.tsx`에 ToastProvider/TooltipProvider/다크모드 영구화 wrapping
 - 샘플 `app/page.tsx`에 NovaInput, PromptChip, FileCard, Card 사용 예시
+- `prep:ui` / `prep:ui-sources` npm 스크립트 — `pnpm dev` 시 `@polaris/ui` build/source generation 자동 실행 (clean clone에서도 무중단)
 
 ## 2. 의존성 설치 + dev 실행
 
 ```sh
-pnpm install
-pnpm dev
+pnpm install   # @polaris/ui prepare hook이 토큰/아이콘 source 자동 생성
+pnpm dev       # template의 prep:ui가 @polaris/ui dist 빌드 → next dev
 ```
 
 ## 3. package.json 정리

@@ -1,5 +1,5 @@
 ---
-description: @polaris/ui 컴포넌트 사용/추가 가이드
+description: @polaris/ui 컴포넌트·아이콘·로고 사용/추가 가이드
 argument-hint: <컴포넌트 이름>
 ---
 
@@ -8,26 +8,70 @@ argument-hint: <컴포넌트 이름>
 ### 1. @polaris/ui에 이미 있는지 확인
 
 ```sh
-grep -E "^export (const|function|interface|type) $ARGUMENTS\b" node_modules/@polaris/ui/dist/index.d.ts || echo "Not found"
+grep -E "^export (const|function|interface|type) $ARGUMENTS\b" node_modules/@polaris/ui/dist/index.d.ts || echo "Not found in root"
 ```
 
-또는 [데모의 컴포넌트 카탈로그 페이지](https://miles-hs-lee.github.io/PolarisDesign/#/components)에서 시각 확인.
+루트에 없으면 subpath도 확인:
+```sh
+grep -E "$ARGUMENTS\b" node_modules/@polaris/ui/dist/{form,ribbon,icons,file-icons,logos}/index.d.ts 2>/dev/null
+```
+
+또는 데모 카탈로그에서 시각 확인:
+- 컴포넌트 — <https://miles-hs-lee.github.io/PolarisDesign/#/components>
+- 아이콘 / 파일 아이콘 / 로고 — <https://miles-hs-lee.github.io/PolarisDesign/#/icons>
+- 토큰 (색상·타이포·radius·shadow·motion·z·breakpoint) — <https://miles-hs-lee.github.io/PolarisDesign/#/tokens>
 
 ### 2. 있다면 — 그대로 import
 
 ```tsx
+// 일반 컴포넌트
 import { $ARGUMENTS } from '@polaris/ui';
+
+// 폼
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@polaris/ui/form';
+
+// 에디터 리본
+import {
+  Ribbon, RibbonTabs, RibbonTabList, RibbonTab, RibbonContent,
+  RibbonGroup, RibbonStack, RibbonRow, RibbonRowDivider, RibbonSeparator,
+  RibbonButton, RibbonMenuButton, RibbonSplitButton,
+  RibbonToggleGroup, RibbonToggleItem,
+} from '@polaris/ui/ribbon';
+
+// v0.7+ 디자인팀 SVG 자산
+import { ArrowDownIcon, ChevronRightIcon, SearchIcon } from '@polaris/ui/icons';
+import { DocxIcon, FolderIcon, ZipIcon } from '@polaris/ui/file-icons';
+import { PolarisLogo, NovaLogo } from '@polaris/ui/logos';
 ```
 
-prop이나 variants를 임의로 추가하지 말 것. 부족하다고 느끼면 4번으로.
+prop·variants를 임의로 추가하지 말 것. 부족하다고 느끼면 4번으로.
 
-### 3. 없다면 — 인라인으로 만들되 토큰만 사용
+### 3. 없다면 — 인라인으로 만들되 v0.7 토큰만 사용
 
 이 프로젝트에서 한 번만 쓰는 단순 컴포넌트라면 로컬 파일에 만들어도 됩니다. 단:
-- 색상 → `bg-brand-*`, `text-fg-*`, `border-surface-*` 등 토큰 클래스만
-- 폰트 → `font-polaris`, `text-polaris-heading-md` 등
-- 스페이싱 → Tailwind 기본 (`p-4`, `gap-2`)
-- 반경/그림자 → `rounded-polaris-*`, `shadow-polaris-*`
+
+| 카테고리 | v0.7 spec 클래스 |
+|---|---|
+| 텍스트 | `text-label-{normal,neutral,alternative,assistive,inverse,disabled}` |
+| 페이지 배경 | `bg-background-base`, `bg-background-disabled` |
+| Card / Dialog 표면 | `bg-layer-surface` |
+| Modal dim | `bg-layer-overlay` |
+| Hover / Pressed | `bg-interaction-{hover,pressed}` |
+| Fill (틴트) | `bg-fill-{neutral,normal,strong}` |
+| 보더 | `border-line-{neutral,normal,strong,disabled}` |
+| Brand 강조 | `bg-accent-brand-{normal,strong,bg,bg-hover}`, `text-accent-brand-normal` |
+| Black 액션 | `bg-accent-action-normal text-static-white` |
+| 포커스 ring | `ring-focus-ring` |
+| 상태 (+ 아이콘 동반!) | `text-state-{success,warning,error,info}`, `bg-state-{}-bg` |
+| AI / NOVA | `bg-ai-normal text-label-inverse` + `shadow-polaris-ai` |
+| 폰트 크기 | `text-polaris-{display,title,heading1-4,body1-3,caption1-2}` |
+| Spacing (named) | `p-polaris-{4xs..4xl}` (또는 Tailwind 기본) |
+| Radius | `rounded-polaris-{2xs,xs,sm,md,lg,xl,2xl,pill}` (default `md` 12px) |
+| Shadow | `shadow-polaris-{xs,sm,md,lg,ai}` |
+| Motion | `duration-polaris-{instant,fast,normal,slow}`, `ease-polaris-{in-out,out,in}` |
+| Z-index | `z-polaris-{base,dropdown,sticky,dim,modal,toast}` |
+
+v0.6 / rc.0 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-raised`, `bg-status-danger`, `text-polaris-display-lg`, `text-polaris-h1`~`-h5` 등)는 v0.7에서 deprecated alias로 작동하지만 새 코드는 위 spec 이름 사용. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`.
 
 `@polaris/ui` 안에 들어가야 할 정도로 재사용성이 있다면 4번으로.
 

@@ -30,11 +30,12 @@ Claude Code 세션을 재시작하면 자동으로 로드됩니다.
 
 설명: "Use when creating, editing, or adding features to a Polaris Office web service."
 
-폴라리스 웹 서비스를 만들/수정할 때 자동 트리거되어 모델에게 다음을 강제합니다:
-- 신규는 `/polaris-init`, 기존은 `/polaris-migrate`로 시작
-- UI 요소는 `@polaris/ui` 컴포넌트 우선
-- 색상/폰트/스페이싱은 토큰만 (hex·rgb·임의값 금지)
-- AI/NOVA 컨텍스트는 `bg-brand-secondary`, 일반은 `bg-brand-primary`
+폴라리스 웹 서비스를 만들/수정할 때 자동 트리거되어 모델에게 다음을 강제합니다 (v0.7+ spec):
+- 신규는 `/polaris-init`, 기존은 `/polaris-migrate` (codemod 단계 포함)로 시작
+- UI 요소는 `@polaris/ui` 컴포넌트 우선 — 신규 v0.7 entry: `@polaris/ui/icons` (65 × 18/24/32 px) · `/file-icons` (29 타입) · `/logos`
+- 색상은 v0.7 시맨틱 토큰만 (`label.*` / `background.*` / `layer.*` / `accentBrand.*` / `state.*` / `ai.*`) — hex·rgb·임의값 금지
+- AI / NOVA 컨텍스트는 `ai.*` (`bg-ai-normal` + `shadow-polaris-ai`), 일반은 `accentBrand.*` (`bg-accent-brand-normal`)
+- State 컬러 (`text-state-error` 등)는 작은 텍스트 단독 사용 금지 — 아이콘 동반 필수 (WCAG 1.4.1)
 - 변경 후 `/polaris-check`로 검증
 
 ### 슬래시커맨드
@@ -64,7 +65,7 @@ Claude Code 세션을 재시작하면 자동으로 로드됩니다.
 2. `Edit` 도구 호출 후 PostToolUse 훅 발화
 3. ESLint가 `no-hardcoded-color` 위반 탐지 (hex `#FF0000`)
 4. 훅이 다음 턴 컨텍스트에 위반 내역 + 수정 가이드 주입
-5. 다음 턴에 모델이 자동으로 `var(--polaris-status-danger)` 또는 적절한 토큰으로 교체
+5. 다음 턴에 모델이 자동으로 `var(--polaris-state-error)` 또는 적절한 v0.7 토큰으로 교체
 
 이 루프가 모델이 매 토큰 결정마다 SKILL을 떠올릴 필요를 없애주는 핵심 메커니즘입니다.
 
