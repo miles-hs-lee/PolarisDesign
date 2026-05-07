@@ -1,6 +1,7 @@
 import { forwardRef, useRef } from 'react';
 import * as DropdownPrimitive from '@radix-ui/react-dropdown-menu';
-import { Check, ChevronRight, Circle } from 'lucide-react';
+import { Circle } from 'lucide-react';
+import { CheckIcon, ChevronRightIcon } from '../icons';
 import { cn } from '../lib/cn';
 
 export const DropdownMenu = DropdownPrimitive.Root;
@@ -90,7 +91,7 @@ export const DropdownMenuCheckboxItem = forwardRef<
   >
     <span className="absolute left-2 inline-flex h-3.5 w-3.5 items-center justify-center">
       <DropdownPrimitive.ItemIndicator>
-        <Check className="h-3.5 w-3.5" aria-hidden="true" />
+        <CheckIcon size={14} aria-hidden="true" />
       </DropdownPrimitive.ItemIndicator>
     </span>
     {children}
@@ -119,7 +120,7 @@ export const DropdownMenuSubTrigger = forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DropdownPrimitive.SubTrigger ref={ref} className={cn(itemBase, className)} {...props}>
     {children}
-    <ChevronRight className="ml-auto h-4 w-4" aria-hidden="true" />
+    <ChevronRightIcon size={16} className="ml-auto" aria-hidden="true" />
   </DropdownPrimitive.SubTrigger>
 ));
 DropdownMenuSubTrigger.displayName = 'DropdownMenuSubTrigger';

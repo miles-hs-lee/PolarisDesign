@@ -53,7 +53,7 @@ import { forwardRef, type ReactNode } from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 import { Slot } from '@radix-ui/react-slot';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDownIcon } from '../icons';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/cn';
 import { SimpleTooltip } from '../components/Tooltip';
@@ -71,8 +71,9 @@ const LgLabel = ({ children }: { children: ReactNode }) => (
 
 /** Chevron rendered next to / below a label to signal a dropdown trigger. */
 const TriggerChevron = ({ stacked = false }: { stacked?: boolean }) => (
-  <ChevronDown
-    className={cn('h-3 w-3 shrink-0 text-label-alternative', stacked ? 'mt-0' : 'ml-0.5')}
+  <ChevronDownIcon
+    size={12}
+    className={cn('shrink-0 text-label-alternative', stacked ? 'mt-0' : 'ml-0.5')}
     aria-hidden="true"
   />
 );
@@ -425,7 +426,7 @@ export const RibbonSplitButton = forwardRef<HTMLButtonElement, RibbonSplitButton
     },
     ref
   ) => {
-    const chevronIcon = <ChevronDown className="h-3 w-3" aria-hidden="true" />;
+    const chevronIcon = <ChevronDownIcon size={12} aria-hidden="true" />;
 
     // When disabled, skip mounting `DropdownMenu` entirely. Radix's
     // `DropdownMenuTrigger asChild` doesn't always honor a child button's

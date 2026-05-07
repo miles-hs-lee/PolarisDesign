@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useState, type ReactNode } from 'react';
 import * as ToastPrimitive from '@radix-ui/react-toast';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { X } from 'lucide-react';
+import { CloseIcon } from '../icons';
 import { cn } from '../lib/cn';
 
 export const ToastProvider = ToastPrimitive.Provider;
@@ -144,7 +144,7 @@ export const ToastClose = forwardRef<
     )}
     {...props}
   >
-    <X className="h-4 w-4" aria-hidden="true" />
+    <CloseIcon size={16} aria-hidden="true" />
   </ToastPrimitive.Close>
 ));
 ToastClose.displayName = 'ToastClose';

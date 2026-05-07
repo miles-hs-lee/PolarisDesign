@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { X } from 'lucide-react';
+import { CloseIcon } from '../icons';
 import { cn } from '../lib/cn';
 
 /**
@@ -80,7 +80,7 @@ export const DrawerContent = forwardRef<
             'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary'
           )}
         >
-          <X className="h-4 w-4" aria-hidden="true" />
+          <CloseIcon size={16} aria-hidden="true" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
       )}

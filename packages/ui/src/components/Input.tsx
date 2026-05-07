@@ -1,5 +1,5 @@
 import { forwardRef, useId, useState, useImperativeHandle, useRef, type FocusEvent, type ChangeEvent } from 'react';
-import { AlertCircle } from 'lucide-react';
+import { ErrorIcon } from '../icons';
 import { cn } from '../lib/cn';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -115,7 +115,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             className="flex items-start gap-polaris-3xs text-polaris-caption1 text-state-error"
             role="alert"
           >
-            <AlertCircle className="h-4 w-4 shrink-0 mt-px" aria-hidden="true" />
+            <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />
             <span>{error}</span>
           </p>
         ) : hint ? (

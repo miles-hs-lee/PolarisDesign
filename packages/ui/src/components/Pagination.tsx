@@ -1,6 +1,7 @@
 import { forwardRef, type ElementType } from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from '../icons';
 import { cn } from '../lib/cn';
 
 export const Pagination = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
@@ -63,7 +64,7 @@ export interface PaginationStepProps extends PaginationItemProps {
 export const PaginationPrev = forwardRef<HTMLElement, PaginationStepProps>(
   ({ className, children, label = '이전 페이지', ...props }, ref) => (
     <PaginationItem ref={ref} className={className} aria-label={label} {...props}>
-      <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+      <ChevronLeftIcon size={16} aria-hidden="true" />
       {children}
     </PaginationItem>
   )
@@ -74,7 +75,7 @@ export const PaginationNext = forwardRef<HTMLElement, PaginationStepProps>(
   ({ className, children, label = '다음 페이지', ...props }, ref) => (
     <PaginationItem ref={ref} className={className} aria-label={label} {...props}>
       {children}
-      <ChevronRight className="h-4 w-4" aria-hidden="true" />
+      <ChevronRightIcon size={16} aria-hidden="true" />
     </PaginationItem>
   )
 );

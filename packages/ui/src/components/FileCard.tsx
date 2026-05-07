@@ -37,7 +37,7 @@ export const FileCard = forwardRef<HTMLElement, FileCardProps>(
         )}
         {...props}
       >
-        <FileIcon type={type} size="md" />
+        <FileIcon type={type} size={40} />
         <div className="flex-1 min-w-0">
           <div className="text-polaris-body2 font-medium text-label-normal truncate">{name}</div>
           {meta && (

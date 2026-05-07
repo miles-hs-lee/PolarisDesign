@@ -29,7 +29,7 @@
  */
 import { forwardRef } from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
-import { Search } from 'lucide-react';
+import { SearchIcon } from '../icons';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cn } from '../lib/cn';
 
@@ -98,7 +98,7 @@ export const CommandInput = forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
   <div className="flex items-center border-b border-line-neutral px-3" cmdk-input-wrapper="">
-    <Search className="mr-2 h-4 w-4 shrink-0 text-label-alternative" aria-hidden="true" />
+    <SearchIcon size={16} className="mr-2 shrink-0 text-label-alternative" aria-hidden="true" />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(

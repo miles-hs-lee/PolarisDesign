@@ -365,18 +365,30 @@ export default function Components() {
       <Section title="9. FileIcon (폴라리스 고유)">
         <div className="flex items-end gap-3 flex-wrap">
           <div className="flex flex-col items-center gap-1">
-            <FileIcon type="docx" size="sm" />
-            <span className="text-polaris-caption1 text-label-alternative">sm</span>
+            <FileIcon type="docx" size={28} />
+            <span className="text-polaris-caption1 text-label-alternative">28</span>
           </div>
           {(['docx', 'xlsx', 'pptx', 'pdf', 'hwp'] as const).map((t) => (
             <div key={t} className="flex flex-col items-center gap-1">
-              <FileIcon type={t} size="md" />
+              <FileIcon type={t} size={40} />
               <span className="text-polaris-caption1 text-label-alternative">{t}</span>
             </div>
           ))}
           <div className="flex flex-col items-center gap-1">
-            <FileIcon type="docx" size="lg" />
-            <span className="text-polaris-caption1 text-label-alternative">lg</span>
+            <FileIcon type="docx" size={64} />
+            <span className="text-polaris-caption1 text-label-alternative">64</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <FileIcon type="folder" size={40} />
+            <span className="text-polaris-caption1 text-label-alternative">folder</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <FileIcon type="image" size={40} />
+            <span className="text-polaris-caption1 text-label-alternative">image</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <FileIcon type="zip" size={40} />
+            <span className="text-polaris-caption1 text-label-alternative">zip</span>
           </div>
         </div>
       </Section>

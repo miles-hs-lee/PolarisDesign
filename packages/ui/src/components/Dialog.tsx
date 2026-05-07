@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { X } from 'lucide-react';
+import { CloseIcon } from '../icons';
 import { cn } from '../lib/cn';
 
 export const Dialog = DialogPrimitive.Root;
@@ -63,7 +63,7 @@ export const DialogContent = forwardRef<
           'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-focus-ring/40'
         )}
       >
-        <X className="h-4 w-4" aria-hidden="true" />
+        <CloseIcon size={16} aria-hidden="true" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>

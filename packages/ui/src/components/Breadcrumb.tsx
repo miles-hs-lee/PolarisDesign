@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRightIcon } from '../icons';
 import { cn } from '../lib/cn';
 
 export const Breadcrumb = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
@@ -80,7 +80,7 @@ export const BreadcrumbSeparator = ({
     className={cn('text-label-alternative [&>svg]:h-3.5 [&>svg]:w-3.5', className)}
     {...props}
   >
-    {children ?? <ChevronRight />}
+    {children ?? <ChevronRightIcon size={16} />}
   </li>
 );
 BreadcrumbSeparator.displayName = 'BreadcrumbSeparator';

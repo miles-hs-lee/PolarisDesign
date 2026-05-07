@@ -1,5 +1,6 @@
 import { forwardRef, useState, useId } from 'react';
-import { Send, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
+import { SendIcon } from '../icons';
 import { cn } from '../lib/cn';
 
 export interface NovaInputProps
@@ -126,7 +127,7 @@ export const NovaInput = forwardRef<HTMLInputElement, NovaInputProps>(
               'transition-colors'
             )}
           >
-            <Send className="h-4 w-4" aria-hidden="true" />
+            <SendIcon size={16} aria-hidden="true" />
           </button>
         </div>
       </div>

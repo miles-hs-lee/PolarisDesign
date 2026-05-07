@@ -7,7 +7,7 @@
  * For a popover-driven date input, see `<DatePicker>`.
  */
 import { ko } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from '../icons';
 import { DayPicker, type DayPickerProps } from 'react-day-picker';
 import { cn } from '../lib/cn';
 
@@ -63,9 +63,9 @@ export function Calendar({
       components={{
         Chevron: ({ orientation }) =>
           orientation === 'left' ? (
-            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+            <ChevronLeftIcon size={16} aria-hidden="true" />
           ) : (
-            <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            <ChevronRightIcon size={16} aria-hidden="true" />
           ),
       }}
       {...props}

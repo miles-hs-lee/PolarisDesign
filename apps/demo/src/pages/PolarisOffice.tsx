@@ -696,7 +696,7 @@ function NewDocPane() {
             variant="ghost"
             className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-background-alternative text-left"
           >
-            <FileIconBadge type={doc.type} size="md" />
+            <FileIconBadge type={doc.type} size={40} />
             <span className="flex flex-col items-start min-w-0">
               <span className="text-polaris-body2 font-semibold">{doc.title}</span>
               <span className="text-polaris-caption1 text-label-alternative truncate">{doc.desc}</span>
@@ -753,7 +753,7 @@ function DownloadPane() {
               variant="ghost"
               className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-background-alternative text-left"
             >
-              <FileIconBadge type={type} size="md" />
+              <FileIconBadge type={type} size={40} />
               <span className="text-polaris-body2 font-medium">
                 {type.toUpperCase()}으로 다운로드
               </span>
