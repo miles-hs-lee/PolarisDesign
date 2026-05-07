@@ -66,10 +66,17 @@ jobs:
       - name: Test — @polaris/plugin hook
         run: pnpm --filter @polaris/plugin test
 
-      - name: Lint — demo (must be 0 violations)
+      - name: Lint — demo (showcase, warnings allowed)
+        # demo is the local sandbox, not an npm package. Many warnings are
+        # legitimate lucide chrome icons (Menu, Save, Bell, …). Errors
+        # still fail. To raise to 0-warnings later, swap or per-line-disable
+        # in each demo page and add `--max-warnings=0` here.
         run: pnpm --filter demo lint
 
-      - name: Lint — template-next (must be 0 violations)
+      - name: Lint — template-next (must be 0 warnings)
+        # template-next is an npm-published starter — kept strict so it
+        # ships clean. The package.json `lint` script enforces
+        # `--max-warnings=0`.
         run: pnpm --filter polaris-template-next lint
 
       - name: Build — demo

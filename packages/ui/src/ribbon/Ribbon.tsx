@@ -144,7 +144,10 @@ export const RibbonTab = forwardRef<
       'relative inline-flex items-center px-1 py-1.5 text-polaris-body2 text-label-alternative transition-colors',
       'hover:text-label-normal',
       'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
-      'data-[state=active]:text-label-normal data-[state=active]:font-semibold',
+      // Active state: color shift + the brand-color underline accent below.
+      // No bold — Office's actual ribbon doesn't bold the active tab label
+      // (the underline + label-normal color is enough to indicate active).
+      'data-[state=active]:text-label-normal',
       'data-[state=active]:after:absolute data-[state=active]:after:inset-x-0 data-[state=active]:after:-bottom-px data-[state=active]:after:h-0.5 data-[state=active]:after:bg-accent-brand-normal',
       className
     )}
@@ -213,7 +216,7 @@ export const RibbonGroup = forwardRef<HTMLDivElement, RibbonGroupProps>(
     >
       <div className="flex items-center justify-center gap-0 flex-1 min-h-16">{children}</div>
       {label && (
-        <div className="mt-0.5 text-center text-polaris-caption1 text-label-alternative leading-tight whitespace-pre-line">
+        <div className="mt-0.5 text-center text-polaris-caption1 font-normal text-label-alternative leading-tight whitespace-pre-line">
           {label}
         </div>
       )}
@@ -308,7 +311,11 @@ const ribbonButtonStyles = cva(
       size: {
         sm: 'h-6 min-w-6 px-0.5 text-polaris-body2',
         md: 'h-8 min-w-8 px-2 text-polaris-body2',
-        lg: 'flex-col h-16 min-w-14 px-1 py-1 text-polaris-caption1 gap-0.5',
+        // lg label is 12px regular — `text-polaris-caption1` ships with
+        // weight 700 per the type spec, but Office's lg ribbon buttons
+        // (붙여넣기 / 페이지 설정 / …) render labels in regular weight,
+        // so we explicitly override with `font-normal`.
+        lg: 'flex-col h-16 min-w-14 px-1 py-1 text-polaris-caption1 font-normal gap-0.5',
       },
     },
     defaultVariants: { size: 'sm' },

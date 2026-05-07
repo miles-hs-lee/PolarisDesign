@@ -9,6 +9,7 @@
     "@polaris/ui": "0.7.0"
   },
   "changesets": [
-    "ribbon-icons-and-demo"
+    "ribbon-icons-and-demo",
+    "ribbon-icons-svg-id-isolation-and-naming"
   ]
 }

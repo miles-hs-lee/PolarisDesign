@@ -29,6 +29,7 @@
 import { readdirSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { prefixSvgIds } from './_svg-utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ASSET_ROOT = resolve(__dirname, '../../../assets/ribbon');
@@ -68,25 +69,77 @@ function extractInner(svg: string): string {
 }
 
 /**
- * Normalize a Figma-export filename to a kebab-case slug.
+ * Curated slug rewrites for Figma exports whose filename concatenates
+ * compound words (e.g. `aligncenter` instead of `align-center`).
  *
- *   ribbon_big_ico_ai_2dto3d.svg     → ai-2dto3d
- *   ribbon_big_ico_change_next.svg   → change-next
- *   ribbon_ico_aligncenter.svg       → aligncenter
- *   ribbon_ico_shade new.svg         → shade-new
- *   ribbon_ico_underline_01.svg      → underline-01
+ * The Figma source name is preserved in `assets/ribbon/`; this map
+ * runs *after* basic normalization but *before* PascalCase, so the
+ * exported component names are human-readable (`AlignCenterIcon`
+ * rather than `AligncenterIcon`).
  *
- * Preserves the original word boundaries (we don't try to split
- * `aligncenter` → `align-center` — too brittle, source authority).
+ * Rule of thumb for adding entries: only split when the result is a
+ * common multi-word concept; leave hyperlink / strikethrough / numbering
+ * etc. unsplit because they're widely treated as single tokens.
+ *
+ * Edits here change the public component API. Once `@polaris/ui/ribbon-icons`
+ * is published, removing or changing a target slug is a breaking change
+ * (only ADDING new entries for new Figma exports is safe afterwards).
+ */
+const SLUG_REWRITES: Record<string, string> = {
+  // Small (16) — text formatting + alignment
+  aligncenter:     'align-center',
+  alignleft:       'align-left',
+  alignright:      'align-right',
+  changecase:      'change-case',
+  clearformat:     'clear-format',
+  fillcolor:       'fill-color',
+  linespacing:     'line-spacing',
+  multilevel:      'multi-level',
+  textcolor:       'text-color',
+  textoutline:     'text-outline',
+  // Big (32) — image / shape primitives + page
+  alignleft01:        'align-left-01',
+  docuprotection:     'docu-protection',
+  horizontaltextbox:  'horizontal-textbox',
+  linebreak:          'line-break',
+  movebackward:       'move-backward',
+  moveforward:        'move-forward',
+  newpage:            'new-page',
+  noapply:            'no-apply',
+  pagescale:          'page-scale',
+  pagesplit:          'page-split',
+  'pagesplit-sheet':  'page-split-sheet',
+  rotateright90:      'rotate-right-90',
+  setlayout:          'set-layout',
+  setpage:            'set-page',
+  spellingcheck:      'spelling-check',
+  wordcount:          'word-count',
+  // Big — AI compound names
+  'ai-bgchange':    'ai-bg-change',
+  'ai-bgdelete':    'ai-bg-delete',
+  'ai-wordcloud':   'ai-word-cloud',
+};
+
+/**
+ * Normalize a Figma-export filename to a kebab-case slug, then apply
+ * `SLUG_REWRITES` for human-readable compound splitting.
+ *
+ *   ribbon_big_ico_ai_2dto3d.svg     → ai-2dto3d           (no rewrite)
+ *   ribbon_big_ico_change_next.svg   → change-next         (no rewrite)
+ *   ribbon_ico_aligncenter.svg       → align-center        (rewritten)
+ *   ribbon_ico_shade new.svg         → shade-new           (no rewrite)
+ *   ribbon_ico_underline_01.svg      → underline-01        (no rewrite)
+ *   ribbon_big_ico_rotateright90.svg → rotate-right-90     (rewritten)
  */
 function normalizeSlug(filename: string): string {
-  return filename
+  const base = filename
     .replace(/\.svg$/i, '')
     .replace(/^ribbon_(big_)?ico_/i, '')
     .toLowerCase()
     .replace(/[\s_]+/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '');
+  return SLUG_REWRITES[base] ?? base;
 }
 
 function readFolder(category: 'big' | 'small'): RibbonIconEntry[] {
@@ -98,11 +151,18 @@ function readFolder(category: 'big' | 'small'): RibbonIconEntry[] {
     const slug = normalizeSlug(file);
     if (!slug) continue;
     const pascal = pascalCase(slug);
+    // Prefix internal ids with the slug so e.g. WordcountIcon's
+    // `clip0_0_31035` doesn't collide with PasteIcon's same-named clip
+    // when both render on the same page.
+    const inner = prefixSvgIds(
+      extractInner(readFileSync(join(dir, file), 'utf8')),
+      slug,
+    );
     entries.push({
       slug,
       pascal,
       componentName: `${pascal}Icon`,
-      inner: extractInner(readFileSync(join(dir, file), 'utf8')),
+      inner,
       nativeSize,
       category,
     });

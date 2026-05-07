@@ -17,6 +17,7 @@
 import { readdirSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { prefixSvgIds } from './_svg-utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ASSET_ROOT = resolve(__dirname, '../../../assets/svg/file-icons/32');
@@ -155,7 +156,11 @@ function main() {
       slug,
       pascal,
       componentName: `${pascal}Icon`,
-      inner: extractInner(readFileSync(join(ASSET_ROOT, file), 'utf8')),
+      // Prefix internal ids with the slug — see build-ribbon-icons.ts.
+      inner: prefixSvgIds(
+        extractInner(readFileSync(join(ASSET_ROOT, file), 'utf8')),
+        slug,
+      ),
     });
   }
 

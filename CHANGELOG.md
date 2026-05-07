@@ -6,7 +6,35 @@
 
 ---
 
-## [Unreleased] — 0.7.1-rc.0
+## [Unreleased] — 0.7.1-rc.1
+
+rc.0 위에 누적된 픽스 — 코덱스 코드 리뷰 + 사용자 시각 검토 반영. 모두 0.7.1 정식 직전 정리해야 할 항목.
+
+### SVG id 격리 (P1)
+
+`build-{icons,file-icons,logos,ribbon-icons}` 4종 generator가 각 SVG 본문의 `id="..."` 정의 + `url(#...)` / `href="#..."` / `xlink:href="#..."` 참조를 슬러그 prefix로 다시 작성. Figma export의 자동 ID(`clip0_0_31035`, `Mask`, `Group_2` 등)가 다른 아이콘 사이에 충돌해 두 번째 인스턴스가 첫 번째 정의로 잘못 resolve되는 문제 해소.
+
+### Ribbon 아이콘 컴포넌트 네이밍 정리 (P1, public API freeze 직전)
+
+`SLUG_REWRITES` 맵으로 compound concat된 Figma 슬러그를 kebab-case로 정규화 → 사람이 읽기 쉬운 PascalCase 컴포넌트명으로. 30여 종 변경: `AligncenterIcon` → `AlignCenterIcon`, `TextcolorIcon` → `TextColorIcon`, `Rotateright90Icon` → `RotateRight90Icon`, `DocuprotectionIcon` → `DocuProtectionIcon`, `WordcountIcon` → `WordCountIcon` 등. Source SVG 파일명은 그대로, normalize 단계에서만 rewrite.
+
+### Ribbon 폰트 weight 정정
+
+- `text-polaris-caption1`은 spec상 weight 700이지만 Office lg 리본 버튼 라벨(붙여넣기 / 페이지 설정 / …)은 실제로 regular 400. `RibbonButton` lg variant + `RibbonStack` 라벨에 `font-normal` 명시.
+- `RibbonTab` active 상태의 `font-semibold` 제거 — underline accent + label-normal 색만으로 active 표시.
+
+### Lint 게이트 정정
+
+- `polaris-template-next` lint script에 `--max-warnings=0` 추가 (npm publish 대상). 3 warnings는 polaris 등가물로 swap (`Plus → PlusIcon`, `Search → SearchIcon`, `Image as ImageIcon → ImageIcon`).
+- `apps/demo`는 sandbox라 warning 허용하되 CI step 이름을 honest하게: "showcase, warnings allowed".
+
+### Visual baseline 재기준선화
+
+위 변경들이 픽셀 단위 시각 차이를 만들어 `pnpm test:e2e` 28건 중 12건이 실패. baseline 갱신 — 모두 의도된 변경으로 28/28 green 확인.
+
+---
+
+## [Unreleased — superseded] — 0.7.1-rc.0
 
 v0.7.0 위에 누적된 추가 — **breaking 없음**, 디자인 시스템에 ribbon 아이콘 셋 추가 + 데모 페이지를 실제 폴라리스 오피스 워드 리본에 맞춰 재구성.
 

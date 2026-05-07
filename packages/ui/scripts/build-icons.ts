@@ -24,6 +24,7 @@
 import { readdirSync, readFileSync, writeFileSync, mkdirSync, unlinkSync, statSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { prefixSvgIds } from './_svg-utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ASSET_ROOT = resolve(__dirname, '../../../assets/svg/icons');
@@ -81,7 +82,10 @@ function buildEntry(slug: string): IconEntry {
       continue;
     }
     if (!stat.isFile()) continue;
-    inner[size] = extractInner(readFileSync(file, 'utf8'));
+    // Prefix per-size ids (`<slug>-<size>__...`) so e.g. ArrowDown 18
+    // and ArrowDown 24 don't share an internal `Mask` id when both
+    // mount on the same page (e.g. the icon catalog's size-compare row).
+    inner[size] = prefixSvgIds(extractInner(readFileSync(file, 'utf8')), `${slug}-${size}`);
   }
   // Prefer 24 (the design system's default) → fallback 18 → 32.
   const defaultSize: Size =

@@ -62,37 +62,37 @@ import {
   CutIcon, CopyIcon, CopyFormatIcon,
   BoldIcon, ItalicIcon, Underline01Icon as UnderlineIcon,
   StrikethroughIcon, SubscriptIcon, SuperscriptIcon,
-  ClearformatIcon,
-  BulletIcon, NumberingIcon, MultilevelIcon,
+  ClearFormatIcon,
+  BulletIcon, NumberingIcon, MultiLevelIcon,
   DentIcon, IndentIcon,
-  FillcolorIcon,
-  AlignleftIcon, AligncenterIcon, AlignrightIcon, JustifyIcon, AlignmentIcon,
-  LinespacingIcon, ParagraphNarrowIcon, ParagraphWideIcon,
+  FillColorIcon,
+  AlignLeftIcon, AlignCenterIcon, AlignRightIcon, JustifyIcon, AlignmentIcon,
+  LineSpacingIcon, ParagraphNarrowIcon, ParagraphWideIcon,
   FontSizeLargeIcon, FontSizeSmallIcon,
-  ChangecaseIcon, FindIcon, TextReplaceIcon,
-  ShadeNewIcon, TextAccentcolourNewIcon, TextcolorIcon, TextoutlineIcon,
+  ChangeCaseIcon, FindIcon, TextReplaceIcon,
+  ShadeNewIcon, TextAccentcolourNewIcon, TextColorIcon, TextOutlineIcon,
   OrientationsheetIcon,
   // home — big (32)
   PasteIcon, TextFormatIcon,
   // insert / layout — big (32)
   TableIcon, ImageIcon as RibbonImageIcon, ImageOnlineIcon, ShapeIcon,
-  HyperlinkIcon, BookmarkIcon, HorizontaltextboxIcon, SymbolIcon,
-  PageColumnIcon, Rotateright90Icon, PagescaleIcon, PagesplitIcon,
-  PagesplitSheetIcon, LinebreakIcon, MarginIcon, ImagePositionIcon,
+  HyperlinkIcon, BookmarkIcon, HorizontalTextboxIcon, SymbolIcon,
+  PageColumnIcon, RotateRight90Icon, PageScaleIcon, PageSplitIcon,
+  PageSplitSheetIcon, LineBreakIcon, MarginIcon, ImagePositionIcon,
   DirectionIcon,
-  SetpageIcon, SetlayoutIcon, GroupIcon,
-  MoveforwardIcon, MovebackwardIcon, NewpageIcon, Alignleft01Icon,
+  SetPageIcon, SetLayoutIcon, GroupIcon,
+  MoveForwardIcon, MoveBackwardIcon, NewPageIcon, AlignLeft01Icon,
   // review — big (32)
   MemoNewIcon, MemoPaneIcon, MemoDeleteIcon, MemoNextIcon, MemoPreviousIcon,
-  TrackChangesIcon, TrackShowmarkupIcon, WordcountIcon,
+  TrackChangesIcon, TrackShowmarkupIcon, WordCountIcon,
   ChangePreviousIcon, ChangeNextIcon,
-  ApplyIcon, NoapplyIcon, SpellingcheckIcon, DocuprotectionIcon,
+  ApplyIcon, NoApplyIcon, SpellingCheckIcon, DocuProtectionIcon,
   // AI — big (32)
   TranslateIcon, AiGuideIcon, WebSearchIcon,
   AiChatIcon, AiRecordIcon, AiTextToImageIcon, Ai2dto3dIcon,
-  AiBgdeleteIcon, AiBgchangeIcon, AiRemakeIcon, AiExpansionIcon,
+  AiBgDeleteIcon, AiBgChangeIcon, AiRemakeIcon, AiExpansionIcon,
   AiQualityIcon, AiStyleIcon, AiTemplateIcon, AiWriteIcon,
-  AiVideoIcon, AiWordcloudIcon,
+  AiVideoIcon, AiWordCloudIcon,
 } from '@polaris/ui/ribbon-icons';
 
 /* ================================================================== *
@@ -268,10 +268,10 @@ function HomeRibbon() {
             <RibbonButton tooltip="글자 크게" icon={<FontSizeLargeIcon />} />
             <RibbonButton tooltip="글자 작게" icon={<FontSizeSmallIcon />} />
             <RibbonRowDivider />
-            <RibbonButton tooltip="서식 지우기" icon={<ClearformatIcon />} />
+            <RibbonButton tooltip="서식 지우기" icon={<ClearFormatIcon />} />
             <RibbonSplitButton
               tooltip="대소문자"
-              icon={<ChangecaseIcon />}
+              icon={<ChangeCaseIcon />}
               menuLabel="대소문자 옵션"
               menu={
                 <>
@@ -305,7 +305,7 @@ function HomeRibbon() {
             <RibbonRowDivider />
             <RibbonSplitButton
               tooltip="글자 색"
-              icon={<ColorAccentIcon icon={<TextcolorIcon size={12} />} barClass="bg-status-danger" />}
+              icon={<ColorAccentIcon icon={<TextColorIcon size={12} />} barClass="bg-status-danger" />}
               menuLabel="글자 색"
               menu={<DropdownMenuItem>색 선택…</DropdownMenuItem>}
             />
@@ -317,7 +317,7 @@ function HomeRibbon() {
             />
             <RibbonRowDivider />
             <RibbonButton tooltip="음영" icon={<ShadeNewIcon />} />
-            <RibbonButton tooltip="문자 테두리" icon={<TextoutlineIcon />} />
+            <RibbonButton tooltip="문자 테두리" icon={<TextOutlineIcon />} />
           </RibbonRow>
         </RibbonStack>
       </RibbonGroup>
@@ -332,7 +332,7 @@ function HomeRibbon() {
           <RibbonRow>
             <RibbonSplitButton tooltip="글머리 기호" icon={<BulletIcon />} menuLabel="글머리 기호" menu={<DropdownMenuItem>· — ▪</DropdownMenuItem>} />
             <RibbonSplitButton tooltip="번호 매기기" icon={<NumberingIcon />} menuLabel="번호 매기기" menu={<DropdownMenuItem>1. 2. 3.</DropdownMenuItem>} />
-            <RibbonSplitButton tooltip="다단계 목록" icon={<MultilevelIcon />} menuLabel="다단계 목록" menu={<DropdownMenuItem>1.1.1</DropdownMenuItem>} />
+            <RibbonSplitButton tooltip="다단계 목록" icon={<MultiLevelIcon />} menuLabel="다단계 목록" menu={<DropdownMenuItem>1.1.1</DropdownMenuItem>} />
           </RibbonRow>
           <RibbonRow>
             <RibbonButton tooltip="내어쓰기" icon={<DentIcon />} />
@@ -350,7 +350,7 @@ function HomeRibbon() {
         <RibbonRow>
           <RibbonSplitButton
             tooltip="채우기 색"
-            icon={<ColorAccentIcon icon={<FillcolorIcon size={12} />} barClass="bg-status-danger" />}
+            icon={<ColorAccentIcon icon={<FillColorIcon size={12} />} barClass="bg-status-danger" />}
             menuLabel="채우기 색"
             menu={<DropdownMenuItem>색 선택…</DropdownMenuItem>}
           />
@@ -368,9 +368,9 @@ function HomeRibbon() {
         <RibbonStack>
           <RibbonRow>
             <RibbonToggleGroup type="single" value={align} onValueChange={(v) => v && setAlign(v)}>
-              <RibbonToggleItem value="left" tooltip="왼쪽 정렬" icon={<AlignleftIcon />} />
-              <RibbonToggleItem value="center" tooltip="가운데 정렬" icon={<AligncenterIcon />} />
-              <RibbonToggleItem value="right" tooltip="오른쪽 정렬" icon={<AlignrightIcon />} />
+              <RibbonToggleItem value="left" tooltip="왼쪽 정렬" icon={<AlignLeftIcon />} />
+              <RibbonToggleItem value="center" tooltip="가운데 정렬" icon={<AlignCenterIcon />} />
+              <RibbonToggleItem value="right" tooltip="오른쪽 정렬" icon={<AlignRightIcon />} />
               <RibbonToggleItem value="justify" tooltip="양쪽 정렬" icon={<JustifyIcon />} />
               <RibbonToggleItem value="distribute" tooltip="배분 정렬" icon={<WrapText className="h-4 w-4" />} />
             </RibbonToggleGroup>
@@ -383,7 +383,7 @@ function HomeRibbon() {
             />
           </RibbonRow>
           <RibbonRow>
-            <RibbonSplitButton tooltip="줄 간격" icon={<LinespacingIcon />} menuLabel="줄 간격" menu={<DropdownMenuItem>1.0 / 1.5 / 2.0</DropdownMenuItem>} />
+            <RibbonSplitButton tooltip="줄 간격" icon={<LineSpacingIcon />} menuLabel="줄 간격" menu={<DropdownMenuItem>1.0 / 1.5 / 2.0</DropdownMenuItem>} />
             <RibbonSplitButton tooltip="단락 위 간격" icon={<ParagraphNarrowIcon />} menuLabel="단락 위 간격" menu={<DropdownMenuItem>0 / 6 / 12pt</DropdownMenuItem>} />
             <RibbonSplitButton tooltip="단락 아래 간격" icon={<ParagraphWideIcon />} menuLabel="단락 아래 간격" menu={<DropdownMenuItem>0 / 6 / 12pt</DropdownMenuItem>} />
             <RibbonButton tooltip="단락 기호 표시" icon={<Pilcrow className="h-4 w-4" />} />
@@ -432,8 +432,8 @@ function InsertRibbon() {
           buttons clustered tight (no inner separator), then a divider
           before the table/image/shape group. */}
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<NewpageIcon size={24} />}>새{'\n'}페이지</RibbonButton>
-        <RibbonButton size="lg" icon={<PagesplitSheetIcon size={24} />}>페이지{'\n'}나누기</RibbonButton>
+        <RibbonButton size="lg" icon={<NewPageIcon size={24} />}>새{'\n'}페이지</RibbonButton>
+        <RibbonButton size="lg" icon={<PageSplitSheetIcon size={24} />}>페이지{'\n'}나누기</RibbonButton>
       </RibbonGroup>
 
       <RibbonSeparator />
@@ -472,7 +472,7 @@ function InsertRibbon() {
       {/* Group 4 — text-box (split with vertical/horizontal options) +
           symbol. Reference shows these in the same group. */}
       <RibbonGroup>
-        <RibbonSplitButton size="lg" icon={<HorizontaltextboxIcon size={24} />} menuLabel="텍스트 상자 종류" menu={
+        <RibbonSplitButton size="lg" icon={<HorizontalTextboxIcon size={24} />} menuLabel="텍스트 상자 종류" menu={
           <>
             <DropdownMenuItem>가로 텍스트 상자</DropdownMenuItem>
             <DropdownMenuItem>세로 텍스트 상자</DropdownMenuItem>
@@ -511,25 +511,25 @@ function LayoutRibbon() {
             </>
           }
         >용지{'\n'}방향</RibbonMenuButton>
-        <RibbonMenuButton icon={<PagescaleIcon size={24} />} menu={<><DropdownMenuItem>A4</DropdownMenuItem><DropdownMenuItem>Letter</DropdownMenuItem></>}>크기</RibbonMenuButton>
+        <RibbonMenuButton icon={<PageScaleIcon size={24} />} menu={<><DropdownMenuItem>A4</DropdownMenuItem><DropdownMenuItem>Letter</DropdownMenuItem></>}>크기</RibbonMenuButton>
         <RibbonMenuButton icon={<PageColumnIcon size={24} />} menu={<><DropdownMenuItem>1단</DropdownMenuItem><DropdownMenuItem>2단</DropdownMenuItem><DropdownMenuItem>3단</DropdownMenuItem></>}>단</RibbonMenuButton>
         <RibbonMenuButton
-          icon={<PagesplitIcon size={24} />}
+          icon={<PageSplitIcon size={24} />}
           menu={
             <>
               <DropdownMenuItem className="gap-2">
-                <PagesplitSheetIcon size={16} aria-hidden="true" /> 페이지 나누기
+                <PageSplitSheetIcon size={16} aria-hidden="true" /> 페이지 나누기
               </DropdownMenuItem>
               <DropdownMenuItem className="gap-2">
-                <LinebreakIcon size={16} aria-hidden="true" /> 줄 나누기
+                <LineBreakIcon size={16} aria-hidden="true" /> 줄 나누기
               </DropdownMenuItem>
               <DropdownMenuItem>단 나누기</DropdownMenuItem>
               <DropdownMenuItem>구역 나누기</DropdownMenuItem>
             </>
           }
         >나누기</RibbonMenuButton>
-        <RibbonButton size="lg" icon={<SetpageIcon size={24} />}>페이지{'\n'}설정</RibbonButton>
-        <RibbonButton size="lg" icon={<SetlayoutIcon size={24} />}>레이아웃{'\n'}설정</RibbonButton>
+        <RibbonButton size="lg" icon={<SetPageIcon size={24} />}>페이지{'\n'}설정</RibbonButton>
+        <RibbonButton size="lg" icon={<SetLayoutIcon size={24} />}>레이아웃{'\n'}설정</RibbonButton>
       </RibbonGroup>
 
       <RibbonSeparator />
@@ -540,10 +540,10 @@ function LayoutRibbon() {
         <RibbonMenuButton disabled icon={<ImagePositionIcon size={24} />} menu={<DropdownMenuItem>위치 선택</DropdownMenuItem>}>위치</RibbonMenuButton>
         <RibbonMenuButton disabled icon={<WrapText className="h-6 w-6" />} menu={<DropdownMenuItem>옵션</DropdownMenuItem>}>텍스트{'\n'}줄 바꿈</RibbonMenuButton>
         <RibbonMenuButton disabled icon={<GroupIcon size={24} />} menu={<DropdownMenuItem>그룹/해제</DropdownMenuItem>}>그룹</RibbonMenuButton>
-        <RibbonMenuButton disabled icon={<MoveforwardIcon size={24} />} menu={<DropdownMenuItem>맨 앞으로</DropdownMenuItem>}>앞으로{'\n'}가져오기</RibbonMenuButton>
-        <RibbonMenuButton disabled icon={<MovebackwardIcon size={24} />} menu={<DropdownMenuItem>맨 뒤로</DropdownMenuItem>}>뒤로{'\n'}보내기</RibbonMenuButton>
-        <RibbonMenuButton disabled icon={<Alignleft01Icon size={24} />} menu={<DropdownMenuItem>왼쪽/오른쪽/위/아래</DropdownMenuItem>}>맞춤</RibbonMenuButton>
-        <RibbonMenuButton disabled icon={<Rotateright90Icon size={24} />} menu={<><DropdownMenuItem>90° 회전</DropdownMenuItem><DropdownMenuItem>180° 회전</DropdownMenuItem></>}>회전</RibbonMenuButton>
+        <RibbonMenuButton disabled icon={<MoveForwardIcon size={24} />} menu={<DropdownMenuItem>맨 앞으로</DropdownMenuItem>}>앞으로{'\n'}가져오기</RibbonMenuButton>
+        <RibbonMenuButton disabled icon={<MoveBackwardIcon size={24} />} menu={<DropdownMenuItem>맨 뒤로</DropdownMenuItem>}>뒤로{'\n'}보내기</RibbonMenuButton>
+        <RibbonMenuButton disabled icon={<AlignLeft01Icon size={24} />} menu={<DropdownMenuItem>왼쪽/오른쪽/위/아래</DropdownMenuItem>}>맞춤</RibbonMenuButton>
+        <RibbonMenuButton disabled icon={<RotateRight90Icon size={24} />} menu={<><DropdownMenuItem>90° 회전</DropdownMenuItem><DropdownMenuItem>180° 회전</DropdownMenuItem></>}>회전</RibbonMenuButton>
       </RibbonGroup>
     </RibbonContent>
   );
@@ -564,19 +564,19 @@ function ReviewRibbon() {
       {/* Group 1 — word count + memo navigation. The reference shows
           단어 개수 alone followed by 5 memo controls, all in the same
           spacing rhythm (treated as one group).
-          단어 개수 split menu carries SpellingcheckIcon (맞춤법 검사) so
+          단어 개수 split menu carries SpellingCheckIcon (맞춤법 검사) so
           the design icon stays referenced without adding a button the
           reference doesn't have. */}
       <RibbonGroup>
         <RibbonSplitButton
           size="lg"
-          icon={<WordcountIcon size={24} />}
+          icon={<WordCountIcon size={24} />}
           menuLabel="문서 검사 옵션"
           menu={
             <>
               <DropdownMenuItem>단어 개수 표시</DropdownMenuItem>
               <DropdownMenuItem className="gap-2">
-                <SpellingcheckIcon size={16} aria-hidden="true" /> 맞춤법 검사
+                <SpellingCheckIcon size={16} aria-hidden="true" /> 맞춤법 검사
               </DropdownMenuItem>
             </>
           }
@@ -591,7 +591,7 @@ function ReviewRibbon() {
       <RibbonSeparator />
 
       {/* Group 2 — track changes + show markup + view selector.
-          변경내용 표시 menu carries DocuprotectionIcon (문서 보호) as a
+          변경내용 표시 menu carries DocuProtectionIcon (문서 보호) as a
           related option so its design icon stays wired up. */}
       <RibbonGroup>
         <RibbonToggleGroup type="multiple" value={trackChanges} onValueChange={setTrackChanges}>
@@ -607,7 +607,7 @@ function ReviewRibbon() {
               <DropdownMenuItem>최종본</DropdownMenuItem>
               <DropdownMenuItem>원본</DropdownMenuItem>
               <DropdownMenuItem className="gap-2">
-                <DocuprotectionIcon size={16} aria-hidden="true" /> 문서 보호 설정…
+                <DocuProtectionIcon size={16} aria-hidden="true" /> 문서 보호 설정…
               </DropdownMenuItem>
             </>
           }
@@ -634,7 +634,7 @@ function ReviewRibbon() {
             <DropdownMenuItem>모두 적용</DropdownMenuItem>
           </>
         }>적용</RibbonSplitButton>
-        <RibbonSplitButton size="lg" icon={<NoapplyIcon size={24} />} menuLabel="취소 옵션" menu={
+        <RibbonSplitButton size="lg" icon={<NoApplyIcon size={24} />} menuLabel="취소 옵션" menu={
           <>
             <DropdownMenuItem>이 변경 사항 취소</DropdownMenuItem>
             <DropdownMenuItem>모두 취소</DropdownMenuItem>
@@ -684,7 +684,7 @@ function AIToolsRibbon() {
             overlay={<span className="absolute -top-1 -right-1 h-2 w-2 rounded-polaris-pill bg-status-danger" aria-hidden="true" />}
           />
         }>번역</RibbonButton>
-        <RibbonButton size="lg" icon={<AiWordcloudIcon size={24} />}>워드{'\n'}클라우드</RibbonButton>
+        <RibbonButton size="lg" icon={<AiWordCloudIcon size={24} />}>워드{'\n'}클라우드</RibbonButton>
       </RibbonGroup>
 
       <RibbonSeparator />
@@ -706,8 +706,8 @@ function AIToolsRibbon() {
       <RibbonGroup>
         <RibbonButton size="lg" icon={<AiTextToImageIcon size={24} />}>Text to{'\n'}Image</RibbonButton>
         <RibbonButton size="lg" icon={<Ai2dto3dIcon size={24} />}>2D→3D{'\n'}변환</RibbonButton>
-        <RibbonButton size="lg" icon={<AiBgdeleteIcon size={24} />}>배경{'\n'}제거</RibbonButton>
-        <RibbonButton size="lg" icon={<AiBgchangeIcon size={24} />}>배경{'\n'}변경</RibbonButton>
+        <RibbonButton size="lg" icon={<AiBgDeleteIcon size={24} />}>배경{'\n'}제거</RibbonButton>
+        <RibbonButton size="lg" icon={<AiBgChangeIcon size={24} />}>배경{'\n'}변경</RibbonButton>
         <RibbonButton size="lg" icon={<AiRemakeIcon size={24} />}>이미지{'\n'}리메이크</RibbonButton>
         <RibbonButton size="lg" icon={<AiExpansionIcon size={24} />}>이미지{'\n'}확장</RibbonButton>
         <RibbonButton size="lg" icon={<AiQualityIcon size={24} />}>해상도{'\n'}향상</RibbonButton>

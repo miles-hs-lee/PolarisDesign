@@ -14,7 +14,9 @@ import {
   NovaInput,
   PromptChip,
 } from '@polaris/ui';
-import { Plus, Sparkles, Search, Image as ImageIcon, FileText } from 'lucide-react';
+import { PlusIcon, SearchIcon, ImageIcon } from '@polaris/ui/icons';
+// Sparkles + FileText: no `@polaris/ui/icons` equivalent — keep lucide.
+import { Sparkles, FileText } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function Home() {
@@ -56,13 +58,13 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10">
-          <PromptChip icon={<Search className="h-4 w-4" />} onClick={() => setSubmitted('트렌드 조사')}>
+          <PromptChip icon={<SearchIcon size={16} />} onClick={() => setSubmitted('트렌드 조사')}>
             2025년 소비자 트렌드를 산업별로 조사해 줘
           </PromptChip>
           <PromptChip icon={<FileText className="h-4 w-4" />} onClick={() => setSubmitted('회의 요약')}>
             회의의 주요 내용을 한 장 분량으로 요약해 줘
           </PromptChip>
-          <PromptChip icon={<ImageIcon className="h-4 w-4" />} onClick={() => setSubmitted('이미지 생성')}>
+          <PromptChip icon={<ImageIcon size={16} />} onClick={() => setSubmitted('이미지 생성')}>
             보고서 주제에 맞는 키 비주얼 이미지를 만들어 줘
           </PromptChip>
         </div>
@@ -100,7 +102,7 @@ export default function Home() {
             </CardBody>
             <CardFooter>
               <Button size="sm">
-                <Plus className="h-4 w-4" /> 새 페이지 만들기
+                <PlusIcon size={16} /> 새 페이지 만들기
               </Button>
               <Button variant="secondary" size="sm">
                 <Sparkles className="h-4 w-4" /> NOVA로 시작
