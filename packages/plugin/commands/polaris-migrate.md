@@ -33,7 +33,7 @@ pnpm dlx @polaris/lint polaris-codemod-v07 src
 pnpm dlx @polaris/lint polaris-codemod-v07 --apply src
 ```
 
-처리 범위: TS 토큰 멤버 / Tailwind 클래스 / CSS 변수. 자세히 → [`docs/migration/v0.6-to-v0.7.md`](https://github.com/miles-hs-lee/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md).
+처리 범위: TS 토큰 멤버 / Tailwind 클래스 / CSS 변수. 자세히 → [`docs/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md).
 
 > **적용 범위 주의** — codemod는 consumer 코드 (`src/`, `apps/`, `app/`)에만 돌리세요. `@polaris/ui` 자체 소스 (특히 `packages/ui/src/{tokens,styles,tailwind}`)는 deprecated alias 정의가 의도적으로 들어있어서 false-positive를 보입니다.
 

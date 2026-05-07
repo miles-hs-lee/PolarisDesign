@@ -1,6 +1,6 @@
 # Polaris Design Tokens — Reference
 
-> **이 문서는 사양(spec)입니다.** 실제 토큰 값은 [`packages/ui/src/tokens/*.ts`](packages/ui/src/tokens)에 정의되어 있고, 데모의 [`/#/tokens`](https://miles-hs-lee.github.io/PolarisDesign/#/tokens) 페이지가 그 값을 시각적으로 보여줍니다. `packages/ui/src/styles/tokens.css`는 [`scripts/build-tokens.ts`](packages/ui/scripts/build-tokens.ts)로 자동 생성되며 손으로 편집하지 않습니다 — 실수로 편집하면 CI가 차단합니다.
+> **이 문서는 사양(spec)입니다.** 실제 토큰 값은 [`packages/ui/src/tokens/*.ts`](packages/ui/src/tokens)에 정의되어 있고, 데모의 [`/#/tokens`](https://polarisoffice.github.io/PolarisDesign/#/tokens) 페이지가 그 값을 시각적으로 보여줍니다. `packages/ui/src/styles/tokens.css`는 [`scripts/build-tokens.ts`](packages/ui/scripts/build-tokens.ts)로 자동 생성되며 손으로 편집하지 않습니다 — 실수로 편집하면 CI가 차단합니다.
 >
 > 이 문서를 갱신할 때는 **사양(이 문서) → 코드(`tokens.ts`) → CSS(자동) → 데모 페이지(자동)** 순서. hex 값을 바꾸려면 `tokens.ts`만 수정하고 `pnpm --filter @polaris/ui build:tokens`을 돌리면 나머지가 따라옵니다.
 
@@ -272,5 +272,5 @@ Tailwind 기본 그대로.
 
 1. 위 🟡 confirm 항목을 디자인 팀과 30분 워크숍에서 일괄 결정
 2. 합의된 hex 값을 `packages/ui/src/tokens/colors.ts`에 반영 → `pnpm --filter @polaris/ui build:tokens`로 CSS/CSS 변수 자동 동기화
-3. 데모의 [`/#/tokens`](https://miles-hs-lee.github.io/PolarisDesign/#/tokens) 페이지에서 변경된 swatches 시각 확인
+3. 데모의 [`/#/tokens`](https://polarisoffice.github.io/PolarisDesign/#/tokens) 페이지에서 변경된 swatches 시각 확인
 4. 디자인 자산(로고·아이콘·일러스트) 요청은 [`docs/design-assets-v07.md`](docs/design-assets-v07.md) 참조

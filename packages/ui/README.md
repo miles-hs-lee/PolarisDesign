@@ -109,7 +109,7 @@ import {
 } from '@polaris/ui';
 ```
 
-각 컴포넌트의 prop은 IDE에서 JSDoc으로 확인. 시각 사용 예시는 [컴포넌트 카탈로그](https://miles-hs-lee.github.io/PolarisDesign/#/components) 또는 [디자인 토큰 페이지](https://miles-hs-lee.github.io/PolarisDesign/#/tokens).
+각 컴포넌트의 prop은 IDE에서 JSDoc으로 확인. 시각 사용 예시는 [컴포넌트 카탈로그](https://polarisoffice.github.io/PolarisDesign/#/components) 또는 [디자인 토큰 페이지](https://polarisoffice.github.io/PolarisDesign/#/tokens).
 
 ### Subpath imports — 필요한 사람만
 
@@ -145,7 +145,7 @@ import { PolarisLogo, NovaLogo } from '@polaris/ui/logos';
 <NovaLogo tone="white" />
 ```
 
-전체 아이콘 카탈로그: [`/icons` 페이지](https://miles-hs-lee.github.io/PolarisDesign/#/icons).
+전체 아이콘 카탈로그: [`/icons` 페이지](https://polarisoffice.github.io/PolarisDesign/#/icons).
 
 ### 글로벌 Provider
 

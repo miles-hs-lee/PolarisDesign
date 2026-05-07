@@ -6,7 +6,7 @@
 
 ## Live demo
 
-GitHub Pages — **<https://miles-hs-lee.github.io/PolarisDesign/>**
+GitHub Pages — **<https://polarisoffice.github.io/PolarisDesign/>**
 
 | 라우트 | 내용 |
 |---|---|
@@ -35,7 +35,7 @@ assets/                             — 디자인팀 figma export (PNG spec + SV
 ### 모노레포 안에서 작업
 
 ```sh
-git clone https://github.com/miles-hs-lee/PolarisDesign.git
+git clone https://github.com/PolarisOffice/PolarisDesign.git
 cd PolarisDesign
 pnpm install                              # @polaris/ui prepare hook이 토큰/아이콘 source 자동 생성
 pnpm --filter polaris-template-next dev   # → :3000 — 본인 앱 출발점

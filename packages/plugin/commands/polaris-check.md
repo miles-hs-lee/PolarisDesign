@@ -49,7 +49,7 @@ pnpm dlx @polaris/lint polaris-codemod-v07 --apply src
 
 처리: TS 토큰 멤버 (`text.primary` → `label.normal`), Tailwind 클래스 (`bg-brand-primary` → `bg-accent-brand-normal`, `text-polaris-h1` → `text-polaris-display`), CSS 변수 (`--polaris-text-primary` → `--polaris-label-normal`), 컬러 램프 step (`bg-blue-5` → `bg-blue-05`), `rounded-polaris-full` → `rounded-polaris-pill`.
 
-자세한 매핑 표 / 적용 범위 주의사항: [`docs/migration/v0.6-to-v0.7.md`](https://github.com/miles-hs-lee/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md).
+자세한 매핑 표 / 적용 범위 주의사항: [`docs/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md).
 
 전체 진단 (자주 등장 hex 분석 등) 이 필요하면 `npx polaris-audit` 로 요약 리포트 확인. 페이지 단위 마이그레이션은 `/polaris-migrate`.
 

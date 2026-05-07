@@ -1,6 +1,6 @@
 # Polaris Next.js Template
 
-Next.js 15 (App Router) 템플릿. 처음부터 [@polaris/ui](https://github.com/miles-hs-lee/PolarisDesign) 디자인 시스템이 통합돼 있습니다.
+Next.js 15 (App Router) 템플릿. 처음부터 [@polaris/ui](https://github.com/PolarisOffice/PolarisDesign) 디자인 시스템이 통합돼 있습니다.
 
 > ⚠️ **현재 한계 — `@polaris/ui` 미배포**
 >
@@ -9,7 +9,7 @@ Next.js 15 (App Router) 템플릿. 처음부터 [@polaris/ui](https://github.com
 > 1. **모노레포 내부에서 사용** — `packages/template-next/`를 그대로 새 디렉터리로 복사하거나, 새 앱을 모노레포 안에 만들고 이 템플릿의 파일을 참조. `pnpm install`이 workspace 의존성을 정상 해결.
 > 2. **`@polaris/ui`/`@polaris/lint`가 사내 npm 레지스트리(또는 npmjs)에 publish된 이후** — 그때부터 `workspace:*`를 실제 버전 번호로 바꾸고 외부 프로젝트에서도 `npx tiged ...` + `pnpm install`이 동작합니다.
 >
-> 외부 클론(예: `npx tiged miles-hs-lee/PolarisDesign/packages/template-next my-app`)을 시도하면 `pnpm install` 단계에서 `@polaris/ui`/`@polaris/lint`가 npm 레지스트리에 없어 실패합니다. 사내 레지스트리 셋업은 [메인 README](../../README.md#license)의 "다음" 항목을 참고하세요.
+> 외부 클론(예: `npx tiged PolarisOffice/PolarisDesign/packages/template-next my-app`)을 시도하면 `pnpm install` 단계에서 `@polaris/ui`/`@polaris/lint`가 npm 레지스트리에 없어 실패합니다. 사내 레지스트리 셋업은 [메인 README](../../README.md#license)의 "다음" 항목을 참고하세요.
 
 ## 시작 (모노레포 내부)
 
@@ -23,7 +23,7 @@ pnpm --filter polaris-template-next dev         # 템플릿이 그대로 dev 실
 ## 시작 (사내 레지스트리 publish 이후)
 
 ```sh
-npx tiged miles-hs-lee/PolarisDesign/packages/template-next my-app
+npx tiged PolarisOffice/PolarisDesign/packages/template-next my-app
 cd my-app
 # package.json 안의 "@polaris/ui": "workspace:*"를 실제 버전으로 교체 후
 pnpm install

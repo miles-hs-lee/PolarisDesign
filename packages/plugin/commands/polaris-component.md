@@ -17,9 +17,9 @@ grep -E "$ARGUMENTS\b" node_modules/@polaris/ui/dist/{form,ribbon,icons,file-ico
 ```
 
 또는 데모 카탈로그에서 시각 확인:
-- 컴포넌트 — <https://miles-hs-lee.github.io/PolarisDesign/#/components>
-- 아이콘 / 파일 아이콘 / 로고 — <https://miles-hs-lee.github.io/PolarisDesign/#/icons>
-- 토큰 (색상·타이포·radius·shadow·motion·z·breakpoint) — <https://miles-hs-lee.github.io/PolarisDesign/#/tokens>
+- 컴포넌트 — <https://polarisoffice.github.io/PolarisDesign/#/components>
+- 아이콘 / 파일 아이콘 / 로고 — <https://polarisoffice.github.io/PolarisDesign/#/icons>
+- 토큰 (색상·타이포·radius·shadow·motion·z·breakpoint) — <https://polarisoffice.github.io/PolarisDesign/#/tokens>
 
 ### 2. 있다면 — 그대로 import
 

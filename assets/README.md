@@ -95,5 +95,5 @@ UI 아이콘 (`svg/icons/`):
 
 GitHub raw URL을 사용해 README/CHANGELOG에서도 인라인 표시 가능:
 ```
-https://raw.githubusercontent.com/miles-hs-lee/PolarisDesign/main/assets/figma-spec/foundation/color.png
+https://raw.githubusercontent.com/PolarisOffice/PolarisDesign/main/assets/figma-spec/foundation/color.png
 ```

@@ -160,7 +160,7 @@ pnpm --filter <pkg> lint --fix
 `@polaris/ui`가 사내 npm 레지스트리에 publish된 후라면:
 
 ```sh
-npx -y tiged miles-hs-lee/PolarisDesign/packages/template-next my-app
+npx -y tiged PolarisOffice/PolarisDesign/packages/template-next my-app
 cd my-app
 pnpm install
 pnpm dev
@@ -201,7 +201,7 @@ pnpm lint --fix
 - [DESIGN.md](DESIGN.md) — 시스템 spec (Stitch 형식, auto-generated)
 - [메인 README](README.md) — 시스템 전체 개요
 - [tokens.md](tokens.md) — 토큰 사양 (사람용 reference)
-- 라이브 데모: https://miles-hs-lee.github.io/PolarisDesign/
-- 컴포넌트 카탈로그: https://miles-hs-lee.github.io/PolarisDesign/#/components
-- 디자인 토큰: https://miles-hs-lee.github.io/PolarisDesign/#/tokens
-- 디자인 자산 (로고/아이콘): https://miles-hs-lee.github.io/PolarisDesign/#/assets
+- 라이브 데모: https://polarisoffice.github.io/PolarisDesign/
+- 컴포넌트 카탈로그: https://polarisoffice.github.io/PolarisDesign/#/components
+- 디자인 토큰: https://polarisoffice.github.io/PolarisDesign/#/tokens
+- 디자인 자산 (로고/아이콘): https://polarisoffice.github.io/PolarisDesign/#/assets

@@ -10,7 +10,7 @@ argument-hint: <프로젝트 이름>
 `$ARGUMENTS`가 비어 있으면 사용자에게 프로젝트 이름을 물어보고, 있으면 그대로 사용:
 
 ```sh
-npx -y tiged miles-hs-lee/PolarisDesign/packages/template-next $ARGUMENTS
+npx -y tiged PolarisOffice/PolarisDesign/packages/template-next $ARGUMENTS
 cd $ARGUMENTS
 ```
 

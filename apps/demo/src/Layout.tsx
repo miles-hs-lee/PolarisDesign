@@ -259,12 +259,12 @@ export function Layout() {
               <div className="max-w-6xl mx-auto px-6 py-6 text-polaris-caption1 text-label-alternative flex flex-wrap items-center justify-between gap-3">
                 <div>Polaris Design System · v0.1.0</div>
                 <a
-                  href="https://github.com/miles-hs-lee/PolarisDesign"
+                  href="https://github.com/PolarisOffice/PolarisDesign"
                   className="text-accent-brand-normal hover:underline"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  github.com/miles-hs-lee/PolarisDesign
+                  github.com/PolarisOffice/PolarisDesign
                 </a>
               </div>
             </footer>

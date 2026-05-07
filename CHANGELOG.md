@@ -606,7 +606,7 @@ ESLint 9 flat config 플러그인. 4가지 룰로 모델의 토큰 우회를 차
 
 ### 추가됨 — 데모 + 카탈로그
 
-GitHub Pages에 자동 배포 (https://miles-hs-lee.github.io/PolarisDesign/):
+GitHub Pages에 자동 배포 (https://polarisoffice.github.io/PolarisDesign/):
 - **앱 셸** — 좌측 Sidebar + 상단 Navbar (DropdownMenu 사용자 메뉴 포함)
 - **4개 라우트**: Home, NOVA 워크스페이스, CRM 계약 상세, Sign 계약서 목록
 - **NOVA 워크스페이스** — 코스믹 그라데이션 hero + NovaInput + Select·Tooltip + 8개 폴라리스 기능 카드(실제 마케팅 이미지) + DropdownMenu별 응답
@@ -639,11 +639,11 @@ GitHub Pages에 자동 배포 (https://miles-hs-lee.github.io/PolarisDesign/):
 
 ---
 
-[Unreleased]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.5.0...HEAD
-[0.5.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.4.1...v0.5.0
-[0.4.1]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.4.0...v0.4.1
-[0.4.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.1...v0.3.0
-[0.2.1]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.2.0...v0.2.1
-[0.2.0]: https://github.com/miles-hs-lee/PolarisDesign/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/miles-hs-lee/PolarisDesign/releases/tag/v0.1.0
+[Unreleased]: https://github.com/PolarisOffice/PolarisDesign/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/PolarisOffice/PolarisDesign/compare/v0.4.1...v0.5.0
+[0.4.1]: https://github.com/PolarisOffice/PolarisDesign/compare/v0.4.0...v0.4.1
+[0.4.0]: https://github.com/PolarisOffice/PolarisDesign/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/PolarisOffice/PolarisDesign/compare/v0.2.1...v0.3.0
+[0.2.1]: https://github.com/PolarisOffice/PolarisDesign/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/PolarisOffice/PolarisDesign/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/PolarisOffice/PolarisDesign/releases/tag/v0.1.0

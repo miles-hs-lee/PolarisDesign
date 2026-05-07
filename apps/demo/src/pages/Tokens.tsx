@@ -189,7 +189,7 @@ export default function Tokens() {
           v0.7-rc.2 토큰 전수 표시. 색상은{' '}
           <code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">colors</code>{' '}
           export에서 자동 iterate되므로 새 그룹 추가 시 자동 반영됩니다. 디자인 정의서:{' '}
-          <a href="https://github.com/miles-hs-lee/PolarisDesign/blob/main/DESIGN.md" target="_blank" rel="noreferrer" className="text-accent-brand-normal underline">DESIGN.md</a>.
+          <a href="https://github.com/PolarisOffice/PolarisDesign/blob/main/DESIGN.md" target="_blank" rel="noreferrer" className="text-accent-brand-normal underline">DESIGN.md</a>.
         </p>
       </header>
 
