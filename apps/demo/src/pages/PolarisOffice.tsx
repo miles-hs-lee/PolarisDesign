@@ -786,7 +786,7 @@ function NewDocPane() {
           >
             <FileIconBadge type={doc.type} size={40} />
             <span className="flex flex-col items-start min-w-0">
-              <span className="text-polaris-body2 font-semibold">{doc.title}</span>
+              <span className="text-polaris-body2">{doc.title}</span>
               <span className="text-polaris-caption1 text-label-alternative truncate">{doc.desc}</span>
             </span>
           </Button>
@@ -819,7 +819,7 @@ function OpenDocPane() {
               )}
             >
               <Icon className={cn('h-5 w-5 shrink-0', place.iconClass)} aria-hidden="true" />
-              <span className="text-polaris-body2 font-medium">{place.label}</span>
+              <span className="text-polaris-body2">{place.label}</span>
             </Button>
           </li>
         );
@@ -842,7 +842,7 @@ function DownloadPane() {
               className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-background-alternative text-left"
             >
               <FileIconBadge type={type} size={40} />
-              <span className="text-polaris-body2 font-medium">
+              <span className="text-polaris-body2">
                 {type.toUpperCase()}으로 다운로드
               </span>
             </Button>
@@ -920,8 +920,11 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
                   aria-current={pane === item.id ? 'page' : undefined}
                   className={cn(
                     'w-full !justify-start !px-3 !py-2 !h-auto rounded-polaris-md text-left text-polaris-body2 font-normal',
+                    // Active state: brand-tinted background + brand text color.
+                    // (Polaris Office의 실제 파일 메뉴는 active 상태에서 bold를
+                    // 쓰지 않음 — 배경/색만으로 선택 표시.)
                     pane === item.id
-                      ? '!bg-background-alternative !font-semibold !text-label-normal'
+                      ? '!bg-accent-brand-normal-subtle !text-accent-brand-normal'
                       : '!text-label-neutral hover:!bg-background-alternative'
                   )}
                 >
