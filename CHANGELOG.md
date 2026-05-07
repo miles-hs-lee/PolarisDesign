@@ -1,16 +1,106 @@
 # Changelog
 
-이 프로젝트의 주요 변경 사항을 기록합니다.
+이 프로젝트의 **사람이 읽는** 릴리스 narrative입니다. 각 minor/major 릴리스 직후 손으로 정리합니다. 형식은 [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/), 버전은 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
-형식은 [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/)을, 버전 규칙은 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html)을 따릅니다.
+> **자동 생성된 패키지 단위 CHANGELOG는 별도** — `packages/ui/CHANGELOG.md`, `packages/lint/CHANGELOG.md` 등에 `pnpm changeset version` 실행 시 자동 작성됩니다. 변경의 **단편(per-changeset)**은 거기에, **요약 narrative**는 여기에. 루트는 "이번 릴리스에서 뭘 했나" 한 페이지로 훑을 수 있게 유지합니다.
 
 ---
 
 ## [Unreleased]
 
-다음 릴리스(v0.7+)에 들어갈 항목 — [docs/roadmap.md](docs/roadmap.md), [docs/design-assets-v07.md](docs/design-assets-v07.md).
+다음 릴리스 candidate — [docs/roadmap.md](docs/roadmap.md) v0.7.x / v0.8 섹션.
 
-**검증 필요:** v0.4 사용자 보고 — `prefer-polaris-component` lint가 server action `<form action={...}>` 안의 `<button type="submit">`을 일부 케이스에서 flag. v0.2.0 `allowFormSubmit` 수정 후 회귀 테스트는 통과 — 사용자 lint 버전 또는 화이트리스트 미커버 케이스 확인 필요.
+---
+
+## [0.7.0] — 2026-05-07
+
+디자인팀의 v1 (2026.05) 정식 정의서 — `DESIGN.md` + `primitive-color-palette` — 에 토큰 명명·값·컴포넌트 스펙·자산을 완전 정렬한 **메이저 릴리스**. v0.6.1 위에 8개 누적 changeset (rc.0 → rc.1 → rc.2 → final) 통합.
+
+### 시맨틱 토큰 19개 신설
+
+`label.*` (6) / `background.*` (4) / `layer.*` (2 NEW) / `interaction.*` (`pressed` NEW) / `fill.*` (`neutral`·`strong` NEW) / `line.*` (`strong`·`disabled` NEW) / `accentBrand.*` (`bg`·`bgHover` NEW) / `accentAction.*` (Black 버튼 NEW) / `focus.ring` / `staticColors.*` / `state.*` (`new` + `bg` variants 4 NEW). v0.6 / rc.0 / rc.1 alias는 모두 deprecated alias로 작동 (v0.8에서 제거).
+
+### 컬러 primitive 확장
+
+브랜드 6 family + supplementary 5 (Sky Blue / Blue / Violet / Cyan / Yellow) + Gray ramp = **11 family × 10 step** (`05`/`90` 추가). `bg-blue-50` ~ `bg-blue-90` 같은 직접 참조 가능. step `5` (no leading zero)는 deprecated alias.
+
+### Typography 11레벨 spec 명명
+
+`display` (40) / `title` (32) / `heading1`–`heading4` (28/24/20/18) / `body1`–`body3` (16/14/13) / `caption1`–`caption2` (12/11). Caption weight 700, body letter-spacing 제거. 모바일 (≤767px) 자동 한 단계 축소 (`tokens.css`의 `@media`).
+
+### 새 토큰 시스템 4개
+
+- **Spacing** — 12 named scale (`4xs` 2 → `4xl` 64) + Tailwind 기본 유지
+- **Z-index** — `base` 0 / `dropdown` 100 / `sticky` 200 / `dim` 300 / `modal` 400 / `toast` 500
+- **Motion** — duration × 4 (`instant`/`fast`/`normal`/`slow`) + easing × 3 (`in-out`/`out`/`in`)
+- **Breakpoint** — semantic (`mobile`/`tablet-v`/`tablet-h`/`desktop`)
+
+### 다크 모드 그레이스케일 재작성
+
+rc.0의 퍼플 틴트 (`#1B1B2A` 등) → spec의 단색 그레이 (`#232323`/`#282828`/`#3B3B3B` 등). dark hex 19개 토큰 전수 갱신.
+
+### 컴포넌트 재설계
+
+- **Radius 한 단계 시프트** — `md` 8→12 (Button/Card/Modal default), `lg` 12→16 (Large CTA), `xl` 16→24 (Modal), `2xl` 24→38 (bottom sheet).
+- **Button** — 6 사이즈 (24/32/40/48/54/64) + Black variant (`accentAction`).
+- **Input** — 52px height + floating title 패턴 + 강제 에러 아이콘 (WCAG 1.4.1).
+- **Modal** — 24px radius + `layer.surface` 배경.
+- **Toast** — 모든 variant 다크 글래스 표면 (`bg-layer-overlay backdrop-blur-md`) + 좌측 색깔 보더 + 48h.
+
+### 디자인팀 SVG 자산 통합 (3 신규 entry point)
+
+```
+@polaris/ui/icons       — 65 UI 아이콘 × 18/24/32 px (currentColor 자동 변환, Tailwind text-{token}으로 색상 제어)
+@polaris/ui/file-icons  — 29 파일 타입 (multi-color baked-in, 32px 마스터)
+@polaris/ui/logos       — PolarisLogo (3 variants × 2 tones) + NovaLogo (2 tones)
+```
+
+`<FileIcon>` 색깔 사각형 → 디자인팀 실제 SVG로 완전 교체 (5 → 29 타입). `@polaris/ui` 내부 lucide-react는 폴라리스 아이콘으로 대체 (있는 것만 — Loader2/Sparkles/MoreHorizontal 등은 lucide 유지).
+
+### 자동화 도구
+
+- **`polaris-codemod-v07`** — v0.6 / rc.0 / rc.1 / rc.2 → v0.7 일괄 변환 (TS/TSX 토큰 멤버 + Tailwind 클래스 + CSS 변수). 11개 codemod test, `--check` CI 모드 지원.
+- **신규 lint 룰**:
+  - `@polaris/state-color-with-icon` (warn) — `text-state-{success,warning,error}`가 아이콘 동반 없이 사용되면 경고 (WCAG 1.4.1).
+  - `@polaris/prefer-polaris-icon` (warn) — `lucide-react`에 폴라리스 대응 있을 때 권장 (점진 마이그레이션).
+
+### 데모 (`apps/demo`)
+
+- **`/#/icons`** 신규 — 65 UI 아이콘 검색/사이즈 비교 + 29 파일 + 4 로고 카탈로그.
+- **`/#/tokens`** 재구성 — 컬러는 `@polaris/ui/tokens.colors` 에서 자동 iterate (새 그룹 자동 반영). 13 섹션 / ~150 swatch + 비-컬러 토큰 (Spacing/Radius/Shadow/Motion/Z-index/Breakpoint) 시각 데모. figma-spec PNG 인라인 (`<details>` 토글).
+
+### 인프라 / Tooling
+
+- **빌드 파이프라인 3 신규 generator** — `build:icons` / `build:file-icons` / `build:logos` (SVG → React 컴포넌트). `normalize:icons` 가 Figma 자동 export 이름 정규화.
+- **`@polaris/ui` `prepare` hook** — `pnpm install` 시 generated icon / file-icon / logo source 자동 생성. clean clone 지원.
+- **demo / template-next `prep:ui`** — `pnpm install` 후 `pnpm dev` 까지 무중단. PostCSS Tailwind preset이 dist를 요구하는 케이스 처리.
+- **demo Vite alias 3개 추가** — `@polaris/ui/icons`, `/file-icons`, `/logos` source HMR.
+- **demo tsconfig paths 미러링** — Vite alias와 동일 경로로 dist 없이 typecheck 가능.
+- **시각 회귀 baseline 28개** (13 라우트 × 2 viewport + ribbon 5 × 2). `/icons-catalog` 추가.
+
+### 문서
+
+- **DESIGN.md auto-gen 갱신** — 358 CSS vars + 각 섹션에 figma-spec PNG inline (Color/Typography/Grid/Radius/Iconography/Button/Input).
+- **`docs/migration/v0.6-to-v0.7.md`** — 8개 변경 영역 + codemod 매핑 표 (TS/Tailwind/CSS) + codemod 적용 범위 메모 (`@polaris/ui/src/{tokens,styles,tailwind}` 제외).
+- **SKILL.md / AGENTS.md / 패키지 README** v0.7 spec 명명으로 전수 갱신.
+- **루트 README** 압축 (271 → 129 라인) + `docs/roadmap.md` v0.6/v0.7 entry 추가.
+
+### BREAKING vs v0.6.1
+
+- 모든 컴포넌트 radius +4px (md 8→12 등)
+- 다크 모드 hex 전수 변경
+- Button 사이즈 명명 시프트 (`sm`→`xs`, `md`→`sm`, `lg`→`md` 권장 — codemod 미지원, 수동)
+- Input height 36→52, NovaInput 외형 (단일행 → 2행 컴포저)
+- Modal 12r→24r
+- Toast 단색 surface → 다크 글래스
+- `<FileIcon>` API: `size="sm/md/lg"` → `size={number}` (px)
+- `displayLg` 60 → 40 (rc.0 → spec)
+
+### Bumped
+
+@polaris/ui · @polaris/lint · @polaris/plugin · polaris-template-next · demo + root: 0.6.1 → 0.7.0.
+
+마이그레이션 가이드: [`docs/migration/v0.6-to-v0.7.md`](docs/migration/v0.6-to-v0.7.md). 패키지별 자세한 변경 단편: 각 `packages/*/CHANGELOG.md` 의 `## 0.7.0` 섹션.
 
 ---
 
