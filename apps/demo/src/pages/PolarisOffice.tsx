@@ -493,22 +493,26 @@ function InsertRibbon() {
 function LayoutRibbon() {
   return (
     <RibbonContent value="layout">
+      {/* Group 1 — page-level layout (7 buttons per the reference).
+          용지 방향 menu also exposes "글자 방향" with DirectionIcon so
+          the (otherwise standalone-button) design icon stays wired up
+          without adding a button the reference doesn't have. */}
       <RibbonGroup>
         <RibbonMenuButton icon={<MarginIcon size={24} />} menu={<DropdownMenuItem>좁게 / 보통 / 넓게</DropdownMenuItem>}>여백</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonMenuButton
           icon={<OrientationsheetIcon />}
-          menu={<><DropdownMenuItem>세로</DropdownMenuItem><DropdownMenuItem>가로</DropdownMenuItem></>}
+          menu={
+            <>
+              <DropdownMenuItem>세로</DropdownMenuItem>
+              <DropdownMenuItem>가로</DropdownMenuItem>
+              <DropdownMenuItem className="gap-2">
+                <DirectionIcon size={16} aria-hidden="true" /> 글자 방향 설정…
+              </DropdownMenuItem>
+            </>
+          }
         >용지{'\n'}방향</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonMenuButton icon={<PagescaleIcon size={24} />} menu={<><DropdownMenuItem>A4</DropdownMenuItem><DropdownMenuItem>Letter</DropdownMenuItem></>}>크기</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonMenuButton icon={<PageColumnIcon size={24} />} menu={<><DropdownMenuItem>1단</DropdownMenuItem><DropdownMenuItem>2단</DropdownMenuItem><DropdownMenuItem>3단</DropdownMenuItem></>}>단</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonMenuButton
           icon={<PagesplitIcon size={24} />}
           menu={
@@ -519,44 +523,26 @@ function LayoutRibbon() {
               <DropdownMenuItem className="gap-2">
                 <LinebreakIcon size={16} aria-hidden="true" /> 줄 나누기
               </DropdownMenuItem>
-              <DropdownMenuItem className="gap-2">
-                <PageColumnIcon size={16} aria-hidden="true" /> 단 나누기
-              </DropdownMenuItem>
+              <DropdownMenuItem>단 나누기</DropdownMenuItem>
               <DropdownMenuItem>구역 나누기</DropdownMenuItem>
             </>
           }
         >나누기</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
-        <RibbonMenuButton icon={<DirectionIcon size={24} />} menu={<><DropdownMenuItem>가로 쓰기</DropdownMenuItem><DropdownMenuItem>세로 쓰기</DropdownMenuItem></>}>글자{'\n'}방향</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<SetpageIcon size={24} />}>페이지{'\n'}설정</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<SetlayoutIcon size={24} />}>레이아웃{'\n'}설정</RibbonButton>
       </RibbonGroup>
+
       <RibbonSeparator />
-      {/* Image-related — disabled until selection */}
+
+      {/* Group 2 — image-related, disabled until an image is selected
+          (matches the reference's grayed-out cluster). */}
       <RibbonGroup>
         <RibbonMenuButton disabled icon={<ImagePositionIcon size={24} />} menu={<DropdownMenuItem>위치 선택</DropdownMenuItem>}>위치</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonMenuButton disabled icon={<WrapText className="h-6 w-6" />} menu={<DropdownMenuItem>옵션</DropdownMenuItem>}>텍스트{'\n'}줄 바꿈</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonMenuButton disabled icon={<GroupIcon size={24} />} menu={<DropdownMenuItem>그룹/해제</DropdownMenuItem>}>그룹</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonMenuButton disabled icon={<MoveforwardIcon size={24} />} menu={<DropdownMenuItem>맨 앞으로</DropdownMenuItem>}>앞으로{'\n'}가져오기</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonMenuButton disabled icon={<MovebackwardIcon size={24} />} menu={<DropdownMenuItem>맨 뒤로</DropdownMenuItem>}>뒤로{'\n'}보내기</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonMenuButton disabled icon={<Algnleft01Icon size={24} />} menu={<DropdownMenuItem>왼쪽/오른쪽/위/아래</DropdownMenuItem>}>맞춤</RibbonMenuButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonMenuButton disabled icon={<Roatateright90Icon size={24} />} menu={<><DropdownMenuItem>90° 회전</DropdownMenuItem><DropdownMenuItem>180° 회전</DropdownMenuItem></>}>회전</RibbonMenuButton>
       </RibbonGroup>
     </RibbonContent>
@@ -575,44 +561,57 @@ function ReviewRibbon() {
 
   return (
     <RibbonContent value="review">
+      {/* Group 1 — word count + memo navigation. The reference shows
+          단어 개수 alone followed by 5 memo controls, all in the same
+          spacing rhythm (treated as one group).
+          단어 개수 split menu carries SpellingcheckIcon (맞춤법 검사) so
+          the design icon stays referenced without adding a button the
+          reference doesn't have. */}
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<WordcountIcon size={24} />}>단어{'\n'}개수</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
-        <RibbonButton size="lg" icon={<SpellingcheckIcon size={24} />}>맞춤법{'\n'}검사</RibbonButton>
-      </RibbonGroup>
-      <RibbonSeparator />
-      <RibbonGroup>
+        <RibbonSplitButton
+          size="lg"
+          icon={<WordcountIcon size={24} />}
+          menuLabel="문서 검사 옵션"
+          menu={
+            <>
+              <DropdownMenuItem>단어 개수 표시</DropdownMenuItem>
+              <DropdownMenuItem className="gap-2">
+                <SpellingcheckIcon size={16} aria-hidden="true" /> 맞춤법 검사
+              </DropdownMenuItem>
+            </>
+          }
+        >단어{'\n'}개수</RibbonSplitButton>
         <RibbonButton size="lg" icon={<MemoNewIcon size={24} />}>새{'\n'}메모</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonSplitButton size="lg" disabled icon={<MemoDeleteIcon size={24} />} menuLabel="삭제 옵션" menu={<><DropdownMenuItem>삭제</DropdownMenuItem><DropdownMenuItem>모두 삭제</DropdownMenuItem></>}>삭제</RibbonSplitButton>
-      </RibbonGroup>
-      <RibbonGroup>
-        <RibbonButton size="lg" disabled icon={<MemoPreviousIcon size={24} />}>이전{'\n'}메모</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
-        <RibbonButton size="lg" disabled icon={<MemoNextIcon size={24} />}>다음{'\n'}메모</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
+        <RibbonButton size="lg" disabled icon={<MemoPreviousIcon size={24} />}>이전</RibbonButton>
+        <RibbonButton size="lg" disabled icon={<MemoNextIcon size={24} />}>다음</RibbonButton>
         <RibbonButton size="lg" icon={<MemoPaneIcon size={24} />}>메모{'\n'}표시</RibbonButton>
       </RibbonGroup>
+
       <RibbonSeparator />
+
+      {/* Group 2 — track changes + show markup + view selector.
+          변경내용 표시 menu carries DocuprotectionIcon (문서 보호) as a
+          related option so its design icon stays wired up. */}
       <RibbonGroup>
         <RibbonToggleGroup type="multiple" value={trackChanges} onValueChange={setTrackChanges}>
           <RibbonToggleItem value="track" size="lg" tooltip="변경내용 추적" icon={<TrackChangesIcon size={24} />}>변경내용{'\n'}추적</RibbonToggleItem>
         </RibbonToggleGroup>
-      </RibbonGroup>
-      <RibbonGroup>
-        <RibbonSplitButton size="lg" icon={<TrackShowmarkupIcon size={24} />} menuLabel="변경내용 표시 옵션" menu={
-          <>
-            <DropdownMenuItem>모든 변경 사항</DropdownMenuItem>
-            <DropdownMenuItem>최종본</DropdownMenuItem>
-            <DropdownMenuItem>원본</DropdownMenuItem>
-          </>
-        }>변경내용{'\n'}표시</RibbonSplitButton>
-      </RibbonGroup>
-      <RibbonGroup>
+        <RibbonSplitButton
+          size="lg"
+          icon={<TrackShowmarkupIcon size={24} />}
+          menuLabel="변경내용 표시 옵션"
+          menu={
+            <>
+              <DropdownMenuItem>모든 변경 사항</DropdownMenuItem>
+              <DropdownMenuItem>최종본</DropdownMenuItem>
+              <DropdownMenuItem>원본</DropdownMenuItem>
+              <DropdownMenuItem className="gap-2">
+                <DocuprotectionIcon size={16} aria-hidden="true" /> 문서 보호 설정…
+              </DropdownMenuItem>
+            </>
+          }
+        >변경내용{'\n'}표시</RibbonSplitButton>
         <Select value={reviewView} onValueChange={setReviewView}>
           <SelectTrigger className="!h-8 w-36 text-polaris-body2">
             <SelectValue />
@@ -624,7 +623,10 @@ function ReviewRibbon() {
           </SelectContent>
         </Select>
       </RibbonGroup>
+
       <RibbonSeparator />
+
+      {/* Group 3 — accept/reject + change navigation. */}
       <RibbonGroup>
         <RibbonSplitButton size="lg" icon={<ApplyIcon size={24} />} menuLabel="적용 옵션" menu={
           <>
@@ -632,24 +634,14 @@ function ReviewRibbon() {
             <DropdownMenuItem>모두 적용</DropdownMenuItem>
           </>
         }>적용</RibbonSplitButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonSplitButton size="lg" icon={<NoapplyIcon size={24} />} menuLabel="취소 옵션" menu={
           <>
             <DropdownMenuItem>이 변경 사항 취소</DropdownMenuItem>
             <DropdownMenuItem>모두 취소</DropdownMenuItem>
           </>
         }>취소</RibbonSplitButton>
-      </RibbonGroup>
-      <RibbonGroup>
-        <RibbonButton size="lg" disabled icon={<ChangePreviousIcon size={24} />}>이전{'\n'}변경</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
-        <RibbonButton size="lg" disabled icon={<ChangeNextIcon size={24} />}>다음{'\n'}변경</RibbonButton>
-      </RibbonGroup>
-      <RibbonSeparator />
-      <RibbonGroup>
-        <RibbonButton size="lg" icon={<DocuprotectionIcon size={24} />}>문서{'\n'}보호</RibbonButton>
+        <RibbonButton size="lg" disabled icon={<ChangePreviousIcon size={24} />}>이전</RibbonButton>
+        <RibbonButton size="lg" disabled icon={<ChangeNextIcon size={24} />}>다음</RibbonButton>
       </RibbonGroup>
     </RibbonContent>
   );
@@ -664,6 +656,9 @@ function ReviewRibbon() {
 function AIToolsRibbon() {
   return (
     <RibbonContent value="ai">
+      {/* Group 1 — chat / search / write / translate / wordcloud.
+          Several have small status pips (red dot for "new"/"alert"
+          state) overlaid on the design icon — matches the reference. */}
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
@@ -671,77 +666,77 @@ function AIToolsRibbon() {
             overlay={<Sparkles className="h-3 w-3 absolute -top-1 -left-1 text-ai-normal" />}
           />
         }>NOVA{'\n'}AI 채팅</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<WebSearchIcon size={24} />}
             overlay={<span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-polaris-pill bg-status-danger" aria-hidden="true" />}
           />
         }>웹{'\n'}검색</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<AiWriteIcon size={24} />}
             overlay={<Pencil className="h-3 w-3 absolute -bottom-0.5 -right-0.5 text-ai-normal" />}
           />
         }>AI{'\n'}Write</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<TranslateIcon size={24} />}
             overlay={<span className="absolute -top-1 -right-1 h-2 w-2 rounded-polaris-pill bg-status-danger" aria-hidden="true" />}
           />
         }>번역</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<AiWordcloudIcon size={24} />}>워드{'\n'}클라우드</RibbonButton>
       </RibbonGroup>
+
       <RibbonSeparator />
+
+      {/* Group 2 — dictation, alone in its own group (per reference). */}
       <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<AiRecordIcon size={24} />}
-            overlay={<Sparkles className="h-3 w-3 absolute -top-1 -left-1 text-ai-normal" />}
+            overlay={<span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-polaris-pill bg-status-danger" aria-hidden="true" />}
           />
         }>받아쓰기</RibbonButton>
       </RibbonGroup>
+
       <RibbonSeparator />
+
+      {/* Group 3 — image-generation gallery. The reference shows
+          8 image AI features in a tight cluster (no inner separators). */}
       <RibbonGroup>
         <RibbonButton size="lg" icon={<AiTextToImageIcon size={24} />}>Text to{'\n'}Image</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
-        <RibbonButton size="lg" icon={<AiVideoIcon size={24} />}>AI{'\n'}비디오</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<Ai2dto3dIcon size={24} />}>2D→3D{'\n'}변환</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<AiBgdeleteIcon size={24} />}>배경{'\n'}제거</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<AiBgchangeIcon size={24} />}>배경{'\n'}변경</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<AiRemakeIcon size={24} />}>이미지{'\n'}리메이크</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<AiExpansionIcon size={24} />}>이미지{'\n'}확장</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<AiQualityIcon size={24} />}>해상도{'\n'}향상</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<AiStyleIcon size={24} />}>스타일{'\n'}변환</RibbonButton>
       </RibbonGroup>
-      <RibbonGroup>
-        <RibbonButton size="lg" icon={<AiTemplateIcon size={24} />}>AI{'\n'}템플릿</RibbonButton>
-      </RibbonGroup>
+
       <RibbonSeparator />
+
+      {/* Group 4 — guide / help. The reference shows a single button.
+          We expose the (otherwise unused) AI 비디오 / AI 템플릿 design
+          icons as menu items in a "더 보기" gallery so the design system
+          still showcases all 91 ribbon icons end-to-end. */}
       <RibbonGroup>
-        <RibbonButton size="lg" icon={<AiGuideIcon size={24} />}>AI 도구{'\n'}사용자 가이드</RibbonButton>
+        <RibbonSplitButton
+          size="lg"
+          icon={<AiGuideIcon size={24} />}
+          menuLabel="AI 기능 갤러리"
+          menu={
+            <>
+              <DropdownMenuItem className="gap-2">
+                <AiVideoIcon size={16} aria-hidden="true" /> AI 비디오 (베타)
+              </DropdownMenuItem>
+              <DropdownMenuItem className="gap-2">
+                <AiTemplateIcon size={16} aria-hidden="true" /> AI 템플릿 갤러리
+              </DropdownMenuItem>
+              <DropdownMenuItem>전체 사용자 가이드…</DropdownMenuItem>
+            </>
+          }
+        >AI 도구{'\n'}사용자 가이드</RibbonSplitButton>
       </RibbonGroup>
     </RibbonContent>
   );
