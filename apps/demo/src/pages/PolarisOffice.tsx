@@ -428,26 +428,22 @@ function HomeRibbon() {
 function InsertRibbon() {
   return (
     <RibbonContent value="insert">
+      {/* Group 1 — page-level inserts. The reference shows these two
+          buttons clustered tight (no inner separator), then a divider
+          before the table/image/shape group. */}
       <RibbonGroup>
         <RibbonButton size="lg" icon={<NewpageIcon size={24} />}>새{'\n'}페이지</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<PagesplitSheetIcon size={24} />}>페이지{'\n'}나누기</RibbonButton>
       </RibbonGroup>
-      <RibbonGroup>
-        <RibbonButton size="lg" icon={<LinebreakIcon size={24} />}>줄{'\n'}나누기</RibbonButton>
-      </RibbonGroup>
+
       <RibbonSeparator />
+
+      {/* Group 2 — table / image / shape. Shape is the only split
+          button (chevron-down for shape gallery). */}
       <RibbonGroup>
         <RibbonButton size="lg" icon={<TableIcon size={24} />}>표</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<RibbonImageIcon size={24} />}>그림</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<ImageOnlineIcon size={24} />}>온라인{'\n'}그림</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonSplitButton size="lg" icon={<ShapeIcon size={24} />} menuLabel="도형 선택" menu={
           <>
             <DropdownMenuItem>사각형</DropdownMenuItem>
@@ -456,11 +452,13 @@ function InsertRibbon() {
           </>
         }>도형</RibbonSplitButton>
       </RibbonGroup>
+
       <RibbonSeparator />
+
+      {/* Group 3 — navigational inserts. Bookmark icon gets a small red
+          marker overlay (matches the reference). */}
       <RibbonGroup>
         <RibbonButton size="lg" icon={<HyperlinkIcon size={24} />}>하이퍼{'\n'}링크</RibbonButton>
-      </RibbonGroup>
-      <RibbonGroup>
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<BookmarkIcon size={24} />}
@@ -468,6 +466,11 @@ function InsertRibbon() {
           />
         }>책갈피</RibbonButton>
       </RibbonGroup>
+
+      <RibbonSeparator />
+
+      {/* Group 4 — text-box (split with vertical/horizontal options) +
+          symbol. Reference shows these in the same group. */}
       <RibbonGroup>
         <RibbonSplitButton size="lg" icon={<HorizontaltextboxIcon size={24} />} menuLabel="텍스트 상자 종류" menu={
           <>
@@ -475,9 +478,6 @@ function InsertRibbon() {
             <DropdownMenuItem>세로 텍스트 상자</DropdownMenuItem>
           </>
         }>텍스트{'\n'}상자</RibbonSplitButton>
-      </RibbonGroup>
-      <RibbonSeparator />
-      <RibbonGroup>
         <RibbonButton size="lg" icon={<SymbolIcon size={24} />}>기호</RibbonButton>
       </RibbonGroup>
     </RibbonContent>
@@ -509,7 +509,23 @@ function LayoutRibbon() {
         <RibbonMenuButton icon={<PageColumnIcon size={24} />} menu={<><DropdownMenuItem>1단</DropdownMenuItem><DropdownMenuItem>2단</DropdownMenuItem><DropdownMenuItem>3단</DropdownMenuItem></>}>단</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
-        <RibbonMenuButton icon={<PagesplitIcon size={24} />} menu={<><DropdownMenuItem>페이지 나누기</DropdownMenuItem><DropdownMenuItem>단 나누기</DropdownMenuItem><DropdownMenuItem>구역 나누기</DropdownMenuItem></>}>나누기</RibbonMenuButton>
+        <RibbonMenuButton
+          icon={<PagesplitIcon size={24} />}
+          menu={
+            <>
+              <DropdownMenuItem className="gap-2">
+                <PagesplitSheetIcon size={16} aria-hidden="true" /> 페이지 나누기
+              </DropdownMenuItem>
+              <DropdownMenuItem className="gap-2">
+                <LinebreakIcon size={16} aria-hidden="true" /> 줄 나누기
+              </DropdownMenuItem>
+              <DropdownMenuItem className="gap-2">
+                <PageColumnIcon size={16} aria-hidden="true" /> 단 나누기
+              </DropdownMenuItem>
+              <DropdownMenuItem>구역 나누기</DropdownMenuItem>
+            </>
+          }
+        >나누기</RibbonMenuButton>
       </RibbonGroup>
       <RibbonGroup>
         <RibbonMenuButton icon={<DirectionIcon size={24} />} menu={<><DropdownMenuItem>가로 쓰기</DropdownMenuItem><DropdownMenuItem>세로 쓰기</DropdownMenuItem></>}>글자{'\n'}방향</RibbonMenuButton>
