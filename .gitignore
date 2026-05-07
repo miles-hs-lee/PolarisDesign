@@ -24,3 +24,7 @@ figma/*.fig
 packages/ui/src/icons/
 packages/ui/src/file-icons/
 packages/ui/src/logos/
+
+# Synced from assets/figma-spec via `pnpm --filter demo sync:figma-spec`
+# (auto-runs predev / prebuild). Source of truth lives in assets/.
+apps/demo/public/figma-spec/

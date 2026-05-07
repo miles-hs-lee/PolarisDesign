@@ -4,12 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5173 --host",
-    "build": "tsc --noEmit && vite build",
+    "dev": "pnpm sync:figma-spec && vite --port 5173 --host",
+    "build": "pnpm sync:figma-spec && tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "optimize-images": "node scripts/optimize-nova-images.mjs"
+    "optimize-images": "node scripts/optimize-nova-images.mjs",
+    "sync:figma-spec": "rm -rf public/figma-spec && cp -r ../../assets/figma-spec public/figma-spec"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
