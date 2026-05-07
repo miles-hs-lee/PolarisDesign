@@ -7,6 +7,9 @@ export default defineConfig({
     'src/tailwind/index.ts',
     'src/form/index.ts',
     'src/ribbon/index.ts',
+    'src/icons/index.ts',
+    'src/file-icons/index.ts',
+    'src/logos/index.ts',
   ],
   format: ['esm', 'cjs'],
   dts: true,
@@ -25,6 +28,9 @@ export default defineConfig({
       'dist/index.js', 'dist/index.cjs',
       'dist/form/index.js', 'dist/form/index.cjs',
       'dist/ribbon/index.js', 'dist/ribbon/index.cjs',
+      'dist/icons/index.js', 'dist/icons/index.cjs',
+      'dist/file-icons/index.js', 'dist/file-icons/index.cjs',
+      'dist/logos/index.js', 'dist/logos/index.cjs',
     ];
     for (const file of targets) {
       const content = fs.readFileSync(file, 'utf8');

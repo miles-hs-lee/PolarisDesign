@@ -31,6 +31,21 @@
       "import": "./dist/ribbon/index.js",
       "require": "./dist/ribbon/index.cjs"
     },
+    "./icons": {
+      "types": "./dist/icons/index.d.ts",
+      "import": "./dist/icons/index.js",
+      "require": "./dist/icons/index.cjs"
+    },
+    "./file-icons": {
+      "types": "./dist/file-icons/index.d.ts",
+      "import": "./dist/file-icons/index.js",
+      "require": "./dist/file-icons/index.cjs"
+    },
+    "./logos": {
+      "types": "./dist/logos/index.d.ts",
+      "import": "./dist/logos/index.js",
+      "require": "./dist/logos/index.cjs"
+    },
     "./styles/tokens.css": "./src/styles/tokens.css",
     "./styles/v4-theme.css": "./src/styles/v4-theme.css"
   },
@@ -45,9 +60,13 @@
     "src/styles/v4-theme.css"
   ],
   "scripts": {
-    "build": "pnpm build:tokens && pnpm build:design-md && tsup",
+    "build": "pnpm build:tokens && pnpm build:design-md && pnpm build:icons && pnpm build:file-icons && pnpm build:logos && tsup",
     "build:tokens": "tsx scripts/build-tokens.ts",
     "build:design-md": "tsx scripts/build-design-md.ts",
+    "build:icons": "tsx scripts/build-icons.ts",
+    "build:file-icons": "tsx scripts/build-file-icons.ts",
+    "build:logos": "tsx scripts/build-logos.ts",
+    "normalize:icons": "tsx scripts/normalize-icon-names.ts",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run && node --test 'test/**/*.test.mjs'",

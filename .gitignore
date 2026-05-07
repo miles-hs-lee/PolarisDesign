@@ -17,3 +17,10 @@ test-results/
 # truth lives in the design team's Figma workspace; the .fig export
 # stays local for offline reference.
 figma/*.fig
+
+# Auto-generated icon / logo / file-icon components — regenerate via
+# `pnpm --filter @polaris/ui build`. Source SVGs live in `assets/svg/`
+# (also gitignored — design team's Figma is the canonical source).
+packages/ui/src/icons/
+packages/ui/src/file-icons/
+packages/ui/src/logos/
