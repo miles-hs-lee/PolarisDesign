@@ -1,0 +1,97 @@
+name: Release tarballs
+
+# What this does:
+#   On every `v*` git tag (incl. `v0.7.2`, `v0.8.0-rc.0`, `v1.0.0-alpha.3`),
+#   build the publishable packages, run `pnpm pack` on each, and attach the
+#   resulting `.tgz` files to the GitHub Release for that tag.
+#
+# Consumers install via the Release URL — see
+# `docs/internal-consumer-setup.md`. PolarisDesign is a public repo, so
+# downloads require **no authentication** at all.
+#
+# Why a separate workflow (not in CI):
+#   - Runs only on tag push (release event), not every PR.
+#   - Has `contents: write` permission to upload Release assets — kept
+#     minimal so the broader CI workflow stays read-only.
+#
+# Re-running:
+#   Re-tagging the same version (force-update) will re-trigger this
+#   workflow and overwrite the Release assets. To pack a past tag manually
+#   (e.g. backfill v0.7.1 / v0.7.2 which were tagged before this workflow
+#   existed), use the `workflow_dispatch` trigger and pass the tag name.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to package (e.g. v0.7.2). Must already exist on remote.'
+        required: true
+
+concurrency:
+  # One run per tag — if a tag is force-pushed mid-run, cancel the in-flight one.
+  group: release-tarballs-${{ github.event.inputs.tag || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  pack-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # upload Release assets
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # When invoked via workflow_dispatch, check out the requested tag.
+          # When invoked via tag push, github.ref_name is already the tag.
+          ref: ${{ github.event.inputs.tag || github.ref_name }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Build the publishable packages. `@polaris/plugin` and
+      # `polaris-template-next` are NOT npm-published (plugin marketplace +
+      # tiged git template respectively), so we skip them.
+      - name: Build @polaris/ui
+        run: pnpm --filter @polaris/ui build
+
+      - name: Build @polaris/lint
+        run: pnpm --filter @polaris/lint build
+
+      - name: Pack tarballs
+        run: |
+          mkdir -p dist-tarballs
+          pnpm --filter @polaris/ui   pack --pack-destination "$(pwd)/dist-tarballs"
+          pnpm --filter @polaris/lint pack --pack-destination "$(pwd)/dist-tarballs"
+          ls -la dist-tarballs/
+
+      - name: Compute SHA-256 manifest
+        # Consumers can verify integrity by comparing against the manifest.
+        # The manifest itself is also uploaded as a Release asset.
+        run: |
+          cd dist-tarballs
+          sha256sum *.tgz > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Upload tarballs to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          files: |
+            dist-tarballs/*.tgz
+            dist-tarballs/SHA256SUMS.txt
+          # If the Release for this tag doesn't exist yet, create it.
+          # Auto-generated notes supplement (don't replace) the manual
+          # CHANGELOG.md narrative — the body shows commit history since
+          # the previous tag.
+          generate_release_notes: true
+          fail_on_unmatched_files: true

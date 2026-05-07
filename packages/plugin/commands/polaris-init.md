@@ -18,24 +18,54 @@ cd $ARGUMENTS
 - Next.js 15 (App Router) + TypeScript
 - `@polaris/ui` + `@polaris/lint` 사전 통합 (v0.7 spec 토큰)
 - Tailwind preset + tokens.css 자동 import
-- 디자인팀 SVG 자산 — `@polaris/ui/icons` (65) · `/file-icons` (29) · `/logos` (Polaris + Nova) 즉시 사용 가능
+- 디자인팀 SVG 자산 — `@polaris/ui/icons` (65) · `/file-icons` (29) · `/logos` (Polaris + Nova) · `/ribbon-icons` (91) 즉시 사용 가능
 - Pretendard 폰트 (CDN)
 - `app/layout.tsx`에 ToastProvider/TooltipProvider/다크모드 영구화 wrapping
 - 샘플 `app/page.tsx`에 NovaInput, PromptChip, FileCard, Card 사용 예시
 - `prep:ui` / `prep:ui-sources` npm 스크립트 — `pnpm dev` 시 `@polaris/ui` build/source generation 자동 실행 (clean clone에서도 무중단)
 
-## 2. 의존성 설치 + dev 실행
+## 2. `workspace:*` → GitHub Release 타르볼 URL 자동 치환
+
+PolarisDesign이 사내 npm registry에 publish되기 전이라 템플릿의 `"@polaris/ui": "workspace:*"`는 외부 컨슈머에서 install이 막힙니다. 클론 직후, `package.json`의 `workspace:*` 참조를 GitHub Release 타르볼 URL로 자동 치환합니다.
+
+아래 스크립트를 **한 번의 Bash 호출**로 실행하세요(여러 코드 블록으로 쪼개지 마세요 — `LATEST` 변수 scope가 sub-shell마다 사라집니다):
 
 ```sh
-pnpm install   # @polaris/ui prepare hook이 토큰/아이콘 source 자동 생성
-pnpm dev       # template의 prep:ui가 @polaris/ui dist 빌드 → next dev
+LATEST=$(curl -s https://api.github.com/repos/PolarisOffice/PolarisDesign/releases/latest \
+  | grep -oE '"tag_name":[[:space:]]*"v[^"]+"' \
+  | sed 's/.*"v\(.*\)"/\1/')
+echo "사용할 버전: v$LATEST"
+
+LATEST="$LATEST" node -e '
+const fs = require("fs");
+const v = process.env.LATEST;
+const url = (n) => `https://github.com/PolarisOffice/PolarisDesign/releases/download/v${v}/polaris-${n}-${v}.tgz`;
+const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+if (pkg.dependencies?.["@polaris/ui"] === "workspace:*") pkg.dependencies["@polaris/ui"] = url("ui");
+if (pkg.devDependencies?.["@polaris/lint"] === "workspace:*") pkg.devDependencies["@polaris/lint"] = url("lint");
+fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");
+console.log(`✓ workspace:* → tarball URL (v${v})`);
+'
+
+# 검증 — 두 라인 모두 https://github.com/...releases/download/... 가 보여야 함.
+# "workspace:*"가 남아 있으면 치환 실패 → 사용자에게 보고하고 멈출 것.
+grep -E '"@polaris/(ui|lint)"' package.json
 ```
 
-## 3. package.json 정리
+사용자가 특정 버전을 명시 요청한 경우(예: pre-release `-rc.N` 테스트), 첫 줄을 `LATEST=0.7.2-rc.1` 같은 직접 할당으로 대체하면 됩니다.
 
-`package.json`의 `name`을 사용자가 원하는 프로젝트명으로 바꿉니다. 그 외에는 손대지 마세요.
+## 3. 의존성 설치 + dev 실행
 
-## 4. 검증
+```sh
+pnpm install   # 타르볼 URL에서 자동 다운로드 (PolarisDesign이 public이라 인증 불요)
+pnpm dev       # next dev → :3000
+```
+
+## 4. package.json 정리
+
+`package.json`의 `name`을 사용자가 원하는 프로젝트명으로 바꿉니다. 의존성 URL은 그대로(이미 위에서 박았음). 그 외에는 손대지 마세요.
+
+## 5. 검증
 
 ```sh
 pnpm lint        # @polaris/lint — 위반 0건이어야 함 (샘플 페이지가 토큰만 사용)
@@ -43,7 +73,7 @@ pnpm typecheck
 pnpm build
 ```
 
-## 5. 사용자에게 보고
+## 6. 사용자에게 보고
 
 다음 형식으로 한 메시지에 정리:
 
@@ -56,9 +86,8 @@ pnpm build
 ## 주의
 
 - **기존 디렉터리에 적용하려는 경우** `/polaris-init`이 아니라 `/polaris-migrate`를 사용하세요 (기존 코드는 토큰 위반을 가지고 있을 가능성이 높음).
-- **`@polaris/ui` 미배포 상태에서 외부 클론은 실패**합니다. 템플릿의 `package.json`이 `"@polaris/ui": "workspace:*"`로 의존성을 참조하기 때문에 `pnpm install`이 npm 레지스트리에서 패키지를 찾지 못합니다.
-  - **확인 절차**: 1단계 클론 직후 `cat package.json | grep workspace`로 workspace 참조가 남아 있는지 확인. 남아 있으면 사용자에게 다음 중 한 경로를 선택하도록 보고하세요.
-    - (a) 모노레포 안에서 작업 — 새 앱을 `packages/` 또는 `apps/` 아래에 만들고 이 템플릿 파일들을 참조
-    - (b) `@polaris/ui`/`@polaris/lint`를 사내 npm/GitHub Packages에 publish 후, `workspace:*`를 실제 버전(예: `^0.1.0`)으로 교체
-    - (c) 임시 우회: `pnpm link`로 로컬 모노레포 빌드를 새 프로젝트에 링크
-  - 위 셋 모두 사용자 결정이 필요하므로 임의로 진행하지 말고 반드시 보고할 것.
+- **타르볼 URL 치환 실패 시 멈출 것**: 2단계의 sed/node 치환 후에도 `package.json`에 `"workspace:*"`가 남아 있으면 install이 실패합니다. 그 경우 사용자에게 다음 사항을 함께 보고하고 진행을 멈추세요:
+  - 가능한 원인: GitHub API rate limit, 네트워크, jq 미설치, 또는 PolarisDesign에 아직 v\* Release가 없음 (초기 셋업 단계).
+  - 사용자에게 사용할 버전을 직접 묻기 (예: "v0.7.2"), 사용자 답변을 받아 수동 치환 후 재시도.
+- **사내 npm registry 등장 시점**: registry URL이 정해지면 이 명령의 2단계가 단순한 `pnpm install`로 바뀌고, 템플릿의 `workspace:*` 참조도 표준 semver(`^0.7.2` 등)로 교체됩니다. 그 시점까지는 위 타르볼 흐름이 default.
+- **외부 협력사 / 다른 회사**: 위 흐름은 사내 + 인증 불필요한 public Release에 의존합니다. PolarisDesign이 private으로 전환되거나 협력사가 제한적 접근만 받는 경우, GitHub PAT 셋업 단계가 추가됩니다 — 별도 가이드가 만들어질 때까지는 사용자에게 보고하고 멈출 것.

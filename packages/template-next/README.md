@@ -2,35 +2,56 @@
 
 Next.js 15 (App Router) 템플릿. 처음부터 [@polaris/ui](https://github.com/PolarisOffice/PolarisDesign) 디자인 시스템이 통합돼 있습니다.
 
-> ⚠️ **현재 한계 — `@polaris/ui` 미배포**
+> 📦 **현재 배포 모델 — GitHub Release 타르볼**
 >
-> 이 템플릿은 `@polaris/ui`와 `@polaris/lint`를 `workspace:*`로 참조합니다. 그래서 다음 두 경로 중 하나로만 동작합니다:
+> 사내 npm registry가 아직 셋업되지 않은 단계에서, `@polaris/ui` / `@polaris/lint`는 [GitHub Release](https://github.com/PolarisOffice/PolarisDesign/releases)에 첨부되는 `.tgz` 타르볼로 배포됩니다. PolarisDesign이 public repo이므로 **인증/PAT 셋업 불필요**.
 >
-> 1. **모노레포 내부에서 사용** — `packages/template-next/`를 그대로 새 디렉터리로 복사하거나, 새 앱을 모노레포 안에 만들고 이 템플릿의 파일을 참조. `pnpm install`이 workspace 의존성을 정상 해결.
-> 2. **`@polaris/ui`/`@polaris/lint`가 사내 npm 레지스트리(또는 npmjs)에 publish된 이후** — 그때부터 `workspace:*`를 실제 버전 번호로 바꾸고 외부 프로젝트에서도 `npx tiged ...` + `pnpm install`이 동작합니다.
->
-> 외부 클론(예: `npx tiged PolarisOffice/PolarisDesign/packages/template-next my-app`)을 시도하면 `pnpm install` 단계에서 `@polaris/ui`/`@polaris/lint`가 npm 레지스트리에 없어 실패합니다. 사내 레지스트리 셋업은 [메인 README](../../README.md#license)의 "다음" 항목을 참고하세요.
+> 이 템플릿의 `package.json`에는 `workspace:*`가 박혀 있어 그대로는 외부 클론에서 install이 막힙니다. **클론 직후** `workspace:*`를 타르볼 URL로 한 번 치환해야 합니다 (아래 절차 또는 `/polaris-init`이 자동으로 수행).
 
-## 시작 (모노레포 내부)
+## 시작 (외부 제품 repo)
 
-```sh
-# 모노레포 클론 후
-cd PolarisDesign
-pnpm install                                    # workspace 전체
-pnpm --filter polaris-template-next dev         # 템플릿이 그대로 dev 실행됨
+방법 1 — Claude Code `/polaris-init` 슬래시커맨드 (권장):
 ```
+/polaris-init my-app
+```
+클론 + `workspace:*` → 타르볼 URL 치환 + install + dev까지 한 번에.
 
-## 시작 (사내 레지스트리 publish 이후)
-
+방법 2 — 수동:
 ```sh
 npx tiged PolarisOffice/PolarisDesign/packages/template-next my-app
 cd my-app
-# package.json 안의 "@polaris/ui": "workspace:*"를 실제 버전으로 교체 후
+
+# 사용할 버전 결정 (가장 최신 정식 태그)
+LATEST=$(curl -s https://api.github.com/repos/PolarisOffice/PolarisDesign/releases/latest \
+  | grep -oE '"tag_name":[[:space:]]*"v[^"]+"' | sed 's/.*"v\(.*\)"/\1/')
+
+# package.json의 workspace:* → tarball URL 치환
+node -e '
+const fs = require("fs"); const v = process.env.LATEST;
+const url = (n) => `https://github.com/PolarisOffice/PolarisDesign/releases/download/v${v}/polaris-${n}-${v}.tgz`;
+const p = JSON.parse(fs.readFileSync("package.json","utf8"));
+if (p.dependencies?.["@polaris/ui"] === "workspace:*") p.dependencies["@polaris/ui"] = url("ui");
+if (p.devDependencies?.["@polaris/lint"] === "workspace:*") p.devDependencies["@polaris/lint"] = url("lint");
+fs.writeFileSync("package.json", JSON.stringify(p,null,2)+"\n");
+'
+
 pnpm install
 pnpm dev
 ```
 
-또는 Claude Code에서 `/polaris-init` 슬래시커맨드를 실행하면 위 단계와 알림을 자동으로 수행합니다.
+상세(Tailwind preset 연결, Renovate 자동 업그레이드, 트러블슈팅): 루트의 [`docs/internal-consumer-setup.md`](../../docs/internal-consumer-setup.md).
+
+## 시작 (모노레포 내부 — 디자인 시스템 자체 데모/카탈로그용)
+
+```sh
+cd PolarisDesign
+pnpm install
+pnpm --filter polaris-template-next dev   # workspace:* 그대로 동작
+```
+
+## 시작 (사내 npm registry publish 이후)
+
+registry가 셋업되면 `workspace:*`는 표준 semver(`^0.7.2`)로 교체되고, 외부 사용은 그냥 `pnpm install`이 됩니다.
 
 ## 무엇이 들어 있나
 

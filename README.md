@@ -42,21 +42,37 @@ pnpm --filter polaris-template-next dev   # → :3000 — 본인 앱 출발점
 pnpm --filter demo dev                    # → :5173 — 컴포넌트/토큰/아이콘 카탈로그
 ```
 
-> 사내 npm 레지스트리 publish 전이라 외부 클론은 `workspace:*` 의존성으로 install이 막힙니다. 그 전까지는 모노레포 내부에서 `apps/` 또는 `packages/` 아래 디렉터리를 추가해 작업하세요.
+> **모노레포 안에서 작업하는 경우**는 디자인 시스템 자체의 데모 / 토큰 viewer / 카탈로그 같은 *시스템 부속물*에만 권장합니다. 진짜 사내 제품 코드는 별도 repo에 두는 게 정상이에요. 그 경우는 ↓.
+
+### 외부 사내 제품 repo에서 install (정식 npm publish 전 임시)
+
+PolarisDesign이 public repo이므로 GitHub Release에 첨부된 타르볼을 인증 없이 install 가능:
+
+```jsonc
+// 제품 repo의 package.json
+{
+  "dependencies": {
+    "@polaris/ui": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.2/polaris-ui-0.7.2.tgz"
+  },
+  "devDependencies": {
+    "@polaris/lint": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.2/polaris-lint-0.7.2.tgz"
+  }
+}
+```
+
+상세 절차(Tailwind preset 연결, ESLint config, Renovate 자동 업그레이드, 트러블슈팅): [`docs/internal-consumer-setup.md`](docs/internal-consumer-setup.md).
 
 ### Claude Code에서 부트스트랩
 
 ```
-/polaris-init <name>          # 새 프로젝트
+/polaris-init <name>          # 새 프로젝트 (위 타르볼 URL을 자동 박아줌)
 /polaris-migrate              # 기존 코드 점진 마이그레이션
 /polaris-check                # 현재 상태 lint
 ```
 
 ### 기존 프로젝트에 토큰만 도입
 
-```sh
-pnpm add @polaris/ui @polaris/lint
-```
+[`docs/internal-consumer-setup.md`](docs/internal-consumer-setup.md)의 1~3번 절차만 따라하면 됩니다. 사내 npm registry 등장 시점에는 URL 의존성을 표준 `^0.7.2` semver로 한 줄 교체.
 
 `tailwind.config.ts`에 preset, `eslint.config.mjs`에 recommended config, 진입점에 `import '@polaris/ui/styles/tokens.css'`. 자세히 → [`packages/ui/README.md`](packages/ui/README.md).
 
