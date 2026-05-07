@@ -6,9 +6,20 @@
 
 ## 설치
 
-```sh
-pnpm add -D @polaris/lint eslint
+PolarisDesign이 사내 npm registry에 publish되기 전 단계라, `@polaris/lint`는 [GitHub Release](https://github.com/PolarisOffice/PolarisDesign/releases)의 `.tgz` 타르볼로 배포됩니다. Public repo이므로 인증 불요.
+
+`package.json`에 직접 추가:
+
+```jsonc
+{
+  "devDependencies": {
+    "@polaris/lint": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.2/polaris-lint-0.7.2.tgz",
+    "eslint": "^9.0.0"
+  }
+}
 ```
+
+그리고 `pnpm install`. 전체 셋업: [`docs/internal-consumer-setup.md`](../../docs/internal-consumer-setup.md).
 
 ## ESLint 설정
 

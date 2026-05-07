@@ -26,7 +26,7 @@ cd $ARGUMENTS
 
 ## 2. `workspace:*` → GitHub Release 타르볼 URL 자동 치환
 
-PolarisDesign이 사내 npm registry에 publish되기 전이라 템플릿의 `"@polaris/ui": "workspace:*"`는 외부 컨슈머에서 install이 막힙니다. 클론 직후, `package.json`의 `workspace:*` 참조를 GitHub Release 타르볼 URL로 자동 치환합니다.
+폴라리스 패키지는 GitHub Release에 첨부된 `.tgz` 타르볼로 배포됩니다 (사내 npm registry 셋업 시점에 표준 semver로 교체 예정). 템플릿의 `"@polaris/ui": "workspace:*"`는 모노레포 내부에서만 동작하므로, 외부 제품 repo에서는 클론 직후 `package.json`의 `workspace:*` 참조를 타르볼 URL로 자동 치환합니다.
 
 아래 스크립트를 **한 번의 Bash 호출**로 실행하세요(여러 코드 블록으로 쪼개지 마세요 — `LATEST` 변수 scope가 sub-shell마다 사라집니다):
 

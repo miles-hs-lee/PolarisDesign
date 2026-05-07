@@ -299,5 +299,5 @@ import { Table, TableRow, TableCell } from '@polaris/ui';
 ## 8. 알려진 한계
 
 - **Tailwind v3 only** — Next.js 16+ 기본인 Tailwind v4를 쓰려면 [tailwind-v4-migration.md](tailwind-v4-migration.md) 참고. v0.4에서 v4-네이티브 preset 예정.
-- **`workspace:*` 외부 클론 실패** — 사내 npm publish 전까지는 모노레포 안에서 작업하거나 link 사용. [README.md](../README.md#quick-start) 참고.
+- **외부 클론 시 `workspace:*` 치환 필요** — `template-next`를 `npx tiged`로 클론한 경우 `package.json`의 `workspace:*` 의존성을 GitHub Release 타르볼 URL로 한 번 치환해야 합니다. `/polaris-init` 슬래시커맨드가 자동 수행하거나 [internal-consumer-setup.md](internal-consumer-setup.md) 참고.
 - **react-hook-form 어댑터 없음** — 현재는 `register()` spread + `error` prop 직접 wiring. v0.4에서 wrapper 추가 예정.

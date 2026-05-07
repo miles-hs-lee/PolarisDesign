@@ -12,16 +12,25 @@
 - [ ] React 18+ 또는 19
 - [ ] Tailwind 사용 중인지 확인. 없으면 → 설치 + 설정 필요
 - [ ] Tailwind 버전 확인. **v3** 권장 (v4는 [별도 가이드](tailwind-v4-migration.md))
-- [ ] 현재 npm registry 정책 확인 (`@polaris/ui` 사내 publish 여부)
 
 ---
 
 ## M1. 의존성 + 토큰 (30분)
 
-```sh
-pnpm add @polaris/ui
-pnpm add -D @polaris/lint
+PolarisDesign은 GitHub Release에 첨부된 `.tgz` 타르볼로 배포됩니다. `package.json`에 직접 추가:
+
+```jsonc
+{
+  "dependencies": {
+    "@polaris/ui": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.2/polaris-ui-0.7.2.tgz"
+  },
+  "devDependencies": {
+    "@polaris/lint": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.2/polaris-lint-0.7.2.tgz"
+  }
+}
 ```
+
+그리고 `pnpm install`. 전체 셋업 절차는 [`docs/internal-consumer-setup.md`](internal-consumer-setup.md).
 
 `tailwind.config.ts`:
 ```ts

@@ -159,16 +159,15 @@ pnpm --filter <pkg> lint --fix
 
 ## 새 프로젝트를 만들 때
 
-`@polaris/ui`가 사내 npm 레지스트리에 publish된 후라면:
+Claude Code에서:
 
-```sh
-npx -y tiged PolarisOffice/PolarisDesign/packages/template-next my-app
-cd my-app
-pnpm install
-pnpm dev
+```
+/polaris-init my-app
 ```
 
-publish 전이라면 모노레포 내부에서 `apps/` 또는 `packages/` 아래에 새 디렉터리를 추가하고 workspace 의존성으로 작업하세요.
+이 명령이 (1) `template-next` 클론 (2) `package.json`의 `workspace:*`를 GitHub Release 타르볼 URL로 자동 치환 (3) `pnpm install` (4) `pnpm dev`까지 한 번에 수행합니다. 수동 절차는 [`docs/internal-consumer-setup.md`](docs/internal-consumer-setup.md) 참고.
+
+> 모노레포 내부에 새 디렉토리를 추가하는 경우는 디자인 시스템 자체의 부속 페이지(데모, 토큰 viewer, 카탈로그)일 때만. 진짜 제품 코드는 별도 repo에 두고 위 흐름으로 install.
 
 ## 기존 프로젝트를 폴라리스로 마이그레이션
 

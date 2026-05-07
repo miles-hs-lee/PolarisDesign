@@ -6,10 +6,22 @@
 
 ## 설치
 
-```sh
-pnpm add @polaris/ui
-pnpm add -D tailwindcss
+PolarisDesign이 사내 npm registry에 publish되기 전 단계라, `@polaris/ui`는 [GitHub Release](https://github.com/PolarisOffice/PolarisDesign/releases)의 `.tgz` 타르볼로 배포됩니다. Public repo이므로 인증 불요.
+
+`package.json`에 직접 추가:
+
+```jsonc
+{
+  "dependencies": {
+    "@polaris/ui": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.2/polaris-ui-0.7.2.tgz"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}
 ```
+
+그리고 `pnpm install`. 전체 셋업 절차(Tailwind preset 연결, tokens.css import, Renovate 자동 업그레이드, 트러블슈팅): [`docs/internal-consumer-setup.md`](../../docs/internal-consumer-setup.md). 새 프로젝트는 `/polaris-init <name>` 슬래시커맨드 한 줄로 부트스트랩 가능.
 
 ## 토큰
 

@@ -2,11 +2,9 @@
 
 Next.js 15 (App Router) 템플릿. 처음부터 [@polaris/ui](https://github.com/PolarisOffice/PolarisDesign) 디자인 시스템이 통합돼 있습니다.
 
-> 📦 **현재 배포 모델 — GitHub Release 타르볼**
+> **배포 모델** — `@polaris/ui` / `@polaris/lint`는 [GitHub Release](https://github.com/PolarisOffice/PolarisDesign/releases)에 첨부되는 `.tgz` 타르볼로 배포됩니다. PolarisDesign이 public repo이므로 인증 / PAT 셋업 불요.
 >
-> 사내 npm registry가 아직 셋업되지 않은 단계에서, `@polaris/ui` / `@polaris/lint`는 [GitHub Release](https://github.com/PolarisOffice/PolarisDesign/releases)에 첨부되는 `.tgz` 타르볼로 배포됩니다. PolarisDesign이 public repo이므로 **인증/PAT 셋업 불필요**.
->
-> 이 템플릿의 `package.json`에는 `workspace:*`가 박혀 있어 그대로는 외부 클론에서 install이 막힙니다. **클론 직후** `workspace:*`를 타르볼 URL로 한 번 치환해야 합니다 (아래 절차 또는 `/polaris-init`이 자동으로 수행).
+> 이 템플릿의 `package.json`에는 모노레포 작업용 `workspace:*` 의존성이 박혀 있어, 외부 클론 시 한 번 타르볼 URL로 치환해야 합니다 (`/polaris-init`이 자동 수행, 아래에 수동 절차).
 
 ## 시작 (외부 제품 repo)
 
@@ -48,10 +46,6 @@ cd PolarisDesign
 pnpm install
 pnpm --filter polaris-template-next dev   # workspace:* 그대로 동작
 ```
-
-## 시작 (사내 npm registry publish 이후)
-
-registry가 셋업되면 `workspace:*`는 표준 semver(`^0.7.2`)로 교체되고, 외부 사용은 그냥 `pnpm install`이 됩니다.
 
 ## 무엇이 들어 있나
 
