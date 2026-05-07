@@ -52,10 +52,12 @@ You are working on a Polaris Office web service. Apply these rules without askin
      RibbonToggleGroup, RibbonToggleItem,
    } from '@polaris/ui/ribbon';
 
-   // v0.7 — Design-team SVG assets (65 UI icons + 29 file-type + logos)
+   // v0.7 — Design-team SVG assets (65 UI icons + 29 file-type + logos + 91 ribbon)
    import { ArrowDownIcon, ChevronRightIcon, SearchIcon } from '@polaris/ui/icons';
    import { DocxIcon, FolderIcon, ZipIcon } from '@polaris/ui/file-icons';
    import { PolarisLogo, NovaLogo } from '@polaris/ui/logos';
+   // Ribbon-only icons (multi-color, native 16/32; for use INSIDE Ribbon buttons):
+   import { BoldIcon, PasteIcon, AiChatIcon } from '@polaris/ui/ribbon-icons';
    ```
 3. Native `<button>`, `<input>`, `<textarea>`, `<select>`, `<dialog>` are forbidden in feature code — the lint rule `@polaris/prefer-polaris-component` blocks them. (They're allowed inside `@polaris/ui` itself.)
 

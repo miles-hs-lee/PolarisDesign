@@ -1,0 +1,14 @@
+{
+  "mode": "pre",
+  "tag": "rc",
+  "initialVersions": {
+    "demo": "0.7.0",
+    "@polaris/lint": "0.7.0",
+    "@polaris/plugin": "0.7.0",
+    "polaris-template-next": "0.7.0",
+    "@polaris/ui": "0.7.0"
+  },
+  "changesets": [
+    "ribbon-icons-and-demo"
+  ]
+}

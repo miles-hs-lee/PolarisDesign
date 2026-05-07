@@ -143,6 +143,15 @@ import { DocxIcon, FolderIcon, ZipIcon } from '@polaris/ui/file-icons';
 import { PolarisLogo, NovaLogo } from '@polaris/ui/logos';
 <PolarisLogo variant="horizontal" size={32} />
 <NovaLogo tone="white" />
+
+// 리본 전용 아이콘 91종 (57 big × 32 + 34 small × 16 px, 멀티컬러 baked-in)
+// 큰/작은 set은 별도로 디자인됨 — 같은 슬러그가 두 set에 동시에 존재하지 않음.
+// `RIBBON_ICON_REGISTRY`로 슬러그→컴포넌트 동적 lookup, `RIBBON_ICON_BIG_SLUGS`/
+// `RIBBON_ICON_SMALL_SLUGS` Set으로 어느 set에 속하는지 판별.
+import { BoldIcon, AiChatIcon, PasteIcon } from '@polaris/ui/ribbon-icons';
+<BoldIcon />              // 16 × 16 (small native — sm/md 리본 버튼용)
+<AiChatIcon />            // 32 × 32 (big native — lg 리본 버튼용)
+<PasteIcon size={20} />   // size prop으로 균등 스케일
 ```
 
 전체 아이콘 카탈로그: [`/icons` 페이지](https://polarisoffice.github.io/PolarisDesign/#/icons).

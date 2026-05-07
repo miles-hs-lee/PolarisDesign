@@ -77,11 +77,11 @@ import {
   // insert / layout — big (32)
   TableIcon, ImageIcon as RibbonImageIcon, ImageOnlineIcon, ShapeIcon,
   HyperlinkIcon, BookmarkIcon, HorizontaltextboxIcon, SymbolIcon,
-  PageColumnIcon, Roatateright90Icon, PagescaleIcon, PagesplitIcon,
+  PageColumnIcon, Rotateright90Icon, PagescaleIcon, PagesplitIcon,
   PagesplitSheetIcon, LinebreakIcon, MarginIcon, ImagePositionIcon,
   DirectionIcon,
   SetpageIcon, SetlayoutIcon, GroupIcon,
-  MoveforwardIcon, MovebackwardIcon, NewpageIcon, Algnleft01Icon,
+  MoveforwardIcon, MovebackwardIcon, NewpageIcon, Alignleft01Icon,
   // review — big (32)
   MemoNewIcon, MemoPaneIcon, MemoDeleteIcon, MemoNextIcon, MemoPreviousIcon,
   TrackChangesIcon, TrackShowmarkupIcon, WordcountIcon,
@@ -542,8 +542,8 @@ function LayoutRibbon() {
         <RibbonMenuButton disabled icon={<GroupIcon size={24} />} menu={<DropdownMenuItem>그룹/해제</DropdownMenuItem>}>그룹</RibbonMenuButton>
         <RibbonMenuButton disabled icon={<MoveforwardIcon size={24} />} menu={<DropdownMenuItem>맨 앞으로</DropdownMenuItem>}>앞으로{'\n'}가져오기</RibbonMenuButton>
         <RibbonMenuButton disabled icon={<MovebackwardIcon size={24} />} menu={<DropdownMenuItem>맨 뒤로</DropdownMenuItem>}>뒤로{'\n'}보내기</RibbonMenuButton>
-        <RibbonMenuButton disabled icon={<Algnleft01Icon size={24} />} menu={<DropdownMenuItem>왼쪽/오른쪽/위/아래</DropdownMenuItem>}>맞춤</RibbonMenuButton>
-        <RibbonMenuButton disabled icon={<Roatateright90Icon size={24} />} menu={<><DropdownMenuItem>90° 회전</DropdownMenuItem><DropdownMenuItem>180° 회전</DropdownMenuItem></>}>회전</RibbonMenuButton>
+        <RibbonMenuButton disabled icon={<Alignleft01Icon size={24} />} menu={<DropdownMenuItem>왼쪽/오른쪽/위/아래</DropdownMenuItem>}>맞춤</RibbonMenuButton>
+        <RibbonMenuButton disabled icon={<Rotateright90Icon size={24} />} menu={<><DropdownMenuItem>90° 회전</DropdownMenuItem><DropdownMenuItem>180° 회전</DropdownMenuItem></>}>회전</RibbonMenuButton>
       </RibbonGroup>
     </RibbonContent>
   );
@@ -976,24 +976,30 @@ export default function PolarisOffice() {
 
       <Ribbon className="!border-b-2">
         <RibbonTabs value={activeTab} onValueChange={setActiveTab}>
-          <RibbonTabList>
-            <RibbonTab value="file">파일</RibbonTab>
-            <RibbonTab value="home">홈</RibbonTab>
-            <RibbonTab value="insert">삽입</RibbonTab>
-            <RibbonTab value="layout">레이아웃</RibbonTab>
-            <RibbonTab value="review">검토</RibbonTab>
-            <RibbonTab value="view">보기</RibbonTab>
-            <RibbonTab value="pen">펜</RibbonTab>
-            <RibbonTab value="ai" className="relative pr-3">
-              AI 도구
-              <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-polaris-pill bg-status-danger" aria-hidden="true" />
-            </RibbonTab>
-            <span className="ml-auto inline-flex items-center pr-2">
-              <Button variant="ghost" size="sm" aria-label="리본 접기" className="!h-8 !w-8 !px-0">
-                <ChevronUp className="h-4 w-4 text-label-alternative" />
-              </Button>
-            </span>
-          </RibbonTabList>
+          {/* The tablist + collapse button sit on the same baseline, but
+              ARIA's `role="tablist"` should only contain `role="tab"`
+              children. Wrap them in a flex parent and pull the
+              border-bottom up to the wrapper so the visual line stays
+              continuous while keeping the collapse affordance outside
+              the Radix tablist. */}
+          <div className="flex items-center border-b border-line-neutral">
+            <RibbonTabList className="!border-b-0 flex-1 min-w-0">
+              <RibbonTab value="file">파일</RibbonTab>
+              <RibbonTab value="home">홈</RibbonTab>
+              <RibbonTab value="insert">삽입</RibbonTab>
+              <RibbonTab value="layout">레이아웃</RibbonTab>
+              <RibbonTab value="review">검토</RibbonTab>
+              <RibbonTab value="view">보기</RibbonTab>
+              <RibbonTab value="pen">펜</RibbonTab>
+              <RibbonTab value="ai" className="relative pr-3">
+                AI 도구
+                <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-polaris-pill bg-status-danger" aria-hidden="true" />
+              </RibbonTab>
+            </RibbonTabList>
+            <Button variant="ghost" size="sm" aria-label="리본 접기" className="!h-8 !w-8 !px-0 mr-2 shrink-0">
+              <ChevronUp className="h-4 w-4 text-label-alternative" />
+            </Button>
+          </div>
 
           <HomeRibbon />
           <InsertRibbon />

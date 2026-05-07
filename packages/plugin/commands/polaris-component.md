@@ -42,6 +42,8 @@ import {
 import { ArrowDownIcon, ChevronRightIcon, SearchIcon } from '@polaris/ui/icons';
 import { DocxIcon, FolderIcon, ZipIcon } from '@polaris/ui/file-icons';
 import { PolarisLogo, NovaLogo } from '@polaris/ui/logos';
+// 리본 전용 아이콘 (Office 리본 버튼 안에서만 사용 — 57 big × 32 + 34 small × 16):
+import { BoldIcon, PasteIcon, AiChatIcon } from '@polaris/ui/ribbon-icons';
 ```
 
 prop·variants를 임의로 추가하지 말 것. 부족하다고 느끼면 4번으로.

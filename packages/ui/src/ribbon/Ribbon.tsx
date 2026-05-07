@@ -257,7 +257,7 @@ export const RibbonSeparator = forwardRef<HTMLDivElement, React.HTMLAttributes<H
       ref={ref}
       role="separator"
       aria-orientation="vertical"
-      className={cn('mx-0 my-1 w-px shrink-0 bg-surface-border', className)}
+      className={cn('mx-0 my-1 w-px shrink-0 bg-line-neutral', className)}
       {...props}
     />
   )
@@ -276,7 +276,7 @@ export const RibbonRowDivider = forwardRef<HTMLDivElement, React.HTMLAttributes<
       ref={ref}
       role="separator"
       aria-orientation="vertical"
-      className={cn('mx-1 h-4 w-px shrink-0 bg-surface-border self-center', className)}
+      className={cn('mx-1 h-4 w-px shrink-0 bg-line-neutral self-center', className)}
       {...props}
     />
   )

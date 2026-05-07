@@ -6,9 +6,39 @@
 
 ---
 
-## [Unreleased]
+## [Unreleased] — 0.7.1-rc.0
 
-다음 릴리스 candidate — [docs/roadmap.md](docs/roadmap.md) v0.7.x / v0.8 섹션.
+v0.7.0 위에 누적된 추가 — **breaking 없음**, 디자인 시스템에 ribbon 아이콘 셋 추가 + 데모 페이지를 실제 폴라리스 오피스 워드 리본에 맞춰 재구성.
+
+### 신규 — `@polaris/ui/ribbon-icons` (91 디자인팀 아이콘)
+
+리본 버튼 안에서 사용하는 멀티컬러 아이콘 셋. UI 아이콘(`@polaris/ui/icons`, monochrome + currentColor)과 별도 — 색상이 디자인팀에 의해 baked in 됨.
+- **57 big × 32 px** — `RibbonButton size="lg"` (icon-over-label) 용
+- **34 small × 16 px** — `RibbonButton size="sm/md"` (icon-only / icon-before-label) 용. big의 축소가 아닌 별도 디자인.
+- `RIBBON_ICON_REGISTRY` (슬러그→컴포넌트), `RIBBON_ICON_BIG_SLUGS` / `RIBBON_ICON_SMALL_SLUGS` Set으로 어느 셋에 속하는지 판별.
+
+### 데모 페이지 재구성
+
+- `/polaris-office`를 실제 폴라리스 오피스 워드 리본에 맞춰 5개 탭 (홈/삽입/레이아웃/검토/AI 도구) 모두 재배치. lucide-react best-effort 매칭 → 91/91 디자인팀 ribbon-icon 사용.
+- 파일 백스테이지 메뉴 폰트 weight 정정 (제품 실측에 맞춰 bold/semibold 제거).
+- 탭 헤더의 "리본 접기" 버튼을 `<RibbonTabList>` 외부로 이동 (`role="tablist"` ARIA 위반 정정).
+- `/icons` 카탈로그 페이지에 ribbon 섹션 추가 (big/small 분리 표시).
+
+### Ribbon 컴포넌트 폴리시
+
+`RibbonSeparator` / `RibbonRowDivider`가 deprecated alias `bg-surface-border` 대신 v0.7 spec 토큰 `bg-line-neutral` 사용 (v0.8의 alias 제거에 미리 대비).
+
+### Generator infra
+
+`build-icons` / `build-file-icons` / `build-logos` / `build-ribbon-icons` 4종이 idempotent + 동시 실행 안전. `pnpm -r typecheck`처럼 동일 출력 디렉토리에 대한 병렬 invocation에서 발생하던 `ENOTEMPTY` 경쟁 상태 해소 (`rmSync` 제거 → `mkdir(recursive)` + 파일 단위 overwrite + best-effort orphan prune 패턴).
+
+### Asset 정정
+
+디자인팀 export 파일명 오타 두 건 정정:
+- `roatateright90` → `rotateright90`
+- `algnleft01` → `alignleft01`
+
+정식 첫 릴리즈 전이라 외부 영향 없음 (ribbon-icons 자체가 0.7.1에 처음 노출).
 
 ---
 

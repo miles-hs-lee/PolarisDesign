@@ -61,10 +61,12 @@ import {
   RibbonToggleGroup, RibbonToggleItem,
 } from '@polaris/ui/ribbon';
 
-// v0.7+ — 디자인팀 SVG 자산 (65 UI 아이콘 + 29 파일 + 로고)
+// v0.7+ — 디자인팀 SVG 자산 (65 UI 아이콘 + 29 파일 + 로고 + 91 리본)
 import { ArrowDownIcon, ChevronRightIcon, SearchIcon } from '@polaris/ui/icons';
 import { DocxIcon, FolderIcon, ZipIcon } from '@polaris/ui/file-icons';
 import { PolarisLogo, NovaLogo } from '@polaris/ui/logos';
+// 리본 전용 (Office 리본 버튼용 멀티컬러 아이콘 — 57 big × 32 + 34 small × 16):
+import { BoldIcon, PasteIcon, AiChatIcon } from '@polaris/ui/ribbon-icons';
 ```
 
 native `<button>`, `<input>`, `<textarea>`, `<select>`, `<dialog>`은 **feature 코드에서 금지**. ESLint 룰 `@polaris/prefer-polaris-component`가 차단합니다 (단, `<button type="submit">`는 form-control 패턴이라 허용).
