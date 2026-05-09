@@ -107,6 +107,7 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from '@polaris/ui';
+import { BellIcon, DeleteIcon, DownloadIcon, FolderIcon, ImageIcon, PencilLineIcon, PlusIcon, SearchIcon, SettingsIcon } from '@polaris/ui/icons';
 import {
   Form,
   FormField,
@@ -133,44 +134,7 @@ import type { DateRange } from 'react-day-picker';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {
-  Plus,
-  Sparkles,
-  MoreHorizontal,
-  Copy,
-  Download,
-  Pencil,
-  Trash2,
-  Search,
-  Image as ImageIcon,
-  FileText,
-  Home,
-  Star,
-  Folder,
-  Trash,
-  Bell,
-  Settings,
-  HelpCircle,
-  TrendingUp,
-  Clipboard,
-  Bold,
-  Italic,
-  Underline,
-  Strikethrough,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  AlignJustify,
-  List,
-  ListOrdered,
-  Link as LinkIcon,
-  Code,
-  Quote,
-  Heading1,
-  Heading2,
-  Highlighter,
-  Type,
-} from 'lucide-react';
+import { Sparkles, MoreHorizontal, Copy, FileText, Home, Star, HelpCircle, TrendingUp, Clipboard, Bold, Italic, Underline, Strikethrough, AlignLeft, AlignCenter, AlignRight, AlignJustify, List, ListOrdered, Link as LinkIcon, Code, Quote, Heading1, Heading2, Highlighter, Type } from 'lucide-react';
 
 type ToastEntry = { id: number; title: string; description?: string; variant: 'info' | 'success' | 'warning' | 'danger' };
 
@@ -225,7 +189,7 @@ export default function Components() {
           <Button size="md">Medium</Button>
           <Button size="lg">Large</Button>
           <Button size="md">
-            <Plus className="h-4 w-4" /> 새 문서
+            <PlusIcon className="h-4 w-4" /> 새 문서
           </Button>
         </div>
       </Section>
@@ -432,17 +396,17 @@ export default function Components() {
           <DropdownMenuContent align="start">
             <DropdownMenuLabel>문서 액션</DropdownMenuLabel>
             <DropdownMenuItem onSelect={() => pushToast('info', '편집 모드로 전환')}>
-              <Pencil className="h-4 w-4" /> 편집
+              <PencilLineIcon className="h-4 w-4" /> 편집
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => pushToast('info', '복제 완료')}>
               <Copy className="h-4 w-4" /> 복제
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => pushToast('info', '다운로드 시작')}>
-              <Download className="h-4 w-4" /> 다운로드
+              <DownloadIcon className="h-4 w-4" /> 다운로드
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem destructive onSelect={() => pushToast('danger', '문서 삭제됨')}>
-              <Trash2 className="h-4 w-4" /> 삭제
+              <DeleteIcon className="h-4 w-4" /> 삭제
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -452,17 +416,17 @@ export default function Components() {
         <div className="flex flex-wrap gap-3">
           <SimpleTooltip label="새 문서를 만듭니다">
             <Button size="sm">
-              <Plus className="h-4 w-4" /> 새 문서
+              <PlusIcon className="h-4 w-4" /> 새 문서
             </Button>
           </SimpleTooltip>
           <SimpleTooltip label="알림 (3개)" side="bottom">
             <Button variant="ghost" size="sm" aria-label="알림">
-              <Bell className="h-4 w-4" />
+              <BellIcon className="h-4 w-4" />
             </Button>
           </SimpleTooltip>
           <SimpleTooltip label="설정" side="bottom">
             <Button variant="ghost" size="sm" aria-label="설정">
-              <Settings className="h-4 w-4" />
+              <SettingsIcon className="h-4 w-4" />
             </Button>
           </SimpleTooltip>
           <SimpleTooltip label="도움말 — 자세한 안내는 도움말 센터에서 확인할 수 있습니다." side="right">
@@ -524,13 +488,13 @@ export default function Components() {
             <SidebarBody>
               <SidebarSection>
                 <SidebarItem icon={<Home className="h-4 w-4" />} label="홈" active />
-                <SidebarItem icon={<Folder className="h-4 w-4" />} label="폴라리스 드라이브" />
+                <SidebarItem icon={<FolderIcon className="h-4 w-4" />} label="폴라리스 드라이브" />
                 <SidebarItem icon={<Sparkles className="h-4 w-4" />} label="NOVA" trailing={<Badge variant="secondary">AI</Badge>} />
               </SidebarSection>
               <SidebarSection title="문서">
                 <SidebarItem icon={<FileText className="h-4 w-4" />} label="공유 문서" />
                 <SidebarItem icon={<Star className="h-4 w-4" />} label="중요 문서" trailing={<Badge variant="neutral">12</Badge>} />
-                <SidebarItem icon={<Trash className="h-4 w-4" />} label="휴지통" />
+                <SidebarItem icon={<DeleteIcon className="h-4 w-4" />} label="휴지통" />
               </SidebarSection>
             </SidebarBody>
             <SidebarFooter>
@@ -558,12 +522,12 @@ export default function Components() {
             <NavbarActions>
               <SimpleTooltip label="알림" side="bottom">
                 <Button variant="ghost" size="sm" aria-label="알림">
-                  <Bell className="h-4 w-4" />
+                  <BellIcon className="h-4 w-4" />
                 </Button>
               </SimpleTooltip>
               <SimpleTooltip label="설정" side="bottom">
                 <Button variant="ghost" size="sm" aria-label="설정">
-                  <Settings className="h-4 w-4" />
+                  <SettingsIcon className="h-4 w-4" />
                 </Button>
               </SimpleTooltip>
               <Avatar size="sm"><AvatarFallback>이</AvatarFallback></Avatar>
@@ -575,7 +539,7 @@ export default function Components() {
       <Section title="18. PromptChip (Tier 1, 폴라리스 고유)">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <PromptChip
-            icon={<Search className="h-4 w-4" />}
+            icon={<SearchIcon className="h-4 w-4" />}
             onClick={() => pushToast('info', '검색 시작', '2025년 소비자 트렌드')}
           >
             2025년 소비자 트렌드를 산업별로 심층 조사해줘

@@ -28,25 +28,8 @@ import {
   DropdownMenuSeparator,
   cn,
 } from '@polaris/ui';
-import {
-  Home as HomeIcon,
-  Sparkles,
-  Briefcase,
-  PenSquare,
-  Layers,
-  Palette,
-  Image as ImageIcon,
-  Bell,
-  Settings,
-  HelpCircle,
-  Search,
-  LogOut,
-  User,
-  Menu as MenuIcon,
-  FileText,
-  FilePen,
-  X as XIcon,
-} from 'lucide-react';
+import { BellIcon, ImageIcon, MenuIcon, SearchIcon, SettingsIcon, UserIcon } from '@polaris/ui/icons';
+import { Home as HomeIcon, Sparkles, Briefcase, PenSquare, Layers, Palette, HelpCircle, LogOut, FileText, FilePen, X as XIcon } from 'lucide-react';
 
 type Theme = 'light' | 'dark';
 
@@ -193,7 +176,7 @@ export function Layout() {
               </NavbarBrand>
               <NavbarNav>
                 <div className="hidden md:block relative w-full max-w-md">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-label-alternative pointer-events-none z-10" aria-hidden="true" />
+                  <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-label-alternative pointer-events-none z-10" aria-hidden="true" />
                   <Input
                     type="search"
                     placeholder="문서·계약·NOVA 응답 검색"
@@ -209,7 +192,7 @@ export function Layout() {
                 </SimpleTooltip>
                 <SimpleTooltip label="알림 (3건)" side="bottom">
                   <Button variant="ghost" size="sm" aria-label="알림" className="relative">
-                    <Bell className="h-4 w-4" />
+                    <BellIcon className="h-4 w-4" />
                     <span
                       aria-hidden="true"
                       className="absolute top-1 right-1 inline-flex h-1.5 w-1.5 rounded-polaris-pill bg-state-error"
@@ -218,7 +201,7 @@ export function Layout() {
                 </SimpleTooltip>
                 <SimpleTooltip label="설정" side="bottom">
                   <Button variant="ghost" size="sm" aria-label="설정">
-                    <Settings className="h-4 w-4" />
+                    <SettingsIcon className="h-4 w-4" />
                   </Button>
                 </SimpleTooltip>
                 <DropdownMenu>
@@ -239,7 +222,7 @@ export function Layout() {
                     <div className="px-2.5 pb-1.5 text-polaris-caption1 text-label-alternative">miles@polaris.example</div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={() => alert('계정 설정')}>
-                      <User className="h-4 w-4" /> 계정 설정
+                      <UserIcon className="h-4 w-4" /> 계정 설정
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={toggleTheme}>
                       {theme === 'dark' ? '☀ 라이트 모드로' : '🌙 다크 모드로'}

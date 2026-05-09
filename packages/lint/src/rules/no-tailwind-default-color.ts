@@ -150,7 +150,12 @@ const rule: Rule.RuleModule = {
         // 3+ digit shades (100/200/.../900) on the same palette name
         // fall through to Tailwind defaults — flagged.
         if (POLARIS_OWNED_PALETTES.has(palette) && shade.length <= 2) continue;
-        const hint = SEMANTIC_HINT[palette] ?? 'a Polaris semantic token';
+        // Special case for `neutral` — Polaris extends it but with the
+        // *deprecated rc.0 palette* (purple-tinted gray). Hint at the
+        // semantic v0.7 replacement instead of generic "a Polaris token".
+        const hint = palette === 'neutral'
+          ? 'label-* / fill-* / line-* (rc.0 neutral ramp는 deprecated)'
+          : (SEMANTIC_HINT[palette] ?? 'a Polaris semantic token');
         context.report({
           node,
           messageId: 'tailwindDefault',

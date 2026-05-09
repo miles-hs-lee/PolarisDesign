@@ -15,20 +15,8 @@ import {
   DropdownMenuSeparator,
   cn,
 } from '@polaris/ui';
-import {
-  Search,
-  Plus,
-  MoreVertical,
-  Inbox,
-  CheckCircle2,
-  Clock3,
-  ChevronRight,
-  Eye,
-  Copy,
-  Send,
-  Bell,
-  Trash2,
-} from 'lucide-react';
+import { BellIcon, ChevronRightIcon, DeleteIcon, PlusIcon, SearchIcon, SendIcon } from '@polaris/ui/icons';
+import { MoreVertical, Inbox, CheckCircle2, Clock3, Eye, Copy } from 'lucide-react';
 
 type ContractStatus = 'in_progress' | 'completed' | 'expiring' | 'declined';
 
@@ -148,7 +136,7 @@ export default function SignContractList() {
             </p>
           </div>
           <Button>
-            <Plus className="h-4 w-4" aria-hidden="true" /> 새 계약 보내기
+            <PlusIcon className="h-4 w-4" aria-hidden="true" /> 새 계약 보내기
           </Button>
         </div>
       </header>
@@ -161,12 +149,12 @@ export default function SignContractList() {
         <StatCard icon={CheckCircle2} label="완료" value={stats.completed} tone="success" />
       </div>
 
-      {/* Search + Filter */}
+      {/* SearchIcon + Filter */}
       <Card className="mb-4">
         <CardBody className="!py-4">
           <div className="flex flex-col md:flex-row gap-3 md:items-center">
             <div className="relative flex-1 min-w-0">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-label-alternative pointer-events-none" aria-hidden="true" />
+              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-label-alternative pointer-events-none" aria-hidden="true" />
               <Input
                 placeholder="계약명, 거래처, 이메일로 검색"
                 value={query}
@@ -318,7 +306,7 @@ function ContractRow({ contract: c }: { contract: Contract }) {
 
             <div className="flex items-center gap-1 md:justify-end shrink-0">
               <Button variant="ghost" size="sm">
-                보기 <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                보기 <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -335,17 +323,17 @@ function ContractRow({ contract: c }: { contract: Contract }) {
                   </DropdownMenuItem>
                   {c.status === 'in_progress' && (
                     <DropdownMenuItem onSelect={() => alert(`독촉: ${c.id}`)}>
-                      <Bell className="h-4 w-4" /> 서명 독촉
+                      <BellIcon className="h-4 w-4" /> 서명 독촉
                     </DropdownMenuItem>
                   )}
                   {c.status === 'expiring' && (
                     <DropdownMenuItem onSelect={() => alert(`재발송: ${c.id}`)}>
-                      <Send className="h-4 w-4" /> 재발송
+                      <SendIcon className="h-4 w-4" /> 재발송
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem destructive onSelect={() => alert(`취소: ${c.id}`)}>
-                    <Trash2 className="h-4 w-4" /> 계약 취소
+                    <DeleteIcon className="h-4 w-4" /> 계약 취소
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

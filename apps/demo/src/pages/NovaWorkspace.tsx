@@ -25,24 +25,8 @@ import {
   AvatarFallback,
   cn,
 } from '@polaris/ui';
-import {
-  Sparkles,
-  Search,
-  FileText,
-  Image as ImageIcon,
-  Code2,
-  Languages,
-  Mic,
-  ChevronDown,
-  Plus,
-  Copy,
-  Share2,
-  Star,
-  Trash2,
-  Info,
-  History,
-  ArrowRight,
-} from 'lucide-react';
+import { ArrowRightIcon, ChevronDownIcon, DeleteIcon, HistoryIcon, ImageIcon, InfoCircleIcon, PlusIcon, SearchIcon, ShareIcon, TranslateIcon } from '@polaris/ui/icons';
+import { Sparkles, FileText, Code2, Mic, Copy, Star } from 'lucide-react';
 
 type Length = 'short' | 'medium' | 'long';
 type Tone = 'formal' | 'friendly' | 'concise';
@@ -92,10 +76,10 @@ function NovaHeroBackground() {
 }
 
 const PROMPT_TEMPLATES = [
-  { icon: Search, label: '트렌드 조사', prompt: '2025년 소비자 트렌드를 산업별로 심층 조사해 줘' },
+  { icon: SearchIcon, label: '트렌드 조사', prompt: '2025년 소비자 트렌드를 산업별로 심층 조사해 줘' },
   { icon: FileText, label: '회의록 요약', prompt: '회의의 주요 내용을 한 장 분량으로 간결하게 요약해 줘' },
   { icon: ImageIcon, label: '키 비주얼', prompt: '보고서 주제에 맞는 키 비주얼 이미지를 만들어 줘' },
-  { icon: Languages, label: '영문 번역', prompt: '이 문서를 자연스러운 영문으로 번역해 줘' },
+  { icon: TranslateIcon, label: '영문 번역', prompt: '이 문서를 자연스러운 영문으로 번역해 줘' },
 ] as const;
 
 const MORE_TEMPLATES = [
@@ -238,7 +222,7 @@ export default function NovaWorkspace() {
             <div className="flex items-center gap-2">
               <span className="text-label-alternative">응답 길이</span>
               <SimpleTooltip label="응답의 분량을 조절합니다. 보통 = 한 화면 분량.">
-                <Info className="h-3.5 w-3.5 text-label-alternative" aria-hidden="true" />
+                <InfoCircleIcon className="h-3.5 w-3.5 text-label-alternative" aria-hidden="true" />
               </SimpleTooltip>
               <Select value={length} onValueChange={(v) => setLength(v as Length)}>
                 <SelectTrigger className="!h-9 !w-32">
@@ -255,7 +239,7 @@ export default function NovaWorkspace() {
             <div className="flex items-center gap-2">
               <span className="text-label-alternative">톤</span>
               <SimpleTooltip label="응답의 어조. 사내 보고서면 정중함, 메모면 간결을 추천.">
-                <Info className="h-3.5 w-3.5 text-label-alternative" aria-hidden="true" />
+                <InfoCircleIcon className="h-3.5 w-3.5 text-label-alternative" aria-hidden="true" />
               </SimpleTooltip>
               <Select value={tone} onValueChange={(v) => setTone(v as Tone)}>
                 <SelectTrigger className="!h-9 !w-32">
@@ -272,8 +256,8 @@ export default function NovaWorkspace() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="tertiary" size="sm">
-                  <History className="h-4 w-4" /> 최근 설정
-                  <ChevronDown className="h-3.5 w-3.5 ml-1" aria-hidden="true" />
+                  <HistoryIcon className="h-4 w-4" /> 최근 설정
+                  <ChevronDownIcon className="h-3.5 w-3.5 ml-1" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -304,7 +288,7 @@ export default function NovaWorkspace() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm">
-                    <Plus className="h-4 w-4" /> 템플릿 추가
+                    <PlusIcon className="h-4 w-4" /> 템플릿 추가
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -319,7 +303,7 @@ export default function NovaWorkspace() {
                   })}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onSelect={() => alert('새 템플릿 만들기')}>
-                    <Plus className="h-4 w-4" /> 새 템플릿 만들기
+                    <PlusIcon className="h-4 w-4" /> 새 템플릿 만들기
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -343,7 +327,7 @@ export default function NovaWorkspace() {
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-polaris-heading-sm">NOVA로 할 수 있는 것</h2>
           <Button variant="ghost" size="sm">
-            전체 보기 <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            전체 보기 <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -408,7 +392,7 @@ export default function NovaWorkspace() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" aria-label="더보기" className="!h-7 !w-7 !px-0">
-                        <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+                        <ChevronDownIcon className="h-3.5 w-3.5" aria-hidden="true" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -416,14 +400,14 @@ export default function NovaWorkspace() {
                         <Copy className="h-4 w-4" /> 복사
                       </DropdownMenuItem>
                       <DropdownMenuItem onSelect={() => alert('공유')}>
-                        <Share2 className="h-4 w-4" /> 공유
+                        <ShareIcon className="h-4 w-4" /> 공유
                       </DropdownMenuItem>
                       <DropdownMenuItem onSelect={() => alert(r.starred ? '즐겨찾기 해제' : '즐겨찾기')}>
                         <Star className="h-4 w-4" /> {r.starred ? '즐겨찾기 해제' : '즐겨찾기'}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem destructive onSelect={() => alert('삭제')}>
-                        <Trash2 className="h-4 w-4" /> 삭제
+                        <DeleteIcon className="h-4 w-4" /> 삭제
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

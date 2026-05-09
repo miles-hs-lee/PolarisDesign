@@ -53,7 +53,7 @@ pnpm --filter polaris-template-next dev   # workspace:* 그대로 동작
 
 - **`@polaris/ui`** — 토큰 + 18개 컴포넌트, `app/page.tsx`에서 바로 사용 가능
 - **`@polaris/lint`** — `eslint.config.mjs`에 recommended 프리셋 적용
-- **Tailwind preset** — `bg-brand-primary`, `text-fg-primary`, `rounded-polaris-md` 등 토큰 클래스 자동 등록
+- **Tailwind preset** — `bg-accent-brand-normal`, `text-label-normal`, `rounded-polaris-md` 등 v0.7 spec 토큰 클래스 자동 등록
 - **Pretendard** 폰트 CDN 로드
 - **다크모드** 토글 컴포넌트(`components/theme-toggle.tsx`) — `localStorage`에 영구화
 - **샘플 페이지** — NovaInput, PromptChip, FileCard, Card 조합 예시
@@ -64,7 +64,7 @@ pnpm --filter polaris-template-next dev   # workspace:* 그대로 동작
 2. `app/page.tsx`의 샘플 콘텐츠를 실제 화면으로 교체
 3. 새 라우트는 `app/<path>/page.tsx` 추가
 4. 컴포넌트는 `@polaris/ui`에서 import — 직접 native `<button>`, `<input>` 사용 시 lint 차단
-5. 색상·폰트·간격은 모두 토큰만 사용 (`text-fg-primary`, `bg-brand-primary`, `p-4` 등)
+5. 색상·폰트·간격은 모두 v0.7 spec 토큰만 사용 (`text-label-normal`, `bg-accent-brand-normal`, `p-4` 등)
 
 ## 검증
 

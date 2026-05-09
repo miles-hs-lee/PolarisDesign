@@ -25,6 +25,7 @@ import {
   DropdownMenuItem,
   cn,
 } from '@polaris/ui';
+import { ArrowLeftIcon, BellIcon, ChevronDownIcon, ChevronUpIcon, FolderIcon, HistoryIcon, MenuIcon, PencilLineIcon } from '@polaris/ui/icons';
 import {
   Ribbon,
   RibbonTabs,
@@ -42,17 +43,7 @@ import {
   RibbonToggleGroup,
   RibbonToggleItem,
 } from '@polaris/ui/ribbon';
-import {
-  // chrome + file backstage (no polaris ribbon-icon equivalents)
-  Menu, Star, Save, ChevronDown, ChevronUp, Monitor, UsersRound, Bell,
-  ArrowLeft, HardDrive, Folder as FolderIcon, History,
-  // home tab — only kept where no ribbon-icon equivalent exists
-  ArrowLeftRight, WrapText, CornerDownLeft, Pilcrow,
-  Pencil,
-  // AI tab — sparkles overlay only
-  Sparkles,
-  type LucideIcon,
-} from 'lucide-react';
+import { Star, Save, Monitor, UsersRound, HardDrive, ArrowLeftRight, WrapText, CornerDownLeft, Pilcrow, Sparkles } from 'lucide-react';
 
 // v0.7+ — design-team ribbon icons (multi-color, native sizes 16/32).
 // Every icon in `@polaris/ui/ribbon-icons` is referenced somewhere in this
@@ -126,12 +117,12 @@ function OverlayIcon({ base, overlay }: { base: ReactNode; overlay: ReactNode })
 function EditorChrome() {
   return (
     <div className="flex items-center gap-2 h-12 px-3 border-b border-line-neutral bg-background-normal">
-      <Button variant="ghost" size="sm" aria-label="Menu" className="!h-9 !w-9 !px-0 shrink-0">
-        <Menu className="h-5 w-5 text-accent-brand-normal" />
+      <Button variant="ghost" size="sm" aria-label="메뉴" className="!h-9 !w-9 !px-0 shrink-0">
+        <MenuIcon className="h-5 w-5 text-accent-brand-normal" />
       </Button>
       <div className="flex items-center gap-1.5 text-polaris-body2 min-w-0">
         <span className="truncate">NewDocument 2026-05-07 211414.docx</span>
-        <ChevronDown className="h-4 w-4 text-label-alternative shrink-0" aria-hidden="true" />
+        <ChevronDownIcon className="h-4 w-4 text-label-alternative shrink-0" aria-hidden="true" />
       </div>
       <Button variant="ghost" size="sm" aria-label="즐겨찾기" className="!h-8 !w-8 !px-0 ml-1 shrink-0 hidden sm:inline-flex">
         <Star className="h-4 w-4 text-label-alternative" />
@@ -154,7 +145,7 @@ function EditorChrome() {
           <span className="hidden md:inline">공유</span>
         </Button>
         <Button variant="ghost" size="sm" aria-label="알림" className="gap-1.5">
-          <Bell className="h-4 w-4" aria-hidden="true" />
+          <BellIcon className="h-4 w-4" aria-hidden="true" />
           <span className="hidden md:inline">알림</span>
         </Button>
         <Button variant="ghost" size="sm" aria-label="Miles (이해석)" className="gap-1.5">
@@ -675,7 +666,7 @@ function AIToolsRibbon() {
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<AiWriteIcon size={24} />}
-            overlay={<Pencil className="h-3 w-3 absolute -bottom-0.5 -right-0.5 text-ai-normal" />}
+            overlay={<PencilLineIcon className="h-3 w-3 absolute -bottom-0.5 -right-0.5 text-ai-normal" />}
           />
         }>AI{'\n'}Write</RibbonButton>
         <RibbonButton size="lg" icon={
@@ -797,8 +788,11 @@ function NewDocPane() {
 }
 
 function OpenDocPane() {
-  const places: Array<{ icon: LucideIcon; iconClass: string; label: string }> = [
-    { icon: History, iconClass: 'text-label-alternative', label: '최근 문서' },
+  // 배열 안 아이콘이 lucide(Star/Monitor/UsersRound/HardDrive)와 polaris
+  // (HistoryIcon)의 mix — 둘 다 className/aria-hidden 인터페이스가 동일
+  // 하므로 React.ElementType으로 widen.
+  const places: Array<{ icon: React.ElementType; iconClass: string; label: string }> = [
+    { icon: HistoryIcon, iconClass: 'text-label-alternative', label: '최근 문서' },
     { icon: Monitor, iconClass: 'text-label-alternative', label: '내 컴퓨터' },
     { icon: HardDrive, iconClass: 'text-accent-brand-normal', label: '폴라리스 드라이브' },
     { icon: UsersRound, iconClass: 'text-state-success', label: '공유 문서' },
@@ -917,7 +911,7 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
             aria-label="문서로 돌아가기"
             className="!h-9 !w-9 !px-0"
           >
-            <ArrowLeft className="h-5 w-5 text-accent-brand-normal" />
+            <ArrowLeftIcon className="h-5 w-5 text-accent-brand-normal" />
           </Button>
         </div>
         <nav aria-label="파일 메뉴" className="px-2 pb-4">
@@ -1007,7 +1001,7 @@ export default function PolarisOffice() {
               </RibbonTab>
             </RibbonTabList>
             <Button variant="ghost" size="sm" aria-label="리본 접기" className="!h-8 !w-8 !px-0 mr-2 shrink-0">
-              <ChevronUp className="h-4 w-4 text-label-alternative" />
+              <ChevronUpIcon className="h-4 w-4 text-label-alternative" />
             </Button>
           </div>
 

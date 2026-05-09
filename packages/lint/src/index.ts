@@ -12,7 +12,10 @@ import noNonPolarisCssVar from './rules/no-non-polaris-css-var';
 
 const meta = {
   name: '@polaris/lint',
-  version: '0.5.0',
+  // ESLint Plugin spec의 meta.version — `pnpm version` 시점에
+  // `scripts/sync-root-version.mjs`가 이 줄의 string literal을 자동
+  // 교체합니다 (TS_TARGETS regex). 손으로 갱신하지 마세요.
+  version: '0.7.3',
 } as const;
 
 const rules = {

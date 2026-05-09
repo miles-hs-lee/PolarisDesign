@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Card, CardBody, Badge, cn } from '@polaris/ui';
-import { Layers, FileText, Mail, Palette, ArrowRight, Sparkles, FileSpreadsheet } from 'lucide-react';
+import { ArrowRightIcon } from '@polaris/ui/icons';
+import { Layers, FileText, Mail, Palette, Sparkles, FileSpreadsheet } from 'lucide-react';
 
 const CARDS = [
   {
@@ -87,7 +88,7 @@ export default function Home() {
                     'inline-flex items-center gap-1 text-polaris-body2',
                     isAi ? 'text-ai-normal' : 'text-accent-brand-normal'
                   )}>
-                    살펴보기 <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    살펴보기 <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
                   </span>
                 </CardBody>
               </Card>
@@ -111,7 +112,7 @@ export default function Home() {
                 4색 브랜드 팔레트와 NOVA 보라, 뉴트럴, 타이포·반경·그림자까지 한 페이지에서.
               </p>
               <span className="inline-flex items-center gap-1 text-polaris-body2 text-ai-normal">
-                토큰 보기 <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                토큰 보기 <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
               </span>
             </CardBody>
           </Card>

@@ -11,7 +11,7 @@
  *
  *   1. <PolarisLogo>            — Footer 브랜드 마크
  *   2. <NovaLogo> + AI Purple   — 공고문 분석 / 초안 자동 작성 CTA
- *   3. <FileIcon type="hwp|hwpx|docx"> — STEP 05 파일 형식
+ *   3. <FileIcon type="hwp|docx|pdf"> — STEP 05 파일 형식
  *   4. <Button variant="ai">    — NOVA AI 기능 CTA (Purple 그라디언트)
  *   5. <PromptChip>             — Coverage 분야 칩
  *   6. <Ribbon> 미니 미리보기   — 문서 편집 핵심 자산
@@ -58,9 +58,8 @@ import {
   AiWriteIcon, AiChatIcon,
 } from '@polaris/ui/ribbon-icons';
 import {
-  ArrowRightIcon, CheckIcon, SearchIcon,
+  ArrowRightIcon, CheckIcon,
 } from '@polaris/ui/icons';
-import { Sparkles } from 'lucide-react';
 
 /* ================================================================== *
  * Hero — NOVA 그라디언트 타이틀 + AI CTA + Tertiary CTA
@@ -137,7 +136,7 @@ function Stat({ value, label, tone }: { value: string; label: string; tone?: 'ai
 /* ================================================================== *
  * Workflow — 5 step cards
  *   STEP 04 (초안 자동 작성)   = NOVA Purple accent + AiWriteIcon
- *   STEP 05 (문서 생성)        = FileIcon trio (hwp / hwpx / docx)
+ *   STEP 05 (문서 생성)        = FileIcon trio (hwp / docx / pdf)
  * ================================================================== */
 
 function Workflow() {
@@ -388,7 +387,7 @@ function EditorPreview() {
 const IDENTITY_ITEMS = [
   { asset: '<PolarisLogo>',    where: 'Footer + 사이드바 brand mark' },
   { asset: '<NovaLogo>',       where: 'AI CTA 버튼 안 (이번 hero)' },
-  { asset: '<FileIcon type="hwp/hwpx/docx">', where: 'STEP 05 카드' },
+  { asset: '<FileIcon type="hwp/docx/pdf">', where: 'STEP 05 카드' },
   { asset: 'Button variant="ai"', where: '"공고문 분석하기" CTA — NOVA Purple solid' },
   { asset: 'NOVA 그라디언트',   where: 'Hero 타이틀 "AI가 제안서 작성" / Stat 등록 양식' },
   { asset: '<PromptChip>',     where: 'Coverage 분야 칩 (NOVA hover)' },

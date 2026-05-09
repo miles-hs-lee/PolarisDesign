@@ -30,28 +30,8 @@ import {
   DropdownMenuSeparator,
   cn,
 } from '@polaris/ui';
-import {
-  ChevronRight,
-  Pencil,
-  Send,
-  Printer,
-  Building2,
-  User,
-  Phone,
-  Mail,
-  Calendar,
-  Banknote,
-  FileText,
-  CheckCircle2,
-  Circle,
-  Clock,
-  MessageSquare,
-  MoreHorizontal,
-  Copy,
-  Download,
-  Archive,
-  Link2,
-} from 'lucide-react';
+import { ChevronRightIcon, DownloadIcon, MessageIcon, PencilLineIcon, SendIcon, UserIcon } from '@polaris/ui/icons';
+import { Printer, Building2, Phone, Mail, Calendar, Banknote, FileText, CheckCircle2, Circle, Clock, MoreHorizontal, Copy, Archive, Link2 } from 'lucide-react';
 import { useState } from 'react';
 
 type TimelineStatus = 'done' | 'current' | 'pending';
@@ -79,9 +59,9 @@ export default function CrmContractDetail() {
       {/* Breadcrumb */}
       <nav className="text-polaris-body2 text-label-alternative flex items-center gap-1.5 mb-3" aria-label="Breadcrumb">
         <span>영업관리</span>
-        <ChevronRight className="h-4 w-4" aria-hidden="true" />
+        <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
         <span>계약</span>
-        <ChevronRight className="h-4 w-4" aria-hidden="true" />
+        <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
         <span className="text-label-normal">CTR-2026-0413</span>
       </nav>
 
@@ -103,10 +83,10 @@ export default function CrmContractDetail() {
             <Printer className="h-4 w-4" aria-hidden="true" /> 인쇄
           </Button>
           <Button variant="tertiary" size="sm">
-            <Pencil className="h-4 w-4" aria-hidden="true" /> 수정
+            <PencilLineIcon className="h-4 w-4" aria-hidden="true" /> 수정
           </Button>
           <Button size="sm" onClick={() => setToastOpen(true)}>
-            <Send className="h-4 w-4" aria-hidden="true" /> 결재 독촉
+            <SendIcon className="h-4 w-4" aria-hidden="true" /> 결재 독촉
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -120,7 +100,7 @@ export default function CrmContractDetail() {
                 <Copy className="h-4 w-4" /> 계약 복제
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => alert('첨부 일괄 다운로드')}>
-                <Download className="h-4 w-4" /> 첨부 일괄 다운로드
+                <DownloadIcon className="h-4 w-4" /> 첨부 일괄 다운로드
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => alert('공유 링크 복사')}>
                 <Link2 className="h-4 w-4" /> 공유 링크 복사
@@ -146,8 +126,8 @@ export default function CrmContractDetail() {
                 <Field icon={Calendar} label="계약 기간" value="2026-05-01 ~ 2027-04-30" />
                 <Field icon={Banknote} label="계약 금액" value="₩148,500,000 (VAT 별도)" />
                 <Field icon={Calendar} label="결제 조건" value="분기 선납 / 4회 분할" />
-                <Field icon={User} label="영업 담당" value="이해석" />
-                <Field icon={User} label="검토 담당" value="김지수 (계약법무팀)" />
+                <Field icon={UserIcon} label="영업 담당" value="이해석" />
+                <Field icon={UserIcon} label="검토 담당" value="김지수 (계약법무팀)" />
               </dl>
             </CardBody>
           </Card>
@@ -167,7 +147,7 @@ export default function CrmContractDetail() {
                   <div className="text-polaris-body1 font-semibold">㈜핸디소프트</div>
                   <div className="text-polaris-body2 text-label-neutral mb-3">대규모 SI · 임직원 약 1,200명 · 사업자번호 220-81-XXXXX</div>
                   <div className="flex flex-wrap gap-x-6 gap-y-1.5 text-polaris-body2 text-label-neutral">
-                    <span className="inline-flex items-center gap-1.5"><User className="h-4 w-4" aria-hidden="true" /> 김민호 부장 (구매팀)</span>
+                    <span className="inline-flex items-center gap-1.5"><UserIcon className="h-4 w-4" aria-hidden="true" /> 김민호 부장 (구매팀)</span>
                     <span className="inline-flex items-center gap-1.5"><Phone className="h-4 w-4" aria-hidden="true" /> 02-1234-5678</span>
                     <span className="inline-flex items-center gap-1.5"><Mail className="h-4 w-4" aria-hidden="true" /> minho.kim@handysoft.example</span>
                   </div>
@@ -215,7 +195,7 @@ export default function CrmContractDetail() {
                 </TabsContent>
                 <TabsContent value="comments">
                   <div className="text-polaris-body2 text-label-alternative mt-2 flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4" aria-hidden="true" /> 아직 코멘트가 없습니다.
+                    <MessageIcon className="h-4 w-4" aria-hidden="true" /> 아직 코멘트가 없습니다.
                   </div>
                 </TabsContent>
                 <TabsContent value="related">
@@ -307,7 +287,10 @@ function Field({
   label,
   value,
 }: {
-  icon: typeof Building2;
+  // ElementType wide enough to accept both lucide and @polaris/ui/icons
+  // — both render with `className` + `aria-hidden` so the call site stays
+  // identical regardless of source.
+  icon: React.ElementType;
   label: string;
   value: string;
 }) {

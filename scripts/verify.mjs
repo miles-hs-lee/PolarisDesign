@@ -38,10 +38,36 @@ const args = process.argv.slice(2);
 const withE2E = args.includes('--with-e2e') || process.env.VERIFY_E2E === '1';
 const start = Date.now();
 
+// Auto-detect "drift" check eligibility:
+//
+// `git diff --exit-code <file>` after `pnpm build` is meant to catch the
+// case where someone edited `tokens.ts` but didn't commit the regenerated
+// `tokens.css`. CI runs on a clean checkout so the diff cleanly isolates
+// drift. Locally — especially as a pre-push hook — a user mid-edit may
+// have legitimate WIP in those files, and the check would fire on the
+// WIP rather than on real drift.
+//
+// Strategy: per file, skip the check (with a warning) if the file is
+// already dirty in the working tree before the build. The build will
+// still regenerate; if there was *additional* drift on top of the WIP,
+// it just won't be caught here — but CI catches it anyway. Other 11
+// checks still run.
+function isDirty(file) {
+  return spawnSync('git', ['diff', '--quiet', '--', file]).status !== 0;
+}
+
+const driftSkippable = ['packages/ui/src/styles/tokens.css', 'DESIGN.md'].filter(isDirty);
+if (driftSkippable.length > 0) {
+  console.log(`(skipping sync drift checks for dirty files: ${driftSkippable.join(', ')} — CI's clean checkout will still catch drift)`);
+}
+const driftStep = (label, file) => isDirty(file)
+  ? [`${label} (skipped — dirty)`, ['true']]
+  : [label, ['git', 'diff', '--exit-code', file]];
+
 const STEPS = [
   ['Build @polaris/ui',                ['pnpm', '--filter', '@polaris/ui', 'build']],
-  ['Verify token sync',                ['git', 'diff', '--exit-code', 'packages/ui/src/styles/tokens.css']],
-  ['Verify DESIGN.md sync',            ['git', 'diff', '--exit-code', 'DESIGN.md']],
+  driftStep('Verify token sync',       'packages/ui/src/styles/tokens.css'),
+  driftStep('Verify DESIGN.md sync',   'DESIGN.md'),
   ['Verify root version sync',         ['node', 'scripts/sync-root-version.mjs', '--check']],
   ['Build @polaris/lint',              ['pnpm', '--filter', '@polaris/lint', 'build']],
   ['Typecheck (all packages)',         ['pnpm', '-r', 'typecheck']],
