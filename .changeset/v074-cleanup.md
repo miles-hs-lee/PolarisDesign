@@ -6,7 +6,13 @@
 'demo': patch
 ---
 
-v0.7.3 리뷰의 🟢 nice-to-have 7건 정리.
+v0.7.3 리뷰의 🟢 nice-to-have 7건 정리 + 컨슈머 피드백 2건 fix.
+
+**컨슈머 피드백 fix:**
+- `packages/plugin/README.md` — 옵션 A "로컬 심링크" 절차가 현재 Claude Code에서 동작하지 않음. 루트에 [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json) 추가하고 README를 mini-marketplace 흐름(`/plugin marketplace add .` + `/plugin install polaris-design@polaris-design`)으로 갱신. Claude **데스크탑** 앱은 plugin 시스템 노출 안 한다는 한계도 명시.
+- `packages/lint/bin/polaris-audit.mjs` — temp eslint config 생성 시 임시 디렉토리에 `node_modules`가 없어 `import polaris from '@polaris/lint'` resolve 실패하던 버그 수정. `createRequire(import.meta.url).resolve('@polaris/lint', { paths: [target] })` + `pathToFileURL`로 절대 file URL을 inject. target 우선, audit 스크립트 자체 location fallback. `@polaris/lint`가 target에 미설치면 친절한 에러 메시지로 종료.
+
+
 
 **`apps/demo`:**
 - `ProposalPlatform.tsx` 미사용 import 제거 (`Sparkles`, `SearchIcon`)

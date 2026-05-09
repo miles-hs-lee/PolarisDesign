@@ -19,11 +19,13 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname } from 'node:path';
+import { createRequire } from 'node:module';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const target = resolve(process.argv[2] || '.');
+const requireFromHere = createRequire(import.meta.url);
 
 const RULE_LABELS = {
   '@polaris/no-hardcoded-color': '하드코딩 색상 (hex/rgb/named)',
@@ -45,6 +47,25 @@ const red = (s) => color(s, 31);
 const green = (s) => color(s, 32);
 const yellow = (s) => color(s, 33);
 
+function resolvePolarisLint() {
+  // Resolve @polaris/lint to an absolute path so a temp config (which has no
+  // adjacent node_modules) can still import it. Try the target project first,
+  // then fall back to this script's own location (works when this script is
+  // installed inside node_modules/@polaris/lint/bin/).
+  const tries = [
+    () => requireFromHere.resolve('@polaris/lint', { paths: [target] }),
+    () => requireFromHere.resolve('@polaris/lint'),
+  ];
+  for (const t of tries) {
+    try {
+      return t();
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
 function buildTempConfig() {
   // If user already has eslint.config.{js,mjs,cjs,ts}, use it.
   const candidates = ['eslint.config.js', 'eslint.config.mjs', 'eslint.config.cjs', 'eslint.config.ts'];
@@ -52,8 +73,17 @@ function buildTempConfig() {
     if (existsSync(join(target, c))) return null;
   }
   // Otherwise, create a temp config that just uses recommended.
+  // The temp dir has no node_modules, so we must inject an absolute file URL
+  // for @polaris/lint instead of a bare specifier.
+  const polarisLintPath = resolvePolarisLint();
+  if (!polarisLintPath) {
+    console.error('polaris-audit: @polaris/lint is not installed in the target project.');
+    console.error('  Install it first:  npm i -D @polaris/lint   (or pnpm add -D)');
+    process.exit(2);
+  }
+  const polarisLintUrl = pathToFileURL(polarisLintPath).href;
   const dir = mkdtempSync(join(tmpdir(), 'polaris-audit-'));
-  const cfg = `import polaris from '@polaris/lint';
+  const cfg = `import polaris from ${JSON.stringify(polarisLintUrl)};
 export default [...polaris.configs.recommended, { ignores: ['node_modules/**', 'dist/**', '.next/**', '.turbo/**', 'build/**'] }];
 `;
   const cfgPath = join(dir, 'eslint.config.mjs');

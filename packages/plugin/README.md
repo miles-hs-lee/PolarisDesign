@@ -6,23 +6,43 @@
 
 ## 설치
 
-### 옵션 A: 로컬 심링크 (개발 / 파일럿)
+### 옵션 A: 로컬 마켓플레이스 (개발 / 파일럿 — Claude Code CLI)
+
+PolarisDesign repo 자체가 mini-marketplace로 동작하도록 루트에 [`.claude-plugin/marketplace.json`](../../.claude-plugin/marketplace.json)을 둡니다. **로컬 심링크 방식은 현재 Claude Code에서 동작하지 않으니** 다음 흐름을 사용하세요:
 
 ```sh
-mkdir -p ~/.claude/plugins
-ln -s "$(pwd)/packages/plugin" ~/.claude/plugins/polaris-design
+git clone https://github.com/PolarisOffice/PolarisDesign.git
+cd PolarisDesign
 ```
 
-Claude Code 세션을 재시작하면 자동으로 로드됩니다.
-
-### 옵션 B: 마켓플레이스 (배포 단계)
-
-사내 Git/마켓플레이스에 publish한 뒤:
+Claude Code(CLI) 세션 안에서:
 
 ```
-/plugin marketplace add <git-url>
-/plugin install polaris-design
+/plugin marketplace add .              # 현재 디렉토리의 marketplace.json 등록
+/plugin install polaris-design@polaris-design
 ```
+
+> ⚠️ Claude **데스크탑** 앱은 plugin 시스템을 노출하지 않습니다 — 플러그인을 활용하려면 Claude Code CLI 세션을 사용해야 합니다.
+
+레포에 변경이 들어오면 다음으로 갱신:
+
+```
+/plugin marketplace update
+/plugin install polaris-design@polaris-design     # 최신 버전 재설치
+```
+
+(설치된 플러그인은 `~/.claude/plugins/cache/` 안에 복사본으로 보관되며 source repo 변경이 자동으로 반영되지 않습니다.)
+
+### 옵션 B: 원격 마켓플레이스 (배포 단계)
+
+사내 마켓플레이스 git URL이 정해지면 — 또는 PolarisDesign repo URL 자체를 직접 register할 수도 있습니다:
+
+```
+/plugin marketplace add PolarisOffice/PolarisDesign
+/plugin install polaris-design@polaris-design
+```
+
+GitHub repo URL은 그대로 인식됩니다 (`https://github.com/PolarisOffice/PolarisDesign` 또는 shorthand `PolarisOffice/PolarisDesign`).
 
 ## 구성
 
