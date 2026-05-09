@@ -111,6 +111,24 @@ import { label, background, layer, line, accentBrand, state, ai } from '@polaris
 - 일반 기능 → `bg-accent-brand-normal`
 - 같은 화면에서 둘을 섞지 마세요
 
+### 3-1. 시각적 브랜드 정체성 — Polaris signature 자산 적극 노출
+
+토큰만 정확히 쓰면 *시각적으론 평범한 SaaS로 보일 수 있는* 함정이 있습니다 (외부 사이트 검수 2건 — kcas-platform.vercel.app, jane-h-oh.github.io/design-test). Polaris가 시장에서 거의 유일하게 갖는 자산을 **적극적으로 노출**해야 정체성이 드러납니다. 도메인별 매핑:
+
+| 도메인 단서 | 사용할 자산 |
+|---|---|
+| AI / NOVA / 자동 작성 / 분석 | `<Button variant="ai">` + `<NovaLogo tone="white" size={16~20} />` |
+| 헤로 / 핵심 stat에 AI 강조 | NOVA 그라디언트 텍스트 (`from-purple-40 to-ai-normal` + `bg-clip-text text-transparent`) — 한 단어만 |
+| 파일 / 다운로드 표시 | `<FileIcon type="docx|hwp|pdf|...">` (29종) — 텍스트 "DOCX" 대신 |
+| 문서 편집 / 보고서 / 제안서 작성 | `<Ribbon>` + `@polaris/ui/ribbon-icons` (91종) — Polaris의 가장 큰 차별 자산 |
+| 필터 / 카테고리 chip | `<PromptChip>` (평범한 button chip 대신) |
+| 사이드바 active state | `bg-accent-brand-bg` 브랜드 틴트 |
+| Footer / login / 브랜드 영역 | `<PolarisLogo>` / `<NovaLogo>` |
+
+**원칙**: (1) AI는 명시(평범 blue로 위장 ❌), (2) 파일은 아이콘으로(텍스트 ❌), (3) 편집 use case면 Ribbon 검토, (4) brand 색은 1~2 지점에만(도배 ❌).
+
+**참고 구현**: `/proposal-platform` 데모 — 9가지 signature 자산 적용된 reference 페이지. 하단 IDENTITY CHECKLIST 섹션 참고.
+
 ### 4. 파일 타입 색상 — 컴포넌트 사용
 
 29개 파일 타입 SVG가 `@polaris/ui` 에서 제공됩니다:

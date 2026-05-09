@@ -111,6 +111,28 @@ NEVER write any of:
 - Everything else → `bg-accent-brand-normal` (blue)
 - Don't mix accent-brand and ai on the same screen.
 
+### 4-1. 시각적 브랜드 정체성 — Polaris signature 자산 적극 노출
+
+토큰만 정확히 써도 *시각적으론 평범한 SaaS로 보일 수 있다*는 함정이 있습니다 (외부 사이트 검수 2건에서 확인된 패턴). Polaris가 시장에서 거의 유일하게 갖는 자산을 **적극적으로 노출**해야 시각 정체성이 드러납니다. 코드 생성 시 다음 도메인 매핑을 의식적으로 적용하세요:
+
+| 도메인 단서 | 사용할 자산 | 비고 |
+|---|---|---|
+| AI / NOVA / 자동 작성 / 분석 / 요약 / 챗 | `<Button variant="ai">` + `<NovaLogo tone="white" size={16~20} />` 동반 | 평범한 brand-blue 버튼으로 만들지 말 것 — 사용자가 AI 기능인지 인지 못 함 |
+| 헤로 / 핵심 stat에 AI 강조 | NOVA 그라디언트 텍스트 (`linear-gradient(135deg, var(--polaris-purple-40), var(--polaris-ai-normal))` + `bg-clip-text text-transparent`) | 한 단어 / 한 수치만 그라디언트 — 도배 금지 |
+| 파일 / 다운로드 / 형식 표시 | `<FileIcon type="docx|hwp|pdf|xlsx|pptx|...">` (29종) | 텍스트 "DOCX" 대신 시각 아이콘. 멀티컬러 baked-in |
+| 문서 편집 / 보고서 / 제안서 작성 페이지 | `<Ribbon>` + `@polaris/ui/ribbon-icons` (91종) | Polaris의 가장 큰 차별 자산 — Office-style ribbon은 사실상 Polaris만 갖춤 |
+| 필터 / 카테고리 / 빠른 액션 chip | `<PromptChip>` | 평범한 `<button>` chip 대신 — NOVA hover로 시각 차별 |
+| 사이드바 / nav active state | `bg-accent-brand-bg` 브랜드 틴트 (DESIGN.md §4 Navigation) | 단순 `text-color` change가 아니라 배경에 brand tint |
+| Footer / login / 브랜드 영역 | `<PolarisLogo variant="horizontal|symbol|favicon">` / `<NovaLogo>` | "Powered by Polaris" 같은 attribution, 또는 메인 브랜드 마크 |
+
+**핵심 원칙**:
+1. **AI는 명시한다** — AI 기능이면 AI Purple로 시각화. 평범 brand-blue로 위장하면 안 됨.
+2. **파일은 아이콘으로** — 텍스트 "DOCX/HWP/PDF" 표시 ❌. `<FileIcon>` ✓.
+3. **편집 use case면 Ribbon** — 문서/보고서/제안서/스프레드시트/PDF 편집은 무조건 `<Ribbon>` 검토.
+4. **brand 색은 1~2 지점에만** — primary 색을 모든 곳에 도배하면 brand 색이 평범해짐. 핵심 CTA / 핵심 stat에만.
+
+**참고 구현**: `/proposal-platform` 데모 페이지가 이 9가지 자산을 한 페이지에 모두 적용한 reference. 페이지 하단 "IDENTITY CHECKLIST" 섹션이 항목별 적용 위치를 명시. 새 페이지 만들 때 비교용으로 사용.
+
 ### 5. State 컬러 — 색상만으로 정보 전달 금지 (WCAG 1.4.1)
 
 `state.success / warning / error` 는 작은 텍스트에서 contrast AA를 만족하지 않습니다. 다음 룰 준수:

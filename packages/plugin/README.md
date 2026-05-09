@@ -44,7 +44,8 @@ Claude Code 세션을 재시작하면 자동으로 로드됩니다.
 |---|---|
 | `/polaris-init <name>` | 새 프로젝트를 `template-next`로 1줄 부트스트랩 |
 | `/polaris-migrate` | 기존 프로젝트 점진적 마이그레이션 (audit → fix → enforce) |
-| `/polaris-check` | 현재 프로젝트의 lint 위반 검증 |
+| `/polaris-check` | 현재 프로젝트의 lint 위반 검증 (mechanical) |
+| `/polaris-brand-audit` | signature 자산 적용 기회 식별 — NOVA / FileIcon / Ribbon / PromptChip (휴리스틱) |
 | `/polaris-component <이름>` | 컴포넌트 사용/추가 가이드 |
 
 ### PostToolUse 훅
