@@ -43,6 +43,7 @@
  */
 import { createContext, forwardRef, useContext, useId, useMemo } from 'react';
 import { Slot } from '@radix-ui/react-slot';
+import { ErrorIcon } from '../icons';
 import {
   Controller,
   FormProvider,
@@ -160,7 +161,7 @@ export const FormDescription = forwardRef<HTMLParagraphElement, React.HTMLAttrib
       <p
         ref={ref}
         id={formDescriptionId}
-        className={cn('text-polaris-caption1 font-normal text-label-alternative', className)}
+        className={cn('text-polaris-helper text-label-alternative', className)}
         {...props}
       />
     );
@@ -173,14 +174,24 @@ export const FormMessage = forwardRef<HTMLParagraphElement, React.HTMLAttributes
     const { error, formMessageId } = useFormField();
     const body = error ? String(error?.message) : children;
     if (!body) return null;
+    // 디자인팀 spec (DESIGN.md §4 Inputs & Forms / §10 Color Usage Rules):
+    // 에러 메시지는 X / ⚠️ 아이콘 동반 필수 (WCAG 1.4.1 — 색상만으로 정보를
+    // 전달하지 않음). 레이아웃: `[icon] message`, 아이콘 16px, 4px gap,
+    // 둘 다 --state-error 색.
+    //
+    // FormMessage는 react-hook-form 흐름이라 *항상 에러 컨텍스트*로 가정.
+    // 다른 의미(success/info)로 쓰고 싶으면 별도 prop 추가가 필요(현재는
+    // 디자인팀 결정 대기 — `docs/design-team-followup.md` #7 참고).
     return (
       <p
         ref={ref}
         id={formMessageId}
-        className={cn('text-polaris-caption1 font-normal text-state-error', className)}
+        className={cn('flex items-start gap-polaris-3xs text-polaris-helper text-state-error', className)}
+        role="alert"
         {...props}
       >
-        {body}
+        <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />
+        <span>{body}</span>
       </p>
     );
   }

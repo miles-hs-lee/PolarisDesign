@@ -75,7 +75,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               className={cn(
                 'pointer-events-none absolute left-5 font-polaris transition-all duration-polaris-fast ease-polaris-out',
                 labelFloating
-                  ? 'top-2 text-polaris-caption1 font-normal text-label-assistive'
+                  ? 'top-2 text-polaris-helper text-label-assistive'
                   : 'top-1/2 -translate-y-1/2 text-polaris-body2 text-label-assistive'
               )}
             >
@@ -112,14 +112,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {error ? (
           <p
             id={messageId}
-            className="flex items-start gap-polaris-3xs text-polaris-caption1 font-normal text-state-error"
+            className="flex items-start gap-polaris-3xs text-polaris-helper text-state-error"
             role="alert"
           >
             <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />
             <span>{error}</span>
           </p>
         ) : hint ? (
-          <p id={messageId} className="text-polaris-caption1 font-normal text-label-alternative">
+          <p id={messageId} className="text-polaris-helper text-label-alternative">
             {hint}
           </p>
         ) : null}

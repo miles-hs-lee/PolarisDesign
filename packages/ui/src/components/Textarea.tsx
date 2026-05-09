@@ -1,4 +1,5 @@
 import { forwardRef, useId } from 'react';
+import { ErrorIcon } from '../icons';
 import { cn } from '../lib/cn';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -43,14 +44,17 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           {...props}
         />
         {(error || hint) && (
+          // 에러: ErrorIcon 동반 (DESIGN.md §4 / WCAG 1.4.1)
           <p
             id={messageId}
             className={cn(
-              'text-polaris-caption1 font-normal',
-              isError ? 'text-state-error' : 'text-label-alternative'
+              'text-polaris-helper',
+              isError ? 'flex items-start gap-polaris-3xs text-state-error' : 'text-label-alternative'
             )}
+            role={isError ? 'alert' : undefined}
           >
-            {error ?? hint}
+            {isError && <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />}
+            <span>{error ?? hint}</span>
           </p>
         )}
       </div>

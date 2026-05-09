@@ -318,6 +318,13 @@ const polarisPreset: Partial<Config> = {
         'polaris-caption1':  ['12px', { lineHeight: '16px', fontWeight: '700' }],
         'polaris-caption2':  ['11px', { lineHeight: '14px', fontWeight: '700' }],
 
+        // v0.7.4 — form helper / error / floating-label 전용 토큰.
+        // 디자인팀 DESIGN.md §4 Inputs & Forms 명시: Floating Title /
+        // Error Text가 12px / weight 400 / lh 1.3. caption1과 사이즈가
+        // 같지만 weight가 달라 별도 토큰으로 분리. caption1은 badge / tag
+        // / label 같은 *bold* 캡션 컨텍스트 그대로 700 유지.
+        'polaris-helper':    ['12px', { lineHeight: '16px', fontWeight: '400' }],
+
         // ───── rc.0 deprecated aliases (codemod target) ─────
         // NB: rc.0 `display` was 60px; rc.1 redefines to 40 per spec.
         'polaris-h1':        ['40px', { lineHeight: '56px', fontWeight: '700' }],

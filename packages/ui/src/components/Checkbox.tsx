@@ -1,6 +1,6 @@
 import { forwardRef, useId } from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { CheckIcon, MinusIcon } from '../icons';
+import { CheckIcon, MinusIcon, ErrorIcon } from '../icons';
 import { cn } from '../lib/cn';
 
 export interface CheckboxProps
@@ -67,14 +67,18 @@ export const Checkbox = forwardRef<
           </label>
         )}
         {(error || hint) && (
+          // 에러: ErrorIcon 동반 (DESIGN.md §4 / WCAG 1.4.1)
+          // 힌트: 텍스트만
           <p
             id={messageId}
             className={cn(
-              'text-polaris-caption1 font-normal',
-              isError ? 'text-state-error' : 'text-label-alternative'
+              'text-polaris-helper',
+              isError ? 'flex items-start gap-polaris-3xs text-state-error' : 'text-label-alternative'
             )}
+            role={isError ? 'alert' : undefined}
           >
-            {error ?? hint}
+            {isError && <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />}
+            <span>{error ?? hint}</span>
           </p>
         )}
       </div>
