@@ -12,6 +12,87 @@
 
 ---
 
+## [0.7.3] — 2026-05-08
+
+디자인팀 v0.7.2 재검수 + 외부 사이트 검수 2건 결과를 정리한 patch. **breaking 없음** — 토큰 추가 / lint 룰 추가 / 데모 신규 / tooling 강화. RC 없이 누적 changeset 3개를 한 번에 푸시.
+
+### `@polaris/ui` — 컴포넌트 spec 정합 (디자인팀 v0.7.2 재검수)
+
+디자인팀 follow-up review의 자동 처리 가능 항목을 모두 반영.
+
+- **`outline` (deprecated) → `tertiary` 일괄 마이그레이션** — 데모 22곳. Components 카탈로그의 outline showcase도 라벨 정리. Outline은 사용자 시야에서 제거.
+- **`status-*` v1 토큰 → `state-*` v2 토큰** (24줄, 6 컴포넌트: `Alert`, `Badge`, `DropdownMenu`, `Checkbox`, `Textarea`, `Form`). `danger → error` rename. `bg-status-X/<alpha>` → `bg-state-X-bg` (alpha 추정 → 디자인된 light tint).
+- **`polaris-helper` 타이포 토큰 신설** (12px / 400 / lh 1.3) — DESIGN.md §4 명시: Floating Title / Error Text 모두 weight regular. Form 7곳(FormDescription / FormMessage / Input floating-label / Input error / Input hint / Checkbox / Textarea)을 신규 토큰으로 마이그. caption1(700)은 badge / tag 용 그대로.
+- **`FormMessage` 자동 ErrorIcon prepend** — `<ErrorIcon size={16} />` + 4px gap + `flex items-start gap-polaris-3xs` + `role="alert"`. DESIGN.md §4 / WCAG 1.4.1 — "필수: 아이콘 동반 (X 또는 ⚠️, 16px) ... 색상만으로 에러를 전달하지 않음". `Checkbox` / `Textarea` 에러 상태도 동일 패턴 일관성 정합.
+
+남은 디자인팀 컨펌 필요 5+1건은 [`docs/design-team-followup.md`](docs/design-team-followup.md)에 정리:
+1. Button Tertiary 2종 분리 (흰 배경 + 회색 배경)
+2. Modal/Dialog 풀 너비 버튼 layout
+3. Checkbox 4가지 형태 + RadioGroup 신설
+4. Checkbox AI Purple variant
+5. Alert 유지 / 제거 결정 (현재 유지, 토큰만 정합)
+6. (보너스) 디자인팀 검수 절차 확립
+
+### `@polaris/lint` — 신규 룰 3종 (외부 사이트 검수 결과)
+
+2026-05-08 외부 사이트 검수 2건(`jane-h-oh.github.io/design-test/dashboard`, `kcas-platform.vercel.app/GovChance`)에서 "Polaris 토큰을 load만 하고 평범한 SaaS로 보이는" 패턴 발견. 기존 6 lint 룰로는 어느 것도 못 잡아 회귀 차단을 위해 추가.
+
+- **`no-tailwind-default-color`** (warn, v0.8 → error 예정) — Tailwind 기본 22 palette × 17 utility prefix × alpha modifier까지 매칭. 단, **Polaris가 자체 ramp(`05/10/20/30/40/50/60/70/80/90`)로 확장한 9개 palette**(blue/cyan/gray/green/orange/purple/red/violet/yellow)는 **1-2 digit shade 통과** — `bg-blue-50` / `from-purple-40` 같은 README §85·AGENTS §121 공식 토큰 false positive 방지. 3-digit shade(100/200/.../900)는 Tailwind default 폴백이라 flag.
+- **`no-deprecated-polaris-token`** (error) — v0.6/rc.0/v1 deprecated alias 사용 차단. Tailwind class(`bg-fg-primary`, `text-surface-raised`, `bg-brand-primary`, `bg-status-danger`) + CSS variable(`var(--polaris-neutral-*)`, `var(--polaris-text-*)`, `var(--polaris-surface-*)`) 둘 다.
+- **`no-non-polaris-css-var`** (warn) — JSX/className/style의 `var(--polaris-*)` / `var(--tw-*)` 외 CSS 변수 차단. `var(--color-copy)` / `var(--app-gradient-*)` 같은 자체 alias 레이어 검출. `allowedPrefixes` 옵션으로 escape hatch.
+
+신규 룰이 검출한 데모 코드의 잔존 위반 39건은 sed 일괄 마이그레이션으로 동시 해소.
+
+### `apps/demo` — `/proposal-platform` 신규
+
+GovChance 도메인(R&D 제안서 작성 플랫폼)을 재현하되 Polaris signature 자산 9가지를 모두 적용한 reference 페이지:
+- `<PolarisLogo>` (Footer) + `<NovaLogo>` (AI CTA 안)
+- `<FileIcon type="hwp/docx/pdf">` 트리오 (STEP 05)
+- `Button variant="ai"` (NOVA Purple solid)
+- NOVA 그라디언트 텍스트 (Hero 헤드라인 / Stat)
+- `<PromptChip>` (Coverage 분야)
+- `<Ribbon>` 미니 미리보기 (Polaris의 "거의 유일한" 자산)
+- 페이지 하단 IDENTITY CHECKLIST 섹션 — 외부 컨슈머의 비교 reference
+
+외부 사이트 검수 시 "Polaris 토큰만 load한 상태로 시각 정체성이 안 드러나는" 사이트에 보낼 reference URL.
+
+### Plugin / SKILL — 브랜드 정체성 가이드
+
+- **`SKILL.md` §4-1** + **`AGENTS.md` §3-1** 신규 — 도메인 단서별 signature 자산 매핑(AI 키워드 → `Button variant="ai"` + NovaLogo / 파일 → `<FileIcon>` / 편집기 → `<Ribbon>` / 헤로 AI → NOVA 그라디언트 등). LLM이 코드 생성 시점에 의식적으로 적용하도록.
+- **`/polaris-brand-audit`** 신규 슬래시커맨드 — 7가지 grep 휴리스틱으로 signature 자산 적용 *기회* 탐색. `/polaris-check`(mechanical 위반)와 보완 관계. false positive 가능 명시 — 사용자 검토 필수.
+
+### Tooling — `pnpm verify` + opt-in pre-push hook
+
+CI 13 step과 1:1 매칭하는 sequential runner. 첫 실패에서 멈추고 stdout/stderr 마지막 60/30줄 출력. 로컬 ~30s, e2e 포함 시 +30s.
+
+```sh
+pnpm verify                  # 매뉴얼 (e2e 제외)
+pnpm verify --with-e2e       # e2e 포함
+pnpm verify:install-hook     # opt-in pre-push hook 설치
+git push --no-verify         # 비상 우회
+```
+
+이번 release 주기에 CI 회귀 4건 발생 — 다음 회귀 차단을 위해 도입. 자동 install 하지 않고 opt-in (사용자 워크플로 다양성 + git config 자동 수정 회피).
+
+### `bg-accent-brand-normal-subtle` Tailwind alias 누락 hotfix (v0.7.2 → 0.7.3 carryover)
+
+이미 v0.7.2에서 처리됐지만 narrative 정리 — 12+ 컴포넌트(Sidebar, Pagination, Calendar, Drawer, Command, Badge, Select, DropdownMenu, FileCard, Ribbon)의 hover/active 배경이 *모든 버전에서 silently broken*이었음. v0.7.2 hotfix로 alias 추가해 즉시 복구.
+
+### Codex 리뷰 4건 정정
+
+- `no-tailwind-default-color`의 Polaris-owned ramp 오인 → `POLARIS_OWNED_PALETTES` allowlist + shade 캡처
+- `template-next/README.md`의 `LATEST` env 미export → `LATEST="$LATEST" node -e ...` 정정
+- `/proposal-platform`이 e2e visual에 없음 → routes 추가 (28→30 baseline)
+- Renovate regex의 dotted 버전 미스매치 → `[^/]+?` non-greedy로 정정
+
+### 패키지 버전
+
+@polaris/ui · @polaris/lint · @polaris/plugin · polaris-template-next · demo + root: **0.7.2 → 0.7.3**.
+
+마이그레이션 필요 없음 (additive). 컨슈머는 신규 lint warning을 볼 수 있으나 모두 *기존 코드*의 문제를 새로 검출하는 형태 — `polaris-codemod-v07`로 자동 변환 가능. 패키지별 자세한 변경 단편: 각 `packages/*/CHANGELOG.md`의 `## 0.7.3` 섹션.
+
+---
+
 ## [0.7.2] — 2026-05-07
 
 🐛 **Hotfix** — Tailwind alias 누락으로 시스템 전반의 hover / active 배경이 silently broken이던 버그 정정.

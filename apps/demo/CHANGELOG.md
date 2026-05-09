@@ -1,5 +1,136 @@
 # demo
 
+## 0.7.3
+
+### Patch Changes
+
+- 96ad78a: 디자인팀 v0.7.2 재검수의 자동 처리 가능 항목 6건 정리. 디자인 조율이 필요한 7건은 [`docs/design-team-followup.md`](docs/design-team-followup.md)로 분리.
+
+  **`variant="outline"` (deprecated) → `variant="tertiary"` 일괄 마이그레이션 (22곳)**
+
+  `apps/demo` 21곳 + `packages/ui/src/components/DatePicker.tsx` 2곳 (Button trigger). Components 카탈로그의 `<Button variant="tertiary">Outline</Button>` showcase 줄도 라벨을 "Tertiary"로 정정 — outline은 더 이상 표면에 노출되지 않음.
+
+  **`status-*` v1 토큰 → `state-*` v2 토큰 (24줄, 6 컴포넌트)**
+
+  `Alert`, `Badge`, `DropdownMenu`, `Checkbox`, `Textarea`, `Form` 컴포넌트에서 `text-status-{success,warning,info,danger}`, `bg-status-X/<alpha>`, `border-status-X`, `outline-status-X`, `ring-status-X` 등을 모두 v0.7 spec의 `state-*`로 마이그레이션. 매핑:
+
+  - `success`/`warning`/`info` → 동명
+  - `danger` → `error` (rename)
+  - `bg-status-X/N` (alpha-blended) → `bg-state-X-bg` (디자인된 light tint)
+
+  `DropdownMenu`의 destructive variant도 같이 정합. 옛 alpha 기반 추정 색이 디자인팀 spec의 정식 `*-bg` 토큰으로 교체되어 다크 모드에서도 의도한 색이 정확히 나옵니다.
+
+  **Form helper / error / floating-label 텍스트 weight 정정 (7곳)**
+
+  `polaris-caption1` 토큰은 spec상 weight 700이지만, form 컨텍스트의 helper / error / description / floating-label은 Regular(400)이 정확. 토큰 자체는 그대로 두고 사용처에 `font-normal` 명시:
+
+  - `Form.tsx`: FormDescription, FormMessage
+  - `Input.tsx`: 플로팅 라벨, error message, helper message
+  - `Checkbox.tsx`: error / description text
+  - `Textarea.tsx`: error / description text
+
+  caption1 토큰을 통째로 Regular로 바꿀지(다른 사용처 영향) 별도 helper 토큰을 만들지는 디자인팀 follow-up 항목 #6.
+
+  **Test / Visual 회귀**
+
+  - 테스트 89/89 통과 (`Alert.test`, `Badge.test`의 status-* 어서션도 state-*로 갱신)
+  - Playwright 28/28 통과 (마이그레이션으로 인한 시각 변화는 baseline에 반영)
+  - `pnpm -r typecheck` 깨끗
+
+  **Follow-up — 디자인 조율 필요한 7건**
+
+  [`docs/design-team-followup.md`](docs/design-team-followup.md):
+
+  1. Button Tertiary 2종 분리 (흰 배경 + 회색 배경)
+  2. Modal/Dialog 풀 너비 버튼 레이아웃
+  3. Checkbox 4가지 형태 분리 (사각/원/체크마크/라디오)
+  4. Checkbox AI Purple variant
+  5. Alert 제거 vs 별도 분류 결정
+  6. Helper text weight: caption1 토큰 변경 vs 별도 helper 토큰 신설
+  7. FormMessage 에러 아이콘 일관성 (+ 보너스: 디자인팀 검수 절차 확립)
+
+  각 항목별 답변 후 컴포넌트 단위 PR로 진행. 자동 처리분만 v0.7.3에 우선 반영해 회귀 차단.
+
+- 252cbde: DESIGN.md §4 Inputs & Forms에 명시된 폼 helper / error 텍스트 spec 정합.
+
+  **`polaris-helper` 타이포그래피 토큰 신설** — 12px / weight 400 / lh 1.3.
+
+  DESIGN.md가 Floating Title과 Error Text 모두 `--font-size-xxs (12px) / --weight-regular`로 명시. 기존 `polaris-caption1` 토큰은 spec상 weight 700 (badges, tags 용도)이라 그대로 유지. 의미상 다른 두 사용처를 별도 토큰으로 분리해 향후 단일 변경으로 모든 폼 helper 텍스트가 따라가도록 정합.
+
+  마이그레이션 (7곳):
+
+  - `Form.tsx` FormDescription, FormMessage
+  - `Input.tsx` floating label / error / helper
+  - `Checkbox.tsx` error / hint
+  - `Textarea.tsx` error / hint
+
+  이전 v0.7.3의 임시 `text-polaris-caption1 font-normal` 패치를 `text-polaris-helper`로 정식 토큰화. caption1 token 자체는 무변경.
+
+  **`FormMessage` 자동 ErrorIcon prepend** — DESIGN.md §4 명시:
+
+  > 필수: 아이콘 동반 (X 또는 ⚠️, 16px) — 텍스트 좌측에 4px gap. 색상만으로 에러를 전달하지 않음 (WCAG 1.4.1)
+  >
+  > 레이아웃: `[icon] Error message text` — 아이콘과 텍스트 모두 `--state-error` 색상
+
+  `Form.tsx`의 `FormMessage`가 자동으로 `<ErrorIcon size={16} />`을 prepend. `flex items-start gap-polaris-3xs`, `role="alert"` 적용. react-hook-form 컨트롤러 흐름에서 모든 폼 에러가 일관된 시각/접근성 패턴으로 표시됨.
+
+  **`Checkbox` / `Textarea` 에러 상태 일관성** — 같은 ErrorIcon + flex 레이아웃 적용. hint 상태는 텍스트만(아이콘 없음). 폼 컴포넌트 패밀리 전체가 동일 spec.
+
+  **시각 회귀 baseline**: components-catalog (desktop + mobile) 갱신.
+
+  **나머지 디자인팀 답이 필요한 5+1건은 docs/design-team-followup.md로 분리**:
+
+  - Tertiary / Ghost 정합 (DESIGN.md 부분 답)
+  - Modal 풀 너비 버튼 layout (DESIGN.md 미정)
+  - Checkbox 4가지 형태 + RadioGroup 신설 (DESIGN.md 미정)
+  - Checkbox AI Purple variant (DESIGN.md 일반 룰만)
+  - Alert 유지/제거 결정 (DESIGN.md에 Alert 미존재 — Toast 단일)
+  - 디자인팀 검수 절차 확립 (메타)
+
+  검증: typecheck 4/4 Done, vitest 89/89, playwright 28/28 (catalog baseline 갱신).
+
+- 8918872: 🛡️ `@polaris/lint`에 신규 룰 3개 — 외부 사이트 검수에서 발견된 사각지대를 회귀 차단으로 막음.
+
+  **배경**: 2026-05-08 `jane-h-oh.github.io/design-test/dashboard` 검수에서 Polaris 토큰을 *load*만 하고 실제 사용은 Tailwind 기본 palette + 자체 `--color-*` alias 레이어 + rc.0 deprecated 토큰을 쓰는 사이트 발견. 기존 lint 룰 6종(`no-hardcoded-color`, `no-arbitrary-tailwind` 등)으로는 어느 것도 잡지 못함 — bracket-arbitrary 패턴, hex literal에만 반응하는 한계.
+
+  **신규 룰**:
+
+  1. **`@polaris/no-tailwind-default-color`** (warn, v0.8 → error 예정)
+     Tailwind 기본 22 palette(`slate-*`, `rose-*`, `red-*`, `blue-*`, …)를 색상 utility에 사용하는 것 차단. 17개 utility prefix(`text/bg/border/ring/outline/divide/placeholder/caret/accent/decoration/shadow/from/via/to/fill/stroke`) × 22 palette × 알파 modifier까지 매칭. 메시지에 semantic 토큰 hint 동봉(예: slate → label-_ / fill-_ / line-\*).
+
+  2. **`@polaris/no-deprecated-polaris-token`** (error)
+     v0.6 / rc.0 / v1 deprecated alias 사용 차단. Tailwind class(`bg-fg-primary`, `text-surface-raised`, `bg-brand-primary`, `bg-status-danger` 등) + CSS variable(`var(--polaris-neutral-*)`, `var(--polaris-text-*)`, `var(--polaris-surface-*)` 등) 둘 다. 각 검출 시 v0.7 spec 교체값 메시지에 동봉. v0.8에서 alias 제거 예정이라 신규 코드는 처음부터 차단해 회귀 방지.
+
+  3. **`@polaris/no-non-polaris-css-var`** (warn)
+     JSX/className/style에서 `var(--polaris-*)` 또는 `var(--tw-*)` 외 CSS 변수 사용 차단. `var(--color-copy)`, `var(--app-gradient-*)`, `var(--my-brand)` 같은 자체 alias 레이어 검출. `allowedPrefixes` 옵션으로 third-party 변수 escape hatch 제공. _제한_: pure `*.css` 파일은 ESLint scope 밖 — 글로벌 CSS의 자체 alias *정의*는 못 잡지만 JS/TSX의 *소비*는 잡음.
+
+  **테스트 커버리지**: 33 신규 테스트 케이스 추가 → 53개 → 86개. 각 룰 valid/invalid 패턴 다양하게.
+
+  **기존 코드베이스 정리**:
+
+  - 데모 39 위반(전부 deprecated alias) — 자동 sed 마이그레이션으로 해소: `bg-status-* → bg-state-*` (danger→error rename), `border-brand-primary → border-accent-brand-normal`, `border-brand-secondary → border-ai-normal`, `from/via/to-surface-canvas → -background-base` 등.
+  - 데모 4 위반(Tailwind 기본색 `bg-neutral-100`) — `bg-fill-neutral`로 정합.
+  - 데모 1 위반(custom CSS var `--editor-chrome-h`) — 의도된 데모 전용 layout var, eslint-disable-next-line으로 명시.
+
+  **검증**:
+
+  - `pnpm --filter @polaris/lint test` → 86 ✓ + 11 codemod ✓
+  - `pnpm --filter @polaris/ui test` → 89/89
+  - `pnpm test:e2e` → 28/28 (시각 baseline 변동 없음 — status-_/state-_ 토큰이 유사 hex)
+  - `pnpm --filter polaris-template-next lint --max-warnings=0` → 0 warnings, 0 errors
+  - `pnpm --filter demo lint` → 0 errors (deprecated alias 위반 모두 해소)
+
+  **v0.8 계획**:
+
+  - `no-tailwind-default-color` warn → error (consumer 마이그레이션 시간 후)
+  - deprecated alias CSS 변수 자체 제거 → `no-deprecated-polaris-token` 룰의 일부 패턴 자연 무용화
+  - Stylelint 기반 `--color-*` alias _정의_ 차단 룰 검토(global CSS 커버리지)
+
+- Updated dependencies [96ad78a]
+- Updated dependencies [252cbde]
+- Updated dependencies [8918872]
+  - @polaris/ui@0.7.3
+
 ## 0.7.2
 
 ### Patch Changes

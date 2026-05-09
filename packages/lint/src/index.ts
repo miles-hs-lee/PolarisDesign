@@ -22,7 +22,7 @@ const rules = {
   'prefer-polaris-component': preferPolarisComponent,
   'state-color-with-icon': stateColorWithIcon,
   'prefer-polaris-icon': preferPolarisIcon,
-  // v0.7.5 — added after dashboard re-review (2026-05-08) found a real
+  // v0.7.3 — added after dashboard re-review (2026-05-08) found a real
   // site loading Polaris tokens but using Tailwind native palette +
   // self-defined `--color-*` aliases. Existing rules (regex on
   // bracket-arbitrary patterns / hex literals) didn't catch any of it.
@@ -59,7 +59,7 @@ const recommended: Linter.Config[] = [
       // v0.7-rc.2: warn — lucide-react is still installed for icons
       // polaris doesn't cover. Suppress per-line where needed.
       '@polaris/prefer-polaris-icon': 'warn',
-      // v0.7.5: warn for new rules — give consumers a migration window
+      // v0.7.3: warn for new rules — give consumers a migration window
       // before promoting to error in v0.8. Existing legitimate cases
       // (third-party brand colors, intentional Tailwind palette use) can
       // be suppressed per-line until then.

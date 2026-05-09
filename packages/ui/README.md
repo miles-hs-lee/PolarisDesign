@@ -13,7 +13,7 @@ PolarisDesign이 사내 npm registry에 publish되기 전 단계라, `@polaris/u
 ```jsonc
 {
   "dependencies": {
-    "@polaris/ui": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.2/polaris-ui-0.7.2.tgz"
+    "@polaris/ui": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.3/polaris-ui-0.7.3.tgz"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.0"
