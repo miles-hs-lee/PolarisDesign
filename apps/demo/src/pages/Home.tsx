@@ -68,8 +68,8 @@ export default function Home() {
               <Card className={cn(
                 'h-full transition-colors group-focus-visible:ring-2',
                 isAi
-                  ? 'hover:border-brand-secondary group-focus-visible:ring-brand-secondary'
-                  : 'hover:border-brand-primary group-focus-visible:ring-brand-primary'
+                  ? 'hover:border-ai-normal group-focus-visible:ring-ai-normal'
+                  : 'hover:border-accent-brand-normal group-focus-visible:ring-accent-brand-normal'
               )}>
                 <CardBody>
                   <div className="flex items-center justify-between mb-3">
@@ -98,7 +98,7 @@ export default function Home() {
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
         <Link to="/tokens" className="group">
-          <Card className="h-full transition-colors hover:border-brand-primary">
+          <Card className="h-full transition-colors hover:border-accent-brand-normal">
             <CardBody>
               <div className="flex items-center justify-between mb-3">
                 <span className="inline-flex h-9 w-9 items-center justify-center rounded-polaris-md bg-ai-hover text-ai-normal">

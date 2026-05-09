@@ -237,10 +237,10 @@ function StatCard({
   tone: 'neutral' | 'info' | 'warning' | 'success';
 }) {
   const toneClasses = {
-    neutral: 'bg-neutral-100 text-label-neutral',
-    info: 'bg-status-info/15 text-status-info',
-    warning: 'bg-status-warning/20 text-status-warning',
-    success: 'bg-status-success/15 text-status-success',
+    neutral: 'bg-fill-neutral text-label-neutral',
+    info: 'bg-state-info/15 text-state-info',
+    warning: 'bg-state-warning/20 text-state-warning',
+    success: 'bg-state-success/15 text-state-success',
   } as const;
   return (
     <Card>
@@ -270,11 +270,11 @@ function ContractRow({ contract: c }: { contract: Contract }) {
     );
 
   const progress = c.total === 0 ? 0 : Math.round((c.signed / c.total) * 100);
-  const progressTone = c.status === 'declined' ? 'bg-status-danger' : 'bg-accent-brand-normal';
+  const progressTone = c.status === 'declined' ? 'bg-state-error' : 'bg-accent-brand-normal';
 
   return (
     <li>
-      <Card className="hover:border-brand-primary transition-colors">
+      <Card className="hover:border-accent-brand-normal transition-colors">
         <CardBody className="!py-4">
           <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-6">
             <div className="flex items-center gap-4 flex-1 min-w-0">

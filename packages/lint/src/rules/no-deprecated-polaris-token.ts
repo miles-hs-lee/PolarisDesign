@@ -1,0 +1,192 @@
+import type { Rule } from 'eslint';
+
+/**
+ * Block deprecated Polaris token aliases (v0.6 / rc.0 / rc.1 era) — they
+ * still resolve at runtime via Tailwind preset alias entries, but they're
+ * scheduled for removal in v0.8 and using them today produces visually
+ * stale designs (rc.0 had purple-tinted neutrals; v0.7 spec mandates
+ * neutral grays).
+ *
+ * **Why this exists** — the dashboard re-review (2026-05-08) found a
+ * site loading Polaris tokens but using deprecated aliases like
+ * `--polaris-neutral-600` (rc.0 boring purple `#6E6E84`) instead of
+ * `--polaris-label-neutral` (v0.7 spec `#454C53`). Same site, technically
+ * "Polaris-compliant" (token classes work), but the resulting visual is
+ * off-spec because the alias points at the wrong palette.
+ *
+ * **Catches**:
+ *   - Tailwind classes: `bg-fg-primary`, `text-surface-raised`,
+ *     `bg-brand-primary`, `text-status-success` (rc.0 / v0.6 family)
+ *   - CSS-var references: `var(--polaris-neutral-600)`,
+ *     `var(--polaris-text-primary)`, `var(--polaris-surface-canvas)`
+ *
+ * **Auto-fix is intentionally NOT implemented** — the v0.6→v0.7 mapping
+ * is non-trivial (e.g., `text-fg-primary` could map to `text-label-normal`
+ * or `text-label-neutral` depending on context). Use the codemod instead:
+ *
+ *   pnpm dlx @polaris/lint polaris-codemod-v07 --apply src
+ *
+ * The codemod handles the bulk migration; this rule then guards against
+ * regressions (new code accidentally using deprecated names).
+ */
+
+/**
+ * Token suffixes that are deprecated. Map to v0.7 replacement hint.
+ *
+ * Format: deprecated-name → v0.7-replacement-hint.
+ *
+ * The regex below matches `(?:text|bg|border|ring|outline|divide|fill|
+ * stroke)-<deprecated>` patterns in className strings.
+ */
+const DEPRECATED_TAILWIND_TOKENS: Record<string, string> = {
+  // v0.6 family — `fg-*` (foreground)
+  'fg-primary':           'label-normal',
+  'fg-secondary':         'label-neutral',
+  'fg-muted':             'label-alternative',
+  'fg-on-brand':          'label-inverse',
+  'fg-on-status':         'label-inverse',
+  // v0.6 family — `surface-*`
+  'surface-canvas':       'background-base',
+  'surface-raised':       'layer-surface',
+  'surface-sunken':       'background-alternative',
+  'surface-border':       'line-neutral',
+  'surface-border-strong':'line-normal',
+  // rc.0 family — `brand-primary*` (replaced by accent-brand-*)
+  'brand-primary':        'accent-brand-normal',
+  'brand-primary-hover':  'accent-brand-strong',
+  'brand-primary-subtle': 'accent-brand-bg',
+  'brand-secondary':      'ai-normal',
+  'brand-secondary-hover':'ai-strong',
+  'brand-secondary-subtle': 'ai-hover',
+  // v1 status family — `status-*` (replaced by state-* in v0.7.3)
+  'status-success':       'state-success',
+  'status-warning':       'state-warning',
+  'status-danger':        'state-error',
+  'status-info':          'state-info',
+  'status-success-hover': 'state-success',
+  'status-warning-hover': 'state-warning',
+  'status-danger-hover':  'state-error',
+  'status-info-hover':    'state-info',
+};
+
+/**
+ * CSS variables that are deprecated aliases. Reference via `var(--name)`
+ * is what we flag here.
+ */
+const DEPRECATED_CSS_VARS: Record<string, string> = {
+  // rc.0 boring "neutral" palette (purple-tinted, off-spec)
+  '--polaris-neutral-50':   '--polaris-background-alternative',
+  '--polaris-neutral-100':  '--polaris-fill-neutral',
+  '--polaris-neutral-200':  '--polaris-line-neutral',
+  '--polaris-neutral-300':  '--polaris-line-normal',
+  '--polaris-neutral-400':  '--polaris-line-strong',
+  '--polaris-neutral-500':  '--polaris-label-assistive',
+  '--polaris-neutral-600':  '--polaris-label-alternative',
+  '--polaris-neutral-700':  '--polaris-label-neutral',
+  '--polaris-neutral-800':  '--polaris-label-normal',
+  '--polaris-neutral-900':  '--polaris-label-normal',
+  '--polaris-neutral-1000': '--polaris-label-normal',
+  // rc.0 text-* (replaced by label-*)
+  '--polaris-text-primary':   '--polaris-label-normal',
+  '--polaris-text-secondary': '--polaris-label-neutral',
+  '--polaris-text-muted':     '--polaris-label-alternative',
+  '--polaris-text-on-brand':  '--polaris-label-inverse',
+  '--polaris-text-on-status': '--polaris-label-inverse',
+  // rc.0 surface-* (replaced by background-* / layer-* / line-*)
+  '--polaris-surface-canvas':       '--polaris-background-base',
+  '--polaris-surface-raised':       '--polaris-layer-surface',
+  '--polaris-surface-sunken':       '--polaris-background-alternative',
+  '--polaris-surface-border':       '--polaris-line-neutral',
+  '--polaris-surface-border-strong':'--polaris-line-normal',
+  // v0.6 brand aliases (still defined in tokens.css for back-compat)
+  '--polaris-brand-primary':        '--polaris-accent-brand-normal',
+  '--polaris-brand-primary-hover':  '--polaris-accent-brand-strong',
+  '--polaris-brand-primary-subtle': '--polaris-accent-brand-bg',
+  '--polaris-brand-secondary':      '--polaris-ai-normal',
+  '--polaris-brand-secondary-hover':'--polaris-ai-strong',
+  // v1 status family
+  '--polaris-status-success':       '--polaris-state-success',
+  '--polaris-status-success-hover': '--polaris-state-success',
+  '--polaris-status-warning':       '--polaris-state-warning',
+  '--polaris-status-warning-hover': '--polaris-state-warning',
+  '--polaris-status-danger':        '--polaris-state-error',
+  '--polaris-status-danger-hover':  '--polaris-state-error',
+  '--polaris-status-info':          '--polaris-state-info',
+  '--polaris-status-info-hover':    '--polaris-state-info',
+};
+
+const TAILWIND_UTIL_PREFIXES =
+  'text|bg|border|ring|outline|divide|placeholder|caret|accent|decoration|shadow|from|via|to|fill|stroke';
+
+/**
+ * Build one big regex for Tailwind class detection. We escape `-` in the
+ * suffix list, then or-join everything to a single pattern so we can
+ * report exact matches.
+ */
+const TAILWIND_DEPRECATED_REGEX = new RegExp(
+  `\\b(?:${TAILWIND_UTIL_PREFIXES})-(${Object.keys(DEPRECATED_TAILWIND_TOKENS).map(k => k.replace(/[-]/g, '-')).join('|')})\\b`,
+  'g'
+);
+
+/** `var(--polaris-neutral-600)` style references. */
+const CSS_VAR_REGEX = /var\(\s*(--polaris-[a-z0-9-]+)\s*[,)]/g;
+
+const rule: Rule.RuleModule = {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: 'Disallow deprecated Polaris token aliases (rc.0 / v0.6 era); use v0.7 spec tokens instead. Run `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src` for bulk migration.',
+    },
+    schema: [],
+    messages: {
+      deprecatedTailwind:
+        'Deprecated Polaris token "{{value}}" — replace with "{{replacement}}". Bulk migration: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply`.',
+      deprecatedCssVar:
+        'Deprecated Polaris CSS variable "var({{value}})" — replace with "var({{replacement}})". This alias is removed in v0.8.',
+    },
+  },
+  create(context) {
+    function check(value: string, node: Rule.Node) {
+      // 1. Tailwind class deprecations
+      TAILWIND_DEPRECATED_REGEX.lastIndex = 0;
+      let tm: RegExpExecArray | null;
+      while ((tm = TAILWIND_DEPRECATED_REGEX.exec(value)) !== null) {
+        const match = tm[0];
+        const suffix = tm[1] ?? '';
+        const tailReplacement = DEPRECATED_TAILWIND_TOKENS[suffix];
+        if (!suffix || !tailReplacement) continue;
+        const replacement = match.replace(suffix, tailReplacement);
+        context.report({
+          node,
+          messageId: 'deprecatedTailwind',
+          data: { value: match, replacement },
+        });
+      }
+      // 2. CSS variable references
+      CSS_VAR_REGEX.lastIndex = 0;
+      let cm: RegExpExecArray | null;
+      while ((cm = CSS_VAR_REGEX.exec(value)) !== null) {
+        const varName = cm[1] ?? '';
+        if (!varName) continue;
+        const replacement = DEPRECATED_CSS_VARS[varName];
+        if (replacement) {
+          context.report({
+            node,
+            messageId: 'deprecatedCssVar',
+            data: { value: varName, replacement },
+          });
+        }
+      }
+    }
+    return {
+      Literal(node) {
+        if (typeof node.value === 'string') check(node.value, node as Rule.Node);
+      },
+      TemplateElement(node) {
+        check(node.value.cooked ?? node.value.raw, node as Rule.Node);
+      },
+    };
+  },
+};
+
+export default rule;

@@ -330,14 +330,14 @@ function TimelineRow({ step, isLast }: { step: typeof TIMELINE[number]; isLast: 
         <span
           className={cn(
             'inline-flex h-7 w-7 items-center justify-center rounded-polaris-pill',
-            step.status === 'done' && 'bg-status-success/15 text-status-success',
-            step.status === 'current' && 'bg-status-warning/20 text-status-warning',
-            step.status === 'pending' && 'bg-neutral-100 text-label-alternative'
+            step.status === 'done' && 'bg-state-success/15 text-state-success',
+            step.status === 'current' && 'bg-state-warning/20 text-state-warning',
+            step.status === 'pending' && 'bg-fill-neutral text-label-alternative'
           )}
         >
           <Icon className="h-4 w-4" aria-hidden="true" />
         </span>
-        {!isLast && <span className="w-px flex-1 bg-surface-border my-1" />}
+        {!isLast && <span className="w-px flex-1 bg-line-neutral my-1" />}
       </div>
       <div className={cn('pb-5 flex-1', isLast && 'pb-0')}>
         <div className="flex items-center gap-2 flex-wrap">

@@ -988,7 +988,7 @@ export default function Components() {
                     <RibbonToggleItem value="strikethrough" tooltip="취소선" icon={<Strikethrough className="h-4 w-4" />} />
                   </RibbonToggleGroup>
                   <RibbonSplitButton
-                    icon={<Type className="h-4 w-4 text-status-danger" />}
+                    icon={<Type className="h-4 w-4 text-state-error" />}
                     tooltip="글자 색"
                     menuLabel="글자 색 선택"
                     menu={
@@ -1000,7 +1000,7 @@ export default function Components() {
                     }
                   />
                   <RibbonSplitButton
-                    icon={<Highlighter className="h-4 w-4 text-status-warning" />}
+                    icon={<Highlighter className="h-4 w-4 text-state-warning" />}
                     tooltip="형광펜"
                     menuLabel="형광펜 색"
                     menu={

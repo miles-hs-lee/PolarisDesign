@@ -6,6 +6,9 @@ import noDirectFontFamily from './rules/no-direct-font-family';
 import preferPolarisComponent from './rules/prefer-polaris-component';
 import stateColorWithIcon from './rules/state-color-with-icon';
 import preferPolarisIcon from './rules/prefer-polaris-icon';
+import noTailwindDefaultColor from './rules/no-tailwind-default-color';
+import noDeprecatedPolarisToken from './rules/no-deprecated-polaris-token';
+import noNonPolarisCssVar from './rules/no-non-polaris-css-var';
 
 const meta = {
   name: '@polaris/lint',
@@ -19,6 +22,13 @@ const rules = {
   'prefer-polaris-component': preferPolarisComponent,
   'state-color-with-icon': stateColorWithIcon,
   'prefer-polaris-icon': preferPolarisIcon,
+  // v0.7.5 — added after dashboard re-review (2026-05-08) found a real
+  // site loading Polaris tokens but using Tailwind native palette +
+  // self-defined `--color-*` aliases. Existing rules (regex on
+  // bracket-arbitrary patterns / hex literals) didn't catch any of it.
+  'no-tailwind-default-color': noTailwindDefaultColor,
+  'no-deprecated-polaris-token': noDeprecatedPolarisToken,
+  'no-non-polaris-css-var': noNonPolarisCssVar,
 } as const;
 
 const plugin: ESLint.Plugin = {
@@ -49,6 +59,18 @@ const recommended: Linter.Config[] = [
       // v0.7-rc.2: warn — lucide-react is still installed for icons
       // polaris doesn't cover. Suppress per-line where needed.
       '@polaris/prefer-polaris-icon': 'warn',
+      // v0.7.5: warn for new rules — give consumers a migration window
+      // before promoting to error in v0.8. Existing legitimate cases
+      // (third-party brand colors, intentional Tailwind palette use) can
+      // be suppressed per-line until then.
+      '@polaris/no-tailwind-default-color': 'warn',
+      // Deprecated tokens — error from day one (codemod handles bulk
+      // migration; new code should never introduce a deprecated alias).
+      '@polaris/no-deprecated-polaris-token': 'error',
+      // Non-polaris CSS var — warn (some apps legitimately bridge to
+      // third-party design systems). Promote to error case-by-case via
+      // project-level overrides.
+      '@polaris/no-non-polaris-css-var': 'warn',
     },
   },
 ];

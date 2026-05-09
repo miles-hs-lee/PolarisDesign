@@ -205,6 +205,166 @@ tester.run('no-direct-font-family', polaris.rules['no-direct-font-family'], {
 });
 
 // ============================================================
+// no-tailwind-default-color
+// ============================================================
+tester.run('no-tailwind-default-color', polaris.rules['no-tailwind-default-color'], {
+  valid: [
+    // Polaris semantic tokens — fine
+    { code: `const cls = "text-label-normal bg-background-normal border-line-neutral";` },
+    { code: `const cls = "text-state-error bg-state-error-bg";` },
+    { code: `const cls = "bg-accent-brand-normal text-label-inverse";` },
+    // No color utility at all
+    { code: `const cls = "p-4 rounded-polaris-md flex items-center";` },
+    { code: `const x = "slate is a kind of rock";` },          // text mention, not className
+    // Tailwind palette WITHOUT shade — not valid Tailwind, ignored
+    { code: `const cls = "text-slate";` },
+  ],
+  invalid: [
+    {
+      code: `const cls = "text-slate-600 bg-slate-50";`,
+      errors: [{ messageId: 'tailwindDefault' }, { messageId: 'tailwindDefault' }],
+    },
+    {
+      code: `const cls = "hover:bg-rose-50 hover:text-rose-500 hover:border-rose-200";`,
+      errors: [
+        { messageId: 'tailwindDefault' },
+        { messageId: 'tailwindDefault' },
+        { messageId: 'tailwindDefault' },
+      ],
+    },
+    {
+      code: `const cls = "from-blue-50 via-purple-50 to-red-50";`,
+      errors: [
+        { messageId: 'tailwindDefault' },
+        { messageId: 'tailwindDefault' },
+        { messageId: 'tailwindDefault' },
+      ],
+    },
+    {
+      // Alpha modifier (Tailwind 3.4+) — also flagged
+      code: `const cls = "bg-slate-600/50";`,
+      errors: [{ messageId: 'tailwindDefault' }],
+    },
+    {
+      // Inside template literal
+      code: `const cls = \`text-emerald-700 \${active && 'bg-amber-100'}\`;`,
+      errors: [{ messageId: 'tailwindDefault' }, { messageId: 'tailwindDefault' }],
+    },
+  ],
+});
+
+// ============================================================
+// no-deprecated-polaris-token
+// ============================================================
+tester.run('no-deprecated-polaris-token', polaris.rules['no-deprecated-polaris-token'], {
+  valid: [
+    // v0.7 spec tokens — fine
+    { code: `const cls = "text-label-normal bg-layer-surface border-line-neutral";` },
+    { code: `const cls = "bg-accent-brand-normal hover:bg-accent-brand-strong";` },
+    { code: `const cls = "text-state-error bg-state-error-bg";` },
+    // Polaris CSS vars — fine
+    { code: `const css = \`color: var(--polaris-label-normal);\`;` },
+    // Non-polaris CSS var — NOT this rule's concern (covered by no-non-polaris-css-var)
+    { code: `const css = \`color: var(--my-color);\`;` },
+  ],
+  invalid: [
+    {
+      // v0.6 fg-* family
+      code: `const cls = "text-fg-primary bg-fg-secondary";`,
+      errors: [{ messageId: 'deprecatedTailwind' }, { messageId: 'deprecatedTailwind' }],
+    },
+    {
+      // v0.6 surface-*
+      code: `const cls = "bg-surface-canvas border-surface-border-strong";`,
+      errors: [{ messageId: 'deprecatedTailwind' }, { messageId: 'deprecatedTailwind' }],
+    },
+    {
+      // rc.0 brand-primary*
+      code: `const cls = "bg-brand-primary hover:bg-brand-primary-hover";`,
+      errors: [{ messageId: 'deprecatedTailwind' }, { messageId: 'deprecatedTailwind' }],
+    },
+    {
+      // v1 status-*
+      code: `const cls = "bg-status-success text-status-danger";`,
+      errors: [{ messageId: 'deprecatedTailwind' }, { messageId: 'deprecatedTailwind' }],
+    },
+    {
+      // CSS var — rc.0 boring purple neutral
+      code: `const css = \`color: var(--polaris-neutral-600);\`;`,
+      errors: [{ messageId: 'deprecatedCssVar' }],
+    },
+    {
+      // CSS var — rc.0 text alias
+      code: `const css = \`color: var(--polaris-text-primary);\`;`,
+      errors: [{ messageId: 'deprecatedCssVar' }],
+    },
+    {
+      // CSS var — rc.0 surface alias
+      code: `const css = \`background: var(--polaris-surface-raised);\`;`,
+      errors: [{ messageId: 'deprecatedCssVar' }],
+    },
+    {
+      // Mixed — Tailwind class + CSS var on same line
+      code: `const x = "bg-fg-primary"; const y = \`color: var(--polaris-neutral-700);\`;`,
+      errors: [{ messageId: 'deprecatedTailwind' }, { messageId: 'deprecatedCssVar' }],
+    },
+  ],
+});
+
+// ============================================================
+// no-non-polaris-css-var
+// ============================================================
+tester.run('no-non-polaris-css-var', polaris.rules['no-non-polaris-css-var'], {
+  valid: [
+    // Polaris vars
+    { code: `const css = \`color: var(--polaris-label-normal);\`;` },
+    { code: `const css = \`background: var(--polaris-accent-brand-normal);\`;` },
+    // Tailwind internal vars — allowed
+    { code: `const css = \`--tw-shadow: 0 1px 2px;\`;` },
+    { code: `const css = \`opacity: var(--tw-opacity);\`;` },
+    // No var() at all
+    { code: `const cls = "p-4 text-label-normal";` },
+    // allowedPrefixes option — escape hatch
+    {
+      code: `const css = \`color: var(--my-org-brand);\`;`,
+      options: [{ allowedPrefixes: ['--my-org-'] }],
+    },
+  ],
+  invalid: [
+    {
+      // The dashboard site case — self-defined --color-* alias layer
+      code: `const css = \`color: var(--color-copy);\`;`,
+      errors: [{ messageId: 'nonPolarisVar' }],
+    },
+    {
+      code: `const css = \`background: var(--color-background);\`;`,
+      errors: [{ messageId: 'nonPolarisVar' }],
+    },
+    {
+      // Self-defined gradient
+      code: `const css = \`background: var(--app-gradient-nova-main);\`;`,
+      errors: [{ messageId: 'nonPolarisVar' }],
+    },
+    {
+      // Multiple in one string
+      code: `const css = \`color: var(--color-copy); background: var(--color-background);\`;`,
+      errors: [{ messageId: 'nonPolarisVar' }, { messageId: 'nonPolarisVar' }],
+    },
+    {
+      // Inline style attribute
+      code: `const s = { color: 'var(--my-text)' };`,
+      errors: [{ messageId: 'nonPolarisVar' }],
+    },
+    {
+      // Tailwind arbitrary value — also caught (no-arbitrary-tailwind would
+      // catch the bracket pattern; this rule catches the var() inside)
+      code: `const cls = "bg-[var(--my-brand)]";`,
+      errors: [{ messageId: 'nonPolarisVar' }],
+    },
+  ],
+});
+
+// ============================================================
 // Report
 // ============================================================
 if (failed > 0) {

@@ -210,7 +210,7 @@ export function Layout() {
                     <Bell className="h-4 w-4" />
                     <span
                       aria-hidden="true"
-                      className="absolute top-1 right-1 inline-flex h-1.5 w-1.5 rounded-polaris-pill bg-status-danger"
+                      className="absolute top-1 right-1 inline-flex h-1.5 w-1.5 rounded-polaris-pill bg-state-error"
                     />
                   </Button>
                 </SimpleTooltip>

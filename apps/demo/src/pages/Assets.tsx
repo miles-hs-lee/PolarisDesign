@@ -249,7 +249,7 @@ function LucideIconCard({ name, icon: Icon }: { name: string; icon: LucideIcon }
         variant="ghost"
         onClick={() => navigator.clipboard.writeText(name)}
         aria-label={`Copy lucide icon name: ${name}`}
-        className="group !h-auto !flex-col items-center gap-1.5 !p-3 border border-line-neutral hover:border-brand-primary"
+        className="group !h-auto !flex-col items-center gap-1.5 !p-3 border border-line-neutral hover:border-accent-brand-normal"
       >
         <Icon className="h-5 w-5 text-label-normal group-hover:text-accent-brand-normal" aria-hidden="true" />
         <span className="text-polaris-caption1 text-label-alternative truncate w-full text-center">{name}</span>

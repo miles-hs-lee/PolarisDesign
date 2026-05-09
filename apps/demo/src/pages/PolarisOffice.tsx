@@ -305,7 +305,7 @@ function HomeRibbon() {
             <RibbonRowDivider />
             <RibbonSplitButton
               tooltip="글자 색"
-              icon={<ColorAccentIcon icon={<TextColorIcon size={12} />} barClass="bg-status-danger" />}
+              icon={<ColorAccentIcon icon={<TextColorIcon size={12} />} barClass="bg-state-error" />}
               menuLabel="글자 색"
               menu={<DropdownMenuItem>색 선택…</DropdownMenuItem>}
             />
@@ -350,7 +350,7 @@ function HomeRibbon() {
         <RibbonRow>
           <RibbonSplitButton
             tooltip="채우기 색"
-            icon={<ColorAccentIcon icon={<FillColorIcon size={12} />} barClass="bg-status-danger" />}
+            icon={<ColorAccentIcon icon={<FillColorIcon size={12} />} barClass="bg-state-error" />}
             menuLabel="채우기 색"
             menu={<DropdownMenuItem>색 선택…</DropdownMenuItem>}
           />
@@ -462,7 +462,7 @@ function InsertRibbon() {
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<BookmarkIcon size={24} />}
-            overlay={<span className="absolute top-0 left-1/2 -translate-x-1/2 h-2 w-1 bg-status-danger" aria-hidden="true" />}
+            overlay={<span className="absolute top-0 left-1/2 -translate-x-1/2 h-2 w-1 bg-state-error" aria-hidden="true" />}
           />
         }>책갈피</RibbonButton>
       </RibbonGroup>
@@ -669,7 +669,7 @@ function AIToolsRibbon() {
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<WebSearchIcon size={24} />}
-            overlay={<span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-polaris-pill bg-status-danger" aria-hidden="true" />}
+            overlay={<span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-polaris-pill bg-state-error" aria-hidden="true" />}
           />
         }>웹{'\n'}검색</RibbonButton>
         <RibbonButton size="lg" icon={
@@ -681,7 +681,7 @@ function AIToolsRibbon() {
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<TranslateIcon size={24} />}
-            overlay={<span className="absolute -top-1 -right-1 h-2 w-2 rounded-polaris-pill bg-status-danger" aria-hidden="true" />}
+            overlay={<span className="absolute -top-1 -right-1 h-2 w-2 rounded-polaris-pill bg-state-error" aria-hidden="true" />}
           />
         }>번역</RibbonButton>
         <RibbonButton size="lg" icon={<AiWordCloudIcon size={24} />}>워드{'\n'}클라우드</RibbonButton>
@@ -694,7 +694,7 @@ function AIToolsRibbon() {
         <RibbonButton size="lg" icon={
           <OverlayIcon
             base={<AiRecordIcon size={24} />}
-            overlay={<span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-polaris-pill bg-status-danger" aria-hidden="true" />}
+            overlay={<span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-polaris-pill bg-state-error" aria-hidden="true" />}
           />
         }>받아쓰기</RibbonButton>
       </RibbonGroup>
@@ -801,8 +801,8 @@ function OpenDocPane() {
     { icon: History, iconClass: 'text-label-alternative', label: '최근 문서' },
     { icon: Monitor, iconClass: 'text-label-alternative', label: '내 컴퓨터' },
     { icon: HardDrive, iconClass: 'text-accent-brand-normal', label: '폴라리스 드라이브' },
-    { icon: UsersRound, iconClass: 'text-status-success', label: '공유 문서' },
-    { icon: Star, iconClass: 'text-status-warning fill-status-warning', label: '중요 문서' },
+    { icon: UsersRound, iconClass: 'text-state-success', label: '공유 문서' },
+    { icon: Star, iconClass: 'text-state-warning fill-state-warning', label: '중요 문서' },
   ];
   return (
     <ul className="space-y-1">
@@ -902,6 +902,7 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
       style={
         {
           '--editor-chrome-h': '3rem',
+          // eslint-disable-next-line @polaris/no-non-polaris-css-var -- 데모 전용 inline layout var (chrome 높이), polaris semantic 토큰으로 굳히기엔 너무 specific
           height: 'calc(100vh - var(--editor-chrome-h))',
         } as React.CSSProperties
       }
@@ -1002,7 +1003,7 @@ export default function PolarisOffice() {
               <RibbonTab value="pen">펜</RibbonTab>
               <RibbonTab value="ai" className="relative pr-3">
                 AI 도구
-                <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-polaris-pill bg-status-danger" aria-hidden="true" />
+                <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-polaris-pill bg-state-error" aria-hidden="true" />
               </RibbonTab>
             </RibbonTabList>
             <Button variant="ghost" size="sm" aria-label="리본 접기" className="!h-8 !w-8 !px-0 mr-2 shrink-0">
