@@ -24,7 +24,9 @@ LATEST=$(curl -s https://api.github.com/repos/PolarisOffice/PolarisDesign/releas
   | grep -oE '"tag_name":[[:space:]]*"v[^"]+"' | sed 's/.*"v\(.*\)"/\1/')
 
 # package.json의 workspace:* → tarball URL 치환
-node -e '
+# (LATEST="$LATEST" 로 명시 export — 안 그러면 process.env.LATEST가 undefined가 되어
+#  URL이 `.../v_undefined/polaris-ui-undefined.tgz` 로 박힘)
+LATEST="$LATEST" node -e '
 const fs = require("fs"); const v = process.env.LATEST;
 const url = (n) => `https://github.com/PolarisOffice/PolarisDesign/releases/download/v${v}/polaris-${n}-${v}.tgz`;
 const p = JSON.parse(fs.readFileSync("package.json","utf8"));

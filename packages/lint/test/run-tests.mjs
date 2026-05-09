@@ -218,6 +218,17 @@ tester.run('no-tailwind-default-color', polaris.rules['no-tailwind-default-color
     { code: `const x = "slate is a kind of rock";` },          // text mention, not className
     // Tailwind palette WITHOUT shade — not valid Tailwind, ignored
     { code: `const cls = "text-slate";` },
+    // Polaris-owned palette ramps (README §85 / AGENTS §121) — 1-2 digit
+    // shades on blue/purple/green/red/orange/cyan/yellow/gray/violet are
+    // documented official tokens (not Tailwind defaults).
+    { code: `const cls = "bg-blue-50 text-purple-70 border-gray-30";` },
+    { code: `const cls = "from-purple-40 to-purple-50";` },         // NOVA gradient
+    { code: `const cls = "bg-green-30 text-orange-70 bg-yellow-10";` },
+    { code: `const cls = "bg-red-50 hover:bg-red-60";` },
+    { code: `const cls = "text-cyan-80 text-violet-50";` },
+    { code: `const cls = "bg-gray-10 border-gray-90";` },
+    // Even with alpha modifier on a Polaris-owned 2-digit shade — allowed.
+    { code: `const cls = "bg-blue-50/60";` },
   ],
   invalid: [
     {
@@ -233,7 +244,9 @@ tester.run('no-tailwind-default-color', polaris.rules['no-tailwind-default-color
       ],
     },
     {
-      code: `const cls = "from-blue-50 via-purple-50 to-red-50";`,
+      // 3-digit shades on Polaris-owned palette names — Tailwind defaults
+      // (Polaris ramps stop at 90; 100+ falls through to Tailwind).
+      code: `const cls = "from-blue-200 via-purple-300 to-red-100";`,
       errors: [
         { messageId: 'tailwindDefault' },
         { messageId: 'tailwindDefault' },
@@ -248,6 +261,13 @@ tester.run('no-tailwind-default-color', polaris.rules['no-tailwind-default-color
     {
       // Inside template literal
       code: `const cls = \`text-emerald-700 \${active && 'bg-amber-100'}\`;`,
+      errors: [{ messageId: 'tailwindDefault' }, { messageId: 'tailwindDefault' }],
+    },
+    {
+      // `neutral` is a special case — Polaris extends it but with the
+      // *deprecated* rc.0 palette. Flag regardless of shade. (Suggestion
+      // is `fill-neutral` / `label-neutral`.)
+      code: `const cls = "bg-neutral-100 text-neutral-600";`,
       errors: [{ messageId: 'tailwindDefault' }, { messageId: 'tailwindDefault' }],
     },
   ],

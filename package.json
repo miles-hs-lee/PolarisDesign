@@ -18,7 +18,9 @@
     "release": "changeset publish",
     "test:e2e": "playwright test",
     "test:e2e:update": "playwright test --update-snapshots",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "verify": "node scripts/verify.mjs",
+    "verify:install-hook": "node scripts/install-git-hook.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",

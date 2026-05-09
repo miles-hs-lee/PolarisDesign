@@ -118,7 +118,7 @@ URL 직접 갱신 부담을 줄이려면 [Renovate](https://docs.renovatebot.com
       "customType": "regex",
       "fileMatch": ["(^|/)package\\.json$"],
       "matchStrings": [
-        "https://github\\.com/PolarisOffice/PolarisDesign/releases/download/(?<currentValue>v[^/]+)/polaris-(?<depName>ui|lint)-[^.]+\\.tgz"
+        "https://github\\.com/PolarisOffice/PolarisDesign/releases/download/(?<currentValue>v[^/]+)/polaris-(?<depName>ui|lint)-[^/]+?\\.tgz"
       ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "PolarisOffice/PolarisDesign",

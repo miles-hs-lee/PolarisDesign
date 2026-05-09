@@ -45,6 +45,26 @@ const TAILWIND_PALETTES = [
   'pink', 'rose',
 ];
 
+/**
+ * Tailwind palette names that **Polaris extends with its own 10-step ramp**
+ * (`05/10/20/30/40/50/60/70/80/90`). For these palettes, Polaris-owned
+ * shade names (1-2 digit) are documented as official primitive tokens
+ * (README §85, AGENTS.md §121: `bg-blue-50`, `bg-purple-50`,
+ * `bg-green-30`, `bg-gray-10`, `from-purple-40`). Allow 1-2 digit shades;
+ * 3-digit shades (100/200/.../900) fall through to Tailwind defaults
+ * because Polaris ramps stop at 90 — those are still flagged.
+ *
+ * **NOT included even though Polaris extends them under the same name**:
+ *   - `neutral` — the Polaris neutral ramp is the *deprecated rc.0 palette*
+ *     (boring purple-tinted gray, e.g. `--polaris-neutral-600 = #6E6E84`).
+ *     v0.7 spec replaces it with `label-*` / `fill-*` semantic tokens.
+ *     `bg-neutral-100` should be flagged regardless of shade.
+ */
+const POLARIS_OWNED_PALETTES = new Set([
+  'blue', 'cyan', 'gray', 'green', 'orange',
+  'purple', 'red', 'violet', 'yellow',
+]);
+
 // Tailwind utility prefixes that take a color value.
 const COLOR_UTILITIES = [
   'text', 'bg', 'border', 'ring', 'outline', 'divide', 'placeholder',
@@ -88,15 +108,18 @@ const PALETTE_GROUP = TAILWIND_PALETTES.join('|');
 const UTIL_GROUP = COLOR_UTILITIES.join('|');
 
 /**
- * Match e.g. `text-slate-600`, `bg-rose-50`, `hover:text-slate-900`.
+ * Match e.g. `text-slate-600`, `bg-rose-50`, `bg-blue-50`, `hover:text-slate-900`.
  *
  * Word boundary on the left lets modifier prefixes pass through (`hover:`,
  * `dark:`, `group-hover:`, etc.). The right side requires a digit shade so
  * `text-slate` (no shade) — which Tailwind doesn't compile anyway — is
  * not flagged.
+ *
+ * Captures: 1=palette name, 2=shade digits (used to distinguish
+ * Polaris-owned 1-2 digit shades from 3-digit Tailwind defaults).
  */
 const TAILWIND_DEFAULT_COLOR_REGEX = new RegExp(
-  `\\b(?:${UTIL_GROUP})-(${PALETTE_GROUP})-\\d+(?:/\\d+)?\\b`,
+  `\\b(?:${UTIL_GROUP})-(${PALETTE_GROUP})-(\\d+)(?:/\\d+)?\\b`,
   'g'
 );
 
@@ -120,6 +143,13 @@ const rule: Rule.RuleModule = {
       while ((m = TAILWIND_DEFAULT_COLOR_REGEX.exec(value)) !== null) {
         const match = m[0];
         const palette = m[1] ?? '';
+        const shade = m[2] ?? '';
+        // Polaris-owned palettes (blue/purple/green/gray/...) extend
+        // Tailwind with a 10-step ramp at shades 05-90 (1-2 digits).
+        // Those are documented official tokens — not flagged.
+        // 3+ digit shades (100/200/.../900) on the same palette name
+        // fall through to Tailwind defaults — flagged.
+        if (POLARIS_OWNED_PALETTES.has(palette) && shade.length <= 2) continue;
         const hint = SEMANTIC_HINT[palette] ?? 'a Polaris semantic token';
         context.report({
           node,

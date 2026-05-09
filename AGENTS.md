@@ -215,6 +215,24 @@ pnpm lint --fix
 - "lint 룰을 disable로 우회하자" → ❌. 룰을 끄면 디자인 시스템의 의미가 사라집니다. 룰이 false-positive면 사용자에게 보고.
 - "임의값이 더 짧다" → 무관. 토큰 클래스가 무조건 우선.
 
+## 푸시 전 검증
+
+CI를 깨뜨리는 회귀를 막으려면 push 전에 `pnpm verify`를 한 번 돌리세요. CI의 14개 step을 동일 순서로 실행 — 첫 실패에서 멈추고 stdout/stderr 마지막 부분을 출력합니다.
+
+```sh
+pnpm verify             # ~30s (e2e 제외)
+pnpm verify --with-e2e  # +30s (Playwright 28 시각 회귀)
+```
+
+자동화 (opt-in git pre-push hook):
+
+```sh
+pnpm verify:install-hook  # 한 번만 실행
+# 이후 git push가 자동으로 verify를 거침. 실패 시 push 차단.
+# 비상 우회: git push --no-verify
+# 제거: rm .git/hooks/pre-push
+```
+
 ## 추가 자료
 
 - [DESIGN.md](DESIGN.md) — 시스템 spec (Stitch 형식, auto-generated)

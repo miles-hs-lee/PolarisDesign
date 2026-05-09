@@ -17,6 +17,7 @@ const ROUTES = [
   { path: '/#/icons', name: 'icons-catalog' },
   { path: '/#/assets', name: 'assets' },
   { path: '/#/polaris-office', name: 'polaris-office' },
+  { path: '/#/proposal-platform', name: 'proposal-platform' },
   { path: '/#/nova', name: 'nova-workspace' },
   { path: '/#/crm/contract', name: 'crm-contract' },
   { path: '/#/sign/contracts', name: 'sign-contracts' },
