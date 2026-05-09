@@ -44,6 +44,7 @@ import {
   User,
   Menu as MenuIcon,
   FileText,
+  FilePen,
   X as XIcon,
 } from 'lucide-react';
 
@@ -55,6 +56,7 @@ const APP_NAV: { to: string; label: string; icon: React.ElementType; end?: boole
   { to: '/crm/contract', label: '영업관리', icon: Briefcase },
   { to: '/sign/contracts', label: '사인', icon: PenSquare },
   { to: '/polaris-office', label: '폴라리스 오피스 (리본)', icon: FileText },
+  { to: '/proposal-platform', label: '제안서 플랫폼 (브랜딩)', icon: FilePen, trailing: <Badge variant="secondary">AI</Badge> },
 ];
 
 const REFERENCE_NAV: { to: string; label: string; icon: React.ElementType; end?: boolean }[] = [
