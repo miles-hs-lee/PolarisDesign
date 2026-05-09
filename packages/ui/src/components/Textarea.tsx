@@ -37,7 +37,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             'border border-line-normal resize-vertical',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:border-brand-primary',
             'disabled:opacity-50 disabled:cursor-not-allowed',
-            isError && 'border-status-danger focus-visible:ring-status-danger focus-visible:border-status-danger',
+            isError && 'border-state-error focus-visible:ring-state-error focus-visible:border-state-error',
             className
           )}
           {...props}
@@ -46,8 +46,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           <p
             id={messageId}
             className={cn(
-              'text-polaris-caption1',
-              isError ? 'text-status-danger' : 'text-label-alternative'
+              'text-polaris-caption1 font-normal',
+              isError ? 'text-state-error' : 'text-label-alternative'
             )}
           >
             {error ?? hint}

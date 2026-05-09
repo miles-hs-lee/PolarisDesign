@@ -16,7 +16,7 @@ describe('Badge', () => {
   it('uses subtle tone by default', () => {
     render(<Badge variant="danger">만료</Badge>);
     // tone=subtle (default) for danger uses /15 alpha background
-    expect(screen.getByText('만료').className).toMatch(/bg-status-danger/);
+    expect(screen.getByText('만료').className).toMatch(/bg-state-error/);
   });
 
   it('applies solid tone classes when tone="solid"', () => {

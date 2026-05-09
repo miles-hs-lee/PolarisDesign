@@ -37,7 +37,7 @@ export const Checkbox = forwardRef<
         'disabled:cursor-not-allowed disabled:opacity-50',
         'data-[state=checked]:bg-accent-brand-normal data-[state=checked]:border-brand-primary',
         'data-[state=indeterminate]:bg-accent-brand-normal data-[state=indeterminate]:border-brand-primary',
-        isError && 'border-status-danger focus-visible:outline-status-danger',
+        isError && 'border-state-error focus-visible:outline-state-error',
         className
       )}
       {...props}
@@ -70,8 +70,8 @@ export const Checkbox = forwardRef<
           <p
             id={messageId}
             className={cn(
-              'text-polaris-caption1',
-              isError ? 'text-status-danger' : 'text-label-alternative'
+              'text-polaris-caption1 font-normal',
+              isError ? 'text-state-error' : 'text-label-alternative'
             )}
           >
             {error ?? hint}

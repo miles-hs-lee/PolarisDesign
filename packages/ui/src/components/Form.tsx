@@ -123,7 +123,7 @@ export const FormLabel = forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<
         htmlFor={formItemId}
         className={cn(
           'text-polaris-body2 font-medium text-label-normal',
-          error && 'text-status-danger',
+          error && 'text-state-error',
           className
         )}
         {...props}
@@ -160,7 +160,7 @@ export const FormDescription = forwardRef<HTMLParagraphElement, React.HTMLAttrib
       <p
         ref={ref}
         id={formDescriptionId}
-        className={cn('text-polaris-caption1 text-label-alternative', className)}
+        className={cn('text-polaris-caption1 font-normal text-label-alternative', className)}
         {...props}
       />
     );
@@ -177,7 +177,7 @@ export const FormMessage = forwardRef<HTMLParagraphElement, React.HTMLAttributes
       <p
         ref={ref}
         id={formMessageId}
-        className={cn('text-polaris-caption1 text-status-danger', className)}
+        className={cn('text-polaris-caption1 font-normal text-state-error', className)}
         {...props}
       >
         {body}

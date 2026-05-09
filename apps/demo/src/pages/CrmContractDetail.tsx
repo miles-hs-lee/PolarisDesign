@@ -99,10 +99,10 @@ export default function CrmContractDetail() {
           </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <Button variant="outline" size="sm">
+          <Button variant="tertiary" size="sm">
             <Printer className="h-4 w-4" aria-hidden="true" /> 인쇄
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="tertiary" size="sm">
             <Pencil className="h-4 w-4" aria-hidden="true" /> 수정
           </Button>
           <Button size="sm" onClick={() => setToastOpen(true)}>
@@ -110,7 +110,7 @@ export default function CrmContractDetail() {
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" aria-label="더보기">
+              <Button variant="tertiary" size="sm" aria-label="더보기">
                 <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
               </Button>
             </DropdownMenuTrigger>
@@ -278,7 +278,7 @@ export default function CrmContractDetail() {
                   </DialogHeader>
                   <DialogFooter>
                     <DialogClose asChild>
-                      <Button variant="outline">취소</Button>
+                      <Button variant="tertiary">취소</Button>
                     </DialogClose>
                     <Button variant="danger">계약 취소</Button>
                   </DialogFooter>

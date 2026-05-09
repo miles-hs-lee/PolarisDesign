@@ -47,7 +47,7 @@ export const DropdownMenuItem = forwardRef<
     ref={ref}
     className={cn(
       itemBase,
-      destructive && 'text-status-danger data-[highlighted]:bg-status-danger/10 data-[highlighted]:text-status-danger',
+      destructive && 'text-state-error data-[highlighted]:bg-state-error-bg data-[highlighted]:text-state-error',
       className
     )}
     {...props}
@@ -200,7 +200,7 @@ export const DropdownMenuFormItem = forwardRef<
       asChild
       className={cn(
         itemBase,
-        destructive && 'text-status-danger data-[highlighted]:bg-status-danger/10 data-[highlighted]:text-status-danger',
+        destructive && 'text-state-error data-[highlighted]:bg-state-error-bg data-[highlighted]:text-state-error',
         className
       )}
       {...props}

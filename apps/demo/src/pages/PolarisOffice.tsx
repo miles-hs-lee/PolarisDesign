@@ -883,7 +883,7 @@ function SharePane() {
         </div>
         <Badge variant="neutral">보기 전용</Badge>
       </div>
-      <Button variant="outline" className="w-full">링크 복사</Button>
+      <Button variant="tertiary" className="w-full">링크 복사</Button>
     </div>
   );
 }

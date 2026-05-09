@@ -47,7 +47,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
         <PopoverTrigger asChild>
           <Button
             ref={ref}
-            variant="outline"
+            variant="tertiary"
             disabled={disabled}
             aria-label={ariaLabel}
             className={cn('w-full justify-start font-normal', !value && 'text-label-alternative', className)}
@@ -108,7 +108,7 @@ export const DateRangePicker = forwardRef<HTMLButtonElement, DateRangePickerProp
         <PopoverTrigger asChild>
           <Button
             ref={ref}
-            variant="outline"
+            variant="tertiary"
             disabled={disabled}
             aria-label={ariaLabel}
             className={cn('w-full justify-start font-normal', !value?.from && 'text-label-alternative', className)}

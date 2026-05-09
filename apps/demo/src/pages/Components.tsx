@@ -214,7 +214,7 @@ export default function Components() {
           <Button variant="secondary">
             <Sparkles className="h-4 w-4" /> Secondary (NOVA)
           </Button>
-          <Button variant="outline">Outline</Button>
+          <Button variant="tertiary">Tertiary</Button>
           <Button variant="ghost">Ghost</Button>
           <Button variant="danger">Danger</Button>
           <Button loading>Loading</Button>
@@ -251,7 +251,7 @@ export default function Components() {
               </p>
             </CardBody>
             <CardFooter>
-              <Button variant="outline" size="sm">취소</Button>
+              <Button variant="tertiary" size="sm">취소</Button>
               <Button size="sm">열기</Button>
             </CardFooter>
           </Card>
@@ -304,7 +304,7 @@ export default function Components() {
       <Section title="6. Dialog">
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline">Dialog 열기</Button>
+            <Button variant="tertiary">Dialog 열기</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -315,7 +315,7 @@ export default function Components() {
             </DialogHeader>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">취소</Button>
+                <Button variant="tertiary">취소</Button>
               </DialogClose>
               <Button variant="danger">삭제</Button>
             </DialogFooter>
@@ -325,10 +325,10 @@ export default function Components() {
 
       <Section title="7. Toast">
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={() => pushToast('info', '새 버전이 출시되었습니다', 'v1.4.0 — 자세히 보기')}>info</Button>
-          <Button variant="outline" size="sm" onClick={() => pushToast('success', '저장이 완료되었습니다')}>success</Button>
-          <Button variant="outline" size="sm" onClick={() => pushToast('warning', '변경사항이 저장되지 않았습니다')}>warning</Button>
-          <Button variant="outline" size="sm" onClick={() => pushToast('danger', '파일 업로드 실패', '네트워크 오류로 다시 시도해 주세요')}>danger</Button>
+          <Button variant="tertiary" size="sm" onClick={() => pushToast('info', '새 버전이 출시되었습니다', 'v1.4.0 — 자세히 보기')}>info</Button>
+          <Button variant="tertiary" size="sm" onClick={() => pushToast('success', '저장이 완료되었습니다')}>success</Button>
+          <Button variant="tertiary" size="sm" onClick={() => pushToast('warning', '변경사항이 저장되지 않았습니다')}>warning</Button>
+          <Button variant="tertiary" size="sm" onClick={() => pushToast('danger', '파일 업로드 실패', '네트워크 오류로 다시 시도해 주세요')}>danger</Button>
         </div>
         {toasts.map((t) => (
           <Toast key={t.id} variant={t.variant} duration={4000} onOpenChange={(open) => {
@@ -425,7 +425,7 @@ export default function Components() {
       <Section title="13. DropdownMenu (Tier 1)">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
+            <Button variant="tertiary" size="sm">
               <MoreHorizontal className="h-4 w-4" /> 더보기
             </Button>
           </DropdownMenuTrigger>
@@ -803,7 +803,7 @@ export default function Components() {
           {(['right', 'left', 'top', 'bottom'] as const).map((side) => (
             <Drawer key={side}>
               <DrawerTrigger asChild>
-                <Button variant="outline">{side} 열기</Button>
+                <Button variant="tertiary">{side} 열기</Button>
               </DrawerTrigger>
               <DrawerContent side={side}>
                 <DrawerHeader>
@@ -816,7 +816,7 @@ export default function Components() {
                   </p>
                 </DrawerBody>
                 <DrawerFooter>
-                  <Button variant="outline">취소</Button>
+                  <Button variant="tertiary">취소</Button>
                   <Button>저장</Button>
                 </DrawerFooter>
               </DrawerContent>
@@ -866,7 +866,7 @@ export default function Components() {
             icon={<TrendingUp />}
             title="아직 데이터가 충분하지 않습니다"
             description="최소 7일치 데이터가 있어야 추세를 표시할 수 있습니다."
-            action={<Button variant="outline">샘플 데이터 추가</Button>}
+            action={<Button variant="tertiary">샘플 데이터 추가</Button>}
           />
         </div>
       </Section>
@@ -898,7 +898,7 @@ export default function Components() {
           <p className="text-polaris-body2 text-label-neutral mb-3">
             <kbd className="px-1.5 py-0.5 rounded-polaris-sm border border-line-neutral bg-background-alternative text-polaris-caption1">⌘K</kbd> 또는 아래 버튼으로 열기.
           </p>
-          <Button variant="outline" onClick={() => setCmdOpen(true)}>명령 열기</Button>
+          <Button variant="tertiary" onClick={() => setCmdOpen(true)}>명령 열기</Button>
           <CommandDialog open={cmdOpen} onOpenChange={setCmdOpen}>
             <CommandInput placeholder="페이지 또는 액션 검색" />
             <CommandList>

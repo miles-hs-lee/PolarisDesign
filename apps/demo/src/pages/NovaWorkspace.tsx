@@ -271,7 +271,7 @@ export default function NovaWorkspace() {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
+                <Button variant="tertiary" size="sm">
                   <History className="h-4 w-4" /> 최근 설정
                   <ChevronDown className="h-3.5 w-3.5 ml-1" aria-hidden="true" />
                 </Button>

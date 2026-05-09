@@ -38,6 +38,6 @@ describe('Alert', () => {
         <AlertTitle>오류</AlertTitle>
       </Alert>
     );
-    expect(container.firstChild).toHaveClass('border-status-danger');
+    expect(container.firstChild).toHaveClass('border-state-error');
   });
 });

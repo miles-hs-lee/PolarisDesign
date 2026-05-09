@@ -8,10 +8,10 @@ const alertVariants = cva(
   {
     variants: {
       variant: {
-        info:    'bg-status-info/10 border-status-info text-label-normal',
-        success: 'bg-status-success/10 border-status-success text-label-normal',
-        warning: 'bg-status-warning/15 border-status-warning text-label-normal',
-        danger:  'bg-status-danger/10 border-status-danger text-label-normal',
+        info:    'bg-state-info-bg border-state-info text-label-normal',
+        success: 'bg-state-success-bg border-state-success text-label-normal',
+        warning: 'bg-state-warning-bg border-state-warning text-label-normal',
+        danger:  'bg-state-error-bg border-state-error text-label-normal',
         neutral: 'bg-background-normal border-line-normal text-label-normal',
       },
     },
@@ -28,10 +28,10 @@ const ICONS: Record<NonNullable<VariantProps<typeof alertVariants>['variant']>, 
 };
 
 const ICON_COLORS: Record<NonNullable<VariantProps<typeof alertVariants>['variant']>, string> = {
-  info:    'text-status-info',
-  success: 'text-status-success',
-  warning: 'text-status-warning',
-  danger:  'text-status-danger',
+  info:    'text-state-info',
+  success: 'text-state-success',
+  warning: 'text-state-warning',
+  danger:  'text-state-error',
   neutral: 'text-label-neutral',
 };
 

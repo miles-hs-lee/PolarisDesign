@@ -164,7 +164,7 @@ export function Layout() {
             <SidebarFooter>
               <div className="flex items-center justify-between gap-2">
                 <span className="text-polaris-caption1 text-label-alternative truncate">크레딧 6,805</span>
-                <Button variant="outline" size="sm" onClick={toggleTheme} className="!px-2.5">
+                <Button variant="tertiary" size="sm" onClick={toggleTheme} className="!px-2.5">
                   {theme === 'dark' ? '☀' : '🌙'}
                 </Button>
               </div>
