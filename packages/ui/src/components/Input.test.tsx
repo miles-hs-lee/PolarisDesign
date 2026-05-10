@@ -116,9 +116,13 @@ describe('Input', () => {
     expect(label.className).toContain('top-2');
   });
 
-  it('value={null} or undefined is correctly treated as absent', () => {
+  it('empty string and undefined are correctly treated as absent', () => {
+    // `null` isn't part of `InputProps['value']` (TS forbids it), so we
+    // verify only the two values consumers can actually pass: '' and
+    // undefined. Either should leave the clear × hidden + the floating
+    // label in its centered (placeholder-style) state.
     const { rerender } = render(
-      <Input label="x" value={null as unknown as string} onChange={() => {}} clearable />
+      <Input label="x" value="" onChange={() => {}} clearable />
     );
     expect(screen.queryByRole('button', { name: '입력 지우기' })).toBeNull();
     rerender(<Input label="x" value={undefined} onChange={() => {}} clearable />);

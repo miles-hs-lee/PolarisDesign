@@ -1312,17 +1312,9 @@ export default function Components() {
           <Button variant="tertiary" size="sm" onClick={() => pushToast('warning', '변경사항이 저장되지 않았습니다')}>warning</Button>
           <Button variant="tertiary" size="sm" onClick={() => pushToast('danger', '파일 업로드 실패', '네트워크 오류로 다시 시도해 주세요')}>danger</Button>
         </div>
-        {toasts.map((t) => (
-          <Toast key={t.id} variant={t.variant} duration={4000} onOpenChange={(open) => {
-            if (!open) setToasts((s) => s.filter((x) => x.id !== t.id));
-          }}>
-            <div className="flex flex-col gap-0.5 flex-1 min-w-0">
-              <ToastTitle>{t.title}</ToastTitle>
-              {t.description && <ToastDescription>{t.description}</ToastDescription>}
-            </div>
-            <ToastClose />
-          </Toast>
-        ))}
+        <p className="text-polaris-helper text-label-alternative mt-3">
+          토스트 출력 영역은 페이지 root에 있어서 어떤 카테고리 탭에서 호출해도 보입니다 — 예: Polaris 탭의 CopyButton 데모에서 onCopy 콜백으로도 동작.
+        </p>
       </Section>
 
       <Section cat="overlays" current={catTab} title="6. Alert — variants + dismissible / action">
@@ -1981,6 +1973,28 @@ export default function Components() {
           </CardBody>
         </Card>
       </Section>
+
+      {/*
+        Toast outlet — kept here at page root so toasts fire from ANY
+        category tab (CopyButton onCopy in 'polaris', FileDropZone success
+        in 'forms', DropdownMenu actions in 'overlays', …). Previously this
+        sat inside the `cat="overlays"` Section and got unmounted with the
+        rest of that section when the user switched tabs, which silenced
+        every toast triggered from another tab. Layout.tsx already wraps
+        the whole app in `<ToastProvider>` + `<ToastViewport>`, so any
+        `<Toast>` rendered here is automatically portaled to the viewport.
+      */}
+      {toasts.map((t) => (
+        <Toast key={t.id} variant={t.variant} duration={4000} onOpenChange={(open) => {
+          if (!open) setToasts((s) => s.filter((x) => x.id !== t.id));
+        }}>
+          <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+            <ToastTitle>{t.title}</ToastTitle>
+            {t.description && <ToastDescription>{t.description}</ToastDescription>}
+          </div>
+          <ToastClose />
+        </Toast>
+      ))}
     </div>
   );
 }
