@@ -45,3 +45,5 @@ export * from './Disclosure';
 // Tier 3.6 — file / time inputs (v0.7.5)
 export * from './FileInput';
 export * from './DateTimeInput';
+// Tier 3.7 — Table helpers (toolbar / selection bar / skeleton, v0.7.5)
+export * from './TableHelpers';

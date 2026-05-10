@@ -1,6 +1,6 @@
 # @polaris/ui
 
-폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 47개 React 컴포넌트.
+폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 51개 React 컴포넌트.
 
 루트 [README](../../README.md)에 전체 시스템 설명이 있습니다. 이 문서는 패키지 사용법만 다룹니다.
 
@@ -95,7 +95,7 @@ export default {
 
 v0.6 / rc.0 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-raised`, `bg-status-danger`, `text-polaris-display-lg` 등)는 deprecated alias로 작동. v0.8에서 제거. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`.
 
-## 컴포넌트 (47개)
+## 컴포넌트 (51개)
 
 ```tsx
 import {
@@ -118,6 +118,8 @@ import {
   FileInput, FileDropZone,
   DateTimeInput, TimeInput,
   PaginationFooter,                                               // (Pagination 헬퍼)
+  // Tier 3.7 (4) — Table helpers (v0.7.5)
+  TableSearchInput, TableToolbar, TableSelectionBar, TableSkeleton,
   // 부속 (server-action friendly)
   DropdownMenuFormItem,
   // Toast imperative API
@@ -329,6 +331,118 @@ const [sort, setSort] = useState<{ key: string; dir: TableSortDirection }>({ key
 - `aria-sort`(`ascending`/`descending`/`none`)와 chevron 아이콘이 자동 동기화 (WCAG 1.4.1 — 색상만으로 sort 상태 전달 X)
 - 사이클 기본값: `null → asc → desc → null`. `cycle={['asc', 'desc']}`로 2-state 강제 가능
 - `sortable` 미전달 시 기존 동작 그대로 — 마이그레이션 없음
+
+### Table — toolbar / selection / skeleton 패턴
+
+업무용 SaaS 테이블의 표준 chrome:
+
+```tsx
+import { TableToolbar, TableSelectionBar, TableSkeleton } from '@polaris/ui';
+
+// 검색 + 빠른 필터 chip + 우측 액션
+<TableToolbar
+  search={query} onSearchChange={setQuery}
+  searchPlaceholder="이름·이메일 검색"
+  searchDebounceMs={200}
+  chips={[
+    { value: 'all',    label: '전체',  count: 240 },
+    { value: 'active', label: '활성',  count: 198 },
+    { value: 'paused', label: '비활성', count: 42  },
+  ]}
+  activeChip={status} onChipChange={setStatus}
+  actions={<Button size="sm"><PlusIcon />새 항목</Button>}
+/>
+
+// 행 선택 시 toolbar 자리에 교체
+{selected.length > 0 && (
+  <TableSelectionBar
+    count={selected.length}
+    onCancel={() => setSelected([])}
+    actions={<>
+      <Button variant="tertiary" size="sm">내보내기</Button>
+      <Button variant="danger" size="sm">삭제</Button>
+    </>}
+  />
+)}
+
+// 로딩 상태
+{loading ? <TableSkeleton rows={5} columns={4} /> : <Table>…</Table>}
+```
+
+`TableSearchInput`은 단독으로도 export됨 (카드 헤더 등에서 사용). `debounceMs` prop으로 라이브 검색 디바운스, `clearable`(기본 `true`)로 × 버튼 자동.
+
+### Table cookbook — 자주 묻는 패턴 (별도 컴포넌트 X)
+
+이미 있는 컴포넌트 조합으로 해결되니 신규 export 안 만들었습니다:
+
+```tsx
+// 1. 행별 ⋯ 액션 메뉴 — TableCell + DropdownMenu
+<TableCell className="text-right">
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="ghost" size="sm" aria-label={`${row.name} 액션`}>
+        <MoreHorizontal className="h-4 w-4" />
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end">
+      <DropdownMenuItem><PencilLineIcon />수정</DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem destructive><DeleteIcon />삭제</DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+</TableCell>
+
+// 2. 행 선택 — TableHead + TableCell에 Checkbox
+<TableHead className="w-12">
+  <Checkbox
+    checked={selected.length === rows.length ? true : selected.length > 0 ? 'indeterminate' : false}
+    onCheckedChange={(v) => setSelected(v === true ? rows.map(r => r.id) : [])}
+    aria-label="모두 선택"
+  />
+</TableHead>
+// ...
+<TableCell>
+  <Checkbox checked={selected.includes(row.id)} onCheckedChange={(v) => /* ... */} aria-label={`${row.name} 선택`} />
+</TableCell>
+
+// 3. 빈 상태 — TableBody 안에 colSpan으로 EmptyState
+<TableBody>
+  {rows.length === 0 ? (
+    <TableRow>
+      <TableCell colSpan={columns.length} className="py-12">
+        <EmptyState
+          title="결과가 없습니다"
+          description="필터 조건을 변경해보세요"
+          action={<Button onClick={resetFilters}>필터 초기화</Button>}
+        />
+      </TableCell>
+    </TableRow>
+  ) : rows.map((row) => /* ... */)}
+</TableBody>
+
+// 4. 컬럼 가시성 토글 — TableToolbar actions 슬롯 + DropdownMenu + Checkbox
+<TableToolbar
+  search={...}
+  actions={
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="tertiary" size="sm"><SettingsIcon />컬럼</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        {columnDefs.map((col) => (
+          <DropdownMenuCheckboxItem
+            key={col.key}
+            checked={visible.includes(col.key)}
+            onCheckedChange={(v) => /* toggle */}
+          >
+            {col.label}
+          </DropdownMenuCheckboxItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  }
+/>
+```
 
 ### FileInput / FileDropZone
 

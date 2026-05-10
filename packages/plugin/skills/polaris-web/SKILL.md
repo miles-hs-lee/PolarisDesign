@@ -36,6 +36,8 @@ You are working on a Polaris Office web service. Apply these rules without askin
      FileInput, FileDropZone,
      DateTimeInput, TimeInput,
      PaginationFooter,
+     // Tier 3.7 — Table helpers (v0.7.5)
+     TableSearchInput, TableToolbar, TableSelectionBar, TableSkeleton,
      // Server-action friendly (Next.js App Router)
      DropdownMenuFormItem,
      // Toast imperative API (call toast({...}) anywhere; mount <Toaster /> once)
@@ -62,6 +64,10 @@ You are working on a Polaris Office web service. Apply these rules without askin
    - **datetime / time-of-day picker** → `<DateTimeInput>` / `<TimeInput>` (native input wrapper, mobile-OS picker auto). Use `<DatePicker>` only when you need a calendar grid. Don't roll your own datetime UI.
    - **Passive status badge** ("비활성", "초안", "정책 위반") → `<Badge tone="outline">` — sits between `subtle` (can disappear) and `solid` (demands attention).
    - **Layered elevation in dark mode** (popover-on-card, modal-on-popover) → `bg-surface-popover` / `bg-surface-modal` (v0.7.5 new tiers). Don't `color-mix()` your way around `surface.raised`.
+   - **Data-table chrome** (search bar, filter chips, "+ 추가") → `<TableToolbar>` with `search`/`onSearchChange` + `chips`/`activeChip`/`onChipChange` + `actions` slot. Don't compose Search input + filter chips by hand.
+   - **Bulk-action bar when rows selected** → `<TableSelectionBar count={...} onCancel={...} actions={...} />` *in place of* the toolbar (conditional render). Don't roll your own brand-tinted strip.
+   - **Async-loading table placeholder** → `<TableSkeleton rows={5} columns={4} />` (ARIA `aria-busy=true` + Skeleton shimmer). Don't manually render a `<Table>` of `<Skeleton>` cells.
+   - **Row-level ⋯ menu / row selection / empty state inside table** → no new component needed; compose `<DropdownMenu>` in last `<TableCell>` / `<Checkbox>` in first cell / `<EmptyState>` inside `<TableCell colSpan>`. Patterns documented in the @polaris/ui README cookbook.
 
    **Subpath imports** — keep root barrel light:
    ```ts

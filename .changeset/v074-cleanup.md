@@ -60,6 +60,26 @@ v0.7.3 리뷰의 🟢 nice-to-have 7건 정리 + 컨슈머 피드백 8건 반영
 - README "자주 놓치는 패턴" 섹션에 7개 신규 사용 예시 1줄씩 + Surface elevation 표.
 - SKILL.md "Don't roll your own when these exist"에 7개 항목 추가.
 
+**v0.7.5 — Table helpers 추가 (47 → 51):**
+- `TableSearchInput` — 돋보기 + clear × + 옵션 debounce. 단독 사용 가능
+- `TableToolbar` — search + filter chips + 우측 actions 슬롯을 표준 layout으로 묶은 wrapper. `chips`은 `{value, label, count?}[]`, `activeChip`/`onChipChange`로 컨트롤
+- `TableSelectionBar` — 선택 행 N개 + bulk action 슬롯 + cancel. brand 틴트 strip. toolbar 자리에 conditional render하는 패턴
+- `TableSkeleton` — `rows×columns` 행 placeholder. `role="status"` + `aria-busy="true"` + `aria-live="polite"`. animate-pulse는 motion-safe (reduced-motion 자동 존중)
+- README cookbook에 별도 컴포넌트화 안 한 4건 추가: 행별 ⋯ 액션 메뉴 (TableCell + DropdownMenu) / 행 선택 (Checkbox + indeterminate 헤더) / 빈 상태 (TableCell colSpan + EmptyState) / 컬럼 가시성 토글 (TableToolbar actions + DropdownMenuCheckboxItem)
+- 테스트 +12건 (TableSearchInput 2 + TableToolbar 4 + TableSelectionBar 3 + TableSkeleton 3)
+
+**Demo 카탈로그 보강:**
+- `apps/demo/src/pages/Components.tsx`에 v0.7.4/v0.7.5 신규 10종 모두 섹션 추가 (#36~#44):
+  - Progress (5단 값 · tone 5종 · size 3종 · indeterminate · 인터랙티브)
+  - CopyButton (4 variants · iconOnly · 토스트 연동)
+  - Stat (4-up grid · positive/negative/accent · helper · icon)
+  - Disclosure (default · defaultOpen · hideChevron · asChild Button trigger)
+  - Badge outline tone (subtle/solid/outline 6 variant 비교)
+  - PaginationFooter (기본 · showTotal=false · 사이즈 셀렉터 미사용 · i18n labels)
+  - **Sortable Table 통합 데모** — `TableToolbar`(검색+chip+추가) ↔ `TableSelectionBar`(N개 선택 시 교체) + Checkbox 행 선택(indeterminate 헤더) + sortable TableHead + 행별 ⋯ DropdownMenu + TableSkeleton
+  - FileInput / FileDropZone (3+2 variants)
+  - DateTimeInput / TimeInput (정상 / 에러 상태 grid)
+
 
 
 **`apps/demo`:**
@@ -85,7 +105,7 @@ v0.7.3 리뷰의 🟢 nice-to-have 7건 정리 + 컨슈머 피드백 8건 반영
 - `pnpm verify` → 13/13 ✓
 - `pnpm test:e2e` → baseline 변동 없음 (신규 컴포넌트는 demo 카탈로그에 아직 미노출 — 다음 패치 후보)
 - `pnpm --filter @polaris/lint test` → 95/95 ✓
-- `pnpm --filter @polaris/ui test` → **89 → 151/151 ✓** (+62 신규)
+- `pnpm --filter @polaris/ui test` → **89 → 163/163 ✓** (+74 신규)
 - demo lint warning **80 → 36** (-44, 55% 감소)
 
 Patch only — additive. 컨슈머 영향 없음 (모든 신규 export, 기존 API 변경 없음). `TableHead`의 `sortable`/`sortDirection`/`onSortChange`/`cycle` props도 모두 optional이라 미전달 시 기존 동작 그대로.

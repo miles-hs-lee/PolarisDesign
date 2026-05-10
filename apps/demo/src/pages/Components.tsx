@@ -68,6 +68,7 @@ import {
   PaginationPrev,
   PaginationNext,
   PaginationEllipsis,
+  PaginationFooter,
   Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
@@ -106,6 +107,25 @@ import {
   CommandItem,
   CommandSeparator,
   CommandShortcut,
+  // Tier 3.5 — feedback / utility (v0.7.4)
+  Progress,
+  CopyButton,
+  Stat,
+  Disclosure,
+  DisclosureRoot,
+  DisclosureTrigger,
+  DisclosureContent,
+  // Tier 3.6 — file / time inputs (v0.7.5)
+  FileInput,
+  FileDropZone,
+  DateTimeInput,
+  TimeInput,
+  // Tier 3.7 — Table helpers (v0.7.5)
+  TableSearchInput,
+  TableToolbar,
+  TableSelectionBar,
+  TableSkeleton,
+  type TableSortDirection,
 } from '@polaris/ui';
 import { BellIcon, DeleteIcon, DownloadIcon, FolderIcon, ImageIcon, PencilLineIcon, PlusIcon, SearchIcon, SettingsIcon } from '@polaris/ui/icons';
 import {
@@ -151,6 +171,16 @@ export default function Components() {
   const [cmdOpen, setCmdOpen] = useState(false);
   const [ribbonAlign, setRibbonAlign] = useState('justify');
   const [mdMarks, setMdMarks] = useState<string[]>(['bold']);
+  // v0.7.4 / v0.7.5 demo state
+  const [progressVal, setProgressVal] = useState(47);
+  const [paginationFooterPage, setPaginationFooterPage] = useState(3);
+  const [paginationFooterSize, setPaginationFooterSize] = useState(25);
+  const [tableSort, setTableSort] = useState<{ key: 'name' | 'created'; dir: TableSortDirection }>({ key: 'name', dir: 'asc' });
+  const [tableQuery, setTableQuery] = useState('');
+  const [tableFilter, setTableFilter] = useState<'all' | 'active' | 'paused'>('all');
+  const [tableSelected, setTableSelected] = useState<number[]>([]);
+  const [datetimeVal, setDatetimeVal] = useState('2026-12-31T23:59');
+  const [timeVal, setTimeVal] = useState('09:30');
   const contactForm = useForm<{ name: string; email: string }>({
     resolver: zodResolver(z.object({
       name: z.string().min(2, '2자 이상 입력하세요'),
@@ -1051,7 +1081,493 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="36. 폴라리스 화면 모방 (조합 검증)">
+      <Section title="36. Progress (v0.7.4) — determinate / indeterminate · tone · size">
+        <Card variant="padded">
+          <Stack gap={4}>
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Determinate (다양한 값) — 0 / 25 / 50 / 75 / 100
+              </p>
+              <Stack gap={2}>
+                {[0, 25, 50, 75, 100].map((v) => (
+                  <Stack key={v} direction="row" align="center" gap={3}>
+                    <Progress value={v} aria-label={`${v}%`} className="flex-1" />
+                    <span className="w-10 text-polaris-helper text-label-alternative tabular-nums">
+                      {v}%
+                    </span>
+                  </Stack>
+                ))}
+              </Stack>
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Tones — accent · success · warning · danger · ai
+              </p>
+              <Stack gap={2}>
+                <Progress value={70} tone="accent" aria-label="accent" />
+                <Progress value={70} tone="success" aria-label="success" />
+                <Progress value={70} tone="warning" aria-label="warning" />
+                <Progress value={70} tone="danger" aria-label="danger" />
+                <Progress value={70} tone="ai" aria-label="ai" />
+              </Stack>
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Sizes — sm / md / lg
+              </p>
+              <Stack gap={2}>
+                <Progress value={60} size="sm" aria-label="sm" />
+                <Progress value={60} size="md" aria-label="md" />
+                <Progress value={60} size="lg" aria-label="lg" />
+              </Stack>
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Indeterminate (셔틀 애니메이션 · prefers-reduced-motion 자동 존중)
+              </p>
+              <Progress aria-label="문서 분석 중" />
+            </div>
+
+            <Stack direction="row" gap={2} align="center">
+              <Button size="sm" variant="tertiary" onClick={() => setProgressVal((v) => Math.max(0, v - 10))}>
+                -10
+              </Button>
+              <Progress value={progressVal} aria-label="인터랙티브" className="flex-1" />
+              <Button size="sm" variant="tertiary" onClick={() => setProgressVal((v) => Math.min(100, v + 10))}>
+                +10
+              </Button>
+              <span className="w-10 text-polaris-helper text-label-alternative tabular-nums">
+                {progressVal}%
+              </span>
+            </Stack>
+          </Stack>
+        </Card>
+      </Section>
+
+      <Section title="37. CopyButton (v0.7.4) — clipboard + 1.5s 성공 피드백">
+        <Card variant="padded">
+          <Stack gap={3}>
+            <Stack direction="row" gap={2} wrap>
+              <CopyButton text="https://polaris.example.com/share/abc123">URL 복사</CopyButton>
+              <CopyButton
+                text="POLARIS-2026-Q1-PROPOSAL"
+                variant="primary"
+              >
+                코드 복사
+              </CopyButton>
+              <CopyButton
+                text="https://polaris.example.com/share/abc123"
+                iconOnly
+                aria-label="공유 URL 복사"
+              />
+              <CopyButton
+                text="실패 시 onError 발화"
+                variant="danger"
+                size="sm"
+                onCopy={() => pushToast('success', '클립보드 복사됨')}
+              >
+                토스트 연동
+              </CopyButton>
+            </Stack>
+            <p className="text-polaris-helper text-label-alternative">
+              버튼은 `Button` variant/size를 그대로 받음. iconOnly + aria-label로 squarification.
+            </p>
+          </Stack>
+        </Card>
+      </Section>
+
+      <Section title="38. Stat (v0.7.4) — KPI 타일 (Card 안에 wrap)">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-polaris-md">
+          <Card variant="padded">
+            <Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" />
+          </Card>
+          <Card variant="padded">
+            <Stat label="고유 방문" value="892" delta="-3%" deltaTone="negative" />
+          </Card>
+          <Card variant="padded">
+            <Stat
+              label="다운로드"
+              value="148"
+              delta="+5%"
+              deltaTone="accent"
+              icon={<DownloadIcon />}
+            />
+          </Card>
+          <Card variant="padded">
+            <Stat
+              label="차단"
+              value="7"
+              helper="지난 7일 기준"
+            />
+          </Card>
+        </div>
+      </Section>
+
+      <Section title="39. Disclosure (v0.7.4) — 단일 collapsible (Radix 기반)">
+        <Card variant="padded">
+          <Stack gap={2}>
+            <Disclosure title="기본 — 셰브론 자동 회전">
+              <p className="text-polaris-body2 text-label-neutral">
+                Radix Collapsible로 ARIA aria-expanded / aria-controls 자동.
+              </p>
+            </Disclosure>
+            <Disclosure title="기본 열림 (defaultOpen)" defaultOpen>
+              <Stack gap={2}>
+                <Input label="별명" placeholder="입력하세요" />
+                <Input label="이메일" type="email" placeholder="user@example.com" />
+              </Stack>
+            </Disclosure>
+            <Disclosure title="셰브론 숨김 (hideChevron)" hideChevron>
+              <p className="text-polaris-body2 text-label-neutral">트리거에서 chevron 제거.</p>
+            </Disclosure>
+
+            <p className="text-polaris-caption1 text-label-alternative mt-2">
+              Compound API — 커스텀 trigger (asChild)
+            </p>
+            <DisclosureRoot>
+              <DisclosureTrigger asChild>
+                <Button variant="tertiary" size="sm">
+                  Button을 트리거로
+                </Button>
+              </DisclosureTrigger>
+              <DisclosureContent>
+                <p className="text-polaris-body2 text-label-neutral mt-2">
+                  asChild=true면 wrapper/chevron 모두 생략 — 자식 element가 trigger를 fully own.
+                </p>
+              </DisclosureContent>
+            </DisclosureRoot>
+          </Stack>
+        </Card>
+      </Section>
+
+      <Section title="40. Badge — outline tone 추가 (v0.7.5)">
+        <Card variant="padded">
+          <Stack gap={4}>
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">subtle (default)</p>
+              <Stack direction="row" gap={2} wrap>
+                <Badge variant="neutral">Neutral</Badge>
+                <Badge variant="primary">Primary</Badge>
+                <Badge variant="success">Success</Badge>
+                <Badge variant="warning">Warning</Badge>
+                <Badge variant="danger">Danger</Badge>
+                <Badge variant="info">Info</Badge>
+              </Stack>
+            </div>
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">solid</p>
+              <Stack direction="row" gap={2} wrap>
+                <Badge variant="neutral" tone="solid">Neutral</Badge>
+                <Badge variant="primary" tone="solid">Primary</Badge>
+                <Badge variant="success" tone="solid">Success</Badge>
+                <Badge variant="warning" tone="solid">Warning</Badge>
+                <Badge variant="danger" tone="solid">Danger</Badge>
+                <Badge variant="info" tone="solid">Info</Badge>
+              </Stack>
+            </div>
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                outline ⬆ NEW — passive 상태 (초안 / 비활성 / 위반)
+              </p>
+              <Stack direction="row" gap={2} wrap>
+                <Badge variant="neutral" tone="outline">초안</Badge>
+                <Badge variant="primary" tone="outline">검토 중</Badge>
+                <Badge variant="success" tone="outline">완료</Badge>
+                <Badge variant="warning" tone="outline">대기</Badge>
+                <Badge variant="danger" tone="outline">정책 위반</Badge>
+                <Badge variant="info" tone="outline">알림</Badge>
+              </Stack>
+            </div>
+          </Stack>
+        </Card>
+      </Section>
+
+      <Section title="41. PaginationFooter (v0.7.5) — 번호 + 사이즈 + total 통합">
+        <Card variant="padded">
+          <Stack gap={4}>
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                기본 (검색 + 사이즈 셀렉터 + 인디케이터 모두 표시)
+              </p>
+              <PaginationFooter
+                page={paginationFooterPage}
+                pageSize={paginationFooterSize}
+                total={1234}
+                onPageChange={setPaginationFooterPage}
+                onPageSizeChange={(n) => {
+                  setPaginationFooterSize(n);
+                  setPaginationFooterPage(1);
+                }}
+              />
+            </div>
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                인디케이터 숨김 (showTotal=false)
+              </p>
+              <PaginationFooter
+                page={1}
+                pageSize={10}
+                total={45}
+                showTotal={false}
+                onPageChange={() => {}}
+                onPageSizeChange={() => {}}
+              />
+            </div>
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                번호만 (사이즈 셀렉터 미사용)
+              </p>
+              <PaginationFooter
+                page={2}
+                pageSize={10}
+                total={45}
+                onPageChange={() => {}}
+              />
+            </div>
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                i18n 라벨 커스텀 (labels prop)
+              </p>
+              <PaginationFooter
+                page={1}
+                pageSize={10}
+                total={50}
+                onPageChange={() => {}}
+                onPageSizeChange={() => {}}
+                labels={{
+                  total: (s, e, t) => `Showing ${s}-${e} of ${t}`,
+                  pageSize: 'Per page',
+                }}
+              />
+            </div>
+          </Stack>
+        </Card>
+      </Section>
+
+      <Section title="42. Sortable Table + TableToolbar / TableSelectionBar / TableSkeleton (v0.7.5)">
+        <Card>
+          <CardBody>
+            {tableSelected.length === 0 ? (
+              <TableToolbar
+                search={tableQuery}
+                onSearchChange={setTableQuery}
+                searchPlaceholder="이름·이메일 검색"
+                searchDebounceMs={200}
+                chips={[
+                  { value: 'all', label: '전체', count: 240 },
+                  { value: 'active', label: '활성', count: 198 },
+                  { value: 'paused', label: '비활성', count: 42 },
+                ]}
+                activeChip={tableFilter}
+                onChipChange={setTableFilter}
+                actions={
+                  <Button size="sm">
+                    <PlusIcon />새 항목
+                  </Button>
+                }
+              />
+            ) : (
+              <TableSelectionBar
+                count={tableSelected.length}
+                onCancel={() => setTableSelected([])}
+                actions={
+                  <>
+                    <Button variant="tertiary" size="sm">내보내기</Button>
+                    <Button variant="danger" size="sm">
+                      <DeleteIcon />삭제
+                    </Button>
+                  </>
+                }
+              />
+            )}
+
+            <div className="mt-polaris-md">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12">
+                      <Checkbox
+                        checked={tableSelected.length === 4 ? true : tableSelected.length > 0 ? 'indeterminate' : false}
+                        onCheckedChange={(v) => setTableSelected(v === true ? [1, 2, 3, 4] : [])}
+                        aria-label="모두 선택"
+                      />
+                    </TableHead>
+                    <TableHead
+                      sortable
+                      sortDirection={tableSort.key === 'name' ? tableSort.dir : null}
+                      onSortChange={(dir) => setTableSort({ key: 'name', dir })}
+                    >
+                      이름
+                    </TableHead>
+                    <TableHead>이메일</TableHead>
+                    <TableHead
+                      sortable
+                      sortDirection={tableSort.key === 'created' ? tableSort.dir : null}
+                      onSortChange={(dir) => setTableSort({ key: 'created', dir })}
+                    >
+                      가입일
+                    </TableHead>
+                    <TableHead className="w-12 text-right">…</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {[
+                    { id: 1, name: '김민수', email: 'minsu@polaris.com',  created: '2026-01-12', status: 'active' },
+                    { id: 2, name: '이서연', email: 'seoyeon@polaris.com', created: '2026-02-04', status: 'active' },
+                    { id: 3, name: '박정호', email: 'jungho@polaris.com',  created: '2026-03-19', status: 'paused' },
+                    { id: 4, name: '최예린', email: 'yerin@polaris.com',   created: '2026-04-22', status: 'active' },
+                  ].map((row) => (
+                    <TableRow key={row.id}>
+                      <TableCell>
+                        <Checkbox
+                          checked={tableSelected.includes(row.id)}
+                          onCheckedChange={(v) =>
+                            setTableSelected((prev) =>
+                              v === true ? [...prev, row.id] : prev.filter((x) => x !== row.id)
+                            )
+                          }
+                          aria-label={`${row.name} 선택`}
+                        />
+                      </TableCell>
+                      <TableCell className="font-medium">{row.name}</TableCell>
+                      <TableCell className="text-label-neutral">{row.email}</TableCell>
+                      <TableCell className="text-label-alternative tabular-nums">{row.created}</TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" aria-label={`${row.name} 액션`}>
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>
+                              <PencilLineIcon size={16} />수정
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Copy className="h-4 w-4" />복제
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem destructive>
+                              <DeleteIcon size={16} />삭제
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            <p className="mt-polaris-md text-polaris-caption1 text-label-alternative">
+              현재: 검색 “{tableQuery || '(없음)'}” · 필터 “{tableFilter}” · 정렬{' '}
+              {tableSort.dir ? `${tableSort.key} ${tableSort.dir}` : '없음'} · 선택 {tableSelected.length}건
+            </p>
+          </CardBody>
+        </Card>
+
+        <p className="text-polaris-caption1 text-label-alternative mt-3 mb-2">
+          로딩 상태 — `&lt;TableSkeleton&gt;` 5행 × 4열
+        </p>
+        <TableSkeleton rows={5} columns={4} />
+      </Section>
+
+      <Section title="43. FileInput / FileDropZone (v0.7.5)">
+        <div className="grid md:grid-cols-2 gap-polaris-md">
+          <Card variant="padded">
+            <Stack gap={4}>
+              <div>
+                <p className="text-polaris-caption1 text-label-alternative mb-2">기본</p>
+                <FileInput label="첨부 파일" />
+              </div>
+              <div>
+                <p className="text-polaris-caption1 text-label-alternative mb-2">
+                  multiple + accept + hint
+                </p>
+                <FileInput
+                  label="이미지 업로드"
+                  accept="image/*"
+                  multiple
+                  hint="JPG, PNG, GIF · 각 5MB 이하"
+                />
+              </div>
+              <div>
+                <p className="text-polaris-caption1 text-label-alternative mb-2">error 상태</p>
+                <FileInput
+                  label="필수 첨부"
+                  error="파일을 선택하세요"
+                />
+              </div>
+            </Stack>
+          </Card>
+
+          <Card variant="padded">
+            <Stack gap={3}>
+              <div>
+                <p className="text-polaris-caption1 text-label-alternative mb-2">
+                  Drag&amp;drop · accept + maxSize 검증 + onReject 토스트
+                </p>
+                <FileDropZone
+                  accept=".pdf,.docx"
+                  multiple
+                  maxSize={10 * 1024 * 1024}
+                  hint="PDF, DOCX · 각 10 MB 이하"
+                  onFilesChange={(files) =>
+                    pushToast('success', `${files.length}개 파일 수락됨`, files.map((f) => f.name).join(', '))
+                  }
+                  onReject={(rejections) =>
+                    pushToast('danger', '파일 거부됨', rejections[0]?.reason)
+                  }
+                />
+              </div>
+              <div>
+                <p className="text-polaris-caption1 text-label-alternative mb-2">disabled</p>
+                <FileDropZone disabled prompt="현재 비활성" />
+              </div>
+            </Stack>
+          </Card>
+        </div>
+      </Section>
+
+      <Section title="44. DateTimeInput / TimeInput (v0.7.5) — native input wrap">
+        <Card variant="padded">
+          <Stack gap={4}>
+            <div className="grid md:grid-cols-2 gap-polaris-md">
+              <DateTimeInput
+                label="만료일"
+                hint="브라우저 시간대 기준"
+                value={datetimeVal}
+                onChange={(e) => setDatetimeVal(e.target.value)}
+              />
+              <TimeInput
+                label="알림 시각"
+                hint="HH:MM 24시간 표기"
+                value={timeVal}
+                onChange={(e) => setTimeVal(e.target.value)}
+              />
+            </div>
+            <div className="grid md:grid-cols-2 gap-polaris-md">
+              <DateTimeInput
+                label="에러 상태"
+                error="유효하지 않은 일시"
+                defaultValue="2099-13-32T25:99"
+              />
+              <TimeInput
+                label="에러 상태"
+                error="시각 필수"
+              />
+            </div>
+            <p className="text-polaris-helper text-label-alternative">
+              현재 값: datetime = {datetimeVal} · time = {timeVal}
+            </p>
+          </Stack>
+        </Card>
+      </Section>
+
+      <Section title="45. 폴라리스 화면 모방 (조합 검증)">
         <Card>
           <CardHeader>
             <CardTitle>최근 문서</CardTitle>
