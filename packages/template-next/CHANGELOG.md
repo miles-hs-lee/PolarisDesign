@@ -1,5 +1,11 @@
 # polaris-template-next
 
+## 0.7.5
+
+### Patch Changes
+
+- `@polaris/ui` 0.7.5로 업데이트 — 신규 컴포넌트 14종 + Table sortable / outline Badge / surface elevation 토큰 / focus-ring util 사용 가능. 기존 코드 변경 0.
+
 ## 0.7.3
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@polaris/lint",
-  "version": "0.7.3",
+  "version": "0.7.5",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

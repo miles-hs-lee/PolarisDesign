@@ -1,5 +1,27 @@
 # @polaris/ui
 
+## 0.7.5
+
+### Patch Changes
+
+- 컨슈머(DocFlow) 피드백 + v0.7.5/v0.8 후보로 분류했던 항목까지 한 번에 묶은 누적 patch. **BREAKING 없음** — 모두 additive.
+
+  **신규 컴포넌트 14종 (37 → 51):**
+  - feedback / utility — `Progress`, `CopyButton`, `Stat`, `Disclosure` (4)
+  - file / time / pagination — `FileInput`, `FileDropZone`, `DateTimeInput`, `TimeInput`, `PaginationFooter` (5)
+  - Table helpers — `TableSearchInput`, `TableToolbar`, `TableSelectionBar`, `TableSkeleton` + `TableHead sortable` 확장 (5)
+
+  **API / 토큰:**
+  - `Badge tone="outline"` (12 variants × outline tone, WCAG AA 충족 *-strong 토큰 매핑)
+  - `state.{success,warning,error,info}Strong` 신규 토큰 4 (light: ramp 70 / dark: ramp 30, ≥4.5:1 검증)
+  - `surface.popover` / `surface.modal` elevation 토큰 2단 — DropdownMenu/Select/Popover/Command 는 popover, Dialog/Drawer/CommandDialog 는 modal로 자동 매핑
+  - `shadow-polaris-focus` Tailwind utility (3px 시스템 포커스 링)
+  - `Disclosure asChild` Slot pass-through 정합 처리
+
+  **테스트:** 89 → **169/169 ✓** (+80)
+
+  자세한 narrative는 루트 [`CHANGELOG.md`](../../CHANGELOG.md#075--2026-05-10) 참조.
+
 ## 0.7.3
 
 ### Patch Changes

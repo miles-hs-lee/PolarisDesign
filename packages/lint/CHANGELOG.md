@@ -1,5 +1,13 @@
 # @polaris/lint
 
+## 0.7.5
+
+### Patch Changes
+
+- `polaris-audit` CLI temp config가 임시 디렉토리(`/tmp/polaris-audit-*/`)에 `node_modules`가 없어 `import polaris from '@polaris/lint'` resolve 실패하던 버그 fix. `createRequire(import.meta.url).resolve('@polaris/lint', { paths: [target] })` + `pathToFileURL`로 절대 file URL을 inject. target 우선, audit 스크립트 자체 location fallback. 미설치 시 친절한 안내 메시지로 종료.
+
+- `meta.version` `0.7.3` → `0.7.5` (sync-root-version에 의한 자동 갱신).
+
 ## 0.7.3
 
 ### Patch Changes

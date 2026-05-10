@@ -8,7 +8,76 @@
 
 ## [Unreleased]
 
-다음 릴리스 candidate — [docs/roadmap.md](docs/roadmap.md) v0.7.x / v0.8 섹션.
+다음 릴리스 candidate — [docs/roadmap.md](docs/roadmap.md) v0.8 BREAKING 청소 후보.
+
+---
+
+## [0.7.5] — 2026-05-10
+
+컨슈머(DocFlow) 피드백 + 이전에 v0.7.5/v0.8 후보로 분류했던 것까지 한 번에 묶은 누적 patch. **BREAKING 없음** — 모두 additive (신규 컴포넌트 / 토큰 / 슬롯). 컴포넌트 37 → **51개** (+14), 테스트 89 → **169/169 ✓** (+80). 컨슈머 측 codemod 불필요. (0.7.4는 누적 commit이 빠르게 쌓여 별도 release 없이 0.7.5로 점프.)
+
+### `@polaris/ui` — 신규 컴포넌트 14종
+
+**Tier 3.5 — feedback / utility (4종)**
+
+- **`<Progress>`** — determinate(`value` 0-100) / indeterminate, tone 5종(accent/success/warning/danger/ai), size 3, ARIA 풀세트 + `prefers-reduced-motion` 자동 존중
+- **`<CopyButton>`** — `<Button>` wrapper. clipboard write + 1.5s "복사됨" + `aria-live="polite"` + non-secure 폴백(textarea + execCommand). `iconOnly` 모드, `onCopy`/`onError` 콜백
+- **`<Stat>`** — KPI 타일. `label`/`value`/`delta`/`deltaTone`(neutral/positive/negative/accent)/`icon`/`helper` 슬롯
+- **`<Disclosure>`** — Radix Collapsible 기반 single show/hide. 셰브론 180° 회전 + `asChild`로 fully custom trigger도 지원
+
+**Tier 3.6 — file / time / pagination (5종)**
+
+- **`<FileInput>`** — 트리거 버튼 + 선택 파일명 + 멀티파일 제거 UI
+- **`<FileDropZone>`** — 드래그&드롭 + `accept`/`maxSize` 검증 + `onReject({file, code, reason}[])`. ARIA `role="button"` + Enter/Space activation. `multiple=false` drop 경로도 native picker와 동일하게 첫 1개 강제. consumer onClick/onDrag* 핸들러 compose (preventDefault로 opt-out)
+- **`<DateTimeInput>`** / **`<TimeInput>`** — native input wrap (모바일 OS picker + 브라우저 i18n). `<Input>`과 동일 시각. JSDoc에 UTC shift 함정(`toISOString().slice(0,16)` 9h 어긋남) + `toLocalDatetime(d)` helper 가이드
+- **`<PaginationFooter>`** — 페이지 번호 + "X-Y of N" + pageSize 셀렉터를 한 row로 통합. `labels` prop으로 i18n
+
+**Tier 3.7 — Table helpers (5종, +Table 확장)**
+
+- **`<TableSearchInput>`** — 돋보기 + clear × + 옵션 debounce. 단독 export
+- **`<TableToolbar>`** — search + filter chips(`{value, label, count?}[]`) + 우측 actions 슬롯
+- **`<TableSelectionBar>`** — 선택 N개 + bulk action 슬롯 + cancel. brand 틴트 strip
+- **`<TableSkeleton>`** — `rows × columns` placeholder. `role="status"` + `aria-busy`
+- **`<TableHead sortable>`** — 기존 `<TableHead>`에 `sortable`/`sortDirection`/`onSortChange`/`cycle` 추가. `aria-sort` 자동 + 3-state chevron + `null → asc → desc → null` 사이클 (2-state도 지원). `sortable` 미전달 시 기존 동작 그대로
+
+### `@polaris/ui` — API / 토큰 확장
+
+- **`Badge tone="outline"`** — 12 variants × outline tone. WCAG AA 충족: brand/ai/state는 신규 `*-strong` 토큰, file은 border만 컬러 + text는 `label-normal`로 시프트
+- **`state.{success,warning,error,info}Strong` 신규 토큰 4개** (light: ramp 70 / dark: ramp 30, 모두 ≥4.5:1 검증) — 작은 12px 상태 텍스트 안전한 옵션
+- **`surface.popover` / `surface.modal`** elevation 토큰 2단 (light 모두 #FFFFFF, dark `#232336`/`#2D2D45`). first-party overlay 적용:
+  - `DropdownMenu` / `SelectContent` / `PopoverContent` / `Command` → `bg-surface-popover`
+  - `DialogContent` / `DrawerContent` / `CommandDialog` → `bg-surface-modal`
+  - `layer.overlay`(scrim/dim) ↔ `surface.modal`(panel) 의미 분리 명시
+- **`shadow-polaris-focus`** Tailwind utility + `--polaris-shadow-focus` 토큰 — 3px 시스템 포커스 링, light/dark alpha 자동 조정
+- **`Disclosure` asChild** — `asChild=true`면 wrapper/chevron 모두 생략 후 Slot으로 forward (Radix single-child 요건 준수)
+
+### Demo 카탈로그 (`apps/demo/Components.tsx` #36~#44)
+
+신규 14종을 다양한 variant로 노출 — Progress 5단×3사이즈×5톤 / CopyButton 4 variants + iconOnly + 토스트 / Stat 4-up grid / Disclosure 4 모드 / Badge subtle/solid/outline 6×3 / PaginationFooter 4 모드 / **Sortable Table 통합 데모** (TableToolbar↔TableSelectionBar 교체 + Checkbox 행 선택 indeterminate + sortable + 행별 ⋯ + TableSkeleton) / FileInput·FileDropZone 5 케이스 / DateTimeInput·TimeInput 정상/에러
+
+### `@polaris/lint` / `@polaris/plugin` — 컨슈머 환경 fix
+
+- **`packages/plugin/README.md`** — 옵션 A 로컬 심링크가 현재 Claude Code에서 동작 안 함. 루트 [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) 추가 + `/plugin marketplace add .` + `/plugin install polaris-design@polaris-design` 흐름으로 갱신. Claude **데스크탑** 앱은 plugin 시스템 노출 안 함 (CLI 전용)
+- **`polaris-audit` temp config resolve** — `createRequire(import.meta.url).resolve('@polaris/lint', { paths: [target] })` + `pathToFileURL`로 절대 file URL을 inject (임시 디렉토리에 node_modules 없는 환경 대응)
+
+### 컨슈머 cookbook (디스커버리 fix)
+
+피드백 분석 결과 **약 절반은 이미 있는데 컨슈머가 못 찾은 디스커버리 문제**였음. README/SKILL.md에 cookbook 섹션 신설 — `<Stack direction="row" justify="between">` (Inline/HStack 케이스) / Card slot 패턴 / Input `hint`/`error` / Toast `toast()` imperative / EmptyState `action` / DropdownMenuFormItem / 행 ⋯ 메뉴 / 행 선택 indeterminate / TableCell colSpan + EmptyState 빈 상태 / 컬럼 가시성 토글
+
+### 검증
+
+- `pnpm verify` 13/13 ✓ (60s)
+- `@polaris/ui` test 89 → **169/169 ✓** (+80 신규)
+- `@polaris/lint` test 95/95 ✓
+- demo lint warning 80 → 36 (-44, 55% 감소)
+
+### 컨슈머 영향
+
+**없음** — 모두 신규 export 또는 미사용 prop 추가. 기존 코드 변경 0건.
+
+- `Input.hint` 사용처 OK (helperText alias는 v0.8.0에서 검토)
+- `<TableHead>` 기존 사용처는 자동 (sortable 미전달 시 기존 렌더)
+- 다크모드 popover/modal이 살짝 밝아짐 (의도된 elevation 강화)
 
 ---
 

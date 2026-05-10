@@ -1,5 +1,15 @@
 # @polaris/plugin
 
+## 0.7.5
+
+### Patch Changes
+
+- 옵션 A "로컬 심링크" 절차가 현재 Claude Code에서 동작하지 않음. 루트에 [`.claude-plugin/marketplace.json`](../../.claude-plugin/marketplace.json) 추가하고 README를 mini-marketplace 흐름(`/plugin marketplace add .` + `/plugin install polaris-design@polaris-design`)으로 갱신. Claude **데스크탑** 앱은 plugin 시스템 노출 안 함을 명시 (CLI 전용).
+
+- SKILL.md 보강 — 컨슈머 cookbook 섹션 추가: Stack `direction="row"`, Card slot 패턴, Input `hint`/`error`, Toast imperative API, EmptyState `action`, DropdownMenuFormItem, 행 ⋯ 메뉴, 행 선택 indeterminate, EmptyState 빈 상태, 컬럼 가시성 토글. surface elevation 가이드(popover vs modal vs layer.overlay 의미 분리). label.* vs state.* 시맨틱 분리 + 다크모드 자동/수동 가이드.
+
+- 신규 컴포넌트 14종(`Progress`/`CopyButton`/`Stat`/`Disclosure` + `FileInput`/`FileDropZone`/`DateTimeInput`/`TimeInput`/`PaginationFooter` + Table helpers 5종)을 권장 import 목록에 노출.
+
 ## 0.7.3
 
 ### Patch Changes
