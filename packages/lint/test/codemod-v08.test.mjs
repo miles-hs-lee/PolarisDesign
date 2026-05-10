@@ -496,6 +496,74 @@ test('synthesizes a fresh value import when only type imports exist', () => {
   } finally { cleanup(dir); }
 });
 
+test('surface.* rewrite ALSO adds the destination namespace import (rc.3 regression)', () => {
+  // Codex caught: `surface.raised` → `layer.surface`, `surface.border`
+  // → `line.neutral`, `surface.canvas` → `background.base` rewrite the
+  // member access but if the file imports `{ surface }` without
+  // `{ layer, line, background }`, consumer build breaks with
+  // "layer is not defined". The fix: NAMESPACES_TO_CHECK now includes
+  // every destination namespace of TS_TOKEN_RENAMES, not just the
+  // `brand`-family ones.
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 's.ts'), [
+      `import { surface } from '@polaris/ui/tokens';`,
+      `export const a = surface.raised;`,
+      `export const b = surface.border;`,
+      `export const c = surface.canvas;`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 's.ts'), 'utf8');
+    // Member access rewrites
+    assert.match(out, /export const a = layer\.surface;/);
+    assert.match(out, /export const b = line\.neutral;/);
+    assert.match(out, /export const c = background\.base;/);
+    // Import normalize: layer + line + background must be added
+    assert.match(out, /import\s*\{[^}]*\blayer\b/);
+    assert.match(out, /import\s*\{[^}]*\bline\b/);
+    assert.match(out, /import\s*\{[^}]*\bbackground\b/);
+    // No surface.<destroyed> left over
+    assert.doesNotMatch(out, /\bsurface\.(raised|border|canvas)\b/);
+  } finally { cleanup(dir); }
+});
+
+test('background.normal/alternative member access → background.base / fill.neutral', () => {
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'bg.ts'), [
+      `import { background } from '@polaris/ui/tokens';`,
+      `const a = background.normal;`,
+      `const b = background.alternative;`,
+      `const c = background.base;       // unchanged — kept in v0.8`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'bg.ts'), 'utf8');
+    assert.match(out, /const a = background\.base;/);
+    assert.match(out, /const b = fill\.neutral;/);
+    assert.match(out, /const c = background\.base;\s*\/\/ unchanged/);
+    // fill must be auto-imported (since `fill.neutral` now appears)
+    assert.match(out, /import\s*\{[^}]*\bfill\b/);
+  } finally { cleanup(dir); }
+});
+
+test('radius.full → radius.pill member access', () => {
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'r.ts'), [
+      `import { radius } from '@polaris/ui/tokens';`,
+      `const r = radius.full;`,
+      `const s = radius.md;     // unchanged`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'r.ts'), 'utf8');
+    assert.match(out, /const r = radius\.pill;/);
+    assert.match(out, /const s = radius\.md;/);
+    // radius already imported — no new import needed (idempotent)
+    const radiusImports = (out.match(/import\s*\{[^}]*\bradius\b/g) ?? []).length;
+    assert.equal(radiusImports, 1);
+  } finally { cleanup(dir); }
+});
+
 test('does NOT touch files without an existing @polaris/ui import', () => {
   const dir = setup();
   try {

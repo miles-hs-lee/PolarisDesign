@@ -37,11 +37,11 @@ const rule: Rule.RuleModule = {
   meta: {
     type: 'problem',
     docs: {
-      description: 'Disallow Tailwind arbitrary values; use Polaris token-based classes (e.g. bg-brand-primary, p-4) instead. Layout utilities like grid-cols-[...] are exempt.',
+      description: 'Disallow Tailwind arbitrary values; use Polaris token-based classes (e.g. bg-accent-brand-normal, p-4) instead. Layout utilities like grid-cols-[...] are exempt.',
     },
     schema: [],
     messages: {
-      arbitrary: 'Tailwind arbitrary value "{{value}}" is not allowed. Use a token-based class (bg-brand-primary, text-fg-primary, p-4, rounded-polaris-md, etc.) instead.',
+      arbitrary: 'Tailwind arbitrary value "{{value}}" is not allowed. Use a token-based class (bg-accent-brand-normal, text-label-normal, p-4 or p-polaris-md, rounded-polaris-md, etc.) instead.',
     },
   },
   create(context) {

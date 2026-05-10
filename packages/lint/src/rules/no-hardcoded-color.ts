@@ -35,9 +35,9 @@ const rule: Rule.RuleModule = {
     },
     schema: [],
     messages: {
-      hex: 'Hardcoded hex color "{{value}}" is not allowed. Use a Polaris token (e.g. var(--polaris-brand-primary), bg-brand-primary class, or import from @polaris/ui/tokens).',
+      hex: 'Hardcoded hex color "{{value}}" is not allowed. Use a Polaris token (e.g. var(--polaris-accent-brand-normal), bg-accent-brand-normal class, or import from @polaris/ui/tokens).',
       fn: 'Hardcoded color function "{{value}}" is not allowed. Use a Polaris token instead.',
-      colorProp: 'Hardcoded color "{{value}}" on inline style "{{prop}}" is not allowed. Use a Polaris token (e.g. var(--polaris-brand-primary)).',
+      colorProp: 'Hardcoded color "{{value}}" on inline style "{{prop}}" is not allowed. Use a Polaris token (e.g. var(--polaris-accent-brand-normal)).',
     },
   },
   create(context) {

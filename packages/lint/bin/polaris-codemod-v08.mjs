@@ -110,6 +110,15 @@ const TS_TOKEN_RENAMES = [
   [/\bprimary\.normal\b/g, 'accentBrand.normal'],
   [/\bprimary\.strong\b/g, 'accentBrand.strong'],
 
+  // ───── background.normal/alternative (v0.8 split) ─────
+  // background.base / background.disabled stay; only the two removed
+  // alias keys flip to their split destinations.
+  [/\bbackground\.normal\b/g,      'background.base'],
+  [/\bbackground\.alternative\b/g, 'fill.neutral'],
+
+  // ───── radius.full → radius.pill ─────
+  [/\bradius\.full\b/g, 'radius.pill'],
+
   // ───── status.* → state.* (danger → error, *Hover folded into base) ─────
   [/\bstatus\.successHover\b/g, 'state.success'],
   [/\bstatus\.warningHover\b/g, 'state.warning'],
@@ -503,10 +512,29 @@ function normalizePolarisImports(content) {
   const POLARIS_IMPORT_RE =
     /import\s*(type\s+)?\{([^}]+)\}\s*from\s*['"]@polaris\/ui(\/tokens)?['"];?/g;
 
-  // v0.8 token namespaces that may appear via member-access rewrites
-  // (especially `brand.secondary*` → `ai.*`, `text.*` → `label.*`,
-  // `status.*` → `state.*`, `primary.*` → `accentBrand.*`).
-  const NAMESPACES_TO_CHECK = ['ai', 'accentBrand', 'state', 'label'];
+  // v0.8 token namespaces that may appear via member-access rewrites.
+  // Each entry has to cover an OUTPUT of TS_TOKEN_RENAMES — if rewrite
+  // produces `layer.surface` but `layer` isn't here, the consumer ends
+  // up with `layer is not defined`. List every destination namespace,
+  // not just the ones from `brand`.
+  //
+  // Surface migrations:
+  //   surface.canvas       → background.base    (background)
+  //   surface.raised       → layer.surface       (layer)
+  //   surface.sunken       → fill.neutral        (fill)
+  //   surface.border       → line.neutral        (line)
+  //   surface.borderStrong → line.normal         (line)
+  //   background.normal/alternative → background.base / fill.neutral
+  //   radius.full          → radius.pill         (radius)
+  //   text.* / brand.* / status.* / primary.* (covered above)
+  const NAMESPACES_TO_CHECK = [
+    // brand-family destinations
+    'ai', 'accentBrand', 'state', 'label',
+    // surface-family destinations (v0.8 split)
+    'layer', 'line', 'fill', 'background',
+    // radius (only `radius.full` → `radius.pill` rewrite produces this)
+    'radius',
+  ];
 
   const usedInBody = new Set(
     NAMESPACES_TO_CHECK.filter((ns) =>

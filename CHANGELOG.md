@@ -10,13 +10,36 @@
 
 다음 patch / minor 후보. 비어 있음.
 
-### e2e visual baseline 갱신 (2026-05-10)
+---
 
-rc.3 시점 페이지 + Tokens 데모 재정리 직후 상태로 baseline 12장 갱신
-(6 페이지 × desktop + mobile). 사용자 사인오프 후 `pnpm test:e2e:update`
-로 일괄 갱신. ribbon tab 스크린샷은 변경 없음 (locator fix가 시각에는
-영향 없었음). `pnpm test:e2e` 30/30 ✓ — 정식 v0.8.0 태그 게이트의
-"디자인팀 검토 후 baseline 사인오프" 항목이 닫힘.
+## [0.8.0-rc.4] — 2026-05-10
+
+Codex 후속 리뷰 3건 + e2e visual baseline 사인오프 흡수. **rc.3 대비 BREAKING 변경 없음** — codemod의 또 한 가지 import 누락 케이스(P1) + lint 메시지 / migration doc snippet의 잔여 v0.8 제거 alias 예시 정리.
+
+### P1 — release-gate (consumer build breaker)
+
+- **codemod-v08가 surface.* member-access rewrite 후 destination namespace import를 추가하지 않던 버그 fix** — rc.2에서 도입한 `normalizePolarisImports` 의 `NAMESPACES_TO_CHECK` 가 `ai/accentBrand/state/label` (brand-family destinations) 만 검사했는데, `surface.raised` → `layer.surface` / `surface.border` → `line.neutral` / `surface.canvas` → `background.base` 가 배출하는 `layer/line/background/fill` namespace는 누락. 결과: `import { surface } …` 만 남고 `layer is not defined` 빌드 깨짐. **검사 대상에 `layer / line / fill / background / radius` 추가** — TS_TOKEN_RENAMES의 모든 destination namespace 커버. 회귀 fixture 1건 추가.
+- **`background.normal` / `background.alternative` / `radius.full` TS member-access rewrite 추가** — Tailwind 클래스 (`bg-background-normal` 등)와 CSS variable은 v0.8부터 잡고 있었지만 TS 토큰 형태(`background.normal`, `radius.full`)는 누락되어 있었음. 이제 한 번에 한 종 변환. fixture 2건.
+- 합쳐서 codemod tests 22 → **25**.
+
+### P2 — lint 메시지 cleanup
+
+- **`@polaris/no-arbitrary-tailwind` / `@polaris/no-hardcoded-color` 룰 메시지에 v0.8 제거 alias 예시가 남아 있던 부분 fix** — 룰이 위반을 잡고 출력한 메시지에 "예: `bg-brand-primary`, `text-fg-primary`, `var(--polaris-brand-primary)` 같은 spec 토큰을 쓰세요" 라고 안내하던 부분. 룰 자체는 정확히 동작하지만 메시지를 그대로 따라가면 dead-class / dead-var로 다시 들어갈 위험. v0.8 spec 이름 (`bg-accent-brand-normal`, `text-label-normal`, `var(--polaris-accent-brand-normal)`) 으로 교체.
+
+### P3 — docs snippet
+
+- **`docs/tailwind-v4-migration.md` 의 v4 theme snippet** 이 v0.8 제거 alias (`--color-brand-primary`, `--color-status-success`) 를 예시로 보여주던 부분 fix. 본문은 rc.1에서 이미 갱신됐는데 snippet만 남아 있던 것. v0.8 spec (`--color-accent-brand-normal`, `--color-state-success`, `--color-label-normal`, `--color-layer-surface`) 로 교체 + 전체 매핑은 `packages/ui/src/styles/v4-theme.css` 참조하라는 포인터.
+
+### e2e visual baseline 사인오프 (rc.3 → rc.4 사이 main에 별도 commit)
+
+rc.3 + Tokens 데모 재정리 시점으로 baseline 12장 갱신 (6 페이지 × desktop + mobile, ribbon tab 16장은 변경 없음). 사용자 사인오프 받음. `pnpm test:e2e` **30/30 ✓**. 정식 v0.8.0 태그 게이트의 "디자인팀 검토 후 baseline 사인오프" 항목이 닫힘.
+
+### 검증
+
+- `pnpm verify` **14/14 ✓**
+- `pnpm test:e2e` **30/30 ✓**
+- `polaris-codemod-v08` **25/25** (+3 — surface→layer/line/background import normalize / background.* / radius.full)
+- `@polaris/lint` 104 (변동 없음 — 메시지 텍스트 변경만)
 
 ---
 
