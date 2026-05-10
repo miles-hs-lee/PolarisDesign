@@ -49,6 +49,34 @@ describe('Combobox — single', () => {
     await user.click(screen.getByRole('button', { name: '선택 해제' }));
     expect(onChange).toHaveBeenCalledWith(null);
   });
+
+  it('clear button is a sibling of the trigger (not nested) and is keyboard-focusable', async () => {
+    const user = userEvent.setup();
+    render(<Combobox options={CITIES} value="seoul" placeholder="x" />);
+    const trigger = screen.getByRole('combobox');
+    const clear = screen.getByRole('button', { name: '선택 해제' });
+    // The clear button must NOT be a descendant of the combobox button
+    // (interactive-in-interactive nesting is invalid HTML / a11y).
+    expect(trigger.contains(clear)).toBe(false);
+    // It also has to be reachable via keyboard — the previous tabIndex={-1}
+    // hid it from the tab order.
+    expect(clear).not.toHaveAttribute('tabindex', '-1');
+    // And tab from the trigger should land somewhere reachable (smoke check
+    // that the clear is in the natural tab order).
+    trigger.focus();
+    await user.tab();
+    // The popover trigger likely gains aria-expanded on focus shifts; we only
+    // assert that the clear button is *focusable* (focus didn't get stuck).
+    expect(document.activeElement).not.toBe(trigger);
+  });
+
+  it('clicking clear does NOT open the popover (sibling element, no propagation)', async () => {
+    const user = userEvent.setup();
+    render(<Combobox options={CITIES} value="seoul" placeholder="x" />);
+    await user.click(screen.getByRole('button', { name: '선택 해제' }));
+    // Popover stays closed — combobox aria-expanded should remain false.
+    expect(screen.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false');
+  });
 });
 
 describe('Combobox — multiple', () => {

@@ -29,8 +29,10 @@ const SHAPE_CLASS = {
  *
  * Replaces the `<Skeleton className="..." />`-with-everything-inline
  * pattern with three preset shapes and a multi-line option. Honors
- * `prefers-reduced-motion` automatically (Tailwind's `animate-pulse`
- * is wrapped in `motion-safe` since v3).
+ * `prefers-reduced-motion` automatically — the pulse is gated on
+ * `motion-safe:animate-pulse` so users with reduced-motion preference
+ * see a static block (still valid as a "loading" indicator without
+ * the shimmer).
  *
  * @example
  * ```tsx
@@ -65,7 +67,7 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
             <div
               key={i}
               className={cn(
-                'animate-pulse bg-fill-normal',
+                'motion-safe:animate-pulse bg-fill-normal',
                 SHAPE_CLASS.text,
                 i === lines - 1 ? 'w-[70%]' : 'w-full'
               )}
@@ -83,7 +85,7 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
         aria-busy="true"
         aria-label="로딩 중"
         className={cn(
-          'animate-pulse bg-fill-normal',
+          'motion-safe:animate-pulse bg-fill-normal',
           SHAPE_CLASS[shape],
           className
         )}

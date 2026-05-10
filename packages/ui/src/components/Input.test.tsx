@@ -84,4 +84,24 @@ describe('Input', () => {
     expect((screen.getByLabelText('검색') as HTMLInputElement).value).toBe('');
     expect(onClear).toHaveBeenCalled();
   });
+
+  it('hasValue stays in sync when the parent resets controlled value to ""', () => {
+    function Wrapper() {
+      const [v, setV] = useState('hello');
+      return (
+        <>
+          <Input label="이름" value={v} onChange={(e) => setV(e.target.value)} clearable />
+          <button type="button" onClick={() => setV('')}>외부 리셋</button>
+        </>
+      );
+    }
+    const user = userEvent.setup();
+    render(<Wrapper />);
+    // Clear button visible because the field has a value.
+    expect(screen.getByRole('button', { name: '입력 지우기' })).toBeInTheDocument();
+    // Reset from outside → hasValue should re-sync to false.
+    return user.click(screen.getByRole('button', { name: '외부 리셋' })).then(() => {
+      expect(screen.queryByRole('button', { name: '입력 지우기' })).toBeNull();
+    });
+  });
 });

@@ -176,45 +176,59 @@ export function Combobox<V extends string = string>(props: ComboboxProps<V>) {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <button
-          ref={triggerRef}
-          id={id}
-          type="button"
-          role="combobox"
-          aria-expanded={open}
-          aria-label={ariaLabel}
-          disabled={disabled}
-          className={cn(
-            'inline-flex h-10 w-full items-center justify-between gap-2 rounded-polaris-md',
-            'border border-line-normal bg-background-base px-3 py-2',
-            'text-polaris-body2 font-polaris text-label-normal whitespace-nowrap',
-            'focus-visible:outline-none focus-visible:shadow-polaris-focus focus-visible:border-accent-brand-normal',
-            'disabled:cursor-not-allowed disabled:opacity-50',
-            className
-          )}
-        >
-          <span className="truncate min-w-0 flex-1 text-left">{triggerLabel}</span>
-          {showClear && (
-            <span
-              role="button"
-              tabIndex={-1}
-              aria-label="선택 해제"
-              onClick={(e) => {
-                e.stopPropagation();
-                clear();
-              }}
-              className="inline-flex h-5 w-5 items-center justify-center rounded-polaris-sm text-label-alternative hover:bg-interaction-hover"
-            >
-              <X className="h-3.5 w-3.5" aria-hidden="true" />
-            </span>
-          )}
-          <ChevronsUpDown
-            className="h-4 w-4 shrink-0 text-label-alternative"
-            aria-hidden="true"
+      {/*
+        Wrapper div hosts the trigger button + the clear button as
+        SIBLINGS — not as nested interactives. WAI-ARIA forbids putting
+        a button inside another button (it confuses screen readers and
+        makes either click target ambiguous), and tabIndex={-1} on the
+        nested clear meant keyboard users couldn't reach it at all.
+        Now both are real `<button>`s in the same row, both tab-focusable,
+        each with its own accessible name.
+      */}
+      <div className="relative w-full">
+        <PopoverTrigger asChild>
+          <button
+            ref={triggerRef}
+            id={id}
+            type="button"
+            role="combobox"
+            aria-expanded={open}
+            aria-label={ariaLabel}
+            disabled={disabled}
+            className={cn(
+              'inline-flex h-10 w-full items-center gap-2 rounded-polaris-md',
+              'border border-line-normal bg-background-base py-2',
+              'text-polaris-body2 font-polaris text-label-normal whitespace-nowrap',
+              'focus-visible:outline-none focus-visible:shadow-polaris-focus focus-visible:border-accent-brand-normal',
+              'disabled:cursor-not-allowed disabled:opacity-50',
+              // Right-padding makes room for the chevron + (optional)
+              // sibling clear button outside the trigger.
+              'pl-3',
+              showClear ? 'pr-16' : 'pr-3',
+              className
+            )}
+          >
+            <span className="truncate min-w-0 flex-1 text-left">{triggerLabel}</span>
+            <ChevronsUpDown
+              className="h-4 w-4 shrink-0 text-label-alternative"
+              aria-hidden="true"
           />
-        </button>
-      </PopoverTrigger>
+          </button>
+        </PopoverTrigger>
+        {showClear && (
+          <button
+            type="button"
+            onClick={clear}
+            aria-label="선택 해제"
+            // Sits to the LEFT of the chevron (chevron is inside the
+            // trigger; this sits in the right-padding area we reserved
+            // when `showClear` is set).
+            className="absolute right-9 top-1/2 -translate-y-1/2 inline-flex h-6 w-6 items-center justify-center rounded-polaris-sm text-label-alternative hover:bg-interaction-hover focus-visible:outline-none focus-visible:shadow-polaris-focus"
+          >
+            <X className="h-3.5 w-3.5" aria-hidden="true" />
+          </button>
+        )}
+      </div>
       <PopoverContent
         align="start"
         className={cn('p-0', contentClassName)}

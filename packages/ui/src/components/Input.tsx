@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  useEffect,
   useId,
   useState,
   useImperativeHandle,
@@ -105,6 +106,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const [hasValue, setHasValue] = useState(
       value !== undefined ? Boolean(value) : Boolean(defaultValue)
     );
+    // Sync `hasValue` with controlled `value` whenever the parent updates it
+    // (form reset, react-hook-form `reset()`, URL state restore, …). Without
+    // this, the floating label and clear button stay in their stale state
+    // because the initial `useState` lazy-init only ran once at mount.
+    useEffect(() => {
+      if (value !== undefined) setHasValue(Boolean(value));
+    }, [value]);
     const labelFloating = focused || hasValue;
     const showClear = clearable && hasValue && !disabled && !readOnly;
 

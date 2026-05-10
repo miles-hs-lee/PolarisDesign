@@ -374,7 +374,7 @@ export const TableSkeleton = forwardRef<HTMLDivElement, TableSkeletonProps>(
             {Array.from({ length: columns }).map((_, i) => (
               <div
                 key={i}
-                className="h-3 flex-1 animate-pulse rounded-polaris-2xs bg-fill-strong"
+                className="h-3 flex-1 motion-safe:animate-pulse rounded-polaris-2xs bg-fill-strong"
               />
             ))}
           </div>
@@ -385,7 +385,7 @@ export const TableSkeleton = forwardRef<HTMLDivElement, TableSkeletonProps>(
               {Array.from({ length: columns }).map((__, c) => (
                 <div
                   key={c}
-                  className="h-3 flex-1 animate-pulse rounded-polaris-2xs bg-fill-normal"
+                  className="h-3 flex-1 motion-safe:animate-pulse rounded-polaris-2xs bg-fill-normal"
                   // First column slightly wider, last column slightly narrower —
                   // makes the placeholder read as data, not a flat band.
                   style={{

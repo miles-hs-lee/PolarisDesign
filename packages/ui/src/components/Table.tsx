@@ -93,33 +93,66 @@ export interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement>
    */
   selected?: boolean;
   /**
-   * Mark the row as clickable — adds `cursor-pointer`, stronger hover
-   * tint, and a focus-visible ring for keyboard activation. Use for
-   * row-as-detail-link patterns. Pair with `onClick` (or wrap each cell's
-   * content in `<Link>` for full a11y when navigating to a detail page).
+   * Mark the row as clickable. When set together with `onClick`, the row
+   * becomes a real keyboard-activatable target:
+   *   - `tabIndex={0}` so it joins the tab order
+   *   - Enter / Space fire the `onClick` handler (mouse-only regression
+   *     guard — without this, a `clickable` row would only respond to
+   *     pointer input despite the visual affordance)
+   *   - `cursor-pointer` + stronger hover tint + `shadow-polaris-focus`
+   *
+   * If you only want the *visual* hover state (e.g. each cell already
+   * contains its own `<Link>` and the row itself is not a click target),
+   * omit `onClick` — the keyboard wiring then no-ops too.
+   *
+   * NOTE: For navigating to a detail page, the most accessible pattern
+   * is still wrapping the first cell's content in a real `<Link>` so
+   * the link gets the URL semantics. `clickable` is for in-page actions
+   * (open drawer, select row, etc.) where `onClick` is the source of truth.
    */
   clickable?: boolean;
 }
 
 export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
-  ({ className, selected, clickable, ...props }, ref) => (
-    <tr
-      ref={ref}
-      aria-selected={selected || undefined}
-      data-state={selected ? 'selected' : undefined}
-      className={cn(
-        'transition-colors',
-        // Hover background — stronger when clickable so it reads as actionable.
-        clickable
-          ? 'cursor-pointer hover:bg-fill-neutral focus-visible:outline-none focus-visible:bg-fill-neutral focus-visible:shadow-polaris-focus'
-          : 'hover:bg-background-alternative/50',
-        // Selection takes priority over hover.
-        selected && 'bg-accent-brand-normal-subtle hover:bg-accent-brand-normal-subtle',
-        className
-      )}
-      {...props}
-    />
-  )
+  ({ className, selected, clickable, onKeyDown, tabIndex, ...props }, ref) => {
+    const isInteractive = clickable && Boolean(props.onClick);
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTableRowElement>) => {
+      onKeyDown?.(e);
+      if (e.defaultPrevented) return;
+      // Don't intercept Enter/Space if the focus is on a child interactive
+      // element (button / link / input) — that element should handle it.
+      if (e.target !== e.currentTarget) return;
+      if (!isInteractive) return;
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        props.onClick?.(e as unknown as React.MouseEvent<HTMLTableRowElement>);
+      }
+    };
+
+    return (
+      <tr
+        ref={ref}
+        aria-selected={selected || undefined}
+        data-state={selected ? 'selected' : undefined}
+        // Only join the tab order when actually interactive — caller
+        // can still force tabIndex=-1 if they manage focus themselves.
+        tabIndex={isInteractive ? (tabIndex ?? 0) : tabIndex}
+        onKeyDown={handleKeyDown}
+        className={cn(
+          'transition-colors',
+          // Hover background — stronger when clickable so it reads as actionable.
+          clickable
+            ? 'cursor-pointer hover:bg-fill-neutral focus-visible:outline-none focus-visible:bg-fill-neutral focus-visible:shadow-polaris-focus'
+            : 'hover:bg-background-alternative/50',
+          // Selection takes priority over hover.
+          selected && 'bg-accent-brand-normal-subtle hover:bg-accent-brand-normal-subtle',
+          className
+        )}
+        {...props}
+      />
+    );
+  }
 );
 TableRow.displayName = 'TableRow';
 

@@ -5,6 +5,7 @@ import {
   useImperativeHandle,
   useLayoutEffect,
   useRef,
+  useState,
   type ChangeEvent,
 } from 'react';
 import { ErrorIcon } from '../icons';
@@ -83,6 +84,22 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     const resizeOpts = autoResize === true ? DEFAULT_AUTO_RESIZE : autoResize || null;
 
+    // Track length internally so the counter updates even in
+    // *uncontrolled* mode — without this, parent re-renders never fire,
+    // so `currentLen` (read once at render) stays at the initial
+    // `defaultValue` length and the counter looks frozen. In
+    // controlled mode we still trust the prop.
+    const [internalLen, setInternalLen] = useState(() =>
+      typeof value === 'string'
+        ? value.length
+        : typeof defaultValue === 'string'
+        ? defaultValue.length
+        : 0
+    );
+    useEffect(() => {
+      if (typeof value === 'string') setInternalLen(value.length);
+    }, [value]);
+
     // Resize on every render where the textarea exists. We measure
     // `scrollHeight` after temporarily shrinking the element to its
     // single-row min so the browser reports the *natural* height, then
@@ -123,17 +140,18 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     }, []);
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+      // Always bump internal length — required for the counter to update
+      // in *uncontrolled* mode (parent re-render not guaranteed). In
+      // controlled mode the length comes from `value` via the useEffect
+      // above; internalLen still gets bumped but isn't read.
+      setInternalLen(e.target.value.length);
       onChange?.(e);
       if (resizeOpts) resize();
     };
 
-    // Counter: prefer controlled value, fall back to defaultValue + DOM.
+    // Counter: controlled value wins; otherwise read from internal state.
     const currentLen =
-      typeof value === 'string'
-        ? value.length
-        : typeof defaultValue === 'string'
-        ? defaultValue.length
-        : (localRef.current?.value.length ?? 0);
+      typeof value === 'string' ? value.length : internalLen;
     const overLimit = typeof maxLength === 'number' && currentLen > maxLength;
 
     return (

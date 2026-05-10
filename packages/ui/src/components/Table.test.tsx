@@ -170,3 +170,64 @@ describe('TableHead — sortable', () => {
     expect(onSortChange).toHaveBeenCalledWith('desc');
   });
 });
+
+describe('TableRow — clickable a11y', () => {
+  it('clickable + onClick: tabIndex=0 + Enter/Space fire onClick', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    render(
+      <Table>
+        <TableBody>
+          <TableRow clickable onClick={onClick} data-testid="row">
+            <TableCell>홍길동</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+    const row = screen.getByTestId('row');
+    expect(row).toHaveAttribute('tabindex', '0');
+
+    row.focus();
+    expect(document.activeElement).toBe(row);
+    await user.keyboard('{Enter}');
+    expect(onClick).toHaveBeenCalledTimes(1);
+    await user.keyboard(' ');
+    expect(onClick).toHaveBeenCalledTimes(2);
+  });
+
+  it('clickable WITHOUT onClick: no tabIndex (purely visual)', () => {
+    render(
+      <Table>
+        <TableBody>
+          <TableRow clickable data-testid="row">
+            <TableCell>cell</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+    expect(screen.getByTestId('row')).not.toHaveAttribute('tabindex');
+  });
+
+  it('row keyboard handler does NOT fire an EXTRA onClick when focus is on a child', async () => {
+    // Pressing Enter on an inner <button> still bubbles a click to the
+    // row (that's normal React event delegation). The guarantee we
+    // want is that our row keyboard handler doesn't ALSO call onClick
+    // on top of that — i.e. exactly 1 invocation, not 2.
+    const user = userEvent.setup();
+    const onRowClick = vi.fn();
+    render(
+      <Table>
+        <TableBody>
+          <TableRow clickable onClick={onRowClick} data-testid="row">
+            <TableCell>
+              <button type="button">액션</button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+    screen.getByRole('button', { name: '액션' }).focus();
+    await user.keyboard('{Enter}');
+    expect(onRowClick).toHaveBeenCalledTimes(1);
+  });
+});
