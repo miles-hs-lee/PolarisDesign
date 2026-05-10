@@ -40,4 +40,28 @@ describe('Alert', () => {
     );
     expect(container.firstChild).toHaveClass('border-state-error');
   });
+
+  it('renders action slot when provided', () => {
+    render(
+      <Alert variant="warning" action={<button>재시도</button>}>
+        <AlertTitle>실패</AlertTitle>
+      </Alert>
+    );
+    expect(screen.getByRole('button', { name: '재시도' })).toBeInTheDocument();
+  });
+
+  it('dismissible × button hides the alert + fires onDismiss', async () => {
+    const { default: userEvent } = await import('@testing-library/user-event');
+    const { vi } = await import('vitest');
+    const onDismiss = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <Alert variant="info" dismissible onDismiss={onDismiss}>
+        <AlertTitle>알림</AlertTitle>
+      </Alert>
+    );
+    await user.click(screen.getByRole('button', { name: '닫기' }));
+    expect(onDismiss).toHaveBeenCalled();
+    expect(screen.queryByText('알림')).not.toBeInTheDocument();
+  });
 });

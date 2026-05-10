@@ -11,10 +11,18 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
    * - `padded` — applies `px-5 py-4` directly. Skip the sub-components for simple single-block cards.
    */
   variant?: 'bare' | 'padded';
+  /**
+   * Mark the card as a clickable surface — adds hover/active visual,
+   * focus-visible ring (`shadow-polaris-focus`), and `cursor-pointer`.
+   * Pair with `asChild` + `<Link>`/`<button>` so the entire card becomes
+   * one accessible click target. Without `asChild`, the card itself
+   * stays a plain `<div>` — `interactive` is purely visual then.
+   */
+  interactive?: boolean;
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ className, asChild, variant = 'bare', ...props }, ref) => {
+  ({ className, asChild, variant = 'bare', interactive, ...props }, ref) => {
     const Comp = asChild ? Slot : 'div';
     return (
       <Comp
@@ -22,6 +30,12 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         className={cn(
           'rounded-polaris-lg border border-line-neutral bg-background-normal shadow-polaris-sm',
           variant === 'padded' && 'px-5 py-4',
+          interactive && [
+            'cursor-pointer transition-shadow transition-colors',
+            'hover:shadow-polaris-md hover:border-line-normal',
+            'active:shadow-polaris-sm',
+            'focus-visible:outline-none focus-visible:shadow-polaris-focus',
+          ],
           className
         )}
         {...props}

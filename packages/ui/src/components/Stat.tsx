@@ -1,5 +1,6 @@
 import { forwardRef, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { Skeleton } from './Skeleton';
 import { cn } from '../lib/cn';
 
 /**
@@ -75,10 +76,17 @@ export interface StatProps
   icon?: ReactNode;
   /** Small text below the value (e.g. comparison window: "지난 7일 기준"). */
   helper?: ReactNode;
+  /**
+   * Render a Skeleton placeholder in place of the value (and delta, if
+   * present). The label / icon / helper still render so the tile keeps
+   * its shape and labeled structure during async fetches. Use this
+   * during initial data-load — once data arrives, drop `loading={false}`.
+   */
+  loading?: boolean;
 }
 
 export const Stat = forwardRef<HTMLDivElement, StatProps>(
-  ({ className, label, value, delta, deltaTone, icon, helper, ...props }, ref) => {
+  ({ className, label, value, delta, deltaTone, icon, helper, loading, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -93,12 +101,23 @@ export const Stat = forwardRef<HTMLDivElement, StatProps>(
           )}
           <span>{label}</span>
         </div>
-        <div className="flex items-baseline gap-polaris-2xs">
-          <span className="text-polaris-heading1 text-label-normal">{value}</span>
-          {delta && (
-            <span className={cn(deltaVariants({ tone: deltaTone }))}>{delta}</span>
-          )}
-        </div>
+        {loading ? (
+          // Heading-1 sized skeleton (≈ 32px line) to keep the tile height
+          // stable when data lands. Delta gets a pill skeleton next to it.
+          <div className="flex items-baseline gap-polaris-2xs">
+            <Skeleton shape="bare" className="h-8 w-24 rounded-polaris-sm" />
+            {delta !== undefined && (
+              <Skeleton shape="bare" className="h-4 w-10 rounded-polaris-pill" />
+            )}
+          </div>
+        ) : (
+          <div className="flex items-baseline gap-polaris-2xs">
+            <span className="text-polaris-heading1 text-label-normal">{value}</span>
+            {delta && (
+              <span className={cn(deltaVariants({ tone: deltaTone }))}>{delta}</span>
+            )}
+          </div>
+        )}
         {helper && (
           <p className="text-polaris-helper text-label-alternative">{helper}</p>
         )}

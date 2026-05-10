@@ -85,11 +85,38 @@ export const TableFooter = forwardRef<HTMLTableSectionElement, React.HTMLAttribu
 );
 TableFooter.displayName = 'TableFooter';
 
-export const TableRow = forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTMLTableRowElement>>(
-  ({ className, ...props }, ref) => (
+export interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+  /**
+   * Mark this row as selected (e.g. checkbox-bulk-action UIs). Applies a
+   * brand-tinted background + sets `aria-selected="true"`. Pair with the
+   * `<TableSelectionBar>` row to provide a consistent feedback loop.
+   */
+  selected?: boolean;
+  /**
+   * Mark the row as clickable — adds `cursor-pointer`, stronger hover
+   * tint, and a focus-visible ring for keyboard activation. Use for
+   * row-as-detail-link patterns. Pair with `onClick` (or wrap each cell's
+   * content in `<Link>` for full a11y when navigating to a detail page).
+   */
+  clickable?: boolean;
+}
+
+export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
+  ({ className, selected, clickable, ...props }, ref) => (
     <tr
       ref={ref}
-      className={cn('hover:bg-background-alternative/50 transition-colors', className)}
+      aria-selected={selected || undefined}
+      data-state={selected ? 'selected' : undefined}
+      className={cn(
+        'transition-colors',
+        // Hover background — stronger when clickable so it reads as actionable.
+        clickable
+          ? 'cursor-pointer hover:bg-fill-neutral focus-visible:outline-none focus-visible:bg-fill-neutral focus-visible:shadow-polaris-focus'
+          : 'hover:bg-background-alternative/50',
+        // Selection takes priority over hover.
+        selected && 'bg-accent-brand-normal-subtle hover:bg-accent-brand-normal-subtle',
+        className
+      )}
       {...props}
     />
   )

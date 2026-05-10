@@ -1,5 +1,6 @@
-import { forwardRef } from 'react';
+import { forwardRef, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { X } from 'lucide-react';
 import { cn } from '../lib/cn';
 
 const badgeVariants = cva(
@@ -93,11 +94,49 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof badgeVariants> {}
+    VariantProps<typeof badgeVariants> {
+  /**
+   * Leading icon (12-14px) shown before the children. Using a slot prop
+   * over inlining icons in `children` keeps the gap and vertical
+   * alignment consistent across badges.
+   *
+   * @example `<Badge variant="success" icon={<CheckIcon />}>완료</Badge>`
+   */
+  icon?: ReactNode;
+  /**
+   * Show a × button that fires `onDismiss` on click. Common for filter
+   * chips ("docx ×") and removable tags. The button is rendered as a
+   * separate `<button>` inside the badge so the badge `<span>` itself
+   * stays non-interactive — preserves accessibility for badges that
+   * label other elements.
+   */
+  dismissible?: boolean;
+  /** Fires when the dismiss × button is clicked. */
+  onDismiss?: () => void;
+  /** aria-label for the dismiss button. Default: "제거". */
+  dismissLabel?: string;
+}
 
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ className, variant, tone, ...props }, ref) => (
-    <span ref={ref} className={cn(badgeVariants({ variant, tone }), className)} {...props} />
+  ({ className, variant, tone, icon, dismissible, onDismiss, dismissLabel = '제거', children, ...props }, ref) => (
+    <span ref={ref} className={cn(badgeVariants({ variant, tone }), className)} {...props}>
+      {icon && (
+        <span className="inline-flex shrink-0 items-center [&>svg]:h-3 [&>svg]:w-3" aria-hidden="true">
+          {icon}
+        </span>
+      )}
+      {children}
+      {dismissible && (
+        <button
+          type="button"
+          onClick={onDismiss}
+          aria-label={dismissLabel}
+          className="-mr-1 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-polaris-pill hover:bg-interaction-hover focus-visible:outline-none focus-visible:shadow-polaris-focus"
+        >
+          <X className="h-3 w-3" aria-hidden="true" />
+        </button>
+      )}
+    </span>
   )
 );
 Badge.displayName = 'Badge';

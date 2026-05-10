@@ -1,6 +1,6 @@
-import { forwardRef } from 'react';
+import { forwardRef, useState, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Info, CheckCircle2, AlertTriangle, AlertCircle } from 'lucide-react';
+import { Info, CheckCircle2, AlertTriangle, AlertCircle, X } from 'lucide-react';
 import { cn } from '../lib/cn';
 
 const alertVariants = cva(
@@ -40,12 +40,50 @@ export interface AlertProps
     VariantProps<typeof alertVariants> {
   /** Hide the leading icon. Defaults to false. */
   hideIcon?: boolean;
+  /**
+   * Trailing slot — typical place for a "재시도" / "자세히 보기" CTA
+   * sitting to the right of the message. Compose with `<Button size="sm">`s.
+   * Renders to the LEFT of the dismiss × button when both are present.
+   */
+  action?: ReactNode;
+  /**
+   * Show a × button that hides the alert on click. Internally controlled
+   * (no parent state needed). Pair with `onDismiss` to clean up parent
+   * state, or use `defaultOpen={false}` to start hidden.
+   */
+  dismissible?: boolean;
+  /** Fires after the user clicks the × button. Hide-from-DOM is automatic. */
+  onDismiss?: () => void;
+  /** Initial open state when `dismissible`. Default: `true`. */
+  defaultOpen?: boolean;
+  /** aria-label for the dismiss button. Default: "닫기". */
+  dismissLabel?: string;
 }
 
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(
-  ({ className, variant, hideIcon = false, children, ...props }, ref) => {
+  ({
+    className,
+    variant,
+    hideIcon = false,
+    action,
+    dismissible,
+    onDismiss,
+    defaultOpen = true,
+    dismissLabel = '닫기',
+    children,
+    ...props
+  }, ref) => {
     const v = variant ?? 'info';
     const Icon = ICONS[v];
+    const [open, setOpen] = useState(defaultOpen);
+
+    if (!open) return null;
+
+    const handleDismiss = () => {
+      setOpen(false);
+      onDismiss?.();
+    };
+
     return (
       <div
         ref={ref}
@@ -57,6 +95,21 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
           <Icon className={cn('h-5 w-5 shrink-0 mt-0.5', ICON_COLORS[v])} aria-hidden="true" />
         )}
         <div className="flex-1 min-w-0">{children}</div>
+        {action && (
+          <div className="shrink-0 flex items-center gap-polaris-3xs self-start mt-0.5">
+            {action}
+          </div>
+        )}
+        {dismissible && (
+          <button
+            type="button"
+            onClick={handleDismiss}
+            aria-label={dismissLabel}
+            className="shrink-0 -mt-0.5 -mr-1 inline-flex h-6 w-6 items-center justify-center rounded-polaris-sm text-label-alternative hover:bg-interaction-hover focus-visible:outline-none focus-visible:shadow-polaris-focus"
+          >
+            <X className="h-4 w-4" aria-hidden="true" />
+          </button>
+        )}
       </div>
     );
   }

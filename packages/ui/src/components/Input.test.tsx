@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createRef } from 'react';
+import { createRef, useState } from 'react';
 import { Input } from './Input';
 
 describe('Input', () => {
@@ -40,5 +40,48 @@ describe('Input', () => {
     const input = screen.getByLabelText('이름') as HTMLInputElement;
     await userEvent.type(input, 'Miles');
     expect(input.value).toBe('Miles');
+  });
+
+  it('renders prefix slot before the input text', () => {
+    render(<Input label="amount" prefix="₩" />);
+    expect(screen.getByText('₩')).toBeInTheDocument();
+  });
+
+  it('renders suffix slot after the input', () => {
+    render(<Input label="amount" suffix="KRW" />);
+    expect(screen.getByText('KRW')).toBeInTheDocument();
+  });
+
+  it('clearable button only appears when value is present', async () => {
+    function Controlled() {
+      const [v, setV] = useState('');
+      return <Input label="검색" clearable value={v} onChange={(e) => setV(e.target.value)} />;
+    }
+    const user = userEvent.setup();
+    render(<Controlled />);
+    expect(screen.queryByRole('button', { name: '입력 지우기' })).toBeNull();
+    await user.type(screen.getByLabelText('검색'), 'hello');
+    expect(screen.getByRole('button', { name: '입력 지우기' })).toBeInTheDocument();
+  });
+
+  it('clicking clear resets the value and fires onClear', async () => {
+    const onClear = vi.fn();
+    function Controlled() {
+      const [v, setV] = useState('hello');
+      return (
+        <Input
+          label="검색"
+          clearable
+          value={v}
+          onChange={(e) => setV(e.target.value)}
+          onClear={onClear}
+        />
+      );
+    }
+    const user = userEvent.setup();
+    render(<Controlled />);
+    await user.click(screen.getByRole('button', { name: '입력 지우기' }));
+    expect((screen.getByLabelText('검색') as HTMLInputElement).value).toBe('');
+    expect(onClear).toHaveBeenCalled();
   });
 });

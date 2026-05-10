@@ -37,12 +37,18 @@ export interface DropdownMenuItemProps
   extends React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Item> {
   /** Render the item with status-danger color (for delete / destructive actions). */
   destructive?: boolean;
+  /**
+   * Leading icon (16px). Using this slot keeps icon size + gap consistent
+   * with `DropdownMenuFormItem` (which already takes `icon`). Inlining
+   * icons in `children` works too but the gap/sizing has to match by hand.
+   */
+  icon?: React.ReactNode;
 }
 
 export const DropdownMenuItem = forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Item>,
   DropdownMenuItemProps
->(({ className, destructive, ...props }, ref) => (
+>(({ className, destructive, icon, children, ...props }, ref) => (
   <DropdownPrimitive.Item
     ref={ref}
     className={cn(
@@ -51,7 +57,14 @@ export const DropdownMenuItem = forwardRef<
       className
     )}
     {...props}
-  />
+  >
+    {icon && (
+      <span className="inline-flex shrink-0 items-center [&>svg]:h-4 [&>svg]:w-4" aria-hidden="true">
+        {icon}
+      </span>
+    )}
+    {children}
+  </DropdownPrimitive.Item>
 ));
 DropdownMenuItem.displayName = 'DropdownMenuItem';
 

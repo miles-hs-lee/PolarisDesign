@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { Children, cloneElement, forwardRef, isValidElement, type ReactElement, type ReactNode } from 'react';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/cn';
@@ -60,3 +60,77 @@ export const AvatarFallback = forwardRef<
   />
 ));
 AvatarFallback.displayName = 'AvatarFallback';
+
+/* ================================================================== *
+ * AvatarGroup — overlapping cluster + "+N" overflow         v0.7.6 NEW
+ * ================================================================== *
+ *
+ * Renders Avatar children as an overlapping row, capping visible
+ * avatars at `max` and showing a `+N` indicator for the remainder.
+ * The size from `<AvatarGroup size="md">` is propagated to all child
+ * `<Avatar>` instances (including the overflow indicator) so consumers
+ * pick size in one place.
+ *
+ * Common in collaboration / sharing UIs ("이 문서를 4명이 보고 있어요"),
+ * activity rows, and member lists.
+ *
+ * @example
+ * ```tsx
+ * <AvatarGroup size="sm" max={3}>
+ *   <Avatar><AvatarImage src={u1.avatar} /><AvatarFallback>김</AvatarFallback></Avatar>
+ *   <Avatar><AvatarImage src={u2.avatar} /><AvatarFallback>이</AvatarFallback></Avatar>
+ *   <Avatar><AvatarImage src={u3.avatar} /><AvatarFallback>박</AvatarFallback></Avatar>
+ *   <Avatar><AvatarFallback>최</AvatarFallback></Avatar>
+ *   <Avatar><AvatarFallback>윤</AvatarFallback></Avatar>
+ * </AvatarGroup>
+ * // → 3 visible + "+2"
+ * ```
+ */
+export interface AvatarGroupProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof avatarVariants> {
+  /** Maximum visible avatars before collapsing into `+N`. Default: 4. */
+  max?: number;
+  /** Children must be `<Avatar>` elements. */
+  children: ReactNode;
+}
+
+export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
+  ({ className, size = 'md', max = 4, children, ...props }, ref) => {
+    const all = Children.toArray(children).filter(isValidElement) as ReactElement<AvatarProps>[];
+    const visible = all.slice(0, max);
+    const overflow = all.length - visible.length;
+
+    return (
+      <div
+        ref={ref}
+        className={cn('flex items-center -space-x-2', className)}
+        {...props}
+      >
+        {visible.map((child, i) =>
+          cloneElement(child, {
+            // Propagate size + add overlap ring + ensure each child has a unique key.
+            key: child.key ?? i,
+            size: child.props.size ?? size,
+            className: cn(
+              'ring-2 ring-background-base',
+              child.props.className
+            ),
+          })
+        )}
+        {overflow > 0 && (
+          <Avatar
+            size={size}
+            className={cn('ring-2 ring-background-base', avatarVariants({ size }))}
+            aria-label={`외 ${overflow}명`}
+          >
+            <AvatarFallback className="bg-fill-strong text-label-neutral">
+              +{overflow}
+            </AvatarFallback>
+          </Avatar>
+        )}
+      </div>
+    );
+  }
+);
+AvatarGroup.displayName = 'AvatarGroup';

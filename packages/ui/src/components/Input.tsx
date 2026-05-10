@@ -1,8 +1,21 @@
-import { forwardRef, useId, useState, useImperativeHandle, useRef, type FocusEvent, type ChangeEvent } from 'react';
+import {
+  forwardRef,
+  useId,
+  useState,
+  useImperativeHandle,
+  useRef,
+  type FocusEvent,
+  type ChangeEvent,
+  type ReactNode,
+} from 'react';
+import { X } from 'lucide-react';
 import { ErrorIcon } from '../icons';
 import { cn } from '../lib/cn';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps
+  // `prefix` is a standard HTML attribute (`prefix="og: ..."`) typed as `string`;
+  // omit it so we can re-define it as a ReactNode slot.
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix'> {
   /** Floating title — appears as a small label inside the input on focus
    *  or when the field has a value. Replaces the rc.0 above-input label
    *  per DESIGN.md §4. */
@@ -13,6 +26,30 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
    *  alone). Pass `null` / `undefined` to clear. */
   error?: string;
   containerClassName?: string;
+  /**
+   * Content rendered inside the input on the LEFT (currency symbol,
+   * unit prefix, leading icon). Wrapped in a non-interactive `<span>`
+   * unless it contains a button/anchor — pass interactive elements as
+   * usual. The input's left padding adjusts automatically.
+   *
+   * @example `prefix="$"` · `prefix={<SearchIcon className="h-4 w-4" />}`
+   */
+  prefix?: ReactNode;
+  /**
+   * Content rendered on the RIGHT (unit suffix, trailing icon, helper
+   * text). Same wrapping behavior as `prefix`. Sits to the LEFT of the
+   * `clearable` × button when both are present.
+   */
+  suffix?: ReactNode;
+  /**
+   * Show a clear (×) button when the input has a value. The button
+   * fires a synthetic `input`/`change` event with empty value so
+   * controlled inputs Just Work. Disabled when the input is disabled
+   * or readOnly. Default: `false`.
+   */
+  clearable?: boolean;
+  /** Fires after the clear (×) button resets the value. */
+  onClear?: () => void;
 }
 
 /**
@@ -34,9 +71,26 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
  * Error text: when `error` is provided, the input border turns red AND
  * an icon-prefixed error message renders below. The icon is mandatory
  * (WCAG 1.4.1) — never rely on color alone to signal state.
+ *
+ * **`prefix` / `suffix` / `clearable`** (v0.7.6 NEW):
+ * Affordances for currency/unit/icon adornments and one-click reset.
+ * The input padding auto-adjusts to make room. Mutually composable —
+ * use any combination.
+ *
+ * @example Currency + clearable
+ * ```tsx
+ * <Input prefix="₩" suffix="KRW" clearable
+ *        value={amount} onChange={(e) => setAmount(e.target.value)} />
+ * ```
+ *
+ * @example Search input
+ * ```tsx
+ * <Input prefix={<SearchIcon className="h-4 w-4" />} placeholder="검색"
+ *        clearable value={q} onChange={(e) => setQ(e.target.value)} />
+ * ```
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, containerClassName, label, hint, error, id: providedId, onFocus, onBlur, onChange, value, defaultValue, placeholder, ...props }, forwardedRef) => {
+  ({ className, containerClassName, label, hint, error, id: providedId, onFocus, onBlur, onChange, value, defaultValue, placeholder, prefix, suffix, clearable, onClear, disabled, readOnly, ...props }, forwardedRef) => {
     const generatedId = useId();
     const id = providedId ?? generatedId;
     const messageId = error || hint ? `${id}-msg` : undefined;
@@ -52,6 +106,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       value !== undefined ? Boolean(value) : Boolean(defaultValue)
     );
     const labelFloating = focused || hasValue;
+    const showClear = clearable && hasValue && !disabled && !readOnly;
 
     const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
       setFocused(true);
@@ -66,6 +121,20 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       onChange?.(e);
     };
 
+    const handleClear = () => {
+      const el = localRef.current;
+      if (!el) return;
+      // Use the native setter so React picks up the value via its
+      // input-event simulation (controlled inputs work this way).
+      const proto = window.HTMLInputElement.prototype;
+      const setter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+      setter?.call(el, '');
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      setHasValue(false);
+      onClear?.();
+      el.focus();
+    };
+
     return (
       <div className={cn('flex flex-col gap-polaris-3xs', containerClassName)}>
         <div className="relative">
@@ -73,7 +142,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             <label
               htmlFor={id}
               className={cn(
-                'pointer-events-none absolute left-5 font-polaris transition-all duration-polaris-fast ease-polaris-out',
+                'pointer-events-none absolute font-polaris transition-all duration-polaris-fast ease-polaris-out',
+                // Adornments shift the label-anchor x to align with the input text.
+                prefix ? 'left-12' : 'left-5',
                 labelFloating
                   ? 'top-2 text-polaris-helper text-label-assistive'
                   : 'top-1/2 -translate-y-1/2 text-polaris-body2 text-label-assistive'
@@ -81,6 +152,21 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             >
               {label}
             </label>
+          )}
+          {prefix && (
+            <span
+              aria-hidden={
+                // Icons are usually decorative; strings (currency) might be
+                // semantically meaningful. Hide from AT only for icon nodes
+                // where the input's own label/placeholder carries the
+                // meaning. We default to `true`; consumers that need a
+                // semantic prefix can wrap in their own `<span>` / `<abbr>`.
+                'true'
+              }
+              className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 inline-flex items-center text-polaris-body2 text-label-alternative [&>svg]:h-4 [&>svg]:w-4"
+            >
+              {prefix}
+            </span>
           )}
           <input
             id={id}
@@ -90,6 +176,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             placeholder={labelFloating || !label ? placeholder : ''}
             value={value}
             defaultValue={defaultValue}
+            disabled={disabled}
+            readOnly={readOnly}
             onFocus={handleFocus}
             onBlur={handleBlur}
             onChange={handleChange}
@@ -97,7 +185,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               // 52px height + 20px h-padding + sm radius (8) per spec.
               // pt-5/pb-1 when label is floating reserves space for it.
               'h-[52px] w-full rounded-polaris-sm font-polaris text-polaris-body2',
-              label ? 'pt-5 pb-1 px-5' : 'px-5',
+              label ? 'pt-5 pb-1' : '',
+              // Horizontal padding adjusts for prefix/suffix/clear adornments.
+              prefix ? 'pl-12' : 'pl-5',
+              showClear ? 'pr-11' : suffix ? 'pr-12' : 'pr-5',
               'bg-background-base text-label-normal placeholder:text-label-assistive',
               'border border-line-neutral',
               'transition-colors duration-polaris-fast',
@@ -108,6 +199,29 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             )}
             {...props}
           />
+          {/* Suffix sits to the LEFT of the clear button when both shown. */}
+          {suffix && (
+            <span
+              aria-hidden="true"
+              className={cn(
+                'pointer-events-none absolute top-1/2 -translate-y-1/2 inline-flex items-center text-polaris-body2 text-label-alternative [&>svg]:h-4 [&>svg]:w-4',
+                showClear ? 'right-11' : 'right-5'
+              )}
+            >
+              {suffix}
+            </span>
+          )}
+          {showClear && (
+            <button
+              type="button"
+              onClick={handleClear}
+              aria-label="입력 지우기"
+              tabIndex={-1}
+              className="absolute right-3 top-1/2 -translate-y-1/2 inline-flex h-7 w-7 items-center justify-center rounded-polaris-sm text-label-alternative hover:bg-interaction-hover focus-visible:outline-none focus-visible:shadow-polaris-focus"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
+          )}
         </div>
         {error ? (
           <p

@@ -74,4 +74,21 @@ describe('Badge', () => {
     expect(el).toHaveClass('border-file-docx');
     expect(el).toHaveClass('text-label-normal');
   });
+
+  it('renders dismissible × button + fires onDismiss', async () => {
+    const { default: userEvent } = await import('@testing-library/user-event');
+    const { vi } = await import('vitest');
+    const onDismiss = vi.fn();
+    const user = userEvent.setup();
+    render(<Badge dismissible onDismiss={onDismiss}>filter</Badge>);
+    await user.click(screen.getByRole('button', { name: '제거' }));
+    expect(onDismiss).toHaveBeenCalled();
+  });
+
+  it('renders icon slot before the children', () => {
+    render(<Badge icon={<svg data-testid="badge-ic" />}>완료</Badge>);
+    const el = screen.getByText('완료');
+    // Icon is a sibling rendered before the text.
+    expect(el.parentElement?.querySelector('[data-testid="badge-ic"]')).toBeInTheDocument();
+  });
 });

@@ -213,6 +213,16 @@ export function useToast() {
   return { toasts, toast, dismiss: dismissToast };
 }
 
+export interface ToasterProps {
+  /**
+   * Default `duration` (ms) applied when a `toast({...})` call doesn't
+   * specify one. Radix's own default is 5000ms; bump this for slower
+   * readers, lower it for terse confirmations. Per-toast `duration`
+   * always wins.
+   */
+  defaultDuration?: number;
+}
+
 /**
  * Render once near the root of your app, *inside* a `<ToastProvider>` and next
  * to a `<ToastViewport>`. Then call `toast({ title, description })` anywhere.
@@ -220,12 +230,12 @@ export function useToast() {
  * ```tsx
  * <ToastProvider>
  *   <App />
- *   <Toaster />
+ *   <Toaster defaultDuration={5000} />
  *   <ToastViewport />
  * </ToastProvider>
  * ```
  */
-export function Toaster() {
+export function Toaster({ defaultDuration }: ToasterProps = {}) {
   const { toasts, dismiss } = useToast();
   return (
     <>
@@ -233,7 +243,9 @@ export function Toaster() {
         <Toast
           key={t.id}
           variant={t.variant}
-          duration={t.duration}
+          // Per-toast `duration` wins; fall back to Toaster default; Radix's
+          // own 5000ms default kicks in if neither is set.
+          duration={t.duration ?? defaultDuration}
           open={t.open}
           onOpenChange={(open) => {
             if (!open) dismiss(t.id);

@@ -90,25 +90,75 @@ export interface ButtonProps
   asChild?: boolean;
   /** Show a spinner before the children and disable interaction. */
   loading?: boolean;
+  /**
+   * Leading icon slot. Use this instead of inlining icons in `children` —
+   * the gap, sizing (h-4/w-4), and `aria-hidden` are wired automatically,
+   * keeping rows of buttons visually aligned. Hidden while `loading=true`
+   * (the spinner takes its slot).
+   */
+  iconLeft?: React.ReactNode;
+  /** Trailing icon slot — same wiring as `iconLeft` but rendered after children. */
+  iconRight?: React.ReactNode;
+  /**
+   * Stretch to fill the container width (`w-full`). Replaces the
+   * `className="w-full"` boilerplate used in form CTAs / dialog footers.
+   */
+  fullWidth?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, loading = false, disabled, children, ...props }, ref) => {
+  ({
+    className,
+    variant,
+    size,
+    asChild = false,
+    loading = false,
+    iconLeft,
+    iconRight,
+    fullWidth,
+    disabled,
+    children,
+    ...props
+  }, ref) => {
     const Comp = asChild ? Slot : 'button';
+
+    // When `asChild` is set, Radix Slot requires a single React element
+    // child. We can't safely inject icon slots around an unknown child
+    // element. If the consumer wants iconLeft/iconRight + asChild, they
+    // should compose icons inside their own child element. Throw a dev
+    // warning to surface the mismatch instead of silently dropping icons.
+    if (asChild && (iconLeft || iconRight) && process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[Button] iconLeft/iconRight is ignored when asChild is set — Slot requires a single child. Place the icon inside your child element instead.'
+      );
+    }
+
     return (
       <Comp
         ref={ref}
-        className={cn(buttonVariants({ variant, size }), className)}
+        className={cn(buttonVariants({ variant, size }), fullWidth && 'w-full', className)}
         disabled={disabled || loading}
         {...props}
       >
-        {loading ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-            {children}
-          </>
-        ) : (
+        {asChild ? (
           children
+        ) : (
+          <>
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+            ) : iconLeft ? (
+              <span className="inline-flex shrink-0 [&>svg]:h-4 [&>svg]:w-4" aria-hidden="true">
+                {iconLeft}
+              </span>
+            ) : null}
+            {children}
+            {iconRight && !loading && (
+              <span className="inline-flex shrink-0 [&>svg]:h-4 [&>svg]:w-4" aria-hidden="true">
+                {iconRight}
+              </span>
+            )}
+          </>
         )}
       </Comp>
     );
