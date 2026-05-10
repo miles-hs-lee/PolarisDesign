@@ -12,6 +12,30 @@
 
 ---
 
+## [0.8.0-rc.5] — 2026-05-10
+
+Codex 후속 리뷰 P1 1건 fix. **rc.4 대비 BREAKING 변경 없음** — codemod의 import 자동 추가 로직이 idempotency를 깨뜨리던 케이스를 두 단계 안전망으로 막음.
+
+### P1 — release-gate (codemod idempotency)
+
+- **`normalizePolarisImports`가 마이그레이션 대상이 아닌 파일에도 import를 추가하던 버그 fix** — rc.4에서 `NAMESPACES_TO_CHECK`를 `layer/line/background/fill/radius`까지 확장하면서 false positive 표면적이 넓어졌고, Codex가 재현 케이스를 잡아냄: 사용자 코드에 `const line = { normal: 1 }; line.normal` 같은 로컬 객체가 있고 v0.7 alias는 전혀 안 쓰는 파일에도 codemod가 `import { Button, line } from '@polaris/ui'`를 주입해서 duplicate-declaration으로 빌드를 깨뜨림.
+- **두 단계 안전망 도입**:
+  1. **rewrite gate** — `transform()`에서 이전 rewrite (TS_TOKEN_RENAMES / TAILWIND_RENAMES / CSS_VAR_RENAMES / JSX_RENAMES) 가 실제로 변경을 만든 경우에만 `normalizePolarisImports`를 호출. 마이그레이션 대상이 아닌 파일은 post-pass에 도달하지 않음. 이게 본질적인 fix이고 idempotency도 자연 보장 (이미 v0.8 코드는 rewrite 안 일어나니까 normalize도 skip).
+  2. **local declaration check** — 그래도 통과한 파일에서 `const | let | var | function | class <ns>` 로컬 선언이 있는 namespace는 import 추가 skip. rewrite는 다른 곳에서 일어났는데 우연히 같은 이름의 로컬이 있는 엣지 케이스 보호.
+- **2 신규 회귀 테스트** + **1 기존 테스트 fixture 정정** (`synthesizes a fresh value import …` 테스트 fixture가 실제로는 rewrite를 트리거하지 않는 모양이라 새 gate 통과 못 했음 — `text.primary` 트리거 사용으로 수정해서 진짜 synthesize 케이스 재현). codemod tests **25 → 27**.
+
+### 검증
+
+- `pnpm verify` **14/14 ✓**
+- `polaris-codemod-v08` **27/27** (+2 안전망 회귀 테스트)
+- 기존 22~25개 테스트 모두 그대로 통과 (rewrite gate가 정당한 케이스를 막진 않음)
+
+### 알려진 caveat (rc.5에서 정리)
+
+- 이전 rc 들에서 마이그레이션 가이드에 적혀 있던 "regex 기반 false positive — 로컬 변수가 v0.8 namespace 이름과 같으면 import 잘못 추가될 수 있음" caveat은 두 단계 안전망 도입으로 **사실상 해소**. 이론적으로 여전히 가능한 false-positive 시나리오는: (a) 파일이 v0.7→v0.8 rewrite를 받는 *동시에* (b) destination namespace 이름과 같은 로컬을 destructuring (`const { line } = obj`) 으로 도입한 경우 — 이건 regex로 잡기 어렵고 빈도가 매우 낮아 caveat으로 남김.
+
+---
+
 ## [0.8.0-rc.4] — 2026-05-10
 
 Codex 후속 리뷰 3건 + e2e visual baseline 사인오프 흡수. **rc.3 대비 BREAKING 변경 없음** — codemod의 또 한 가지 import 누락 케이스(P1) + lint 메시지 / migration doc snippet의 잔여 v0.8 제거 alias 예시 정리.

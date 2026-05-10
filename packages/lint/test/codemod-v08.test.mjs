@@ -472,27 +472,36 @@ test('does NOT add value namespaces to `import type { ... }` lines (typecheck pr
   } finally { cleanup(dir); }
 });
 
-test('synthesizes a fresh value import when only type imports exist', () => {
-  // Edge case: file imports ONLY types from @polaris/ui, but member
-  // access (legacy or fresh) needs a value namespace. We can't append
-  // to any existing line — must create a new `import { ai } from …`.
+test('synthesizes a fresh value import when only type imports exist (with active rewrite)', () => {
+  // Edge case: file imports ONLY types from @polaris/ui, AND has a
+  // v0.7 member-access pattern that rewrites to a v0.8 destination
+  // namespace. We can't append the new value binding to a type-only
+  // import (TS2693) — must synthesize a fresh `import { label } from
+  // …` line.
+  //
+  // The rewrite trigger here is `text.primary` → `label.normal`. The
+  // gate (`changes > 0`) needs an actual rewrite to activate the
+  // post-pass, so this fixture must contain something that rewrites.
   const dir = setup();
   try {
     writeFileSync(join(dir, 'typesonly.ts'), [
-      `import type { ButtonProps, CardProps } from '@polaris/ui';`,
-      `// later code references ai.normal directly — perhaps post-rewrite`,
-      `const c: ButtonProps = {} as ButtonProps;`,
-      `const tone = ai.normal;`,  // pre-existing reference, no brand.* to rewrite
+      `import type { ColorPair } from '@polaris/ui/tokens';`,
+      `// text.primary is a v0.7 member-access that flips to label.normal.`,
+      `// Pretend "text" was previously imported as a value somewhere upstream;`,
+      `// codemod rewrites the pattern and trusts post-pass to fix imports.`,
+      `export const myColor: ColorPair = text.primary as unknown as ColorPair;`,
     ].join('\n'));
     runCodemod(dir, ['--apply']);
     const out = readFileSync(join(dir, 'typesonly.ts'), 'utf8');
+    // text.primary rewritten to label.normal — confirms post-pass ran
+    assert.match(out, /label\.normal/);
     // Original type import preserved verbatim
-    assert.match(out, /import type \{ ButtonProps, CardProps \} from '@polaris\/ui'/);
-    // New synthesized value import for `ai`, on the same root subpath
-    // as the first existing polaris import (here: bare @polaris/ui).
-    assert.match(out, /^import \{ ai \} from '@polaris\/ui';/m);
-    // No type-pollution — ai must NOT be inside an `import type {...}` block
-    assert.doesNotMatch(out, /import type \{[^}]*\bai\b/);
+    assert.match(out, /import type \{ ColorPair \} from '@polaris\/ui\/tokens'/);
+    // New synthesized value import for `label`, on the same subpath
+    // as the first existing polaris import (here: /tokens).
+    assert.match(out, /^import \{ label \} from '@polaris\/ui\/tokens';/m);
+    // No type-pollution — label must NOT be inside an `import type {...}` block
+    assert.doesNotMatch(out, /import type \{[^}]*\blabel\b/);
   } finally { cleanup(dir); }
 });
 
@@ -561,6 +570,61 @@ test('radius.full → radius.pill member access', () => {
     // radius already imported — no new import needed (idempotent)
     const radiusImports = (out.match(/import\s*\{[^}]*\bradius\b/g) ?? []).length;
     assert.equal(radiusImports, 1);
+  } finally { cleanup(dir); }
+});
+
+test('does NOT add namespace import to files with no v0.8 rewrite (rc.4 regression)', () => {
+  // Codex caught: previous version invoked `normalizePolarisImports`
+  // unconditionally, so a file that already used `line.normal` for a
+  // local object — without ANY v0.7 token / class / variable that
+  // would trigger a rewrite — would still get `import { Button, line }
+  // from '@polaris/ui'` injected, conflicting with the local
+  // `const line = { normal: 1 }` declaration. The fix gates the
+  // post-pass on `changes > 0` AND skips namespaces that have a
+  // local declaration in the file.
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'noop.ts'), [
+      `import { Button } from '@polaris/ui';`,
+      `const line = { normal: 1 };`,
+      `export const x = line.normal;`,
+      `export const b = Button;`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'noop.ts'), 'utf8');
+    // Import line should be UNCHANGED — no v0.7 alias to rewrite anywhere.
+    assert.match(out, /^import \{ Button \} from '@polaris\/ui';/m);
+    assert.doesNotMatch(out, /import\s*\{[^}]*\bline\b[^}]*\}\s*from\s*['"]@polaris/);
+    // local `line` declaration intact, member access intact.
+    assert.match(out, /const line = \{ normal: 1 \};/);
+    assert.match(out, /export const x = line\.normal;/);
+  } finally { cleanup(dir); }
+});
+
+test('SKIPS adding a namespace whose name shadows a local declaration', () => {
+  // Even when the file IS a migration target (some v0.7 rewrite fires
+  // elsewhere), if the destination namespace name collides with a
+  // local `const | let | var | function | class`, do not append.
+  // Otherwise we'd write `import { Button, line }` next to
+  // `const line = …` and trip a duplicate-declaration error.
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'shadow.ts'), [
+      // v0.7-era class that triggers a rewrite (forces the post-pass
+      // to run via the changes>0 gate)
+      `import { Button } from '@polaris/ui';`,
+      `const line = { normal: 1 };       // shadows the v0.8 'line' namespace`,
+      `const cls = "bg-fg-primary";      // → bg-label-normal (rewrite fires)`,
+      `export const x = line.normal;     // local member access`,
+      `export const b = Button;`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'shadow.ts'), 'utf8');
+    // The v0.7 alias rewrite happened — confirms post-pass was reached
+    assert.match(out, /bg-label-normal/);
+    // But the local-shadowed `line` was NOT auto-imported
+    assert.match(out, /^import \{ Button \} from '@polaris\/ui';/m);
+    assert.doesNotMatch(out, /import\s*\{[^}]*\bline\b[^}]*\}\s*from\s*['"]@polaris/);
   } finally { cleanup(dir); }
 });
 

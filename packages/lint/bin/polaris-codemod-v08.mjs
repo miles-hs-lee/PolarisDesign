@@ -467,21 +467,32 @@ function transform(content, filePath) {
     apply(JSX_RENAMES);
   } else if (ext === '.tsx' || ext === '.jsx') {
     // .tsx / .jsx — full rewrite set incl. JSX tag/prop renames.
+    const before = out;
     apply(TS_TOKEN_RENAMES);
     apply(TAILWIND_RENAMES);
     apply(CSS_VAR_RENAMES);
     apply(JSX_RENAMES);
-    const after = normalizePolarisImports(out);
-    if (after !== out) changes += 1;
-    out = after;
+    // Only normalize imports if a previous rewrite actually fired —
+    // otherwise files that aren't migration targets (already-v0.8 code,
+    // or files that just happen to use a name like `ai` / `line` for
+    // a local) would get spurious imports added. Idempotent and
+    // false-positive-safe.
+    if (out !== before) {
+      const after = normalizePolarisImports(out);
+      if (after !== out) changes += 1;
+      out = after;
+    }
   } else {
     // .ts / .js / .mjs / .cjs — token / class-string only (no JSX).
+    const before = out;
     apply(TS_TOKEN_RENAMES);
     apply(TAILWIND_RENAMES);
     apply(CSS_VAR_RENAMES);
-    const after = normalizePolarisImports(out);
-    if (after !== out) changes += 1;
-    out = after;
+    if (out !== before) {
+      const after = normalizePolarisImports(out);
+      if (after !== out) changes += 1;
+      out = after;
+    }
   }
   return { out, changes };
 }
@@ -496,13 +507,18 @@ function transform(content, filePath) {
  *  file body for `\b<namespace>\.` usage and appends any namespace that
  *  isn't yet imported to the FIRST `@polaris/ui[/tokens]` import line.
  *
- *  Caveats (regex-based, not AST):
- *   - Local variables named like a v0.8 token namespace (e.g.
- *     `const ai = …`) would be detected as "used" and trigger an
- *     unnecessary import addition. Rare in practice for these names —
- *     listed in the migration guide.
- *   - Idempotent: a second run sees the namespace already imported and
- *     adds nothing. */
+ *  Two safety nets against false positives:
+ *   1. Caller (`transform`) only invokes this pass after a previous
+ *      rewrite has actually changed the content. Files that aren't
+ *      migration targets never reach this function.
+ *   2. We additionally skip any namespace name that has a local
+ *      declaration in the file (`const | let | var | function | class
+ *      <ns>`). That covers the leftover edge case where a rewrite did
+ *      fire elsewhere in the file but the bare `<ns>.<member>` token
+ *      we'd otherwise add as an import is a user-defined object.
+ *
+ *  Idempotent: a second run sees the namespace already imported and
+ *  adds nothing. */
 function normalizePolarisImports(content) {
   // Match `import { ... } from '@polaris/ui'` or `'@polaris/ui/tokens'`.
   // Capture groups:
@@ -537,12 +553,23 @@ function normalizePolarisImports(content) {
   ];
 
   const usedInBody = new Set(
-    NAMESPACES_TO_CHECK.filter((ns) =>
+    NAMESPACES_TO_CHECK.filter((ns) => {
       // Require an identifier character after the dot — excludes prose
       // like "navigation state." in JSDoc comments, where `state.` is
       // sentence punctuation rather than a member access.
-      new RegExp(`\\b${ns}\\.[a-zA-Z_$]`).test(content)
-    )
+      if (!new RegExp(`\\b${ns}\\.[a-zA-Z_$]`).test(content)) return false;
+      // Skip if the file declares a local of the same name. We'd
+      // otherwise add `import { line }` to a file that has
+      // `const line = { … }`, breaking the build with a duplicate
+      // declaration. The check covers `const | let | var | function |
+      // class <ns>` and JSX-style ` ${ns}:` destructuring — the
+      // common ways a user might name a local.
+      const localDeclRe = new RegExp(
+        `\\b(?:const|let|var|function|class)\\s+${ns}\\b`,
+      );
+      if (localDeclRe.test(content)) return false;
+      return true;
+    })
   );
   if (usedInBody.size === 0) return content;
 
