@@ -233,6 +233,16 @@ export interface TableHeadProps extends React.ThHTMLAttributes<HTMLTableCellElem
    * Pass `['asc', 'desc']` for two-state (always sorted, no clear).
    */
   cycle?: TableSortDirection[];
+  /**
+   * Apply `whitespace-nowrap` so this header's content stays on one line.
+   * Mirrors `<TableCell nowrap>` so a single column's `<th>` and `<td>`
+   * can match without sprinkling `className="whitespace-nowrap"` on
+   * each row. Single-line "날짜 / 금액 / ID" header columns benefit;
+   * for `sortable` headers it also keeps the chevron + label inline
+   * during horizontal scroll. v0.7.7 had this on TableCell only —
+   * v0.8 closes the API symmetry gap.
+   */
+  nowrap?: boolean;
 }
 
 const DEFAULT_SORT_CYCLE: TableSortDirection[] = ['asc', 'desc', null];
@@ -262,12 +272,13 @@ function SortIcon({ direction }: { direction: TableSortDirection }) {
 }
 
 export const TableHead = forwardRef<HTMLTableCellElement, TableHeadProps>(
-  ({ className, sortable, sortDirection, onSortChange, cycle, children, ...props }, ref) => {
+  ({ className, sortable, sortDirection, onSortChange, cycle, nowrap, children, ...props }, ref) => {
     const density = useContext(DensityContext);
     const baseClass = cn(
       CELL_PAD_X,
       ROW_PAD[density],
       'text-left font-semibold text-polaris-caption1 uppercase tracking-wider',
+      nowrap && 'whitespace-nowrap',
       className
     );
 

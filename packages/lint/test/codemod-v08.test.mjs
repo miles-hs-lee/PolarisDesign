@@ -385,7 +385,11 @@ test('rewrites named-import bindings on @polaris/ui AND @polaris/ui/tokens', () 
     assert.match(out, /import \{ accentBrand \} from '@polaris\/ui\/tokens'/);
     // Mixed-import rename — leaves siblings intact
     assert.match(out, /import \{ state, accentBrand \} from '@polaris\/ui\/tokens'/);
-    assert.match(out, /import \{ label, label \} from '@polaris\/ui\/tokens'/); // 중복 — TS가 잡음 (문서화된 caveat)
+    // The `text` (→ `label`) + `label` mixed-import case used to leave
+    // a duplicate `{ label, label }` for TS to flag. rc.6 dedupes
+    // in-place — the result is a single entry.
+    assert.match(out, /import \{ label \} from '@polaris\/ui\/tokens'/);
+    assert.doesNotMatch(out, /\{ label, label \}/);
     assert.match(out, /import \{ accentBrand, line \} from '@polaris\/ui'/);
     // Non-polaris untouched
     assert.match(out, /import \{ text \} from 'some-other-pkg'/);
@@ -625,6 +629,83 @@ test('SKIPS adding a namespace whose name shadows a local declaration', () => {
     // But the local-shadowed `line` was NOT auto-imported
     assert.match(out, /^import \{ Button \} from '@polaris\/ui';/m);
     assert.doesNotMatch(out, /import\s*\{[^}]*\bline\b[^}]*\}\s*from\s*['"]@polaris/);
+  } finally { cleanup(dir); }
+});
+
+test('dedupes Stack import after HStack/VStack → Stack rewrite (rc.5 regression)', () => {
+  // Codex caught: a file that imported BOTH `Stack` (already used) and
+  // `HStack` / `VStack` (legacy) ends up with three `Stack` entries
+  // after the JSX_RENAMES rewrite renames the H/VStack identifiers
+  // inside imports — leading to "Identifier 'Stack' has already been
+  // declared" at TS compile.
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'dup.tsx'), [
+      `import { Stack, Input, HStack, VStack } from '@polaris/ui';`,
+      `export const x = (`,
+      `  <Stack gap={2}>`,
+      `    <HStack><Input /></HStack>`,
+      `    <VStack><Input /></VStack>`,
+      `  </Stack>`,
+      `);`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'dup.tsx'), 'utf8');
+    // Single `Stack` entry in import — no duplicates
+    const stackInImports = (out.match(/import\s*\{[^}]*\bStack\b[^}]*\}/g) ?? [])
+      .reduce((n, m) => n + (m.match(/\bStack\b/g) ?? []).length, 0);
+    assert.equal(stackInImports, 1, 'Stack should appear exactly once across all polaris imports');
+    // No HStack / VStack identifiers anywhere
+    assert.doesNotMatch(out, /\bHStack\b/);
+    assert.doesNotMatch(out, /\bVStack\b/);
+    // JSX still rewritten to <Stack direction="row"> / <Stack>
+    assert.match(out, /<Stack direction="row"/);
+  } finally { cleanup(dir); }
+});
+
+test('preserves multi-line import body when adding missing namespace (rc.5 regression)', () => {
+  // Codex caught: rc.5 `appendToImportBody` did `body.trim()` then
+  // jammed the missing namespace at the end:
+  //   body = "\n  Badge,\n  TableSkeleton,\n  VStack,\n"
+  //   trimmed.trim() = "Badge,\n  TableSkeleton,\n  VStack,"
+  //   result = "{ ... VStack,, state }"   ←  comma jam + line collapse
+  // After fix: parse entries, dedupe, rebuild with line-per-entry.
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'ml.tsx'), [
+      `import {`,
+      `  Badge,`,
+      `  TableSkeleton,`,
+      `  VStack,`,
+      `} from '@polaris/ui';`,
+      `import { brand } from '@polaris/ui/tokens';`,
+      `export const x = brand.secondary;     // → ai.normal — needs ai import`,
+      `export const y = (`,
+      `  <VStack gap={2}>`,
+      `    <Badge tone="success">ok</Badge>`,
+      `    <TableSkeleton />`,
+      `  </VStack>`,
+      `);`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'ml.tsx'), 'utf8');
+    // Multi-line shape preserved AND `ai` appended as its own indented
+    // line (not jammed onto the previous one). The codemod picks the
+    // FIRST value polaris import (here: the multi-line `@polaris/ui`)
+    // as the destination, per the documented "first value import" rule.
+    assert.match(
+      out,
+      /import \{\n  Badge,\n  TableSkeleton,\n  Stack,\n  ai,\n\} from '@polaris\/ui';/,
+    );
+    // `accentBrand` import is unchanged (single-line shape preserved)
+    assert.match(out, /import \{ accentBrand \} from '@polaris\/ui\/tokens'/);
+    // Member access rewritten
+    assert.match(out, /ai\.normal/);
+    // No `state` jammed in (the specific corruption Codex hit on collection-builder)
+    assert.doesNotMatch(out, /\bstate\b\s*\}/);
+    // No `VStack` residue, no double commas
+    assert.doesNotMatch(out, /\bVStack\b/);
+    assert.doesNotMatch(out, /,,/);
   } finally { cleanup(dir); }
 });
 

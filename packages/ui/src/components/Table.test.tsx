@@ -282,6 +282,39 @@ describe('TableRow — clickable a11y', () => {
     expect(screen.getByTestId('c')).toHaveClass('whitespace-nowrap');
   });
 
+  it('TableHead nowrap prop applies whitespace-nowrap (API symmetry with TableCell)', () => {
+    // v0.8 closes the rc.0 gap: TableCell got `nowrap` in v0.7.7 but
+    // TableHead didn't, so single-line "날짜 / 금액 / ID" header columns
+    // still wrapped on narrow viewports. Mirroring the prop keeps the
+    // <th> + <td> pair in lockstep.
+    render(
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead nowrap data-testid="h">2026-12-31</TableHead>
+          </TableRow>
+        </TableHeader>
+      </Table>
+    );
+    expect(screen.getByTestId('h')).toHaveClass('whitespace-nowrap');
+  });
+
+  it('TableHead nowrap stacks with sortable mode', () => {
+    // The class lands on the <th> wrapper, not the inner button — so
+    // the chevron + label stay together as a single nowrap unit during
+    // horizontal scroll.
+    render(
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead nowrap sortable data-testid="h">이름</TableHead>
+          </TableRow>
+        </TableHeader>
+      </Table>
+    );
+    expect(screen.getByTestId('h')).toHaveClass('whitespace-nowrap');
+  });
+
   it('keyboard activation: focus on the row, Enter fires onClick exactly once', async () => {
     const user = userEvent.setup();
     const onRowClick = vi.fn();

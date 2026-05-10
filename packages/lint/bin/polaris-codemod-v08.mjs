@@ -472,12 +472,19 @@ function transform(content, filePath) {
     apply(TAILWIND_RENAMES);
     apply(CSS_VAR_RENAMES);
     apply(JSX_RENAMES);
-    // Only normalize imports if a previous rewrite actually fired —
-    // otherwise files that aren't migration targets (already-v0.8 code,
-    // or files that just happen to use a name like `ai` / `line` for
-    // a local) would get spurious imports added. Idempotent and
-    // false-positive-safe.
+    // Post-rewrite cleanup. Two passes; both are no-ops if no rewrite
+    // fired upstream, so the migration-target gate at `out !== before`
+    // protects non-target files.
     if (out !== before) {
+      // 1. Dedupe — JSX_RENAMES turns `HStack` / `VStack` import-list
+      //    identifiers into `Stack`, which collides if the file already
+      //    imported `Stack`. Run dedupe regardless of normalize.
+      const deduped = dedupePolarisImports(out);
+      if (deduped !== out) changes += 1;
+      out = deduped;
+      // 2. Normalize — add missing destination namespaces (e.g. `ai`,
+      //    `layer`, `line`) when member-access rewrites introduced
+      //    them but the import wasn't updated.
       const after = normalizePolarisImports(out);
       if (after !== out) changes += 1;
       out = after;
@@ -489,6 +496,13 @@ function transform(content, filePath) {
     apply(TAILWIND_RENAMES);
     apply(CSS_VAR_RENAMES);
     if (out !== before) {
+      // No JSX_RENAMES path here, so dedupe is rarely needed — but
+      // TS_TOKEN_RENAMES of `import { brand }` → `import { accentBrand,
+      // ai }` could collide with an existing `accentBrand` / `ai`.
+      // Run dedupe to be safe, idempotent.
+      const deduped = dedupePolarisImports(out);
+      if (deduped !== out) changes += 1;
+      out = deduped;
       const after = normalizePolarisImports(out);
       if (after !== out) changes += 1;
       out = after;
@@ -609,9 +623,7 @@ function normalizePolarisImports(content) {
       const idx = count++;
       if (idx !== valueMatchIdx || added) return match;
       added = true;
-      const trimmed = body.trim();
-      const sep = trimmed ? ', ' : '';
-      return match.replace(`{${body}}`, `{ ${trimmed}${sep}${missing.join(', ')} }`);
+      return match.replace(`{${body}}`, `{${appendToImportBody(body, missing)}}`);
     });
   }
 
@@ -623,6 +635,83 @@ function normalizePolarisImports(content) {
   const insertAt = matches[0].index ?? 0;
   const newImport = `import { ${missing.join(', ')} } from '@polaris/ui${firstSubpath}';\n`;
   return content.slice(0, insertAt) + newImport + content.slice(insertAt);
+}
+
+/** Parse the inside-`{}` of an `import { … }` line into individual entries.
+ *  Each entry retains the original raw text so we can rebuild the body
+ *  faithfully (including `type X` modifiers, `as Alias`, etc.).
+ *  Empty entries (from trailing commas or `, ,`) are dropped. */
+function parseImportBody(body) {
+  return body.split(',')
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0)
+    .map((part) => {
+      const m = part.match(/^(?:type\s+)?([a-zA-Z_$][a-zA-Z0-9_$]*)/);
+      return { name: m ? m[1] : '', raw: part };
+    });
+}
+
+/** Rebuild the inside-`{}` of an import body, preserving multi-line
+ *  formatting if the source was multi-line. Same rule as Prettier:
+ *  a body with internal newlines becomes one-per-line with trailing
+ *  comma; a body that fit on one line stays compact `{ a, b, c }`. */
+function rebuildImportBody(entries, multiline) {
+  if (entries.length === 0) return ' ';
+  if (multiline) {
+    return '\n  ' + entries.map((e) => e.raw).join(',\n  ') + ',\n';
+  }
+  return ' ' + entries.map((e) => e.raw).join(', ') + ' ';
+}
+
+/** Append new identifiers to an existing import body, preserving
+ *  multi-line formatting and avoiding duplicate names. Used by
+ *  `normalizePolarisImports` to fix the rc.5 multi-line corruption
+ *  Codex caught (`Stack, state }` jammed onto a previously
+ *  multi-line `{\n  …,\n  Stack,\n}` body). */
+function appendToImportBody(body, namesToAdd) {
+  const multiline = body.includes('\n');
+  const entries = parseImportBody(body);
+  const existing = new Set(entries.map((e) => e.name));
+  for (const n of namesToAdd) {
+    if (!existing.has(n)) {
+      existing.add(n);
+      entries.push({ name: n, raw: n });
+    }
+  }
+  return rebuildImportBody(entries, multiline);
+}
+
+/** Dedupe duplicate identifiers within every `@polaris/ui` /
+ *  `@polaris/ui/tokens` import line. Idempotent. Multi-line bodies
+ *  stay multi-line.
+ *
+ *  This is the missing piece Codex caught: the `<HStack>` / `<VStack>`
+ *  → `<Stack>` rewrite emits an identifier-level rename inside import
+ *  lines (`HStack` → `Stack`) without checking whether `Stack` is
+ *  already imported. Result on a file that already imports `Stack`:
+ *
+ *    import { Stack, HStack, VStack } …   ←  before
+ *    import { Stack, Stack, Stack } …     ←  after JSX_RENAMES
+ *
+ *  TS error: "Identifier 'Stack' has already been declared". This
+ *  function is called once per polaris import line as a separate pass
+ *  after JSX_RENAMES so the dedupe runs over the post-rewrite text. */
+function dedupePolarisImports(content) {
+  const POLARIS_IMPORT_RE =
+    /import\s*(type\s+)?\{([^}]+)\}\s*from\s*['"]@polaris\/ui(\/tokens)?['"];?/g;
+  return content.replace(POLARIS_IMPORT_RE, (match, _isType, body) => {
+    const multiline = body.includes('\n');
+    const entries = parseImportBody(body);
+    const seen = new Set();
+    const deduped = [];
+    for (const e of entries) {
+      if (seen.has(e.name)) continue;
+      seen.add(e.name);
+      deduped.push(e);
+    }
+    if (deduped.length === entries.length) return match; // no-op
+    return match.replace(`{${body}}`, `{${rebuildImportBody(deduped, multiline)}}`);
+  });
 }
 
 // ───── Main ──────────────────────────────────────────────────────────

@@ -12,6 +12,32 @@
 
 ---
 
+## [0.8.0-rc.6] — 2026-05-10
+
+Codex 후속 리뷰 P1 2건 fix + P2 1건. **rc.5 대비 BREAKING 변경 없음** — codemod의 import dedupe 누락과 multi-line body corruption 두 결함이 같은 함수에서 발견됨, 같은 사이클에 함께 수정. 추가로 v0.7.7에서 `TableCell.nowrap`만 추가됐던 API 비대칭이 v0.8까지 남아 있던 부분 정리.
+
+### P1 — release-gate (consumer build breakers)
+
+- **codemod-v08가 `<HStack>` / `<VStack>` → `<Stack>` rewrite 후 import dedupe를 안 하던 버그 fix** — JSX_RENAMES의 `HStack` / `VStack` 식별자 치환은 import 라인 안의 단순 글자 교체라, 파일이 이미 `Stack`을 import하고 있으면 결과가 `import { Stack, Stack, Stack } from '@polaris/ui'`로 나옴 → "Identifier 'Stack' has already been declared" 빌드 즉사. 새 `dedupePolarisImports` post-pass 추가 — 모든 polaris import 라인 안에서 식별자 중복 제거. 멀티라인 body는 멀티라인 그대로 유지.
+- **`normalizePolarisImports`가 multi-line import body를 single-line으로 squash하던 corruption fix** — 이전 구현은 `body.trim()` 후 missing namespace를 끝에 jam해서 `{\n  Badge,\n  TableSkeleton,\n  VStack,\n}` 같은 멀티라인 body가 `{ ..., Stack, state }` 처럼 한 줄로 망가지면서 `state`가 어디서 왔는지 알 수 없는 jam 상태가 됨 (Codex가 collection-builder.tsx에서 발견). 새 `parseImportBody` / `rebuildImportBody` 헬퍼로 body를 토큰 단위로 파싱 → 추가 → 멀티라인이었으면 한 줄에 한 entry, single-line이었으면 한 줄로 재조립. trailing comma 정확히 보존.
+- 두 fix 합쳐 codemod tests **27 → 29** (+2: dedupe 회귀 / multi-line 보존 회귀). 한 가지 기존 test (`mixed-import` 의 `{ label, label }` duplicate caveat) 는 dedupe 도입으로 자연 해소 — assertion을 "single entry + dedupe 적용" 으로 갱신.
+
+### P2 — API 대칭 갭 (TableCell.nowrap ↔ TableHead.nowrap)
+
+- **`<TableHead nowrap>` prop 추가** — v0.7.7에서 `<TableCell>`에 `nowrap`을 추가하면서 `<TableHead>`는 누락됐음. 단일 라인 컬럼 (날짜 / 금액 / ID) 의 `<th>` 가 narrow viewport에서 그대로 wrap되거나 `className="whitespace-nowrap"` 직접 추가 패턴이 남아 있던 부분. `sortable` 모드에서도 작동 (chevron + 라벨이 한 줄로 inline 유지). 회귀 테스트 2건 추가.
+
+### 검증
+
+- `pnpm verify` **14/14 ✓**
+- `polaris-codemod-v08` **27 → 29/29** (+2 회귀 + 1 기존 테스트 단순화)
+- `@polaris/ui` test 추가 (TableHead nowrap 2건) — 기존 본문 통과 그대로
+
+### 알려진 caveat (rc.6 정리)
+
+- 이전 rc 들에서 우려하던 "consumer가 codemod 돌리면 `import { Stack, Stack, Stack }` 결과 나올 수 있음" 케이스 dedupe로 자연 해소. 마이그레이션 가이드의 "TypeScript가 잡으니 한 줄에 합치세요" 같은 caveat 한 줄도 제거 가능 (수동 후처리 필요 없음).
+
+---
+
 ## [0.8.0-rc.5] — 2026-05-10
 
 Codex 후속 리뷰 P1 1건 fix. **rc.4 대비 BREAKING 변경 없음** — codemod의 import 자동 추가 로직이 idempotency를 깨뜨리던 케이스를 두 단계 안전망으로 막음.
