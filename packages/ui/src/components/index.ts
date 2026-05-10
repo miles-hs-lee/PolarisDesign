@@ -47,3 +47,8 @@ export * from './FileInput';
 export * from './DateTimeInput';
 // Tier 3.7 — Table helpers (toolbar / selection bar / skeleton, v0.7.5)
 export * from './TableHelpers';
+// Tier 3.8 — page layout + extra primitives (v0.7.7)
+export * from './PageHeader';
+export * from './CircularProgress';
+export * from './Accordion';
+export * from './Combobox';

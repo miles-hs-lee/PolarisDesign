@@ -38,6 +38,13 @@ You are working on a Polaris Office web service. Apply these rules without askin
      PaginationFooter,
      // Tier 3.7 — Table helpers (v0.7.5)
      TableSearchInput, TableToolbar, TableSelectionBar, TableSkeleton,
+     // Tier 3.8 — page layout + extras (v0.7.7)
+     PageHeader, SectionHeader,
+     CircularProgress,
+     Accordion, AccordionItem, AccordionTrigger, AccordionContent,
+     Combobox,
+     // v0.7.6 — AvatarGroup 신규 (props 추가는 기존 컴포넌트에)
+     AvatarGroup,
      // Server-action friendly (Next.js App Router)
      DropdownMenuFormItem,
      // Toast imperative API (call toast({...}) anywhere; mount <Toaster /> once)
@@ -64,6 +71,24 @@ You are working on a Polaris Office web service. Apply these rules without askin
    - **datetime / time-of-day picker** → `<DateTimeInput>` / `<TimeInput>` (native input wrapper, mobile-OS picker auto). Use `<DatePicker>` only when you need a calendar grid. Don't roll your own datetime UI.
    - **Passive status badge** ("비활성", "초안", "정책 위반") → `<Badge tone="outline">` — sits between `subtle` (can disappear) and `solid` (demands attention).
    - **Layered elevation in dark mode** (popover-on-card, modal-on-popover) → `bg-surface-popover` / `bg-surface-modal` (v0.7.5 new tiers). Don't `color-mix()` your way around `surface.raised`.
+   - **Page heading row** (title + description + breadcrumb + actions) → `<PageHeader>`; section heading inside a page → `<SectionHeader>`. Both have eyebrow / actions slots and consistent type sizes — don't roll your own h1+description+button row.
+   - **Searchable Select with > ~15 options** → `<Combobox>` (cmdk-backed). `<Select>` stays for short option lists (≤ ~10). `<Combobox multiple>` for tag-chip multi-select.
+   - **Grouped show/hide (FAQ, settings groups)** → `<Accordion type="single|multiple">`. `<Disclosure>` is the *single* show/hide primitive — Accordion handles groups with arrow-key nav.
+   - **Underline-style page tabs** → `<TabsList variant="underline">`. Default `pill` is for in-card segmented controls; `underline` for page navigation.
+   - **Inline / compact spinner** → `<CircularProgress />` (radial, 4 sizes, indeterminate by default). Use `<Progress>` for full-width upload bars, `<CircularProgress>` for status chips / async cards / "동기화 중 47%" inline.
+   - **Multi-line / auto-expanding textarea** → `<Textarea autoResize maxLength={N} showCount>`. Don't watch `scrollHeight` by hand.
+   - **Currency / search / unit inputs** → `<Input prefix="₩" suffix="KRW" clearable />`. Don't compose icon + input in a flex row by hand.
+   - **Form-toggle Switch with label** → `<Switch label="…" hint="…" error="…" />`. Mirrors Checkbox API.
+   - **Filter / removable chip** → `<Badge dismissible icon={<i/>} onDismiss={...}>`.
+   - **Alert with retry CTA / dismiss** → `<Alert action={<Button>재시도</Button>} dismissible onDismiss={...}>`.
+   - **Multi-line / circular skeleton** → `<Skeleton shape="text" lines={3} />` / `<Skeleton shape="circle" className="h-10 w-10" />`. Don't stack divs by hand.
+   - **Avatar cluster + +N overflow** → `<AvatarGroup max={4}>...</AvatarGroup>`. size auto-propagates to children.
+   - **Stat tile loading** → `<Stat label="…" value={n} loading />` (Skeleton placeholder, 타일 높이 stable).
+   - **Button leading/trailing icon** → `<Button iconLeft={<PlusIcon />} iconRight={<ChevronRightIcon />}>`. `<Button fullWidth>` for form CTAs.
+   - **Clickable card surface** → `<Card interactive asChild><Link>...</Link></Card>` (hover shadow + focus ring).
+   - **DropdownMenuItem with icon** → `<DropdownMenuItem icon={<EditIcon />}>수정</DropdownMenuItem>`.
+   - **Selected/clickable table row** → `<TableRow selected clickable onClick={...}>`.
+   - **Toast default duration** → `<Toaster defaultDuration={5000} />` once at app root.
    - **Data-table chrome** (search bar, filter chips, "+ 추가") → `<TableToolbar>` with `search`/`onSearchChange` + `chips`/`activeChip`/`onChipChange` + `actions` slot. Don't compose Search input + filter chips by hand.
    - **Bulk-action bar when rows selected** → `<TableSelectionBar count={...} onCancel={...} actions={...} />` *in place of* the toolbar (conditional render). Don't roll your own brand-tinted strip.
    - **Async-loading table placeholder** → `<TableSkeleton rows={5} columns={4} />` (ARIA `aria-busy=true` + Skeleton shimmer). Don't manually render a `<Table>` of `<Skeleton>` cells.

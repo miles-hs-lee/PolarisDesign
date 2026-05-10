@@ -126,8 +126,20 @@ import {
   TableSelectionBar,
   TableSkeleton,
   type TableSortDirection,
+  // v0.7.6 — additions
+  AvatarGroup,
+  // v0.7.7 — new components
+  CircularProgress,
+  PageHeader,
+  SectionHeader,
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  Combobox,
+  type ComboboxOption,
 } from '@polaris/ui';
-import { BellIcon, DeleteIcon, DownloadIcon, FolderIcon, ImageIcon, PencilLineIcon, PlusIcon, SearchIcon, SettingsIcon } from '@polaris/ui/icons';
+import { BellIcon, ChevronRightIcon, DeleteIcon, DownloadIcon, FolderIcon, ImageIcon, PencilLineIcon, PlusIcon, SearchIcon, SettingsIcon } from '@polaris/ui/icons';
 import {
   Form,
   FormField,
@@ -181,6 +193,12 @@ export default function Components() {
   const [tableSelected, setTableSelected] = useState<number[]>([]);
   const [datetimeVal, setDatetimeVal] = useState('2026-12-31T23:59');
   const [timeVal, setTimeVal] = useState('09:30');
+  // v0.7.6 / v0.7.7 demo state
+  const [textareaVal, setTextareaVal] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const [tabVariant, setTabVariant] = useState<'pill' | 'underline'>('pill');
+  const [comboCity, setComboCity] = useState<string | null>('seoul');
+  const [comboTags, setComboTags] = useState<string[]>(['urgent']);
   const contactForm = useForm<{ name: string; email: string }>({
     resolver: zodResolver(z.object({
       name: z.string().min(2, '2자 이상 입력하세요'),
@@ -1567,7 +1585,311 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="45. 폴라리스 화면 모방 (조합 검증)">
+      <Section title="45. v0.7.6 — API surface 채우기 (additive props)">
+        <Card variant="padded">
+          <Stack gap={5}>
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Input — prefix / suffix / clearable
+              </p>
+              <Stack gap={3}>
+                <Stack direction="row" gap={3} wrap>
+                  <Input label="금액" prefix="₩" suffix="KRW" clearable defaultValue="120,000" containerClassName="w-72" />
+                  <Input label="검색" prefix={<SearchIcon />} clearable
+                    value={searchInput} onChange={(e) => setSearchInput(e.target.value)}
+                    containerClassName="w-72" />
+                </Stack>
+              </Stack>
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Textarea — autoResize + showCount
+              </p>
+              <Textarea
+                label="피드백"
+                placeholder="자유롭게 작성하세요"
+                autoResize={{ minRows: 2, maxRows: 8 }}
+                maxLength={300}
+                showCount
+                value={textareaVal}
+                onChange={(e) => setTextareaVal(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Switch — label / hint / error (Checkbox 일관성)
+              </p>
+              <Stack gap={3}>
+                <Switch label="이메일 알림" hint="새 댓글이 달리면 받아봅니다." defaultChecked />
+                <Switch label="다크 모드" />
+                <Switch label="공개" error="권한 없음" />
+              </Stack>
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Skeleton — shape preset + 멀티 라인
+              </p>
+              <Stack direction="row" gap={4} align="start">
+                <Skeleton shape="circle" className="h-12 w-12" />
+                <div className="flex-1 max-w-md">
+                  <Skeleton shape="text" lines={3} />
+                </div>
+                <Skeleton shape="rect" className="h-12 w-32" />
+              </Stack>
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Alert — dismissible + action slot
+              </p>
+              <Stack gap={2}>
+                <Alert variant="warning" action={<Button size="sm" variant="tertiary">재시도</Button>}>
+                  <AlertTitle>업로드 실패</AlertTitle>
+                  <AlertDescription>네트워크가 불안정합니다.</AlertDescription>
+                </Alert>
+                <Alert variant="info" dismissible>
+                  <AlertTitle>새 기능 안내</AlertTitle>
+                  <AlertDescription>왼쪽 사이드바에서 즐겨찾기를 추가할 수 있습니다.</AlertDescription>
+                </Alert>
+              </Stack>
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Badge — icon + dismissible (filter chip)
+              </p>
+              <Stack direction="row" gap={2} wrap>
+                <Badge variant="success" icon={<span>✓</span>}>완료</Badge>
+                <Badge variant="info" icon={<span>i</span>}>알림</Badge>
+                <Badge variant="primary" tone="solid" dismissible onDismiss={() => pushToast('info', 'docx 필터 제거')}>docx</Badge>
+                <Badge variant="primary" tone="solid" dismissible onDismiss={() => pushToast('info', 'pdf 필터 제거')}>pdf</Badge>
+                <Badge variant="primary" tone="solid" dismissible onDismiss={() => pushToast('info', 'xlsx 필터 제거')}>xlsx</Badge>
+              </Stack>
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                AvatarGroup — overlap + +N 인디케이터
+              </p>
+              <Stack direction="row" gap={6} align="center">
+                <AvatarGroup size="md" max={4}>
+                  <Avatar><AvatarFallback>김</AvatarFallback></Avatar>
+                  <Avatar><AvatarFallback>이</AvatarFallback></Avatar>
+                  <Avatar><AvatarFallback>박</AvatarFallback></Avatar>
+                </AvatarGroup>
+                <AvatarGroup size="md" max={3}>
+                  <Avatar><AvatarFallback>김</AvatarFallback></Avatar>
+                  <Avatar><AvatarFallback>이</AvatarFallback></Avatar>
+                  <Avatar><AvatarFallback>박</AvatarFallback></Avatar>
+                  <Avatar><AvatarFallback>최</AvatarFallback></Avatar>
+                  <Avatar><AvatarFallback>윤</AvatarFallback></Avatar>
+                  <Avatar><AvatarFallback>한</AvatarFallback></Avatar>
+                </AvatarGroup>
+                <AvatarGroup size="lg" max={2}>
+                  <Avatar><AvatarFallback>1</AvatarFallback></Avatar>
+                  <Avatar><AvatarFallback>2</AvatarFallback></Avatar>
+                  <Avatar><AvatarFallback>3</AvatarFallback></Avatar>
+                  <Avatar><AvatarFallback>4</AvatarFallback></Avatar>
+                  <Avatar><AvatarFallback>5</AvatarFallback></Avatar>
+                </AvatarGroup>
+              </Stack>
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Stat — loading state
+              </p>
+              <div className="grid grid-cols-3 gap-polaris-md">
+                <Card variant="padded">
+                  <Stat label="조회수" value="0" loading />
+                </Card>
+                <Card variant="padded">
+                  <Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" loading />
+                </Card>
+                <Card variant="padded">
+                  <Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" />
+                </Card>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Button — iconLeft / iconRight / fullWidth
+              </p>
+              <Stack gap={2}>
+                <Stack direction="row" gap={2} wrap>
+                  <Button iconLeft={<PlusIcon />}>새 항목</Button>
+                  <Button variant="tertiary" iconRight={<ChevronRightIcon />}>다음</Button>
+                  <Button variant="ai" iconLeft={<Sparkles />} iconRight={<ChevronRightIcon />}>AI 작성</Button>
+                </Stack>
+                <Button fullWidth iconLeft={<DownloadIcon />}>전체 내보내기 (fullWidth)</Button>
+              </Stack>
+            </div>
+
+            <div>
+              <p className="text-polaris-caption1 text-label-alternative mb-2">
+                Card — interactive (hover + focus ring)
+              </p>
+              <div className="grid grid-cols-3 gap-polaris-md">
+                <Card variant="padded" interactive asChild>
+                  <a href="#" className="block text-left no-underline">
+                    <CardTitle className="mb-1">클릭 가능</CardTitle>
+                    <CardDescription>호버 시 shadow + border 강조</CardDescription>
+                  </a>
+                </Card>
+                <Card variant="padded" interactive>
+                  <CardTitle className="mb-1">div 그대로</CardTitle>
+                  <CardDescription>asChild 없이 시각만</CardDescription>
+                </Card>
+                <Card variant="padded">
+                  <CardTitle className="mb-1">기본</CardTitle>
+                  <CardDescription>interactive 미지정 — 정적</CardDescription>
+                </Card>
+              </div>
+            </div>
+          </Stack>
+        </Card>
+      </Section>
+
+      <Section title="46. PageHeader / SectionHeader (v0.7.7) — 페이지 레이아웃">
+        <Card variant="padded" className="mb-polaris-md">
+          <PageHeader
+            breadcrumb={
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem><BreadcrumbLink href="#">대시보드</BreadcrumbLink></BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem><BreadcrumbPage>문서 분석</BreadcrumbPage></BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            }
+            eyebrow="베타"
+            title="문서 분석"
+            description="제안서·IR 자료·계약 문서를 한 곳에서."
+            actions={
+              <>
+                <Button variant="tertiary" size="sm">필터</Button>
+                <Button size="sm" iconLeft={<PlusIcon />}>새 문서</Button>
+              </>
+            }
+          />
+        </Card>
+        <Card variant="padded">
+          <SectionHeader
+            title="최근 활동"
+            description="지난 7일"
+            actions={<Button size="sm" variant="tertiary">전체 보기</Button>}
+          />
+          <p className="text-polaris-body2 text-label-neutral">… 섹션 본문 …</p>
+        </Card>
+      </Section>
+
+      <Section title="47. CircularProgress (v0.7.7) — 라디얼 인디케이터">
+        <Card variant="padded">
+          <Stack direction="row" gap={6} align="center" wrap>
+            <Stack direction="row" gap={3} align="center">
+              <CircularProgress size="sm" value={25} aria-label="25%" />
+              <CircularProgress size="md" value={50} aria-label="50%" />
+              <CircularProgress size="lg" value={75} aria-label="75%" />
+              <CircularProgress size="xl" value={100} tone="success" aria-label="완료" />
+            </Stack>
+            <Stack direction="row" gap={3} align="center">
+              <CircularProgress aria-label="저장 중" />
+              <CircularProgress aria-label="ai" tone="ai" />
+              <CircularProgress aria-label="warning" tone="warning" value={60} />
+              <CircularProgress aria-label="danger" tone="danger" value={30} />
+            </Stack>
+          </Stack>
+        </Card>
+      </Section>
+
+      <Section title="48. Tabs underline variant (v0.7.7)">
+        <Card variant="padded">
+          <Stack direction="row" gap={2} className="mb-polaris-md">
+            <Button size="sm" variant={tabVariant === 'pill' ? 'primary' : 'tertiary'}
+              onClick={() => setTabVariant('pill')}>pill</Button>
+            <Button size="sm" variant={tabVariant === 'underline' ? 'primary' : 'tertiary'}
+              onClick={() => setTabVariant('underline')}>underline</Button>
+          </Stack>
+          <Tabs defaultValue="overview">
+            <TabsList variant={tabVariant}>
+              <TabsTrigger value="overview">개요</TabsTrigger>
+              <TabsTrigger value="activity">활동</TabsTrigger>
+              <TabsTrigger value="settings">설정</TabsTrigger>
+            </TabsList>
+            <TabsContent value="overview" className="text-polaris-body2 text-label-neutral">개요 본문</TabsContent>
+            <TabsContent value="activity" className="text-polaris-body2 text-label-neutral">활동 본문</TabsContent>
+            <TabsContent value="settings" className="text-polaris-body2 text-label-neutral">설정 본문</TabsContent>
+          </Tabs>
+        </Card>
+      </Section>
+
+      <Section title="49. Accordion (v0.7.7) — 그룹 disclosure">
+        <Card variant="padded">
+          <Accordion type="single" collapsible defaultValue="billing">
+            <AccordionItem value="billing">
+              <AccordionTrigger>결제 관련</AccordionTrigger>
+              <AccordionContent>월간 / 연간 결제, 영수증 발행, 환불 정책 안내.</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="security">
+              <AccordionTrigger>보안 / 로그인</AccordionTrigger>
+              <AccordionContent>2단계 인증, SSO, 비밀번호 정책 등.</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="limits">
+              <AccordionTrigger>플랜 제한</AccordionTrigger>
+              <AccordionContent>각 플랜의 사용자·문서·저장공간 한도.</AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </Card>
+      </Section>
+
+      <Section title="50. Combobox (v0.7.7) — searchable Select (single + multiple)">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-polaris-md">
+          <Card variant="padded">
+            <p className="text-polaris-caption1 text-label-alternative mb-2">single — 도시 선택</p>
+            <Combobox
+              options={[
+                { value: 'seoul',  label: '서울', description: '대한민국 수도' },
+                { value: 'busan',  label: '부산', description: '제2의 도시' },
+                { value: 'incheon', label: '인천', description: '항만 도시' },
+                { value: 'daegu',  label: '대구' },
+                { value: 'gwangju', label: '광주' },
+                { value: 'daejeon', label: '대전' },
+                { value: 'ulsan', label: '울산' },
+                { value: 'sejong', label: '세종' },
+              ] as ComboboxOption[]}
+              value={comboCity}
+              onChange={setComboCity}
+              placeholder="도시 선택"
+              searchPlaceholder="도시 이름…"
+            />
+            <p className="text-polaris-helper text-label-alternative mt-2">현재: {comboCity ?? '(없음)'}</p>
+          </Card>
+          <Card variant="padded">
+            <p className="text-polaris-caption1 text-label-alternative mb-2">multiple — 태그 선택</p>
+            <Combobox
+              multiple
+              options={[
+                { value: 'urgent',  label: '긴급', group: '우선순위' },
+                { value: 'normal',  label: '보통', group: '우선순위' },
+                { value: 'low',     label: '낮음', group: '우선순위' },
+                { value: 'bug',     label: '버그', group: '유형' },
+                { value: 'feature', label: '기능', group: '유형' },
+                { value: 'doc',     label: '문서', group: '유형' },
+              ] as ComboboxOption[]}
+              value={comboTags}
+              onChange={setComboTags}
+              placeholder="태그 선택"
+            />
+            <p className="text-polaris-helper text-label-alternative mt-2">선택: {comboTags.join(', ') || '(없음)'}</p>
+          </Card>
+        </div>
+      </Section>
+
+      <Section title="51. 폴라리스 화면 모방 (조합 검증)">
         <Card>
           <CardHeader>
             <CardTitle>최근 문서</CardTitle>

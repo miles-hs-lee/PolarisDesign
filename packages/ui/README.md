@@ -1,6 +1,6 @@
 # @polaris/ui
 
-폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 51개 React 컴포넌트.
+폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 58개 React 컴포넌트.
 
 루트 [README](../../README.md)에 전체 시스템 설명이 있습니다. 이 문서는 패키지 사용법만 다룹니다.
 
@@ -95,7 +95,7 @@ export default {
 
 v0.6 / rc.0 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-raised`, `bg-status-danger`, `text-polaris-display-lg` 등)는 deprecated alias로 작동. v0.8에서 제거. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`.
 
-## 컴포넌트 (51개)
+## 컴포넌트 (58개)
 
 ```tsx
 import {
@@ -120,6 +120,13 @@ import {
   PaginationFooter,                                               // (Pagination 헬퍼)
   // Tier 3.7 (4) — Table helpers (v0.7.5)
   TableSearchInput, TableToolbar, TableSelectionBar, TableSkeleton,
+  // Tier 3.8 (7) — page layout + extra primitives (v0.7.7)
+  PageHeader, SectionHeader,
+  CircularProgress,
+  Accordion, AccordionItem, AccordionTrigger, AccordionContent,
+  Combobox,
+  // v0.7.6 (additive props 13건은 기존 컴포넌트에 추가) + AvatarGroup 신규
+  AvatarGroup,
   // 부속 (server-action friendly)
   DropdownMenuFormItem,
   // Toast imperative API
