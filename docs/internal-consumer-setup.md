@@ -143,6 +143,102 @@ URL 직접 갱신 부담을 줄이려면 [Renovate](https://docs.renovatebot.com
 
 ---
 
+## Upstream release 알림 — 새 버전이 떴을 때 어떻게 알 것인가
+
+vendor / GitHub Release URL 패턴은 **manual sync** 라 새 릴리즈 push가 자동으로 알림되지 않습니다. 컨슈머가 v0.8.0-rc.7이 나온 걸 사람이 알려줘야 알게 되는 경우가 실제로 있었음. 세 가지 패턴 권장:
+
+### 패턴 A — Renovate (PR 자동 생성)
+
+이미 위 (이전 섹션의) `regexManagers` 항목이 있으면 그 자체로 새 v* 태그 publish 시 자동 PR. pre-release 도 받고 싶다면 `packageRules` 한 블록 추가:
+
+```jsonc
+{
+  "packageRules": [
+    {
+      "matchPackageNames": ["PolarisOffice/PolarisDesign"],
+      "labels": ["polaris-upstream"],
+      "reviewers": ["team:frontend"],
+      "matchUpdateTypes": ["major", "minor", "patch"]
+    }
+  ]
+}
+```
+
+> rc 도 받으려면 `"allowedVersions": "/.*-(rc|alpha|beta)\\..*/"` 추가. 다만 RC가 매주 나오는 시기엔 PR이 많아질 수 있어, *정식 stable* 만 받고 RC는 수동 catch up 권장.
+
+### 패턴 B — GitHub Action (Slack / 이슈 알림)
+
+CI에서 hourly cron 으로 latest tag 비교 + 알림. Renovate 안 쓰는 환경에 권장:
+
+```yaml
+# .github/workflows/polaris-upstream-check.yml
+name: Polaris upstream check
+on:
+  schedule:
+    - cron: '0 9 * * 1-5'   # 평일 오전 9시 1회
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare versions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          LATEST=$(gh release view --repo PolarisOffice/PolarisDesign --json tagName -q .tagName)
+          # 우리 package.json의 polaris-ui tarball URL 에서 버전 추출
+          CURRENT=$(grep -oE 'polaris-ui-[0-9][^/]*\.tgz' package.json | head -1 | sed 's/polaris-ui-\(.*\)\.tgz/v\1/')
+          echo "Latest: $LATEST / Ours: $CURRENT"
+          if [ "$LATEST" != "$CURRENT" ]; then
+            echo "::notice ::PolarisDesign latest=$LATEST, ours=$CURRENT"
+            # (선택) Slack 알림 — webhook URL은 secret
+            if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+              curl -X POST -H 'Content-Type: application/json' \
+                -d "{\"text\":\"🌟 PolarisDesign 새 릴리즈: $LATEST (현재: $CURRENT)\nhttps://github.com/PolarisOffice/PolarisDesign/releases/tag/$LATEST\"}" \
+                "${{ secrets.SLACK_WEBHOOK_URL }}"
+            fi
+            # (선택) 자동 이슈 생성
+            gh issue create --title "Polaris upstream: $LATEST → migrate from $CURRENT" \
+              --body "https://github.com/PolarisOffice/PolarisDesign/releases/tag/$LATEST" \
+              --label polaris-upstream || true
+          fi
+```
+
+### 패턴 C — Vendor 패턴 사용 시 sha 비교
+
+vendor 디렉토리에 소스 코드를 통째로 카피하는 패턴이면 sha 비교가 더 정확:
+
+```yaml
+# vendor/polaris/UPSTREAM_COMMIT 에 마지막 sync한 sha를 저장하는 가정
+- name: Check vendor drift
+  env:
+    GH_TOKEN: ${{ github.token }}
+  run: |
+    UPSTREAM=$(gh api repos/PolarisOffice/PolarisDesign/commits/main -q .sha)
+    OURS=$(cat vendor/polaris/UPSTREAM_COMMIT 2>/dev/null || echo "none")
+    if [ "$UPSTREAM" != "$OURS" ]; then
+      echo "::warning ::vendor drift — $OURS → $UPSTREAM"
+      echo "Resync: rm -rf vendor/polaris && git clone --depth=1 ..."
+    fi
+```
+
+### 어떤 패턴을 선택할까
+
+| 컨슈머 환경 | 권장 패턴 |
+|---|---|
+| Renovate 이미 사용 중 | **A** (regexManagers + packageRules 한 줄) |
+| GitHub Actions + Slack 사용 중 | **B** (cron + webhook) |
+| Vendor 패턴 (소스 통째 카피) | **C** (sha 비교) |
+| 위 모두 아님 | **B** 가 가장 빠른 셋업 — secret 한 개 (`SLACK_WEBHOOK_URL`) + workflow 파일 하나 |
+
+### 사내 release 채널 (별도 운영 가능)
+
+폴라리스 디자인 시스템 자체 운영자가 사내 Slack 채널 / 이메일 그룹 운영하는 것도 옵션입니다. 개인은 GitHub `Watch → Releases only` 로 직접 구독해도 OK.
+
+---
+
 ## 향후 — 사내 npm registry 등장 시
 
 사내 표준 npm registry(JFrog/Nexus/Verdaccio 등)가 셋업되면 위 URL 의존성을 표준 semver로 교체 가능:
