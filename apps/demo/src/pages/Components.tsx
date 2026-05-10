@@ -184,6 +184,9 @@ export default function Components() {
   const [cmdOpen, setCmdOpen] = useState(false);
   const [ribbonAlign, setRibbonAlign] = useState('justify');
   const [mdMarks, setMdMarks] = useState<string[]>(['bold']);
+  // Category tab state — 6 buckets that group the 50+ section showcases.
+  // Default 'foundation' so the page lands on the simplest pieces.
+  const [catTab, setCatTab] = useState<'foundation' | 'forms' | 'navigation' | 'overlays' | 'data' | 'polaris'>('foundation');
   // v0.7.4 / v0.7.5 demo state
   const [progressVal, setProgressVal] = useState(47);
   const [paginationFooterPage, setPaginationFooterPage] = useState(3);
@@ -214,14 +217,32 @@ export default function Components() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
-      <header className="mb-10 pb-4 border-b border-line-neutral">
+      <header className="mb-polaris-md pb-polaris-md border-b border-line-neutral">
         <h1 className="text-polaris-heading2 mb-1">Polaris Components</h1>
         <p className="text-polaris-body2 text-label-alternative">
-          37개 컴포넌트(Tier 0 + Tier 1 + Tier 2 + Tier 2.5 + Tier 3 + Tier 4)의 variant·상태·조합을 한 페이지에서 검증
+          60+개 컴포넌트의 variant·상태·조합 검증. 카테고리 탭으로 분리되어 있으니 관심 영역만 골라 볼 수 있습니다.
         </p>
       </header>
 
-      <Section title="1. Button">
+      {/*
+        Category tabs — sticky underline below the page header. The tabs
+        steer which `<Section cat="...">` blocks render; sections with a
+        non-matching `cat` return null. Keeps the source layout flat
+        (sections stay in their original order) while giving the catalog
+        a navigable IA.
+      */}
+      <Tabs value={catTab} onValueChange={(v) => setCatTab(v as typeof catTab)}>
+        <TabsList variant="underline" className="mb-polaris-lg sticky top-0 z-10 bg-background-base">
+          <TabsTrigger value="foundation">Foundation</TabsTrigger>
+          <TabsTrigger value="forms">Forms</TabsTrigger>
+          <TabsTrigger value="navigation">Navigation</TabsTrigger>
+          <TabsTrigger value="overlays">Overlays</TabsTrigger>
+          <TabsTrigger value="data">Data</TabsTrigger>
+          <TabsTrigger value="polaris">Polaris</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
+      <Section cat="foundation" current={catTab} title="1. Button">
         <div className="flex flex-wrap gap-3 items-center">
           <Button>Primary</Button>
           <Button variant="secondary">
@@ -243,7 +264,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="2. Input / Textarea">
+      <Section cat="forms" current={catTab} title="2. Input / Textarea">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
           <Input label="문서 제목" placeholder="제목을 입력하세요" hint="3자 이상" />
           <Input label="이메일" placeholder="you@polaris.com" type="email" error="유효하지 않은 형식입니다" />
@@ -251,7 +272,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="3. Card">
+      <Section cat="foundation" current={catTab} title="3. Card">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card>
             <CardHeader>
@@ -284,7 +305,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="4. Badge">
+      <Section cat="foundation" current={catTab} title="4. Badge">
         <div className="flex flex-wrap gap-2">
           <Badge>neutral</Badge>
           <Badge variant="primary">primary</Badge>
@@ -301,7 +322,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="5. Avatar">
+      <Section cat="foundation" current={catTab} title="5. Avatar">
         <div className="flex items-end gap-4">
           <Avatar size="sm"><AvatarFallback>김</AvatarFallback></Avatar>
           <Avatar size="md"><AvatarFallback>이</AvatarFallback></Avatar>
@@ -314,7 +335,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="6. Dialog">
+      <Section cat="overlays" current={catTab} title="6. Dialog">
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="tertiary">Dialog 열기</Button>
@@ -336,7 +357,7 @@ export default function Components() {
         </Dialog>
       </Section>
 
-      <Section title="7. Toast">
+      <Section cat="overlays" current={catTab} title="7. Toast">
         <div className="flex flex-wrap gap-2">
           <Button variant="tertiary" size="sm" onClick={() => pushToast('info', '새 버전이 출시되었습니다', 'v1.4.0 — 자세히 보기')}>info</Button>
           <Button variant="tertiary" size="sm" onClick={() => pushToast('success', '저장이 완료되었습니다')}>success</Button>
@@ -356,7 +377,7 @@ export default function Components() {
         ))}
       </Section>
 
-      <Section title="8. Tabs">
+      <Section cat="navigation" current={catTab} title="8. Tabs">
         <Tabs value={tab} onValueChange={setTab} className="max-w-xl">
           <TabsList>
             <TabsTrigger value="overview">개요</TabsTrigger>
@@ -375,7 +396,7 @@ export default function Components() {
         </Tabs>
       </Section>
 
-      <Section title="9. FileIcon (폴라리스 고유)">
+      <Section cat="foundation" current={catTab} title="9. FileIcon (폴라리스 고유)">
         <div className="flex items-end gap-3 flex-wrap">
           <div className="flex flex-col items-center gap-1">
             <FileIcon type="docx" size={28} />
@@ -406,7 +427,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="10. FileCard (폴라리스 고유)">
+      <Section cat="foundation" current={catTab} title="10. FileCard (폴라리스 고유)">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <FileCard type="docx" name="원티드 하이파이브 스크립트.docx" meta="2026/04/22 오전 11:06" onClick={() => pushToast('info', '문서를 열었습니다', '원티드 하이파이브 스크립트.docx')} />
           <FileCard type="xlsx" name="2026 핸디소프트 임원 평가.xlsx" meta="2026/02/03 오후 2:14" />
@@ -416,7 +437,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="11. NovaInput (폴라리스 고유)">
+      <Section cat="forms" current={catTab} title="11. NovaInput (폴라리스 고유)">
         <div className="max-w-2xl">
           <NovaInput
             value={novaQuery}
@@ -435,7 +456,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="13. DropdownMenu (Tier 1)">
+      <Section cat="overlays" current={catTab} title="13. DropdownMenu (Tier 1)">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="tertiary" size="sm">
@@ -461,7 +482,7 @@ export default function Components() {
         </DropdownMenu>
       </Section>
 
-      <Section title="14. Tooltip (Tier 1)">
+      <Section cat="overlays" current={catTab} title="14. Tooltip (Tier 1)">
         <div className="flex flex-wrap gap-3">
           <SimpleTooltip label="새 문서를 만듭니다">
             <Button size="sm">
@@ -486,7 +507,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="15. Select (Tier 1)">
+      <Section cat="forms" current={catTab} title="15. Select (Tier 1)">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
           <div>
             <label className="text-polaris-body2 font-medium text-label-normal mb-1.5 block">정렬</label>
@@ -522,7 +543,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="16. Sidebar (Tier 1)">
+      <Section cat="navigation" current={catTab} title="16. Sidebar (Tier 1)">
         <div className="rounded-polaris-lg border border-line-neutral overflow-hidden h-96 flex">
           <Sidebar width="14rem">
             <SidebarHeader>
@@ -556,7 +577,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="17. Navbar (Tier 1)">
+      <Section cat="navigation" current={catTab} title="17. Navbar (Tier 1)">
         <Card className="overflow-hidden !p-0">
           <Navbar className="border-b-0">
             <NavbarBrand>
@@ -585,7 +606,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="18. PromptChip (Tier 1, 폴라리스 고유)">
+      <Section cat="polaris" current={catTab} title="18. PromptChip (Tier 1, 폴라리스 고유)">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <PromptChip
             icon={<SearchIcon className="h-4 w-4" />}
@@ -608,7 +629,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="19. Checkbox + Switch (Tier 2)">
+      <Section cat="forms" current={catTab} title="19. Checkbox + Switch (Tier 2)">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card>
             <CardBody>
@@ -647,7 +668,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="20. Skeleton (Tier 2)">
+      <Section cat="foundation" current={catTab} title="20. Skeleton (Tier 2)">
         <Card>
           <CardBody>
             <div className="flex items-center gap-3 mb-4">
@@ -662,7 +683,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="21. Alert (Tier 2)">
+      <Section cat="overlays" current={catTab} title="21. Alert (Tier 2)">
         <div className="space-y-3">
           <Alert variant="info">
             <AlertTitle>새 버전이 배포되었습니다</AlertTitle>
@@ -683,7 +704,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="22. Pagination (Tier 2)">
+      <Section cat="navigation" current={catTab} title="22. Pagination (Tier 2)">
         <Card>
           <CardBody>
             <Pagination>
@@ -702,7 +723,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="23. Breadcrumb (Tier 2)">
+      <Section cat="navigation" current={catTab} title="23. Breadcrumb (Tier 2)">
         <Card>
           <CardBody>
             <Breadcrumb>
@@ -728,7 +749,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="24. EmptyState (Tier 2)">
+      <Section cat="overlays" current={catTab} title="24. EmptyState (Tier 2)">
         <EmptyState
           title="아직 받은 문서가 없습니다"
           description="결재 요청을 받으면 여기에 표시됩니다. NOVA에게 새 문서 작성을 요청해보세요."
@@ -740,7 +761,7 @@ export default function Components() {
         />
       </Section>
 
-      <Section title="25. Stack / HStack / VStack (Tier 2.5)">
+      <Section cat="foundation" current={catTab} title="25. Stack / HStack / VStack (Tier 2.5)">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card variant="padded">
             <p className="text-polaris-caption1 text-label-alternative mb-3">VStack gap=2</p>
@@ -765,7 +786,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="26. Container — 반응형 max-width + padding">
+      <Section cat="foundation" current={catTab} title="26. Container — 반응형 max-width + padding">
         <div className="bg-background-alternative rounded-polaris-md py-4">
           <Container size="md" className="bg-accent-brand-normal-subtle py-4 rounded-polaris-md text-center">
             <p className="text-polaris-body2">size="md" — max-w-screen-md, mx-auto, px 반응형</p>
@@ -773,7 +794,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="27. Table primitive + density (Tier 2.5)">
+      <Section cat="data" current={catTab} title="27. Table primitive + density (Tier 2.5)">
         <Card>
           <CardBody>
             <p className="text-polaris-caption1 text-label-alternative mb-3">density="compact"</p>
@@ -811,7 +832,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="28. Drawer (Tier 2.5) — side variants">
+      <Section cat="overlays" current={catTab} title="28. Drawer (Tier 2.5) — side variants">
         <HStack gap={2} wrap>
           {(['right', 'left', 'top', 'bottom'] as const).map((side) => (
             <Drawer key={side}>
@@ -838,7 +859,7 @@ export default function Components() {
         </HStack>
       </Section>
 
-      <Section title="29. DescriptionList (Tier 2.5)">
+      <Section cat="data" current={catTab} title="29. DescriptionList (Tier 2.5)">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card variant="padded">
             <h3 className="text-polaris-heading-sm mb-3">layout="inline" (default)</h3>
@@ -869,7 +890,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="30. EmptyState — 기본 아이콘 + 커스텀 비교">
+      <Section cat="overlays" current={catTab} title="30. EmptyState — 기본 아이콘 + 커스텀 비교">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <EmptyState
             title="아직 결재 요청이 없습니다"
@@ -884,7 +905,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="31. DatePicker / DateRangePicker (Tier 3, experimental)">
+      <Section cat="forms" current={catTab} title="31. DatePicker / DateRangePicker (Tier 3, experimental)">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card variant="padded">
             <h3 className="text-polaris-heading-sm mb-3">DatePicker (single)</h3>
@@ -906,7 +927,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="32. CommandPalette (Tier 3, experimental)">
+      <Section cat="overlays" current={catTab} title="32. CommandPalette (Tier 3, experimental)">
         <Card variant="padded">
           <p className="text-polaris-body2 text-label-neutral mb-3">
             <kbd className="px-1.5 py-0.5 rounded-polaris-sm border border-line-neutral bg-background-alternative text-polaris-caption1">⌘K</kbd> 또는 아래 버튼으로 열기.
@@ -936,7 +957,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="33. Form (RHF + zod, 사내 표준)">
+      <Section cat="forms" current={catTab} title="33. Form (RHF + zod, 사내 표준)">
         <Card variant="padded">
           <Form {...contactForm}>
             <form
@@ -974,7 +995,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="34. Ribbon — Office 스타일 (subpath: @polaris/ui/ribbon)">
+      <Section cat="polaris" current={catTab} title="34. Ribbon — Office 스타일 (subpath: @polaris/ui/ribbon)">
         <Card>
           <Ribbon className="!border-0">
             <RibbonTabs defaultValue="home">
@@ -1059,7 +1080,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="35. Ribbon — 단일 패널 (MD 에디터 케이스)">
+      <Section cat="polaris" current={catTab} title="35. Ribbon — 단일 패널 (MD 에디터 케이스)">
         <Card>
           <Ribbon className="!border-0">
             <div className="flex items-center gap-1 px-2 py-1.5">
@@ -1100,7 +1121,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="36. Progress (v0.7.4) — determinate / indeterminate · tone · size">
+      <Section cat="data" current={catTab} title="36. Progress (v0.7.4) — determinate / indeterminate · tone · size">
         <Card variant="padded">
           <Stack gap={4}>
             <div>
@@ -1166,7 +1187,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="37. CopyButton (v0.7.4) — clipboard + 1.5s 성공 피드백">
+      <Section cat="polaris" current={catTab} title="37. CopyButton (v0.7.4) — clipboard + 1.5s 성공 피드백">
         <Card variant="padded">
           <Stack gap={3}>
             <Stack direction="row" gap={2} wrap>
@@ -1198,7 +1219,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="38. Stat (v0.7.4) — KPI 타일 (Card 안에 wrap)">
+      <Section cat="data" current={catTab} title="38. Stat (v0.7.4) — KPI 타일 (Card 안에 wrap)">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-polaris-md">
           <Card variant="padded">
             <Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" />
@@ -1225,7 +1246,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="39. Disclosure (v0.7.4) — 단일 collapsible (Radix 기반)">
+      <Section cat="foundation" current={catTab} title="39. Disclosure (v0.7.4) — 단일 collapsible (Radix 기반)">
         <Card variant="padded">
           <Stack gap={2}>
             <Disclosure title="기본 — 셰브론 자동 회전">
@@ -1262,7 +1283,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="40. Badge — outline tone 추가 (v0.7.5)">
+      <Section cat="foundation" current={catTab} title="40. Badge — outline tone 추가 (v0.7.5)">
         <Card variant="padded">
           <Stack gap={4}>
             <div>
@@ -1304,7 +1325,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="41. PaginationFooter (v0.7.5) — 번호 + 사이즈 + total 통합">
+      <Section cat="navigation" current={catTab} title="41. PaginationFooter (v0.7.5) — 번호 + 사이즈 + total 통합">
         <Card variant="padded">
           <Stack gap={4}>
             <div>
@@ -1366,7 +1387,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="42. Sortable Table + TableToolbar / TableSelectionBar / TableSkeleton (v0.7.5)">
+      <Section cat="data" current={catTab} title="42. Sortable Table + TableToolbar / TableSelectionBar / TableSkeleton (v0.7.5)">
         <Card>
           <CardBody>
             {tableSelected.length === 0 ? (
@@ -1494,7 +1515,7 @@ export default function Components() {
         <TableSkeleton rows={5} columns={4} />
       </Section>
 
-      <Section title="43. FileInput / FileDropZone (v0.7.5)">
+      <Section cat="forms" current={catTab} title="43. FileInput / FileDropZone (v0.7.5)">
         <div className="grid md:grid-cols-2 gap-polaris-md">
           <Card variant="padded">
             <Stack gap={4}>
@@ -1551,7 +1572,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="44. DateTimeInput / TimeInput (v0.7.5) — native input wrap">
+      <Section cat="forms" current={catTab} title="44. DateTimeInput / TimeInput (v0.7.5) — native input wrap">
         <Card variant="padded">
           <Stack gap={4}>
             <div className="grid md:grid-cols-2 gap-polaris-md">
@@ -1586,7 +1607,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="45. v0.7.6 — API surface 채우기 (additive props)">
+      <Section cat="polaris" current={catTab} title="45. v0.7.6 — API surface 채우기 (additive props)">
         <Card variant="padded">
           <Stack gap={5}>
             <div>
@@ -1755,7 +1776,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="46. PageHeader / SectionHeader (v0.7.7) — 페이지 레이아웃">
+      <Section cat="navigation" current={catTab} title="46. PageHeader / SectionHeader (v0.7.7) — 페이지 레이아웃">
         <Card variant="padded" className="mb-polaris-md">
           <PageHeader
             breadcrumb={
@@ -1788,7 +1809,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="47. CircularProgress (v0.7.7) — 라디얼 인디케이터">
+      <Section cat="data" current={catTab} title="47. CircularProgress (v0.7.7) — 라디얼 인디케이터">
         <Card variant="padded">
           <Stack direction="row" gap={6} align="center" wrap>
             <Stack direction="row" gap={3} align="center">
@@ -1807,7 +1828,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="48. Tabs underline variant (v0.7.7)">
+      <Section cat="navigation" current={catTab} title="48. Tabs underline variant (v0.7.7)">
         <Card variant="padded">
           <Stack direction="row" gap={2} className="mb-polaris-md">
             <Button size="sm" variant={tabVariant === 'pill' ? 'primary' : 'tertiary'}
@@ -1828,7 +1849,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="49. Accordion (v0.7.7) — 그룹 disclosure">
+      <Section cat="data" current={catTab} title="49. Accordion (v0.7.7) — 그룹 disclosure">
         <Card variant="padded">
           <Accordion type="single" collapsible defaultValue="billing">
             <AccordionItem value="billing">
@@ -1847,7 +1868,7 @@ export default function Components() {
         </Card>
       </Section>
 
-      <Section title="50. Combobox (v0.7.7) — searchable Select (single + multiple)">
+      <Section cat="forms" current={catTab} title="50. Combobox (v0.7.7) — searchable Select (single + multiple)">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-polaris-md">
           <Card variant="padded">
             <p className="text-polaris-caption1 text-label-alternative mb-2">single — 도시 선택</p>
@@ -1890,7 +1911,7 @@ export default function Components() {
         </div>
       </Section>
 
-      <Section title="51. 폴라리스 화면 모방 (조합 검증)">
+      <Section cat="polaris" current={catTab} title="51. 폴라리스 화면 모방 (조합 검증)">
         <Card>
           <CardHeader>
             <CardTitle>최근 문서</CardTitle>
@@ -1913,7 +1934,28 @@ export default function Components() {
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+type SectionCategory = 'foundation' | 'forms' | 'navigation' | 'overlays' | 'data' | 'polaris';
+
+function Section({
+  title,
+  cat,
+  current,
+  children,
+}: {
+  title: string;
+  /** Category bucket — drives which tab this section renders under. */
+  cat: SectionCategory;
+  /** The currently-active tab from the parent. */
+  current: SectionCategory;
+  children: React.ReactNode;
+}) {
+  // Hide instead of unmount so that any stateful child (open Dialogs,
+  // Disclosure default-open, controlled inputs) doesn't lose its
+  // mount state when the user tabs around. `display: none` keeps the
+  // tree alive but visually hides + skips layout cost.
+  // (For demo perf we accept the DOM cost — this page is the catalog,
+  // not a hot path. Switching to mount/unmount later is trivial.)
+  if (cat !== current) return null;
   return (
     <section className="mb-10">
       <h2 className="text-polaris-heading3 mb-4 text-label-normal">{title}</h2>
