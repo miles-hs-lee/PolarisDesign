@@ -30,7 +30,7 @@ export default function Home() {
             <span className="inline-flex h-7 w-7 rounded-polaris-md bg-accent-brand-normal text-label-inverse items-center justify-center font-bold text-polaris-caption1">
               P
             </span>
-            <span className="text-polaris-heading-sm font-semibold">Polaris App</span>
+            <span className="text-polaris-heading4 font-semibold">Polaris App</span>
             <Badge variant="secondary">Tier 0</Badge>
           </div>
           <ThemeToggle />

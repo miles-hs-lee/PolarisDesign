@@ -30,9 +30,9 @@ export const FileCard = forwardRef<HTMLElement, FileCardProps>(
         {...linkProps}
         onClick={onClick}
         className={cn(
-          'flex items-center gap-3 rounded-polaris-md bg-background-normal border border-line-neutral p-3',
+          'flex items-center gap-3 rounded-polaris-md bg-background-base border border-line-neutral p-3',
           interactive &&
-            'hover:bg-accent-brand-normal-subtle hover:border-line-normal transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary',
+            'hover:bg-accent-brand-normal-subtle hover:border-line-normal transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brand-normal',
           className
         )}
         {...props}

@@ -54,16 +54,16 @@ You are working on a Polaris Office web service. Apply these rules without askin
 2. If a needed component doesn't exist in `@polaris/ui`, build it inline using ONLY Polaris tokens (rule 3). Don't bring in shadcn/Radix/MUI directly.
 
    **Don't roll your own when these exist** (frequently re-implemented by mistake):
-   - **Inline / HStack / `justify="between"` row** → `<Stack direction="row" justify="between" align="center">`. No separate `Inline`/`HStack` exports.
+   - **Inline / HStack / `justify="between"` row** → `<Stack direction="row" justify="between" align="center">`. The v0.7-era `<HStack>` / `<VStack>` exports were removed in v0.8 — there is one `<Stack>`, you pick `direction` (default column).
    - **Card with header/footer slots** → use `bare` Card + `<CardHeader>`/`<CardTitle>`/`<CardDescription>`/`<CardBody>`/`<CardFooter>` slots (already exported).
-   - **Helper text / description below input** → `<Input hint="…" error="…" />` (note: prop is `hint`, not `helperText`/`description`).
+   - **Helper text / description below input** → `<Input helperText="…" error="…" />`. As of v0.8 the prop is `helperText` across every form component (Input/Textarea/Switch/Checkbox/FileInput/FileDropZone/DateTimeInput/TimeInput); the v0.7 `hint` alias was renamed for HTML-spec consistency.
    - **Toast imperative call** → `import { toast } from '@polaris/ui'; toast({ title, description, variant })`. Mount `<Toaster />` once.
    - **EmptyState CTA button** → `<EmptyState action={<Button>…</Button>} />`.
    - **Dropdown item that submits a form / server action** → `<DropdownMenuFormItem action={signOut} destructive>` (avoids Radix unmount-before-submit race).
    - **Collapsible / Disclosure with chevron rotation** → `<Disclosure title="…">…</Disclosure>` (compound: `DisclosureRoot/Trigger/Content`). Don't roll your own `<details>` + CSS.
    - **Copy-to-clipboard button with success feedback** → `<CopyButton text={…} />` (clipboard API + 1.5s success state + ARIA live).
    - **Linear progress bar** → `<Progress value={…} />` for determinate, `<Progress />` for indeterminate. ARIA + `prefers-reduced-motion` baked in.
-   - **KPI tile (label / value / delta)** → `<Card variant="padded"><Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" /></Card>`.
+   - **KPI tile (label / value / delta)** → `<Card variant="padded"><Stat label="조회수" value="1,234" delta="+12%" deltaVariant="positive" /></Card>`. As of v0.8 the prop is `deltaVariant` (was `deltaTone` in v0.7).
    - **Custom interactive element's focus ring** → `focus-visible:shadow-polaris-focus` (3px system focus ring, light/dark auto). Don't hand-write `box-shadow: 0 0 0 3px ...`.
    - **Page numbers + page-size selector + total indicator** → `<PaginationFooter page={...} pageSize={...} total={...} onPageChange={...} onPageSizeChange={...} />`. Don't compose `<Pagination>` + `<Select>` + manual "X-Y of N" by hand.
    - **Sortable column header** → `<TableHead sortable sortDirection={dir} onSortChange={setDir}>이름</TableHead>` — `aria-sort` + chevron auto-synced. Don't roll your own button/icon inside `<TableHead>`.
@@ -78,7 +78,7 @@ You are working on a Polaris Office web service. Apply these rules without askin
    - **Inline / compact spinner** → `<CircularProgress />` (radial, 4 sizes, indeterminate by default). Use `<Progress>` for full-width upload bars, `<CircularProgress>` for status chips / async cards / "동기화 중 47%" inline.
    - **Multi-line / auto-expanding textarea** → `<Textarea autoResize maxLength={N} showCount>`. Don't watch `scrollHeight` by hand.
    - **Currency / search / unit inputs** → `<Input prefix="₩" suffix="KRW" clearable />`. Don't compose icon + input in a flex row by hand.
-   - **Form-toggle Switch with label** → `<Switch label="…" hint="…" error="…" />`. Mirrors Checkbox API.
+   - **Form-toggle Switch with label** → `<Switch label="…" helperText="…" error="…" />`. Mirrors Checkbox API. (v0.8: was `hint`.)
    - **Filter / removable chip** → `<Badge dismissible icon={<i/>} onDismiss={...}>`.
    - **Alert with retry CTA / dismiss** → `<Alert action={<Button>재시도</Button>} dismissible onDismiss={...}>`.
    - **Multi-line / circular skeleton** → `<Skeleton shape="text" lines={3} />` / `<Skeleton shape="circle" className="h-10 w-10" />`. Don't stack divs by hand.
@@ -162,7 +162,7 @@ You are working on a Polaris Office web service. Apply these rules without askin
 import { label, background, layer, fill, line, accentBrand, state, ai } from '@polaris/ui/tokens';
 ```
 
-**v0.6 / rc.0 alias는 deprecated** — `bg-brand-primary` / `text-fg-primary` / `bg-surface-raised` / `bg-status-danger` 등은 v0.7에서 계속 작동하지만 v0.8에서 제거. 새 코드는 spec 이름 사용. `pnpm dlx @polaris/lint polaris-codemod-v07 --apply` 로 자동 변환.
+**v0.6 / rc.0 / v0.7 alias는 v0.8에서 제거됨** — `bg-brand-primary` / `text-fg-primary` / `bg-surface-raised` / `bg-status-danger` / `bg-background-normal` / `rounded-polaris-full` 같은 alias 클래스는 v0.7에서 계속 작동했지만 v0.8 패키지엔 더 이상 emit되지 않음 (Tailwind 빌드 시 사라짐). 새 코드는 spec 이름 사용. v0.7 → v0.8 일괄 변환은 **`pnpm dlx @polaris/lint polaris-codemod-v08 --apply`** (token / Tailwind / CSS variable / JSX prop 모두 한 번에 처리).
 
 NEVER write any of:
 - Hex colors: `#fff`, `#1D4ED8`
@@ -225,7 +225,7 @@ import { DocxIcon, XlsxIcon, PptxIcon, PdfIcon, FolderIcon } from '@polaris/ui/f
 - NEVER `font-family: ...` 직접 지정.
 - NEVER `font-['Inter']` 임의값.
 - NEVER letter-spacing 수정 — Pretendard 자체 메트릭 사용.
-- v0.6 / rc.0 alias (`text-polaris-display-lg`, `-h1`~`-h5`, `-body`, `-meta`, `-tiny`) 는 deprecated alias로 작동.
+- v0.6 / rc.0 alias (`text-polaris-display-lg`, `-h1`~`-h5`, `-body`, `-meta`, `-tiny`) 은 **v0.8에서 제거**. 남아 있다면 `pnpm dlx @polaris/lint polaris-codemod-v08 --apply` 로 spec 이름(`-display`, `-heading{1..4}`, `-body{1..3}`, `-caption{1,2}`)으로 변환.
 
 ### 8. Spacing / radius / shadow / motion / z-index
 - **Spacing** (v0.7 named): `p-polaris-md`, `gap-polaris-lg` 등 (4xs/3xs/2xs/xs/sm/md/lg/xl/2xl/3xl/4xl). Tailwind 기본 `p-4` 도 OK. Never `p-[13px]`.

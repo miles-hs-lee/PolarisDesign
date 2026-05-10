@@ -328,6 +328,31 @@ tester.run('no-deprecated-polaris-token', polaris.rules['no-deprecated-polaris-t
       code: `const x = "bg-fg-primary"; const y = \`color: var(--polaris-neutral-700);\`;`,
       errors: [{ messageId: 'deprecatedTailwind' }, { messageId: 'deprecatedCssVar' }],
     },
+    {
+      // v0.8 — `background-normal` / `background-alternative` removed
+      code: `const cls = "bg-background-normal text-background-alternative";`,
+      errors: [{ messageId: 'deprecatedTailwind' }, { messageId: 'deprecatedTailwind' }],
+    },
+    {
+      // v0.8 — `primary-*` (rc.0 alias) removed
+      code: `const cls = "bg-primary-normal hover:bg-primary-strong";`,
+      errors: [{ messageId: 'deprecatedTailwind' }, { messageId: 'deprecatedTailwind' }],
+    },
+    {
+      // v0.8 — `--polaris-radius-full` removed
+      code: `const css = \`border-radius: var(--polaris-radius-full);\`;`,
+      errors: [{ messageId: 'deprecatedCssVar' }],
+    },
+    {
+      // v0.8 — `--polaris-background-normal` removed
+      code: `const css = \`background: var(--polaris-background-normal);\`;`,
+      errors: [{ messageId: 'deprecatedCssVar' }],
+    },
+    {
+      // v0.8 — `--polaris-primary-normal` (rc.0 alias) removed
+      code: `const css = \`color: var(--polaris-primary-normal);\`;`,
+      errors: [{ messageId: 'deprecatedCssVar' }],
+    },
   ],
 });
 

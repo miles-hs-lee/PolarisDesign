@@ -2,10 +2,10 @@ import type { Config } from 'tailwindcss';
 
 /**
  * Returns a Tailwind color value that supports both opaque and alpha-modified
- * forms (e.g. `bg-status-success` vs `bg-status-success/15`).
+ * forms (e.g. `bg-state-success` vs `bg-state-success/15`).
  *
- * Without this, plain `'var(--polaris-status-success)'` strings cause Tailwind
- * to drop the alpha modifier silently — the rule for `bg-status-success/15`
+ * Without this, plain `'var(--polaris-state-success)'` strings cause Tailwind
+ * to drop the alpha modifier silently — the rule for `bg-state-success/15`
  * never gets generated and the tinted background disappears at runtime. The
  * function form lets us produce `color-mix()` for the alpha case.
  *
@@ -28,7 +28,7 @@ function token(varName: string): string {
 /** Builds a 10-step ramp object (`05` → `90`) for the Tailwind palette
  *  given a CSS-var prefix like `--polaris-blue`. Includes the legacy
  *  `5` (no leading zero) key as a deprecated alias of `05` so v0.7-rc.0
- *  classes (`bg-blue-5`) keep resolving. */
+ *  classes (`bg-blue-05`) keep resolving. */
 function ramp10(prefix: string) {
   return {
     '05': token(`${prefix}-05`),
@@ -41,8 +41,6 @@ function ramp10(prefix: string) {
     '70': token(`${prefix}-70`),
     '80': token(`${prefix}-80`),
     '90': token(`${prefix}-90`),
-    /** @deprecated alias of `05`. v0.8 removes. */
-    '5':  token(`${prefix}-5`),
   };
 }
 
@@ -50,21 +48,18 @@ const polarisPreset: Partial<Config> = {
   theme: {
     extend: {
       colors: {
+        // Brand palette aliases — keep these (single-word color references
+        // for non-semantic contexts like ribbon icons / charts that need
+        // raw brand hue without "this is a state" connotation).
         'polaris-blue':   token('--polaris-blue'),
         'polaris-green':  token('--polaris-green'),
         'polaris-orange': token('--polaris-orange'),
         'polaris-red':    token('--polaris-red'),
         'polaris-purple': token('--polaris-purple'),
 
-        brand: {
-          primary:            token('--polaris-brand-primary'),
-          'primary-hover':    token('--polaris-brand-primary-hover'),
-          'primary-subtle':   token('--polaris-brand-primary-subtle'),
-          secondary:          token('--polaris-brand-secondary'),
-          'secondary-hover':  token('--polaris-brand-secondary-hover'),
-          'secondary-subtle': token('--polaris-brand-secondary-subtle'),
-        },
-
+        // File-type colors — multi-color baked-in but exposed as Tailwind
+        // utilities for cases where we paint a separator/avatar in the
+        // file's hue without rendering a `<FileIcon>`.
         file: {
           docx: token('--polaris-file-docx'),
           hwp:  token('--polaris-file-hwp'),
@@ -73,38 +68,14 @@ const polarisPreset: Partial<Config> = {
           pdf:  token('--polaris-file-pdf'),
         },
 
-        status: {
-          success:         token('--polaris-status-success'),
-          'success-hover': token('--polaris-status-success-hover'),
-          warning:         token('--polaris-status-warning'),
-          'warning-hover': token('--polaris-status-warning-hover'),
-          danger:          token('--polaris-status-danger'),
-          'danger-hover':  token('--polaris-status-danger-hover'),
-          info:            token('--polaris-status-info'),
-          'info-hover':    token('--polaris-status-info-hover'),
-        },
-
+        // Surface elevation tiers (v0.7.5+). Light is all #FFFFFF — depth
+        // comes from `shadow-polaris-*`. Dark steps the gray tier upward
+        // from raised → popover → modal so layered overlays read distinct.
         surface: {
-          canvas:          token('--polaris-surface-canvas'),
-          raised:          token('--polaris-surface-raised'),
-          sunken:          token('--polaris-surface-sunken'),
-          /** v0.7.5 NEW — popover/dropdown/menu panel surface. Above raised. */
-          popover:         token('--polaris-surface-popover'),
-          /** v0.7.5 NEW — modal/dialog/drawer panel surface. Top of stack. */
-          modal:           token('--polaris-surface-modal'),
-          border:          token('--polaris-surface-border'),
-          'border-strong': token('--polaris-surface-border-strong'),
-        },
-
-        // Foreground (text) color tokens. Class form: `text-fg-primary`,
-        // `text-fg-on-brand`, etc. We use `fg` instead of `text` to avoid
-        // tailwind-merge confusion with the `text-` font-size utility prefix.
-        fg: {
-          primary:     token('--polaris-text-primary'),
-          secondary:   token('--polaris-text-secondary'),
-          muted:       token('--polaris-text-muted'),
-          'on-brand':  token('--polaris-text-on-brand'),
-          'on-status': token('--polaris-text-on-status'),
+          /** v0.7.5+ — popover/dropdown/menu panel. Above raised. */
+          popover: token('--polaris-surface-popover'),
+          /** v0.7.5+ — modal/dialog/drawer panel. Top of stack. */
+          modal:   token('--polaris-surface-modal'),
         },
 
         neutral: {
@@ -122,11 +93,13 @@ const polarisPreset: Partial<Config> = {
           1000: token('--polaris-neutral-1000'),
         },
 
-        // ───── v1 spec semantic tokens (preferred for new code) ─────
+        // ───── v0.7+ semantic tokens ─────
         //
-        // The v0.6 aliases above (`fg.*`, `surface.*`, `brand.*`) keep
-        // working unchanged. New code should reach for these spec names
-        // — they match the design team's Figma library and DESIGN.md.
+        // These match the design team's Figma library and DESIGN.md.
+        // (v0.6 aliases — `fg.*`, `background.base/raised/sunken`,
+        // `brand.*`, `status.*`, `primary.*` — were removed in v0.8.0.
+        // Run `pnpm dlx @polaris/lint polaris-codemod-v08 --apply src` if
+        // you're upgrading from v0.7.)
 
         label: {
           normal:      token('--polaris-label-normal'),
@@ -138,14 +111,10 @@ const polarisPreset: Partial<Config> = {
           disabled:    token('--polaris-label-disabled'),
         },
         background: {
-          /** v0.7-rc.1 — page-level base bg. */
-          base:        token('--polaris-background-base'),
-          /** v0.7-rc.1 NEW — disabled bg. */
-          disabled:    token('--polaris-background-disabled'),
-          /** @deprecated rc.0 alias of `base`. */
-          normal:      token('--polaris-background-normal'),
-          /** @deprecated rc.0 alias. Use `fill.neutral`. */
-          alternative: token('--polaris-background-alternative'),
+          /** Page-level base bg. */
+          base:     token('--polaris-background-base'),
+          /** Disabled bg (buttons, inputs). */
+          disabled: token('--polaris-background-disabled'),
         },
         // v0.7-rc.1 NEW — layer.surface / layer.overlay
         layer: {
@@ -192,7 +161,7 @@ const polarisPreset: Partial<Config> = {
            * into a single canonical name (`accent-brand-bg-subtle`?) and
            * remove this entry alongside the rest of the rc.0 aliases.
            */
-          'normal-subtle': token('--polaris-brand-primary-subtle'),
+          'normal-subtle': token('--polaris-accent-brand-bg'),
         },
         'accent-action': {
           normal: token('--polaris-accent-action-normal'),
@@ -225,11 +194,6 @@ const polarisPreset: Partial<Config> = {
           'error-strong':   token('--polaris-state-error-strong'),
           'info-strong':    token('--polaris-state-info-strong'),
         },
-        /** @deprecated rc.0 alias of `accent-brand`. */
-        primary: {
-          normal: token('--polaris-primary-normal'),
-          strong: token('--polaris-primary-strong'),
-        },
         ai: {
           normal:  token('--polaris-ai-normal'),
           strong:  token('--polaris-ai-strong'),
@@ -242,9 +206,8 @@ const polarisPreset: Partial<Config> = {
         // (darkest shade); brand ramps inherit `--state-success/-warning/-error`
         // semantic aliases (e.g. green-50 == state-success).
         //
-        // The `5` (no leading zero) key on each is a deprecated alias of
-        // `05` — v0.7-rc.0 classes (`bg-blue-5`) still resolve. Codemod
-        // rewrites them; v0.8 removes the alias.
+        // (v0.7-rc.0 `bg-blue-5` no-leading-zero classes were removed in
+        // v0.8 — codemod-v08 rewrites them to `bg-blue-05`.)
         blue:                ramp10('--polaris-blue'),
         'dark-blue':         ramp10('--polaris-dark-blue'),
         green:               ramp10('--polaris-green'),
@@ -273,8 +236,9 @@ const polarisPreset: Partial<Config> = {
         },
       },
 
-      // 8-level v1 spec scale + `full` deprecated alias for `pill`.
-      // Class form: `rounded-polaris-md`, `rounded-polaris-pill`, etc.
+      // 8-level v1 spec scale. Class form: `rounded-polaris-md`,
+      // `rounded-polaris-pill`, etc. (v0.7 `rounded-polaris-full` alias
+      // was removed in v0.8 — codemod-v08 rewrites it to `pill`.)
       borderRadius: {
         'polaris-2xs':  'var(--polaris-radius-2xs)',
         'polaris-xs':   'var(--polaris-radius-xs)',
@@ -284,8 +248,6 @@ const polarisPreset: Partial<Config> = {
         'polaris-xl':   'var(--polaris-radius-xl)',
         'polaris-2xl':  'var(--polaris-radius-2xl)',
         'polaris-pill': 'var(--polaris-radius-pill)',
-        /** @deprecated Use `polaris-pill` (codemod target). */
-        'polaris-full': 'var(--polaris-radius-full)',
       },
 
       boxShadow: {
@@ -306,7 +268,7 @@ const polarisPreset: Partial<Config> = {
         'polaris-mono': ['var(--polaris-font-mono)'],
       },
 
-      // Type scale — v0.7-rc.1 spec names. Class form: `text-polaris-display`,
+      // Type scale — v0.8 spec names. Class form: `text-polaris-display`,
       // `text-polaris-title`, `text-polaris-heading1`-`heading4`,
       // `text-polaris-body1`-`body3`, `text-polaris-caption1`-`caption2`.
       //
@@ -319,9 +281,10 @@ const polarisPreset: Partial<Config> = {
       // override in tokens.css, NOT through Tailwind utilities — class
       // names stay stable across viewports.
       //
-      // rc.0 / v0.6 aliases preserved so old code keeps compiling.
+      // (v0.7 rc.0 / v0.6 aliases — `polaris-h1`-`h5`, `polaris-body`,
+      // `polaris-meta`, `polaris-tiny`, `polaris-display-lg`, etc. — were
+      // removed in v0.8. Codemod-v08 rewrites them to spec names.)
       fontSize: {
-        // ───── v0.7-rc.1 spec names ─────
         'polaris-display':   ['40px', { lineHeight: '56px', fontWeight: '700' }],
         'polaris-title':     ['32px', { lineHeight: '44px', fontWeight: '700' }],
         'polaris-heading1':  ['28px', { lineHeight: '40px', fontWeight: '700' }],
@@ -340,28 +303,6 @@ const polarisPreset: Partial<Config> = {
         // 같지만 weight가 달라 별도 토큰으로 분리. caption1은 badge / tag
         // / label 같은 *bold* 캡션 컨텍스트 그대로 700 유지.
         'polaris-helper':    ['12px', { lineHeight: '16px', fontWeight: '400' }],
-
-        // ───── rc.0 deprecated aliases (codemod target) ─────
-        // NB: rc.0 `display` was 60px; rc.1 redefines to 40 per spec.
-        'polaris-h1':        ['40px', { lineHeight: '56px', fontWeight: '700' }],
-        'polaris-h2':        ['32px', { lineHeight: '44px', fontWeight: '700' }],
-        'polaris-h3':        ['28px', { lineHeight: '40px', fontWeight: '700' }],
-        'polaris-h4':        ['24px', { lineHeight: '34px', fontWeight: '700' }],
-        'polaris-h5':        ['20px', { lineHeight: '28px', fontWeight: '700' }],
-        'polaris-body':      ['16px', { lineHeight: '24px', fontWeight: '400' }],
-        'polaris-body-sm':   ['14px', { lineHeight: '21px', fontWeight: '400' }],
-        'polaris-detail':    ['14px', { lineHeight: '21px', fontWeight: '500' }],
-        'polaris-meta':      ['12px', { lineHeight: '16px', fontWeight: '700' }],
-        'polaris-tiny':      ['11px', { lineHeight: '14px', fontWeight: '700' }],
-
-        // ───── v0.6 deprecated aliases ─────
-        'polaris-display-lg': ['40px', { lineHeight: '56px', fontWeight: '700' }],
-        'polaris-display-md': ['32px', { lineHeight: '44px', fontWeight: '700' }],
-        'polaris-heading-lg': ['24px', { lineHeight: '34px', fontWeight: '700' }],
-        'polaris-heading-md': ['20px', { lineHeight: '28px', fontWeight: '700' }],
-        'polaris-heading-sm': ['16px', { lineHeight: '24px', fontWeight: '600' }],
-        'polaris-body-lg':    ['16px', { lineHeight: '24px', fontWeight: '400' }],
-        'polaris-caption':    ['12px', { lineHeight: '16px', fontWeight: '700' }],
       },
 
       // v0.7-rc.1 NEW — spec-named spacing tokens. Class form:

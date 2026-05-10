@@ -20,12 +20,12 @@ describe('Stat', () => {
   });
 
   it('applies positive tone color to delta', () => {
-    render(<Stat label="x" value="1" delta="+5%" deltaTone="positive" />);
+    render(<Stat label="x" value="1" delta="+5%" deltaVariant="positive" />);
     expect(screen.getByText('+5%')).toHaveClass('text-state-success');
   });
 
   it('applies negative tone color to delta', () => {
-    render(<Stat label="x" value="1" delta="-3%" deltaTone="negative" />);
+    render(<Stat label="x" value="1" delta="-3%" deltaVariant="negative" />);
     expect(screen.getByText('-3%')).toHaveClass('text-state-error');
   });
 

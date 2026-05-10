@@ -42,7 +42,7 @@ describe('Progress', () => {
   });
 
   it('applies tone variant classes to the fill', () => {
-    const { container } = render(<Progress value={50} tone="success" aria-label="ok" />);
+    const { container } = render(<Progress value={50} variant="success" aria-label="ok" />);
     // Fill is the inner div (the only child of the progressbar root).
     const fill = container.querySelector('[role="progressbar"] > div');
     expect(fill).toHaveClass('bg-state-success');

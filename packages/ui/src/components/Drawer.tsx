@@ -77,7 +77,7 @@ export const DrawerContent = forwardRef<
           className={cn(
             'absolute right-4 top-4 rounded-polaris-sm text-label-alternative',
             'hover:text-label-normal hover:bg-accent-brand-normal-subtle p-1',
-            'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary'
+            'focus-visible:outline-none focus-visible:shadow-polaris-focus'
           )}
         >
           <CloseIcon size={16} aria-hidden="true" />

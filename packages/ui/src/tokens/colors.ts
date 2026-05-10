@@ -14,32 +14,12 @@ export const brandPalette = {
   purple: { light: '#6F3AD0', dark: '#9B85FF' },
 } as const satisfies Record<string, ColorPair>;
 
-export const brand = {
-  primary:         brandPalette.blue,
-  primaryHover:    { light: '#1458AD', dark: '#7AA5F5' },  // PO Blue 70 (primary-strong)
-  primarySubtle:   { light: '#E8F2FE', dark: '#1A2238' },  // PO Blue 5
-  secondary:       brandPalette.purple,
-  secondaryHover:  { light: '#511BB2', dark: '#A896FF' },  // AI Purple 70 (ai-strong)
-  secondarySubtle: { light: '#F5F1FD', dark: '#2A2247' },  // AI Purple 5 (ai-hover)
-} as const satisfies Record<string, ColorPair>;
-
 export const fileType = {
   docx: brandPalette.blue,
   hwp:  brandPalette.blue,
   xlsx: brandPalette.green,
   pptx: brandPalette.orange,
   pdf:  brandPalette.red,
-} as const satisfies Record<string, ColorPair>;
-
-export const status = {
-  success:      { light: '#16A34A', dark: '#3FCB72' },
-  successHover: { light: '#138A3F', dark: '#58D788' },
-  warning:      { light: '#EAB308', dark: '#FFD64A' },
-  warningHover: { light: '#C99B0A', dark: '#FFE17A' },
-  danger:       { light: '#DC2626', dark: '#FF6962' },
-  dangerHover:  { light: '#B91C1C', dark: '#FF8782' },
-  info:         { light: '#2563EB', dark: '#5C9FFF' },
-  infoHover:    { light: '#1D4ED8', dark: '#7AB1FF' },
 } as const satisfies Record<string, ColorPair>;
 
 export const neutral = {
@@ -58,62 +38,52 @@ export const neutral = {
 } as const satisfies Record<string, ColorPair>;
 
 /**
- * Surface elevation tokens.
+ * Surface elevation tokens (v0.8 — pruned).
  *
- * Light mode: every surface above `canvas` is white(-ish). Depth comes
- * from `shadow-polaris-{xs,sm,md,lg}`, not from background tone.
+ * v0.8 removed `canvas` / `raised` / `sunken` / `border` / `borderStrong`
+ * — they're replaced by the v0.7-spec semantic groups:
+ *   canvas       → background.base
+ *   raised       → layer.surface
+ *   sunken       → fill.neutral
+ *   border       → line.neutral
+ *   borderStrong → line.normal
  *
- * Dark mode: depth is conveyed by progressively lighter neutrals because
- * shadows lose contrast on dark backgrounds. The ladder runs:
+ * The remaining elevation tier (added v0.7.5) lives on top of
+ * `layer.surface`:
  *
- *   canvas (deepest, page bg)
- *     ← sunken (insets within canvas — well, code blocks)
- *     ← raised (cards, panels)
- *     ← popover (NEW — menus, dropdowns, comboboxes — sits above raised)
- *     ← modal   (NEW — dialogs, drawers, full-screen sheets — top of stack)
+ *   background.base
+ *     ← layer.surface (cards, panels)
+ *     ← surface.popover (menus, dropdowns, comboboxes)
+ *     ← surface.modal   (dialogs, drawers, sheets — top of stack)
  *
- * Why this matters: a Card inside a Dialog inside a Popover all picking
- * the same `raised` token loses depth in dark mode (consumer feedback in
- * v0.7.4 review — "color-mix() on top of `--surface` to fake elevation").
- * Use the explicit tier whose role matches your component.
- *
- * NOTE on the `layer.overlay` vs new `surface.modal` distinction:
+ * NOTE on `layer.overlay` vs `surface.modal`:
  *   - `layer.overlay`     = dimmed scrim BEHIND a modal (rgba black ~50%)
  *   - `surface.modal`     = the modal's PANEL surface itself
  *   They're not interchangeable.
  */
 export const surface = {
-  canvas:       { light: neutral['50'].light,  dark: neutral['0'].dark },
-  raised:       { light: neutral['0'].light,   dark: neutral['100'].dark },
-  sunken:       { light: neutral['100'].light, dark: neutral['50'].dark },
-  /** Popover / menu / dropdown / combobox panel. Above `raised`, below `modal`.
-   *  Light = white (depth via shadow); dark = a tier brighter than `raised`. */
-  popover:      { light: neutral['0'].light,   dark: '#232336' },
+  /** Popover / menu / dropdown / combobox panel. Above `layer.surface`, below `modal`.
+   *  Light = white (depth via shadow); dark = a tier brighter than `layer.surface`. */
+  popover: { light: neutral['0'].light, dark: '#232336' },
   /** Modal / dialog / drawer / sheet panel. Top of the elevation stack.
    *  Light = white; dark = the brightest surface tier. */
-  modal:        { light: neutral['0'].light,   dark: '#2D2D45' },
-  border:       { light: neutral['200'].light, dark: neutral['200'].dark },
-  borderStrong: { light: neutral['300'].light, dark: neutral['300'].dark },
-} as const satisfies Record<string, ColorPair>;
-
-export const text = {
-  primary:   { light: neutral['1000'].light, dark: neutral['1000'].dark },
-  secondary: { light: neutral['700'].light,  dark: neutral['700'].dark },
-  muted:     { light: neutral['500'].light,  dark: neutral['500'].dark },
-  onBrand:   { light: '#FFFFFF', dark: '#FFFFFF' },
-  onStatus:  { light: '#FFFFFF', dark: '#FFFFFF' },
+  modal:   { light: neutral['0'].light, dark: '#2D2D45' },
 } as const satisfies Record<string, ColorPair>;
 
 /* ================================================================== *
- * 9-step ramps (v1 spec, 2026.05)
+ * 10-step ramps (v1 spec, 2026.05)
  *
- * Each brand color now ships as a full 9-step ramp (5 / 10 / 20 / 30 /
- * 40 / 50 / 60 / 70 / 80). Step 50 matches `brandPalette.<name>.light`
+ * Each brand color ships as a full 10-step ramp (05 / 10 / 20 / 30 /
+ * 40 / 50 / 60 / 70 / 80 / 90). Step 50 matches `brandPalette.<name>.light`
  * — both are exported so consumers can pick whichever fits their
  * context (single-token alias for simple buttons, ramp for chart
  * categories or hover/pressed nuances).
  *
  * Light mode only — design team hasn't supplied a dark-mode ramp yet.
+ *
+ * v0.8 removed the `'5'` (no leading zero) deprecated alias on every
+ * ramp — codemod-v08 rewrites `bg-blue-5` / `bluePalette['5']` to the
+ * `'05'` form.
  * ================================================================== */
 
 /**
@@ -121,9 +91,6 @@ export const text = {
  * Steps run `05` (lightest tint) → `90` (darkest shade). The leading-zero
  * `'05'` matches the spec sheet exactly so search/copy from the design
  * artefact lands on the right key.
- *
- * The `'5'` (no leading zero) key is preserved as a deprecated alias for
- * each ramp so v0.7-rc.0 callers keep compiling — codemod rewrites it.
  */
 export type Ramp10 = Readonly<{
   '05': string;
@@ -136,8 +103,6 @@ export type Ramp10 = Readonly<{
   '70': string;
   '80': string;
   '90': string;
-  /** @deprecated alias of `'05'`. Codemod rewrites `'5'` → `'05'`. */
-  '5': string;
 }>;
 
 /** PO Blue — primary brand color, also the Word file-type accent. */
@@ -152,7 +117,6 @@ export const bluePalette = {
   '70': '#1458AD',
   '80': '#0F4588',
   '90': '#0B3263',
-  '5':  '#E8F2FE',
 } as const satisfies Ramp10;
 
 /** PO Dark Blue — BI / corporate communication only (not for UI). */
@@ -167,7 +131,6 @@ export const darkBluePalette = {
   '70': '#003081',
   '80': '#002665',
   '90': '#001C4A',
-  '5':  '#E5ECF8',
 } as const satisfies Ramp10;
 
 /** Sheet — XLSX file-type accent. Also `--state-success` source. */
@@ -182,7 +145,6 @@ export const greenPalette = {
   '70': '#387D12',
   '80': '#2C620E',
   '90': '#20480A',
-  '5':  '#EDF7E8',
 } as const satisfies Ramp10;
 
 /** Slide — PPTX file-type accent. Also `--state-warning` source. */
@@ -197,7 +159,6 @@ export const orangePalette = {
   '70': '#B05F00',
   '80': '#8A4B00',
   '90': '#653600',
-  '5':  '#FEF3E5',
 } as const satisfies Ramp10;
 
 /** PDF — file-type accent. Also `--state-error` source. */
@@ -212,7 +173,6 @@ export const redPalette = {
   '70': '#AD4040',
   '80': '#883232',
   '90': '#632424',
-  '5':  '#FEEEEE',
 } as const satisfies Ramp10;
 
 /** AI Purple — AI / NOVA surfaces only. Never use on general product UI. */
@@ -227,7 +187,6 @@ export const purplePalette = {
   '70': '#511BB2',
   '80': '#3E0F8D',
   '90': '#20075C',
-  '5':  '#F5F1FD',
 } as const satisfies Ramp10;
 
 /* ================================================================== *
@@ -251,7 +210,6 @@ export const skyBluePalette = {
   '70': '#1E7AAA',
   '80': '#176085',
   '90': '#114661',
-  '5':  '#E9F7FD',
 } as const satisfies Ramp10;
 
 /** Blue (supplementary) — links and accents in dense UIs. Distinct from
@@ -268,7 +226,6 @@ export const blueSupplementaryPalette = {
   '70': '#353F9F',
   '80': '#29317D',
   '90': '#1E245B',
-  '5':  '#EDEEFC',
 } as const satisfies Ramp10;
 
 /** Violet — supplementary purple for charts and tags. Distinct from
@@ -284,7 +241,6 @@ export const violetPalette = {
   '70': '#40318A',
   '80': '#32266C',
   '90': '#241C4F',
-  '5':  '#EEECF9',
 } as const satisfies Ramp10;
 
 /** Cyan — image format and media-related accents. */
@@ -299,7 +255,6 @@ export const cyanPalette = {
   '70': '#00758E',
   '80': '#005C70',
   '90': '#003F4D',
-  '5':  '#E6F9FD',
 } as const satisfies Ramp10;
 
 /** Yellow — note format and highlight colors. Reserved: do NOT use
@@ -315,7 +270,6 @@ export const yellowPalette = {
   '70': '#B08100',
   '80': '#8A6500',
   '90': '#654A00',
-  '5':  '#FFFAEB',
 } as const satisfies Ramp10;
 
 /** Gray ramp — UI backbone (text, lines, surfaces, interaction states).
@@ -338,24 +292,27 @@ export const grayRamp = {
 /* ================================================================== *
  * v1 spec semantic tokens (2026.05)
  *
- * Aligned with the design team's `DESIGN.md` reference (v0.7-rc.1).
- * Dark-mode hex uses the spec's grayscale-centered palette, replacing
- * the rc.0 purple-tinted scale (`#1B1B2A` etc.).
+ * Aligned with the design team's `DESIGN.md` reference. Dark-mode hex
+ * uses the spec's grayscale-centered palette.
  *
  * Token groups in spec order:
  *   label.*         text + icon foreground
  *   background.*    page-level base, disabled
- *   layer.*         surface/overlay (NEW in rc.1)
+ *   layer.*         surface/overlay
  *   interaction.*   hover, pressed
  *   fill.*          tinted surfaces (neutral / normal / strong)
  *   line.*          borders + dividers (neutral / normal / strong / disabled)
  *   accentBrand.*   PO Blue brand accent + bg variants
- *   accentAction.*  Black "action" button (NEW in rc.1)
+ *   accentAction.*  Black "action" button
  *   focus.*         focus-ring
  *   staticColors.*  mode-invariant white/black
  *   state.*         success / warning / error / info / new + bg variants
  *
- * Legacy v0.7-rc.0 groups (`primary.*`, `ai.*`) are kept as aliases.
+ * v0.8 removed legacy groups: `text.*`, `surface.{canvas,raised,sunken,
+ * border,borderStrong}`, `brand.*`, `status.*`, `primary.*`, and the
+ * deprecated `background.{normal,alternative}` keys. Codemod
+ * `polaris-codemod-v08` rewrites consumers; lint rule
+ * `no-deprecated-polaris-token` guards against regressions.
  * ================================================================== */
 
 /** Text + icon foreground tokens (spec: "label"). */
@@ -370,24 +327,22 @@ export const label = {
   assistive:   { light: '#9EA4AA', dark: '#6B6B6B' },
   /** 진한 배경 위 텍스트 (on dark / on-brand surfaces). */
   inverse:     { light: '#FFFFFF', dark: '#232323' },
-  /** v0.7-rc.1 NEW — disabled label / icon. */
+  /** Disabled label / icon. */
   disabled:    { light: '#C9CDD2', dark: '#595959' },
 } as const satisfies Record<string, ColorPair>;
 
-/** Page-level background tokens (spec: "background"). */
+/** Page-level background tokens (spec: "background").
+ *  v0.8 removed the deprecated `normal` / `alternative` keys — codemod
+ *  rewrites them to `base` / `fill.neutral` respectively. */
 export const background = {
-  /** v0.7-rc.1 — page / canvas root background. Was `normal` in rc.0. */
-  base:        { light: '#FFFFFF', dark: '#232323' },
-  /** v0.7-rc.1 NEW — disabled button / input background. */
-  disabled:    { light: '#F2F4F6', dark: '#2D2D2D' },
-  /** @deprecated rc.0 alias of `base`. */
-  normal:      { light: '#FFFFFF', dark: '#232323' },
-  /** @deprecated rc.0 alias. Use `fill.neutral` for tinted page backgrounds. */
-  alternative: { light: '#F7F8F9', dark: '#2D2D2D' },
+  /** Page / canvas root background. */
+  base:     { light: '#FFFFFF', dark: '#232323' },
+  /** Disabled button / input background. */
+  disabled: { light: '#F2F4F6', dark: '#2D2D2D' },
 } as const satisfies Record<string, ColorPair>;
 
-/** Layer tokens (spec: "layer"). v0.7-rc.1 NEW — separates raised
- *  surfaces (cards, dialogs, dropdowns) from the page background. */
+/** Layer tokens (spec: "layer"). Separates raised surfaces (cards,
+ *  dialogs, dropdowns) from the page background. */
 export const layer = {
   /** Cards, dialogs, dropdowns, popovers. */
   surface: { light: '#FFFFFF', dark: '#282828' },
@@ -399,17 +354,17 @@ export const layer = {
 export const interaction = {
   /** Hover surface. */
   hover:   { light: '#F2F4F6', dark: '#4A4A4A' },
-  /** v0.7-rc.1 NEW — pressed / active surface. */
+  /** Pressed / active surface. */
   pressed: { light: '#E8EBED', dark: '#595959' },
 } as const satisfies Record<string, ColorPair>;
 
 /** Fill tokens (spec: "fill") — three intensities of tinted surfaces. */
 export const fill = {
-  /** v0.7-rc.1 NEW — base tinted surface (sidebars, chrome wells). */
+  /** Base tinted surface (sidebars, chrome wells). */
   neutral: { light: '#F7F8F9', dark: '#2D2D2D' },
   /** Generic component bg (Tertiary buttons, filled chips). */
   normal:  { light: '#F2F4F6', dark: '#3B3B3B' },
-  /** v0.7-rc.1 NEW — emphasized fill (selected items, strong surfaces). */
+  /** Emphasized fill (selected items, strong surfaces). */
   strong:  { light: '#E8EBED', dark: '#595959' },
 } as const satisfies Record<string, ColorPair>;
 
@@ -419,41 +374,44 @@ export const line = {
   neutral:  { light: '#E8EBED', dark: '#3B3B3B' },
   /** 일반 보더 (inputs, default borders). */
   normal:   { light: '#C9CDD2', dark: '#595959' },
-  /** v0.7-rc.1 NEW — strong divider, prominent borders. */
+  /** Strong divider, prominent borders. */
   strong:   { light: '#B3B8BD', dark: '#6B6B6B' },
-  /** v0.7-rc.1 NEW — disabled border. */
+  /** Disabled border. */
   disabled: { light: '#F2F4F6', dark: '#2D2D2D' },
 } as const satisfies Record<string, ColorPair>;
 
-/** Brand accent tokens (spec: "accent.brand"). PO Blue.
- *  v0.7-rc.0 used `primary.*`; that namespace is kept as an alias below. */
+/** Brand accent tokens (spec: "accent.brand"). PO Blue. */
 export const accentBrand = {
   /** PO Blue — 기본 강조색 (CTAs, links, focus). 3.85:1 — 14px 이하 본문 단독 사용 금지. */
-  normal:  { light: '#1D7FF9', dark: '#1D7FF9' },
+  normal:       { light: '#1D7FF9', dark: '#1D7FF9' },
   /** PO Blue strong — hover / pressed. */
-  strong:  { light: '#1458AD', dark: '#60A5FA' },
-  /** v0.7-rc.1 NEW — Secondary button background (brand tint). */
-  bg:      { light: '#D9EAFF', dark: '#0B3263' },
-  /** v0.7-rc.1 NEW — Secondary button hover. */
-  bgHover: { light: '#BBD8FD', dark: '#0F4588' },
+  strong:       { light: '#1458AD', dark: '#60A5FA' },
+  /** Secondary button background (brand tint). */
+  bg:           { light: '#D9EAFF', dark: '#0B3263' },
+  /** Secondary button hover. */
+  bgHover:      { light: '#BBD8FD', dark: '#0F4588' },
+  /** Subtle brand-tinted hover/active background. Used by 12+ components
+   *  (Sidebar, Pagination, Calendar, Drawer, Command, Badge, Select,
+   *  DropdownMenu, FileCard, Ribbon, …) for hover/active row indication.
+   *  Lighter than `bg` — sits between `layer.surface` and `bg`. */
+  normalSubtle: { light: '#E8F2FE', dark: '#1A2238' },
 } as const satisfies Record<string, ColorPair>;
 
-/** Action accent tokens (spec: "accent.action"). v0.7-rc.1 NEW.
- *  Black variant for high-contrast "Primary Dark" buttons (e.g. final
- *  submit, "Get started" CTAs). Auto-inverts in dark mode. */
+/** Action accent tokens (spec: "accent.action"). Black variant for
+ *  high-contrast "Primary Dark" buttons (e.g. final submit, "Get
+ *  started" CTAs). Auto-inverts in dark mode. */
 export const accentAction = {
   normal: { light: '#000000', dark: '#FFFFFF' },
   strong: { light: '#454C53', dark: '#F2F4F6' },
 } as const satisfies Record<string, ColorPair>;
 
-/** Focus ring (spec: "focus"). v0.7-rc.1 NEW — dedicated semantic.
- *  Same hex both modes (lighter than accent.brand to read on either
- *  light or dark surfaces). */
+/** Focus ring (spec: "focus"). Same hex both modes (lighter than
+ *  accent.brand to read on either light or dark surfaces). */
 export const focus = {
   ring: { light: '#60A5FA', dark: '#60A5FA' },
 } as const satisfies Record<string, ColorPair>;
 
-/** Mode-invariant colors (spec: "static"). v0.7-rc.1 NEW.
+/** Mode-invariant colors (spec: "static").
  *  Use when a color should NEVER swap with the theme — e.g. a brand
  *  logo on a colored background, a "white" send button on AI Purple. */
 export const staticColors = {
@@ -462,28 +420,27 @@ export const staticColors = {
 } as const satisfies Record<string, ColorPair>;
 
 /** State tokens (spec: "state") — success / warning / error / info /
- *  new. v0.7-rc.1 adds the `bg` variants and the `new` notification dot.
- *  Replaces / supersedes the legacy `status.*` group. */
+ *  new. Includes `bg` variants and the `new` notification dot. */
 export const state = {
-  /** v0.7-rc.1 NEW — only for "new" notification dots. NOT for error UI. */
+  /** Only for "new" notification dots. NOT for error UI. */
   new:        { light: '#FB4949', dark: '#FB4949' },
   /** Success text + icon. 2.66:1 — body 단독 사용 금지, 아이콘/뱃지/18px+ Bold만. */
   success:    { light: '#51B41B', dark: '#51B41B' },
-  /** v0.7-rc.1 NEW — success banner / toast background tint. */
+  /** Success banner / toast background tint. */
   successBg:  { light: '#EDF7E8', dark: '#20480A' },
   /** Warning text + icon. 2.40:1 — body 단독 사용 절대 금지. */
   warning:    { light: '#FD8900', dark: '#FD8900' },
-  /** v0.7-rc.1 NEW — warning banner / toast background tint. */
+  /** Warning banner / toast background tint. */
   warningBg:  { light: '#FEF3E5', dark: '#653600' },
   /** Error text + icon. 3.13:1 — 14px 이하는 아이콘 동반 필수 (WCAG 1.4.1). */
   error:      { light: '#F95C5C', dark: '#F95C5C' },
-  /** v0.7-rc.1 NEW — error banner / toast background tint. */
+  /** Error banner / toast background tint. */
   errorBg:    { light: '#FEEEEE', dark: '#632424' },
   /** Info text + icon. Same hex as accent.brand.normal. */
   info:       { light: '#1D7FF9', dark: '#1D7FF9' },
-  /** v0.7-rc.1 NEW — info banner / toast background tint. */
+  /** Info banner / toast background tint. */
   infoBg:     { light: '#E8F2FE', dark: '#0B3263' },
-  /** v0.7.5 NEW — `state.*Strong` — WCAG-AA-compliant darker tier of each
+  /** v0.7.5 — `state.*Strong` — WCAG-AA-compliant darker tier of each
    *  state color. The base `state.success/warning/error/info` are tuned for
    *  *icons + 18px+ Bold* per WCAG 1.4.1; their contrast on white drops to
    *  2.4-3.1:1 which fails AA for body-size text. The `Strong` pair maps to
@@ -509,33 +466,24 @@ export const state = {
   infoStrong:    { light: '#1458AD', dark: '#8EBFFC' },
 } as const satisfies Record<string, ColorPair>;
 
-/** @deprecated v0.7-rc.0 alias. Use `accentBrand.*` instead. */
-export const primary = {
-  normal: accentBrand.normal,
-  strong: accentBrand.strong,
-} as const satisfies Record<string, ColorPair>;
-
-/** AI surface tokens (Polaris-specific extension — not in DESIGN.md
- *  but kept for NovaInput / AI buttons). Wraps AI Purple. */
+/** AI surface tokens (Polaris-specific extension — wraps AI Purple for
+ *  NovaInput / AI buttons). */
 export const ai = {
   /** AI Purple — AI 액션 버튼, 링크, 강조. */
-  normal:  brand.secondary,
+  normal:  { light: '#6F3AD0', dark: '#9B85FF' },
   /** AI Purple strong — hover / pressed. */
-  strong:  brand.secondaryHover,
+  strong:  { light: '#511BB2', dark: '#A896FF' },
   /** AI hover 표면 (light tint). */
-  hover:   brand.secondarySubtle,
+  hover:   { light: '#F5F1FD', dark: '#2A2247' },
   /** AI pressed 표면. */
   pressed: { light: '#E0D1FF', dark: '#3E0F8D' },
 } as const satisfies Record<string, ColorPair>;
 
 export const colors = {
   brandPalette,
-  brand,
   fileType,
-  status,
   neutral,
   surface,
-  text,
   // 10-step ramps (brand)
   bluePalette,
   darkBluePalette,
@@ -543,7 +491,7 @@ export const colors = {
   orangePalette,
   redPalette,
   purplePalette,
-  // 10-step ramps (supplementary, v0.7-rc.1)
+  // 10-step ramps (supplementary)
   skyBluePalette,
   blueSupplementaryPalette,
   violetPalette,
@@ -551,7 +499,7 @@ export const colors = {
   yellowPalette,
   // gray (9 steps, 10–90)
   grayRamp,
-  // v1 semantic tokens (v0.7-rc.1 expanded)
+  // v1 semantic tokens
   label,
   background,
   layer,
@@ -563,7 +511,6 @@ export const colors = {
   focus,
   staticColors,
   state,
-  // legacy / Polaris-specific
-  primary,
+  // Polaris-specific
   ai,
 } as const;

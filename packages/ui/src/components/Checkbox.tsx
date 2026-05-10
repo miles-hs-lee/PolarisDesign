@@ -1,14 +1,49 @@
 import { forwardRef, useId } from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { CheckIcon, MinusIcon, ErrorIcon } from '../icons';
 import { cn } from '../lib/cn';
 
+/**
+ * Checkbox visual variants.
+ *   - `default` (브랜드 블루) — 일반 폼 / 동의 / 옵션 선택
+ *   - `ai` (NOVA Purple) — AI 컨텍스트 (예: "AI 추천 적용", "Polaris GPT-4 사용")
+ *
+ * The `ai` variant pairs with `<Button variant="ai">` and `<Badge tone="ai">`
+ * so AI-context surfaces read consistently.
+ */
+const checkboxVariants = cva(
+  cn(
+    'peer inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-polaris-sm border bg-background-base text-label-inverse transition-colors',
+    'focus-visible:outline-none focus-visible:shadow-polaris-focus',
+    'disabled:cursor-not-allowed disabled:opacity-50'
+  ),
+  {
+    variants: {
+      variant: {
+        default: cn(
+          'border-line-normal',
+          'data-[state=checked]:bg-accent-brand-normal data-[state=checked]:border-accent-brand-normal',
+          'data-[state=indeterminate]:bg-accent-brand-normal data-[state=indeterminate]:border-accent-brand-normal'
+        ),
+        ai: cn(
+          'border-line-normal',
+          'data-[state=checked]:bg-ai-normal data-[state=checked]:border-ai-normal',
+          'data-[state=indeterminate]:bg-ai-normal data-[state=indeterminate]:border-ai-normal'
+        ),
+      },
+    },
+    defaultVariants: { variant: 'default' },
+  }
+);
+
 export interface CheckboxProps
-  extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
+  extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>,
+    VariantProps<typeof checkboxVariants> {
   /** Visible label rendered to the right of the box. Wires up htmlFor. */
   label?: React.ReactNode;
   /** Helper text below the label. */
-  hint?: React.ReactNode;
+  helperText?: React.ReactNode;
   /** Error message below the label. Sets aria-invalid and recolors text. */
   error?: React.ReactNode;
   /** Container class — applied to the wrapper, not the box itself. */
@@ -18,10 +53,10 @@ export interface CheckboxProps
 export const Checkbox = forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
   CheckboxProps
->(({ className, containerClassName, checked, label, hint, error, id: providedId, ...props }, ref) => {
+>(({ className, containerClassName, checked, label, helperText, error, variant, id: providedId, ...props }, ref) => {
   const generatedId = useId();
   const id = providedId ?? generatedId;
-  const messageId = error || hint ? `${id}-msg` : undefined;
+  const messageId = error || helperText ? `${id}-msg` : undefined;
   const isError = Boolean(error);
 
   const box = (
@@ -32,11 +67,7 @@ export const Checkbox = forwardRef<
       aria-invalid={isError || undefined}
       aria-describedby={messageId}
       className={cn(
-        'peer inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-polaris-sm border border-line-normal bg-background-normal text-label-inverse transition-colors',
-        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
-        'disabled:cursor-not-allowed disabled:opacity-50',
-        'data-[state=checked]:bg-accent-brand-normal data-[state=checked]:border-brand-primary',
-        'data-[state=indeterminate]:bg-accent-brand-normal data-[state=indeterminate]:border-brand-primary',
+        checkboxVariants({ variant }),
         isError && 'border-state-error focus-visible:outline-state-error',
         className
       )}
@@ -52,7 +83,7 @@ export const Checkbox = forwardRef<
     </CheckboxPrimitive.Root>
   );
 
-  if (!label && !hint && !error) return box;
+  if (!label && !helperText && !error) return box;
 
   return (
     <div className={cn('flex items-start gap-2', containerClassName)}>
@@ -66,7 +97,7 @@ export const Checkbox = forwardRef<
             {label}
           </label>
         )}
-        {(error || hint) && (
+        {(error || helperText) && (
           // 에러: ErrorIcon 동반 (DESIGN.md §4 / WCAG 1.4.1)
           // 힌트: 텍스트만
           <p
@@ -78,7 +109,7 @@ export const Checkbox = forwardRef<
             role={isError ? 'alert' : undefined}
           >
             {isError && <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />}
-            <span>{error ?? hint}</span>
+            <span>{error ?? helperText}</span>
           </p>
         )}
       </div>

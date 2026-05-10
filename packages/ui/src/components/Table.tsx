@@ -56,7 +56,7 @@ export const TableHeader = forwardRef<HTMLTableSectionElement, React.HTMLAttribu
   ({ className, ...props }, ref) => (
     <thead
       ref={ref}
-      className={cn('bg-background-alternative text-label-neutral', className)}
+      className={cn('bg-fill-neutral text-label-neutral', className)}
       {...props}
     />
   )
@@ -78,7 +78,7 @@ export const TableFooter = forwardRef<HTMLTableSectionElement, React.HTMLAttribu
   ({ className, ...props }, ref) => (
     <tfoot
       ref={ref}
-      className={cn('bg-background-alternative text-label-neutral border-t border-line-neutral', className)}
+      className={cn('bg-fill-neutral text-label-neutral border-t border-line-neutral', className)}
       {...props}
     />
   )
@@ -181,7 +181,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
           // Hover background — stronger when clickable so it reads as actionable.
           clickable
             ? 'cursor-pointer hover:bg-fill-neutral focus-visible:outline-none focus-visible:bg-fill-neutral focus-visible:shadow-polaris-focus'
-            : 'hover:bg-background-alternative/50',
+            : 'hover:bg-fill-neutral/50',
           // Selection takes priority over hover.
           selected && 'bg-accent-brand-normal-subtle hover:bg-accent-brand-normal-subtle',
           className

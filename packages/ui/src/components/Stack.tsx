@@ -72,14 +72,5 @@ export const Stack = forwardRef<HTMLDivElement, StackProps>(
 );
 Stack.displayName = 'Stack';
 
-/** Horizontal stack — `Stack` with `direction="row"` baked in. */
-export const HStack = forwardRef<HTMLDivElement, Omit<StackProps, 'direction'>>(
-  (props, ref) => <Stack ref={ref} direction="row" {...props} />
-);
-HStack.displayName = 'HStack';
-
-/** Vertical stack — `Stack` with `direction="column"` baked in. */
-export const VStack = forwardRef<HTMLDivElement, Omit<StackProps, 'direction'>>(
-  (props, ref) => <Stack ref={ref} direction="column" {...props} />
-);
-VStack.displayName = 'VStack';
+// `HStack` / `VStack` exports were removed in v0.8.0. Use `<Stack direction="row">`
+// (or just `<Stack>` for the default column). codemod-v08 rewrites consumers.

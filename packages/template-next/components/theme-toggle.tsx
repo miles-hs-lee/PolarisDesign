@@ -23,7 +23,7 @@ export function ThemeToggle() {
   };
 
   return (
-    <Button variant="outline" size="sm" onClick={toggle} aria-label="Toggle theme">
+    <Button variant="tertiary" size="sm" onClick={toggle} aria-label="Toggle theme">
       <span className="theme-icon-light" aria-hidden="true">🌙</span>
       <span className="theme-icon-dark" aria-hidden="true">☀</span>
     </Button>

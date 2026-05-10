@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 html, body {
-  background: var(--polaris-background-alternative);
+  background: var(--polaris-fill-neutral);
   color: var(--polaris-label-normal);
   font-family: var(--polaris-font-sans);
   -webkit-font-smoothing: antialiased;

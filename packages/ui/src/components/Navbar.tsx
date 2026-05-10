@@ -8,7 +8,7 @@ export const Navbar = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
       ref={ref}
       className={cn(
         'flex items-center gap-4 h-14 px-4',
-        'bg-background-normal border-b border-line-neutral',
+        'bg-background-base border-b border-line-neutral',
         className
       )}
       {...props}

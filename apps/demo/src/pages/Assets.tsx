@@ -223,7 +223,7 @@ function PolarisAssetCard({
     <Card className="overflow-hidden">
       <div
         className={cn(
-          'flex items-center justify-center p-6 bg-background-alternative border-b border-line-neutral',
+          'flex items-center justify-center p-6 bg-fill-neutral border-b border-line-neutral',
           variant === 'wide' ? 'min-h-32' : 'min-h-24'
         )}
       >
@@ -267,7 +267,7 @@ function PolarisLogosSection() {
     <section>
       <h2 className="text-polaris-heading3 mb-1">폴라리스 로고</h2>
       <p className="text-polaris-body2 text-label-neutral mb-4">
-        폴라리스 오피스 공식 워드마크와 favicon. <code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">polink-static-contents.polarisoffice.com</code>에 호스팅된 SVG를 그대로 참조합니다.
+        폴라리스 오피스 공식 워드마크와 favicon. <code className="font-polaris-mono text-polaris-body2 bg-fill-neutral px-1 rounded-polaris-sm">polink-static-contents.polarisoffice.com</code>에 호스팅된 SVG를 그대로 참조합니다.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {POLARIS_LOGOS.map((logo) => (
@@ -292,7 +292,7 @@ function PolarisIconsSection() {
       <p className="text-polaris-body2 text-label-neutral mb-4">
         폴라리스 오피스 페이지에서 발견된 자체 제작 SVG 아이콘. 새 아이콘이 필요하기 전에 이쪽을 먼저 확인 — 브랜드 일관성 유지에 가장 안전합니다.
         <span className="block mt-1 text-label-alternative">
-          ⚠️ 디자인 팀에 전체 아이콘 라이브러리 요청은 <code className="font-polaris-mono text-polaris-caption1 bg-background-alternative px-1 rounded-polaris-sm">docs/design-assets-v07.md</code> 참조.
+          ⚠️ 디자인 팀에 전체 아이콘 라이브러리 요청은 <code className="font-polaris-mono text-polaris-caption1 bg-fill-neutral px-1 rounded-polaris-sm">docs/design-assets-v07.md</code> 참조.
         </span>
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -375,7 +375,7 @@ function LucideSection({ filter }: { filter: string }) {
         {filtered.map((cat) => (
           <div key={cat.title}>
             <div className="flex items-baseline justify-between mb-1">
-              <h3 className="text-polaris-heading-sm">{cat.title}</h3>
+              <h3 className="text-polaris-heading4">{cat.title}</h3>
               <span className="text-polaris-caption1 text-label-alternative">{cat.icons.length}개</span>
             </div>
             <p className="text-polaris-caption1 text-label-alternative mb-3">{cat.description}</p>

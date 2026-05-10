@@ -19,7 +19,7 @@ describe('DateTimeInput', () => {
   });
 
   it('renders hint text when hint provided (no alert role)', () => {
-    render(<DateTimeInput label="x" hint="브라우저 시간대 기준" />);
+    render(<DateTimeInput label="x" helperText="브라우저 시간대 기준" />);
     expect(screen.getByText('브라우저 시간대 기준')).toBeInTheDocument();
     expect(screen.queryByRole('alert')).toBeNull();
   });

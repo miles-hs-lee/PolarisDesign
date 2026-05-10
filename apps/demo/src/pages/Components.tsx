@@ -78,8 +78,6 @@ import {
   BreadcrumbSeparator,
   EmptyState,
   Stack,
-  HStack,
-  VStack,
   Container,
   Drawer,
   DrawerTrigger,
@@ -505,15 +503,15 @@ export default function Components() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card variant="padded">
                 <p className="text-polaris-caption1 text-label-alternative mb-3">VStack gap=2</p>
-                <VStack gap={2}>
+                <Stack gap={2}>
                   <div className="bg-accent-brand-normal-subtle text-accent-brand-normal px-3 py-1.5 rounded-polaris-md text-polaris-body2">A</div>
                   <div className="bg-accent-brand-normal-subtle text-accent-brand-normal px-3 py-1.5 rounded-polaris-md text-polaris-body2">B</div>
                   <div className="bg-accent-brand-normal-subtle text-accent-brand-normal px-3 py-1.5 rounded-polaris-md text-polaris-body2">C</div>
-                </VStack>
+                </Stack>
               </Card>
               <Card variant="padded">
                 <p className="text-polaris-caption1 text-label-alternative mb-3">HStack gap=3 align=center</p>
-                <HStack gap={3} align="center">
+                <Stack direction="row" gap={3} align="center">
                   <Avatar size="sm"><AvatarFallback>P</AvatarFallback></Avatar>
                   <span className="text-polaris-body2">홍길동</span>
                   <Badge variant="success">활성</Badge>
@@ -521,13 +519,13 @@ export default function Components() {
                     <Button variant="ghost" size="sm">편집</Button>
                     <Button variant="ghost" size="sm">삭제</Button>
                   </Stack>
-                </HStack>
+                </Stack>
               </Card>
             </div>
           </div>
           <div>
             <p className="text-polaris-caption1 text-label-alternative mb-2">Container — 반응형 max-width + padding</p>
-            <div className="bg-background-alternative rounded-polaris-md py-4">
+            <div className="bg-fill-neutral rounded-polaris-md py-4">
               <Container size="md" className="bg-accent-brand-normal-subtle py-4 rounded-polaris-md text-center">
                 <p className="text-polaris-body2">size="md" — max-w-screen-md, mx-auto, px 반응형</p>
               </Container>
@@ -612,7 +610,7 @@ export default function Components() {
           <div>
             <p className="text-polaris-caption1 text-label-alternative mb-2">기본 — label / hint / error</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
-              <Input label="문서 제목" placeholder="제목을 입력하세요" hint="3자 이상" />
+              <Input label="문서 제목" placeholder="제목을 입력하세요" helperText="3자 이상" />
               <Input label="이메일" placeholder="you@polaris.com" type="email" error="유효하지 않은 형식입니다" />
             </div>
           </div>
@@ -790,7 +788,7 @@ export default function Components() {
           <div>
             <p className="text-polaris-caption1 text-label-alternative mb-2">Switch — label / hint / error (Checkbox 일관성)</p>
             <Stack gap={3}>
-              <Switch label="이메일 알림" hint="새 댓글이 달리면 받아봅니다." defaultChecked />
+              <Switch label="이메일 알림" helperText="새 댓글이 달리면 받아봅니다." defaultChecked />
               <Switch label="다크 모드" />
               <Switch label="공개" error="권한 없음" />
             </Stack>
@@ -801,14 +799,14 @@ export default function Components() {
       <Section cat="forms" current={catTab} title="7. DatePicker / DateRangePicker — 날짜 선택">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card variant="padded">
-            <h3 className="text-polaris-heading-sm mb-3">DatePicker (single)</h3>
+            <h3 className="text-polaris-heading4 mb-3">DatePicker (single)</h3>
             <DatePicker value={pickedDate} onChange={setPickedDate} />
             {pickedDate && (
               <p className="mt-2 text-polaris-caption1 text-label-alternative">선택: {pickedDate.toLocaleDateString('ko-KR')}</p>
             )}
           </Card>
           <Card variant="padded">
-            <h3 className="text-polaris-heading-sm mb-3">DateRangePicker</h3>
+            <h3 className="text-polaris-heading4 mb-3">DateRangePicker</h3>
             <DateRangePicker value={pickedRange} onChange={setPickedRange} />
             {pickedRange?.from && (
               <p className="mt-2 text-polaris-caption1 text-label-alternative">
@@ -826,13 +824,13 @@ export default function Components() {
             <div className="grid md:grid-cols-2 gap-polaris-md">
               <DateTimeInput
                 label="만료일"
-                hint="브라우저 시간대 기준"
+                helperText="브라우저 시간대 기준"
                 value={datetimeVal}
                 onChange={(e) => setDatetimeVal(e.target.value)}
               />
               <TimeInput
                 label="알림 시각"
-                hint="HH:MM 24시간 표기"
+                helperText="HH:MM 24시간 표기"
                 value={timeVal}
                 onChange={(e) => setTimeVal(e.target.value)}
               />
@@ -871,7 +869,7 @@ export default function Components() {
                   label="이미지 업로드"
                   accept="image/*"
                   multiple
-                  hint="JPG, PNG, GIF · 각 5MB 이하"
+                  helperText="JPG, PNG, GIF · 각 5MB 이하"
                 />
               </div>
               <div>
@@ -894,7 +892,7 @@ export default function Components() {
                   accept=".pdf,.docx"
                   multiple
                   maxSize={10 * 1024 * 1024}
-                  hint="PDF, DOCX · 각 10 MB 이하"
+                  helperText="PDF, DOCX · 각 10 MB 이하"
                   onFilesChange={(files) =>
                     pushToast('success', `${files.length}개 파일 수락됨`, files.map((f) => f.name).join(', '))
                   }
@@ -1027,7 +1025,7 @@ export default function Components() {
               <div className="text-polaris-caption1 text-label-alternative">크레딧 6,805</div>
             </SidebarFooter>
           </Sidebar>
-          <div className="flex-1 bg-background-alternative p-4 text-polaris-body2 text-label-alternative">
+          <div className="flex-1 bg-fill-neutral p-4 text-polaris-body2 text-label-alternative">
             메인 영역 — 활성 항목(홈)이 accentBrand.normal.subtle 배경으로 강조됩니다.
           </div>
         </div>
@@ -1038,7 +1036,7 @@ export default function Components() {
           <Navbar className="border-b-0">
             <NavbarBrand>
               <span className="inline-flex h-7 w-7 rounded-polaris-md bg-accent-brand-normal text-label-inverse items-center justify-center font-bold text-polaris-caption1">P</span>
-              <span className="text-polaris-heading-sm font-semibold">Polaris Office</span>
+              <span className="text-polaris-heading4 font-semibold">Polaris Office</span>
             </NavbarBrand>
             <NavbarNav>
               <NavbarItem href="#" active>홈</NavbarItem>
@@ -1228,7 +1226,7 @@ export default function Components() {
       </Section>
 
       <Section cat="overlays" current={catTab} title="2. Drawer — side variants (right/left/top/bottom)">
-        <HStack gap={2} wrap>
+        <Stack direction="row" gap={2} wrap>
           {(['right', 'left', 'top', 'bottom'] as const).map((side) => (
             <Drawer key={side}>
               <DrawerTrigger asChild>
@@ -1251,7 +1249,7 @@ export default function Components() {
               </DrawerContent>
             </Drawer>
           ))}
-        </HStack>
+        </Stack>
       </Section>
 
       <Section cat="overlays" current={catTab} title="3. DropdownMenu — 액션 메뉴">
@@ -1391,7 +1389,7 @@ export default function Components() {
       <Section cat="overlays" current={catTab} title="8. CommandPalette — ⌘K 명령 검색">
         <Card variant="padded">
           <p className="text-polaris-body2 text-label-neutral mb-3">
-            <kbd className="px-1.5 py-0.5 rounded-polaris-sm border border-line-neutral bg-background-alternative text-polaris-caption1">⌘K</kbd> 또는 아래 버튼으로 열기.
+            <kbd className="px-1.5 py-0.5 rounded-polaris-sm border border-line-neutral bg-fill-neutral text-polaris-caption1">⌘K</kbd> 또는 아래 버튼으로 열기.
           </p>
           <Button variant="tertiary" onClick={() => setCmdOpen(true)}>명령 열기</Button>
           <CommandDialog open={cmdOpen} onOpenChange={setCmdOpen}>
@@ -1591,7 +1589,7 @@ export default function Components() {
       <Section cat="data" current={catTab} title="3. DescriptionList — inline / stacked">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card variant="padded">
-            <h3 className="text-polaris-heading-sm mb-3">layout="inline" (default)</h3>
+            <h3 className="text-polaris-heading4 mb-3">layout="inline" (default)</h3>
             <DescriptionList>
               <DescriptionTerm>이름</DescriptionTerm>
               <DescriptionDetails>홍길동</DescriptionDetails>
@@ -1604,7 +1602,7 @@ export default function Components() {
             </DescriptionList>
           </Card>
           <Card variant="padded">
-            <h3 className="text-polaris-heading-sm mb-3">layout="stacked"</h3>
+            <h3 className="text-polaris-heading4 mb-3">layout="stacked"</h3>
             <DescriptionList layout="stacked">
               <div>
                 <DescriptionTerm>거래처</DescriptionTerm>
@@ -1643,11 +1641,11 @@ export default function Components() {
                 Tones — accent · success · warning · danger · ai
               </p>
               <Stack gap={2}>
-                <Progress value={70} tone="accent" aria-label="accent" />
-                <Progress value={70} tone="success" aria-label="success" />
-                <Progress value={70} tone="warning" aria-label="warning" />
-                <Progress value={70} tone="danger" aria-label="danger" />
-                <Progress value={70} tone="ai" aria-label="ai" />
+                <Progress value={70} variant="accent" aria-label="accent" />
+                <Progress value={70} variant="success" aria-label="success" />
+                <Progress value={70} variant="warning" aria-label="warning" />
+                <Progress value={70} variant="danger" aria-label="danger" />
+                <Progress value={70} variant="ai" aria-label="ai" />
               </Stack>
             </div>
 
@@ -1710,17 +1708,17 @@ export default function Components() {
             <p className="text-polaris-caption1 text-label-alternative mb-2">기본 — Card 안에 wrap</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-polaris-md">
               <Card variant="padded">
-                <Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" />
+                <Stat label="조회수" value="1,234" delta="+12%" deltaVariant="positive" />
               </Card>
               <Card variant="padded">
-                <Stat label="고유 방문" value="892" delta="-3%" deltaTone="negative" />
+                <Stat label="고유 방문" value="892" delta="-3%" deltaVariant="negative" />
               </Card>
               <Card variant="padded">
                 <Stat
                   label="다운로드"
                   value="148"
                   delta="+5%"
-                  deltaTone="accent"
+                  deltaVariant="accent"
                   icon={<DownloadIcon />}
                 />
               </Card>
@@ -1740,10 +1738,10 @@ export default function Components() {
                 <Stat label="조회수" value="0" loading />
               </Card>
               <Card variant="padded">
-                <Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" loading />
+                <Stat label="조회수" value="1,234" delta="+12%" deltaVariant="positive" loading />
               </Card>
               <Card variant="padded">
-                <Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" />
+                <Stat label="조회수" value="1,234" delta="+12%" deltaVariant="positive" />
               </Card>
             </div>
           </div>

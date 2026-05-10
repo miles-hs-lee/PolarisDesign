@@ -120,7 +120,7 @@ export default function CrmContractDetail() {
           {/* 계약 정보 */}
           <Card>
             <CardBody>
-              <h2 className="text-polaris-heading-sm mb-4">계약 정보</h2>
+              <h2 className="text-polaris-heading4 mb-4">계약 정보</h2>
               <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
                 <Field icon={FileText} label="계약 유형" value="라이선스 / 연간" />
                 <Field icon={Calendar} label="계약 기간" value="2026-05-01 ~ 2027-04-30" />
@@ -136,7 +136,7 @@ export default function CrmContractDetail() {
           <Card>
             <CardBody>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-polaris-heading-sm">거래처</h2>
+                <h2 className="text-polaris-heading4">거래처</h2>
                 <Button variant="ghost" size="sm">상세</Button>
               </div>
               <div className="flex items-start gap-4">
@@ -159,7 +159,7 @@ export default function CrmContractDetail() {
           {/* 상태 타임라인 */}
           <Card>
             <CardBody>
-              <h2 className="text-polaris-heading-sm mb-4">결재 / 진행 상태</h2>
+              <h2 className="text-polaris-heading4 mb-4">결재 / 진행 상태</h2>
               <ol className="space-y-0">
                 {TIMELINE.map((step, i) => (
                   <TimelineRow key={step.label} step={step} isLast={i === TIMELINE.length - 1} />
@@ -211,7 +211,7 @@ export default function CrmContractDetail() {
           {/* 결재선 */}
           <Card>
             <CardBody>
-              <h2 className="text-polaris-heading-sm mb-4">결재선</h2>
+              <h2 className="text-polaris-heading4 mb-4">결재선</h2>
               <ul className="space-y-3">
                 <ApproverRow name="이해석" role="기안자 · 영업1팀" status="done" />
                 <ApproverRow name="김지수" role="검토 · 계약법무팀" status="done" />
@@ -225,7 +225,7 @@ export default function CrmContractDetail() {
           <Card>
             <CardBody>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-polaris-heading-sm">첨부 파일</h2>
+                <h2 className="text-polaris-heading4">첨부 파일</h2>
                 <Badge variant="neutral">5</Badge>
               </div>
               <div className="space-y-2">
@@ -241,7 +241,7 @@ export default function CrmContractDetail() {
           {/* 위험 액션 */}
           <Card>
             <CardBody>
-              <h2 className="text-polaris-heading-sm mb-3">계약 종료</h2>
+              <h2 className="text-polaris-heading4 mb-3">계약 종료</h2>
               <p className="text-polaris-body2 text-label-neutral mb-4">
                 계약을 취소하거나 폐기합니다. 결재가 진행 중이면 결재선에도 통보됩니다.
               </p>

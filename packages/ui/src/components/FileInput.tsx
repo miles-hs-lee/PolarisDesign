@@ -43,7 +43,7 @@ export interface FileInputProps
   /** Visible label rendered above the trigger. */
   label?: ReactNode;
   /** Helper text below the trigger. */
-  hint?: ReactNode;
+  helperText?: ReactNode;
   /** Error message — shows ⚠ icon + state-error border (mirrors `Input`). */
   error?: ReactNode;
   /** Trigger button label. Default: "파일 선택". */
@@ -61,7 +61,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
     {
       id: providedId,
       label,
-      hint,
+      helperText,
       error,
       buttonLabel = '파일 선택',
       hideSelectedFiles,
@@ -77,7 +77,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
   ) => {
     const generatedId = useId();
     const id = providedId ?? generatedId;
-    const messageId = error || hint ? `${id}-msg` : undefined;
+    const messageId = error || helperText ? `${id}-msg` : undefined;
     const isError = Boolean(error);
     const localRef = useRef<HTMLInputElement | null>(null);
     useImperativeHandle(forwardedRef, () => localRef.current as HTMLInputElement);
@@ -171,9 +171,9 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
             <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />
             <span>{error}</span>
           </p>
-        ) : hint ? (
+        ) : helperText ? (
           <p id={messageId} className="text-polaris-helper text-label-alternative">
-            {hint}
+            {helperText}
           </p>
         ) : null}
       </div>
@@ -227,7 +227,7 @@ export interface FileDropZoneProps
   /** Error string — displayed below the zone with the standard error treatment. */
   error?: ReactNode;
   /** Hint string — displayed below the zone in helper text style. */
-  hint?: ReactNode;
+  helperText?: ReactNode;
   /** ID forwarded to the underlying input (label `htmlFor` target). */
   id?: string;
   /** Hint shown inside the zone. Default: built-in Korean copy. */
@@ -265,7 +265,7 @@ export const FileDropZone = forwardRef<HTMLInputElement, FileDropZoneProps>(
       maxSize,
       disabled,
       error,
-      hint,
+      helperText,
       prompt,
       id: providedId,
       className,
@@ -277,7 +277,7 @@ export const FileDropZone = forwardRef<HTMLInputElement, FileDropZoneProps>(
   ) => {
     const generatedId = useId();
     const id = providedId ?? generatedId;
-    const messageId = error || hint ? `${id}-msg` : undefined;
+    const messageId = error || helperText ? `${id}-msg` : undefined;
     const isError = Boolean(error);
     const inputRef = useRef<HTMLInputElement | null>(null);
     useImperativeHandle(forwardedRef, () => inputRef.current as HTMLInputElement);
@@ -403,7 +403,7 @@ export const FileDropZone = forwardRef<HTMLInputElement, FileDropZoneProps>(
             'focus-visible:outline-none focus-visible:shadow-polaris-focus',
             dragOver
               ? 'border-accent-brand-normal bg-accent-brand-normal-subtle'
-              : 'border-line-normal bg-background-alternative',
+              : 'border-line-normal bg-fill-neutral',
             isError && 'border-state-error',
             disabled && 'cursor-not-allowed opacity-50',
             className
@@ -444,9 +444,9 @@ export const FileDropZone = forwardRef<HTMLInputElement, FileDropZoneProps>(
             <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />
             <span>{error}</span>
           </p>
-        ) : hint ? (
+        ) : helperText ? (
           <p id={messageId} className="text-polaris-helper text-label-alternative">
-            {hint}
+            {helperText}
           </p>
         ) : null}
       </div>

@@ -8,7 +8,7 @@ export interface SwitchProps
   /** Visible label rendered to the right of the switch. Wires up htmlFor. */
   label?: ReactNode;
   /** Helper text below the label. */
-  hint?: ReactNode;
+  helperText?: ReactNode;
   /** Error message — sets `aria-invalid` and renders the message with the
    *  mandatory ⚠ icon (WCAG 1.4.1 — never communicate state via color alone). */
   error?: ReactNode;
@@ -20,9 +20,9 @@ export interface SwitchProps
  * Switch — toggle for binary settings (notifications, dark mode, etc.).
  *
  * Mirrors `<Checkbox>`'s API surface so forms read consistently — the
- * v0.7.5 review caught Switch missing label/hint/error while Checkbox
+ * v0.7.5 review caught Switch missing label/helperText/error while Checkbox
  * had the full set, breaking form layout consistency. Pass `label` to
- * get a clickable label + proper `htmlFor` wiring; `hint` and `error`
+ * get a clickable label + proper `htmlFor` wiring; `helperText` and `error`
  * follow the same rules as the rest of the form components.
  *
  * For richer composition (sub-rows, descriptions next to the switch),
@@ -31,17 +31,17 @@ export interface SwitchProps
  *
  * @example
  * ```tsx
- * <Switch label="이메일 알림" hint="새 댓글이 달리면 받아봅니다." />
+ * <Switch label="이메일 알림" helperText="새 댓글이 달리면 받아봅니다." />
  * <Switch label="공개" error="권한 없음" disabled />
  * ```
  */
 export const Switch = forwardRef<
   React.ElementRef<typeof SwitchPrimitive.Root>,
   SwitchProps
->(({ className, containerClassName, label, hint, error, id: providedId, ...props }, ref) => {
+>(({ className, containerClassName, label, helperText, error, id: providedId, ...props }, ref) => {
   const generatedId = useId();
   const id = providedId ?? generatedId;
-  const messageId = error || hint ? `${id}-msg` : undefined;
+  const messageId = error || helperText ? `${id}-msg` : undefined;
   const isError = Boolean(error);
 
   const root = (
@@ -62,16 +62,16 @@ export const Switch = forwardRef<
     >
       <SwitchPrimitive.Thumb
         className={cn(
-          'pointer-events-none block h-5 w-5 rounded-polaris-pill bg-background-normal shadow-polaris-sm transition-transform',
+          'pointer-events-none block h-5 w-5 rounded-polaris-pill bg-background-base shadow-polaris-sm transition-transform',
           'data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0'
         )}
       />
     </SwitchPrimitive.Root>
   );
 
-  // Bare mode (no label/hint/error) — return the Root only so consumers
+  // Bare mode (no label/helperText/error) — return the Root only so consumers
   // can compose around it (e.g. inline list of settings rows).
-  if (!label && !hint && !error) return root;
+  if (!label && !helperText && !error) return root;
 
   return (
     <div className={cn('flex flex-col gap-polaris-2xs font-polaris', containerClassName)}>
@@ -99,12 +99,12 @@ export const Switch = forwardRef<
           <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />
           <span>{error}</span>
         </p>
-      ) : hint ? (
+      ) : helperText ? (
         <p
           id={messageId}
           className="text-polaris-helper text-label-alternative pl-[3.25rem]"
         >
-          {hint}
+          {helperText}
         </p>
       ) : null}
     </div>

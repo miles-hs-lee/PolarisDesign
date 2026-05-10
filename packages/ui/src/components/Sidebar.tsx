@@ -20,7 +20,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
           ref={ref}
           aria-label="Sidebar"
           className={cn(
-            'flex flex-col h-full shrink-0 bg-background-normal border-r border-line-neutral',
+            'flex flex-col h-full shrink-0 bg-background-base border-r border-line-neutral',
             'transition-[width] duration-150',
             className
           )}
@@ -104,7 +104,7 @@ export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
             'flex w-full items-center gap-2.5 rounded-polaris-md px-2.5 py-1.5',
             'text-polaris-body2 font-medium font-polaris text-label-neutral',
             'hover:bg-accent-brand-normal-subtle hover:text-label-normal transition-colors',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brand-normal',
             active && 'bg-accent-brand-normal-subtle text-accent-brand-normal',
             collapsed && 'justify-center',
             className

@@ -82,7 +82,7 @@ export default function Home() {
                     </span>
                     <Badge variant={isAi ? 'secondary' : 'neutral'}>{card.badge}</Badge>
                   </div>
-                  <h3 className="text-polaris-heading-sm mb-1.5">{card.title}</h3>
+                  <h3 className="text-polaris-heading4 mb-1.5">{card.title}</h3>
                   <p className="text-polaris-body2 text-label-neutral mb-4">{card.desc}</p>
                   <span className={cn(
                     'inline-flex items-center gap-1 text-polaris-body2',
@@ -107,7 +107,7 @@ export default function Home() {
                 </span>
                 <Badge variant="secondary">Tokens</Badge>
               </div>
-              <h3 className="text-polaris-heading-sm mb-1.5">디자인 토큰</h3>
+              <h3 className="text-polaris-heading4 mb-1.5">디자인 토큰</h3>
               <p className="text-polaris-body2 text-label-neutral mb-4">
                 4색 브랜드 팔레트와 NOVA 보라, 뉴트럴, 타이포·반경·그림자까지 한 페이지에서.
               </p>
@@ -120,7 +120,7 @@ export default function Home() {
 
         <Card>
           <CardBody>
-            <h3 className="text-polaris-heading-sm mb-3">아키텍처</h3>
+            <h3 className="text-polaris-heading4 mb-3">아키텍처</h3>
             <ul className="text-polaris-body2 text-label-neutral space-y-2">
               <li>
                 <code className="text-label-normal font-polaris-mono">@polaris/ui</code> — 토큰 + 37개 컴포넌트

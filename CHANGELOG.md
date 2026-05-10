@@ -8,34 +8,89 @@
 
 ## [Unreleased]
 
-DocFlow 컨슈머 v0.7.7 사용 후 피드백 추가 반영. **BREAKING 없음**, 다음 patch (v0.7.8) 후보.
+다음 patch / minor 후보. 비어 있음.
 
-### `@polaris/ui` — 미세 갭 메우기 (additive props)
+---
 
-- **`Stat value` numeric auto-format** — `value: ReactNode | number | bigint`. number/bigint면 `Intl.NumberFormat` 자동 (locale + options 커스터마이즈). 컨슈머가 `1234.toLocaleString()` 매번 박는 패턴 제거. `tabular-nums`로 정렬 안정.
-- **`StatGroup` (신규)** — KPI 4-up grid + auto-rows-fr + `<Stat>` 자식 자동 `<Card variant="padded" h-full>` wrap. helper 텍스트 유무에 상관없이 같은 높이. 비-Stat children은 그대로 통과.
-- **`Disclosure headingLevel` prop** — `'h2'`~`'h6'`. SR heading 목록(NVDA/JAWS H 키 nav) 노출용. button 자체는 그대로 (heading은 layout-transparent `contents`).
-- **`TableCell nowrap` prop** — `whitespace-nowrap` 적용. date/amount/id 컬럼에서 `className="whitespace-nowrap"` 매번 박는 것 제거.
-- **`PaginationFooter showPageSize` 명시 boolean** — `pageSizeOptions={undefined}` 우회 대신. backwards-compat (legacy 동작 유지). 외부 컨트롤이 페이지 사이즈 갖고 있을 때 셀렉터 명시적으로 숨김.
-- **`DatePicker name` / `valueFormat` / `required` / `form`** — hidden input 자동 렌더로 `<form action={serverAction}>` 직결. 이전엔 50줄 wrapper(ExpiryDateField) 강제 작성. ISO `yyyy-MM-dd` 기본, `valueFormat`으로 커스텀.
+## [0.8.0-rc.0] — 2026-05-10
 
-### `Badge` dismissible × hover (코덱스 후속 fix)
+**v0.8.0의 주제는 "쌓아둔 alias / 미세 비일관성을 한 번에 정리"** 입니다. 디자인팀 컨펌이 필요한 항목은 기본값으로 적용해 두었고, 추후 컨펌이 들어오면 그대로 유지하거나 토큰 수치만 조정합니다. 사내 컨슈머가 아직 소수일 때 구조적 변경을 끝내기 위한 BREAKING 정리 릴리스. 모든 변경은 **하나의 codemod (`polaris-codemod-v08`)로 자동 변환**됩니다.
 
-이전 patch에서 발견된 visual regression: solid tone Badge에서 light gray hover patch가 white X 위에 깔려 hover 시 X가 흐릿. tone-aware hover tint (solid → `static-white/25`, subtle/outline → `static-black/10`).
+> ⚠ **rc.0** — pre-release. Codex 리뷰 + 사내 파일럿 통과 후 정식 v0.8.0 태그를 찍습니다.
 
-### 테스트
+### 마이그레이션 한 줄
 
-236 → **254/254 ✓** (+18) — Stat NumberFormat 3 / StatGroup 3 / Disclosure heading 2 / TableCell nowrap 1 / PaginationFooter showPageSize 2 / DatePicker name+hidden input 7.
+```bash
+pnpm up @polaris/ui @polaris/lint @polaris/plugin --latest
+pnpm dlx @polaris/lint polaris-codemod-v08 --apply src
+pnpm build && pnpm lint
+```
 
-### 검증
+자세히 → [`docs/migration/v0.7-to-v0.8.md`](docs/migration/v0.7-to-v0.8.md).
 
-`pnpm verify` 13/13 ✓ (62s) · 컨슈머 측 codemod 불필요.
+### 1. Alias 청소 (Tailwind 빌드 emit 제거)
 
-### Tracking
+v0.7 동안 `--all-aliases` 모드로 emit해 온 v0.6/rc.0/rc.1 alias를 모두 떼어냅니다. **Tailwind 클래스 / CSS 변수가 사라지므로 codemod 적용 안 한 코드는 dead-utility**가 됩니다.
 
-- v0.8.0 BREAKING 청소에 추가: `tone` ↔ `variant` 명명 통일 (Progress=tone, Badge=variant, Stat=deltaTone — 한 컴포넌트 안에서도 deltaTone vs tone 혼재). 디자인 의도가 다르긴 하지만 컨슈머 시각에선 헷갈림.
+| 제거됨 | v0.8 사용 토큰 |
+|---|---|
+| `text-fg-primary/-secondary/-muted/-on-brand` | `text-label-normal/-neutral/-alternative/-inverse` |
+| `bg-surface-canvas/-raised/-sunken/-border/-borderStrong` | `bg-background-base` / `bg-layer-surface` / `bg-fill-neutral` / `border-line-{neutral,normal}` |
+| `bg-brand-primary/-secondary` (+ `-hover/-subtle`) | `bg-accent-brand-{normal,strong,bg,bgHover}` / `bg-ai-{normal,strong,hover}` |
+| `bg-primary-{normal,strong}` (rc.0 alias) | `bg-accent-brand-{normal,strong}` |
+| `bg-status-{success,warning,danger,info}` (+ `-hover`) | `bg-state-{success,warning,error,info}` (`danger` → `error`, hover 흡수) |
+| `bg-background-{normal,alternative}` | `bg-background-base` / `bg-fill-neutral` |
+| `text-polaris-{display-lg,display-md,heading-lg,heading-md,heading-sm,h1..h5,body,body-lg,body-sm,meta,tiny,caption}` | `text-polaris-{display,title,heading{1..4},body{1..3},caption{1,2}}` |
+| `rounded-polaris-full` | `rounded-polaris-pill` |
+| ramp step `5` (e.g. `bg-blue-5`) | `-05` (선행 0) — gray ramp는 10–90이라 영향 없음 |
+
+`surface.popover` / `surface.modal` (v0.7.5 elevation tier)은 **유지** — 알 수 있는 alias가 아니라 정상 토큰입니다.
+
+### 2. 컴포넌트 BREAKING — props / 식별자 정규화
+
+| 이전 (v0.7) | 이후 (v0.8) |
+|---|---|
+| `<Button variant="outline">` | `<Button variant="tertiary">` |
+| `<Input hint="…">` (+ Textarea/Switch/Checkbox/FileInput/FileDropZone/DateTimeInput/TimeInput) | `helperText="…"` (HTML spec 정렬, 폼 컴포넌트 전체 통일) |
+| `<Progress tone="success">` | `<Progress variant="success">` |
+| `<Stat deltaTone="positive">` | `<Stat deltaVariant="positive">` |
+| `<HStack>` / `<VStack>` exports | `<Stack direction="row">` / `<Stack>` (column 기본) — 한 컴포넌트로 통합 |
+| Button `ai` variant `focus-visible:outline-ai-normal` (separate ring) | 모든 Button variant 공통 `focus-visible:shadow-polaris-focus` (3px 시스템 포커스 링, light/dark 자동) |
+
+`<HStack>`/`<VStack>` 식별자는 import에서도 사라집니다 — codemod가 `import { HStack, VStack } from '@polaris/ui'` 를 `import { Stack }`로 정리합니다.
+
+### 3. 컴포넌트 enhancements (additive — 디자인팀 컨펌 후 변경 가능)
+
+추천안 적용. 컨펌 후 토큰 수치만 미세 조정 가능, API 자체는 유지.
+
+- **`Checkbox variant="ai"` (신규)** — AI 컨텍스트(예: "AI 추천 적용", "Polaris GPT-4 사용")용 NOVA Purple 체크박스. `<Button variant="ai">` / `<Badge tone="ai">` 와 시각 페어. 기본은 `default` (Brand Blue) 그대로.
+- **`DialogFooter fullWidthButtons`** — `true` 시 직접 자식 `<button>`을 `flex-1`로 늘려 row 폭을 균등 분할. 모바일 narrow modal / drawer-style 시트에서 두 액션이 half-width 페어로 읽히게. 기본 동작은 v0.7과 동일 (오른쪽 정렬).
+- **포커스 링 통일** — Button 외 Calendar / Drawer / Pagination / Ribbon 등도 `focus-visible:shadow-polaris-focus`로 일원화. 제각각 `outline-*` ring을 쓰던 미세 비일관성 제거.
+
+### 4. 도구 — codemod / lint / 플러그인
+
+- **`polaris-codemod-v08` (신규 bin)** — token + Tailwind + CSS 변수 + JSX prop / component 한 번에. v0.7 codemod와 동일 패턴 (regex 기반, idempotent, `--check` CI 모드, ignored dirs). 15 unit test로 검증 (token / typography / status / ramp / CSS var / button / hint / progress·stat / HStack·VStack / 멱등성 / `--check` exit code).
+- **`@polaris/no-deprecated-polaris-token` 룰 확장** — v0.8에서 emit이 사라진 alias도 룰 메시지에 추가. `polaris-codemod-v08` 명령을 messageId에 직접 안내. 누군가 dead-utility를 새로 작성하면 즉시 차단.
+- **플러그인 SKILL/명령 업데이트** — `polaris-web` SKILL의 "직접 만들지 말 것" 항목 6건 (HStack/Inline, Input.hint, Stat.deltaTone, Switch.hint) v0.8 prop 이름으로. `/polaris-migrate` 명령에 v0.7→v0.8 절차 추가.
+
+### 5. 테스트 / 검증
+
+- `@polaris/ui`: 254 → **(unchanged 본문 + Checkbox AI / DialogFooter fullWidthButtons / focus ring 회귀 케이스)** 모두 통과
+- `@polaris/lint`: 94 → **99/99** (+5: no-deprecated-polaris-token v0.8 케이스 5)
+- `polaris-codemod-v08` smoke test: 11 → **15/15** (+4: button-outline / hint→helperText / Progress·Stat / HStack·VStack)
+- `pnpm verify` **13/13 ✓**
+- 내부 self-apply: `apps/demo` + `packages/template-next` + `packages/ui/src/components/*.test.tsx` → 32 occurrences in 8 files 자동 변환
+
+### 6. 알려진 caveat
+
+- codemod의 JSX 패턴은 **opening-tag가 `>` 없이 한 줄에 들어와야** 정확히 매칭. 멀티라인 prop spread (속성값에 `>` 포함)은 수동 review 권장.
+- HStack/VStack import에서 `Stack`이 이미 import 되어 있으면 codemod 결과가 중복 식별자를 만들 수 있음. TypeScript가 잡으니 한 번 빌드하면 즉시 발견 — `import { Stack, Stack }` 같은 라인이 있으면 합치세요.
+- 디자인팀 컨펌 항목(Checkbox AI / DialogFooter fullWidthButtons / focus ring 통일)은 추천안 — 컨펌 후 토큰 수치만 조정될 수 있음 (API 변경 없음).
+
+### Tracking (다음 minor 후보)
+
 - v0.9 follow-up: 폼 chrome 시각 일관성 (Input 52px floating-inside vs DateTimeInput 52px label-above vs DatePicker button height). 디자인팀 합의 필요 — "같은 폼에서 swappable" 원칙 명문화.
-- 로드맵: Storybook 또는 컴포넌트 matrix 페이지 검토 (디스커버리 강화 — 현재 demo 카탈로그가 부분 대체 중).
+- 로드맵: Storybook 또는 컴포넌트 matrix 페이지 (디스커버리 강화).
 
 ---
 

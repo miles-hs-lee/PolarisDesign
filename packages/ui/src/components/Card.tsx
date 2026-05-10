@@ -28,7 +28,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <Comp
         ref={ref}
         className={cn(
-          'rounded-polaris-lg border border-line-neutral bg-background-normal shadow-polaris-sm',
+          'rounded-polaris-lg border border-line-neutral bg-background-base shadow-polaris-sm',
           variant === 'padded' && 'px-5 py-4',
           interactive && [
             'cursor-pointer transition-shadow transition-colors',

@@ -33,11 +33,11 @@ export function Calendar({
         nav: 'flex items-center justify-between absolute inset-x-1 top-1',
         button_previous: cn(
           'inline-flex h-7 w-7 items-center justify-center rounded-polaris-sm text-label-alternative hover:bg-accent-brand-normal-subtle hover:text-label-normal',
-          'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary'
+          'focus-visible:outline-none focus-visible:shadow-polaris-focus'
         ),
         button_next: cn(
           'inline-flex h-7 w-7 items-center justify-center rounded-polaris-sm text-label-alternative hover:bg-accent-brand-normal-subtle hover:text-label-normal',
-          'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary'
+          'focus-visible:outline-none focus-visible:shadow-polaris-focus'
         ),
         month_grid: 'w-full border-collapse',
         weekdays: 'flex',
@@ -47,7 +47,7 @@ export function Calendar({
         day_button: cn(
           'inline-flex h-9 w-9 items-center justify-center rounded-polaris-md text-polaris-body2 font-normal transition-colors',
           'hover:bg-accent-brand-normal-subtle hover:text-accent-brand-normal',
-          'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
+          'focus-visible:outline-none focus-visible:shadow-polaris-focus',
           'aria-selected:opacity-100'
         ),
         selected: '[&>button]:bg-accent-brand-normal [&>button]:text-label-inverse [&>button]:hover:bg-accent-brand-strong [&>button]:hover:text-label-inverse',

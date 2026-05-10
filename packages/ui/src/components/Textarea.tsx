@@ -13,7 +13,7 @@ import { cn } from '../lib/cn';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
-  hint?: string;
+  helperText?: string;
   error?: string;
   containerClassName?: string;
   /**
@@ -39,7 +39,7 @@ const DEFAULT_AUTO_RESIZE = { minRows: 1, maxRows: 8 };
 /**
  * Textarea — multi-line input matching the Polaris Input visual.
  *
- * Beyond the base label/hint/error pattern, supports two common SaaS
+ * Beyond the base label/helperText/error pattern, supports two common SaaS
  * needs that consumers were re-implementing inline:
  *   - `autoResize` — grows/shrinks to fit content (with min/max bounds)
  *   - `showCount` — `current/max` indicator (requires `maxLength`)
@@ -61,7 +61,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       className,
       containerClassName,
       label,
-      hint,
+      helperText,
       error,
       id: providedId,
       rows = 4,
@@ -77,7 +77,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ) => {
     const generatedId = useId();
     const id = providedId ?? generatedId;
-    const messageId = error || hint ? `${id}-msg` : undefined;
+    const messageId = error || helperText ? `${id}-msg` : undefined;
     const isError = Boolean(error);
     const localRef = useRef<HTMLTextAreaElement | null>(null);
     useImperativeHandle(forwardedRef, () => localRef.current as HTMLTextAreaElement);
@@ -176,20 +176,20 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           aria-describedby={messageId}
           className={cn(
             'px-3 py-2 rounded-polaris-md text-polaris-body2 font-polaris',
-            'bg-background-normal text-label-normal placeholder:text-label-alternative',
+            'bg-background-base text-label-normal placeholder:text-label-alternative',
             'border border-line-normal',
             // Auto-resize hides the native drag handle (fights the grow).
             resizeOpts ? 'resize-none' : 'resize-vertical',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:border-brand-primary',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brand-normal focus-visible:border-accent-brand-normal',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             isError && 'border-state-error focus-visible:ring-state-error focus-visible:border-state-error',
             className
           )}
           {...props}
         />
-        {(error || hint || (showCount && typeof maxLength === 'number')) && (
+        {(error || helperText || (showCount && typeof maxLength === 'number')) && (
           <div className="flex items-start justify-between gap-polaris-2xs">
-            {(error || hint) ? (
+            {(error || helperText) ? (
               <p
                 id={messageId}
                 className={cn(
@@ -199,7 +199,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                 role={isError ? 'alert' : undefined}
               >
                 {isError && <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />}
-                <span>{error ?? hint}</span>
+                <span>{error ?? helperText}</span>
               </p>
             ) : (
               <span aria-hidden="true" />

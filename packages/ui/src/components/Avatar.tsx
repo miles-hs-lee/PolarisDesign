@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/cn';
 
 const avatarVariants = cva(
-  'relative flex shrink-0 overflow-hidden rounded-polaris-pill bg-background-alternative',
+  'relative flex shrink-0 overflow-hidden rounded-polaris-pill bg-fill-neutral',
   {
     variants: {
       size: {

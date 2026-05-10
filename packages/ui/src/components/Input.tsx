@@ -21,7 +21,8 @@ export interface InputProps
    *  or when the field has a value. Replaces the rc.0 above-input label
    *  per DESIGN.md §4. */
   label?: string;
-  hint?: string;
+  /** Helper text rendered below the input (between focus ring and error). */
+  helperText?: string;
   /** Error message — automatically rendered below the input with a
    *  mandatory ⚠️ icon (WCAG 1.4.1: never communicate state via color
    *  alone). Pass `null` / `undefined` to clear. */
@@ -91,10 +92,10 @@ export interface InputProps
  * ```
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, containerClassName, label, hint, error, id: providedId, onFocus, onBlur, onChange, value, defaultValue, placeholder, prefix, suffix, clearable, onClear, disabled, readOnly, ...props }, forwardedRef) => {
+  ({ className, containerClassName, label, helperText, error, id: providedId, onFocus, onBlur, onChange, value, defaultValue, placeholder, prefix, suffix, clearable, onClear, disabled, readOnly, ...props }, forwardedRef) => {
     const generatedId = useId();
     const id = providedId ?? generatedId;
-    const messageId = error || hint ? `${id}-msg` : undefined;
+    const messageId = error || helperText ? `${id}-msg` : undefined;
     const isError = Boolean(error);
 
     // Track focus + value presence for floating-label behavior.
@@ -249,9 +250,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />
             <span>{error}</span>
           </p>
-        ) : hint ? (
+        ) : helperText ? (
           <p id={messageId} className="text-polaris-helper text-label-alternative">
-            {hint}
+            {helperText}
           </p>
         ) : null}
       </div>

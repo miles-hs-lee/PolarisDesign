@@ -25,14 +25,10 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   brandPalette,
-  brand,
   fileType,
-  status,
   neutral,
   surface,
-  text,
   radius,
-  shadow,
   fontFamily,
   textStyle,
   spacing,
@@ -42,6 +38,14 @@ import {
   redPalette,
   purplePalette,
   grayRamp,
+  label,
+  background,
+  layer,
+  fill,
+  line,
+  accentBrand,
+  state,
+  ai,
 } from '../src/tokens';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -72,25 +76,25 @@ function emitColors(): string {
     }
   }
 
-  // Base palette → primary/secondary/accent group names Stitch recommends.
-  // Polaris's `brand.primary` (blue) becomes `primary`; `brand.secondary`
-  // (purple, NOVA) becomes `secondary`. The 4-color file palette stays as
-  // its own group.
-  colors.primary = brand.primary.light;
-  colors['primary-hover'] = brand.primaryHover.light;
-  colors['primary-subtle'] = brand.primarySubtle.light;
-  colors.secondary = brand.secondary.light;
-  colors['secondary-hover'] = brand.secondaryHover.light;
-  colors['secondary-subtle'] = brand.secondarySubtle.light;
+  // Semantic v0.8 spec groups — flatten into Stitch's name space.
+  // `accentBrand.normal` (blue) maps to Stitch's `primary`; `ai.normal`
+  // (NOVA purple) maps to `secondary`. The 4-color file palette stays
+  // grouped (file-docx / file-xlsx / …).
+  colors.primary = accentBrand.normal.light;
+  colors['primary-hover'] = accentBrand.strong.light;
+  colors['primary-subtle'] = accentBrand.bg.light;
+  colors.secondary = ai.normal.light;
+  colors['secondary-hover'] = ai.strong.light;
+  colors['secondary-subtle'] = ai.hover.light;
 
-  // File-type accents (stay grouped as they're brand-specific to Polaris)
+  // File-type accents
   for (const [k, v] of Object.entries(fileType)) {
     colors[`file-${k}`] = v.light;
   }
 
-  // Status
-  for (const [k, v] of Object.entries(status)) {
-    colors[`status-${camelToKebab(k)}`] = v.light;
+  // State (success / warning / error / info / new)
+  for (const [k, v] of Object.entries(state)) {
+    colors[`state-${camelToKebab(k)}`] = v.light;
   }
 
   // Neutral scale
@@ -98,12 +102,24 @@ function emitColors(): string {
     colors[`neutral-${k}`] = v.light;
   }
 
-  // Surface + text aliases
+  // Semantic foreground / surface / fill / line aliases
+  for (const [k, v] of Object.entries(label)) {
+    colors[`label-${camelToKebab(k)}`] = v.light;
+  }
+  for (const [k, v] of Object.entries(background)) {
+    colors[`background-${camelToKebab(k)}`] = v.light;
+  }
+  for (const [k, v] of Object.entries(layer)) {
+    colors[`layer-${camelToKebab(k)}`] = v.light;
+  }
   for (const [k, v] of Object.entries(surface)) {
     colors[`surface-${camelToKebab(k)}`] = v.light;
   }
-  for (const [k, v] of Object.entries(text)) {
-    colors[`text-${camelToKebab(k)}`] = v.light;
+  for (const [k, v] of Object.entries(fill)) {
+    colors[`fill-${camelToKebab(k)}`] = v.light;
+  }
+  for (const [k, v] of Object.entries(line)) {
+    colors[`line-${camelToKebab(k)}`] = v.light;
   }
 
   // Brand palette base (raw color names — useful as a fallback alias)
@@ -162,10 +178,12 @@ function emitSpacing(): string {
 
 function emitComponents(): string {
   // Curated subset — the controls every Polaris consumer touches first.
-  // Stitch lets us reference colors/rounded by token name.
+  // Stitch lets us reference colors/rounded by token name. Spec names
+  // (v0.8): primary = accent.brand.normal, layer-surface = card surface,
+  // label-normal = primary text, etc.
   return `  button-primary:
     backgroundColor: "{colors.primary}"
-    textColor: "{colors.text-on-brand}"
+    textColor: "{colors.label-inverse}"
     rounded: "{rounded.md}"
     padding: 12px
   button-primary-hover:
@@ -176,19 +194,19 @@ function emitComponents(): string {
     rounded: "{rounded.md}"
     padding: 12px
   card:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.text-primary}"
+    backgroundColor: "{colors.layer-surface}"
+    textColor: "{colors.label-normal}"
     rounded: "{rounded.lg}"
     padding: 20px
   input:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.text-primary}"
+    backgroundColor: "{colors.layer-surface}"
+    textColor: "{colors.label-normal}"
     rounded: "{rounded.md}"
     padding: 8px
   badge:
     backgroundColor: "{colors.primary-subtle}"
     textColor: "{colors.primary}"
-    rounded: "{rounded.full}"
+    rounded: "{rounded.pill}"
     padding: 4px`;
 }
 
@@ -237,10 +255,10 @@ The tone is calm and professional with a 4-color brand identity (blue / green / 
 
 The palette is rooted in Polaris's 4-color brand identity. Each base color doubles as its file-type signal (DOCX = blue, XLSX = green, PPTX = orange, PDF = red). A NOVA purple is reserved for AI features.
 
-- **Primary (Polaris Blue, #2B7FFF):** Headlines of action — buttons, links, focus, active nav. Same hex as \`fileType.docx\`.
-- **Secondary (NOVA Purple, #7C5CFF):** AI / generative contexts only. Pairs with sparkle iconography. Never mix primary and secondary on the same screen — pick by context.
-- **Status (success / warning / danger / info):** Reserved for system feedback. Each has a hover variant.
-- **Neutral (12 steps, 0 → 1000):** Light/dark inverted by \`data-theme\`. \`surface.canvas\` (page bg), \`surface.raised\` (cards/modals), \`text.primary\` / \`text.secondary\` / \`text.muted\` are the everyday aliases; reach for those before the raw scale.
+- **Primary (Polaris Blue, #1D7FF9):** Headlines of action — buttons, links, focus, active nav. Same hex as \`fileType.docx\`. Token: \`accentBrand.normal\`.
+- **Secondary (NOVA Purple, #6F3AD0):** AI / generative contexts only. Pairs with sparkle iconography. Never mix primary and secondary on the same screen — pick by context. Token: \`ai.normal\`.
+- **State (success / warning / error / info):** Reserved for system feedback. Each has a \`Bg\` tint for banners + a \`Strong\` tier for body-size text.
+- **Neutral (12 steps, 0 → 1000):** Light/dark inverted by \`data-theme\`. \`background.base\` (page bg), \`layer.surface\` (cards/modals), \`label.normal\` / \`label.neutral\` / \`label.alternative\` are the everyday aliases; reach for those before the raw scale.
 
 Do not mix file-type colors as decorative accents — they carry semantic meaning (document type signals).
 
@@ -250,9 +268,9 @@ Do not mix file-type colors as decorative accents — they carry semantic meanin
 
 Pretendard Variable for both display and body. Korean / Latin / numerals all use the same family. JetBrains Mono for code.
 
-Eleven named levels (v0.7-rc.1 spec): \`display\` (40), \`title\` (32), \`heading1\` (28), \`heading2\` (24), \`heading3\` (20), \`heading4\` (18) for heading hierarchy, \`body1\` (16), \`body2\` (14), \`body3\` (13) for paragraph copy, \`caption1\` (12), \`caption2\` (11) for labels and chrome. All headings + captions are weight 700 (Bold). Body is weight 400 (Regular).
+Eleven named levels (v0.8 spec): \`display\` (40), \`title\` (32), \`heading1\` (28), \`heading2\` (24), \`heading3\` (20), \`heading4\` (18) for heading hierarchy, \`body1\` (16), \`body2\` (14), \`body3\` (13) for paragraph copy, \`caption1\` (12), \`caption2\` (11) for labels and chrome. All headings + captions are weight 700 (Bold). Body is weight 400 (Regular).
 
-Legacy rc.0 names (\`h1\`-\`h5\`, \`body\`, \`detail\`, \`meta\`, \`tiny\`) and v0.6 names (\`display-lg\`, \`heading-lg\`, \`body-lg\`, \`caption\`) are kept as deprecated aliases. Codemod rewrites them.
+(v0.7 rc.0 / v0.6 aliases — \`h1\`-\`h5\`, \`body\`, \`detail\`, \`meta\`, \`tiny\`, \`display-lg\`, \`heading-lg\`, \`body-lg\`, \`caption\` — were removed in v0.8. Run \`pnpm dlx @polaris/lint polaris-codemod-v08 --apply src\` to migrate.)
 
 Line-heights: 1.4 headings, 1.5 body, 1.3 captions. NO letter-spacing — Pretendard's optical metrics are calibrated at the typeface level.
 
@@ -272,13 +290,13 @@ No semantic spacing tokens (e.g., \`spacing.gutter\`, \`spacing.section-y\`) —
 
 Four shadow levels for light mode (\`xs\`, \`sm\`, \`md\`, \`lg\`) plus a darker dark-mode pair. The \`shadow-polaris-*\` Tailwind utilities pick the right pair via \`data-theme\`. Use \`xs\` for hover lifts, \`sm\` for cards, \`md\` for menus / toasts, \`lg\` for modals.
 
-In dark mode, shadows alone don't carry hierarchy — pair with \`surface.raised\` tonal layers (cards sit on a slightly lighter surface than the canvas).
+In dark mode, shadows alone don't carry hierarchy — pair with \`layer.surface\` tonal layers (cards sit on a slightly lighter surface than the page background).
 
 ## Shapes
 
 ![Radius spec](assets/figma-spec/foundation/radius.png)
 
-Eight radius levels (v0.7-rc.1+ spec): \`2xs\` (2) / \`xs\` (4) / \`sm\` (8) / \`md\` (12) / \`lg\` (16) / \`xl\` (24) / \`2xl\` (38) / \`pill\` (9999). Inputs use \`sm\` (8px). Buttons / cards / modals default to \`md\` (12px). Large CTAs use \`lg\` (16px), emphasis modals \`xl\` (24px), bottom sheets \`2xl\` (38px). \`pill\` for pills / avatars / switch thumbs (the legacy \`full\` alias keeps working).
+Eight radius levels (v0.8 spec): \`2xs\` (2) / \`xs\` (4) / \`sm\` (8) / \`md\` (12) / \`lg\` (16) / \`xl\` (24) / \`2xl\` (38) / \`pill\` (9999). Inputs use \`sm\` (8px). Buttons / cards / modals default to \`md\` (12px). Large CTAs use \`lg\` (16px), emphasis modals \`xl\` (24px), bottom sheets \`2xl\` (38px). \`pill\` for pills / avatars / switch thumbs. (The v0.7 \`full\` alias was removed in v0.8 — codemod-v08 rewrites it.)
 
 Avoid mixing rounded and sharp corners in the same component. Don't introduce new \`px\` values — extend the scale instead.
 
@@ -303,9 +321,9 @@ For editor / document products, the \`@polaris/ui/ribbon\` subpath ships an Offi
 ## Do's and Don'ts
 
 - **Do** import from \`@polaris/ui\`, \`@polaris/ui/form\`, \`@polaris/ui/ribbon\`, or \`@polaris/ui/ribbon-icons\` — every component / icon is token-correct out of the box.
-- **Do** use the \`text.primary\` / \`surface.raised\` / \`brand.primary\` style aliases. The raw \`neutral.700\` / \`palette-blue\` exist for advanced cases only.
+- **Do** use the \`label.normal\` / \`layer.surface\` / \`accentBrand.normal\` style aliases. The raw \`neutral.700\` / \`palette-blue\` exist for advanced cases only.
 - **Do** pair status colors with their hover variants for any interactive surface (buttons, cells).
-- **Do** use \`brand.secondary\` (NOVA purple) only inside AI features. Mixing it with \`brand.primary\` on the same screen muddies hierarchy.
+- **Do** use \`ai.normal\` (NOVA purple) only inside AI features. Mixing it with \`accentBrand.normal\` on the same screen muddies hierarchy.
 - **Don't** introduce raw hex values, \`rgb(...)\`, or named CSS colors — \`@polaris/lint\`'s \`no-hardcoded-color\` blocks them.
 - **Don't** use Tailwind arbitrary values (\`bg-[#xxx]\`, \`p-[13px]\`, \`font-['Inter']\`) — the lint rule \`no-arbitrary-tailwind\` blocks them.
 - **Don't** write native \`<button>\` / \`<input>\` / \`<dialog>\` in feature code — \`prefer-polaris-component\` requires the Polaris equivalents.

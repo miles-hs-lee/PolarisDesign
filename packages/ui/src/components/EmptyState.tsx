@@ -18,19 +18,19 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
         ref={ref}
         className={cn(
           'flex flex-col items-center justify-center text-center font-polaris',
-          'rounded-polaris-lg border border-dashed border-line-normal bg-background-alternative',
+          'rounded-polaris-lg border border-dashed border-line-normal bg-fill-neutral',
           'px-6 py-12 gap-3',
           className
         )}
         {...props}
       >
         {resolvedIcon && (
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-polaris-pill bg-background-alternative text-label-alternative [&>svg]:h-6 [&>svg]:w-6">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-polaris-pill bg-fill-neutral text-label-alternative [&>svg]:h-6 [&>svg]:w-6">
             {resolvedIcon}
           </div>
         )}
         <div className="flex flex-col gap-1 max-w-md">
-          <h3 className="text-polaris-heading-sm text-label-normal">{title}</h3>
+          <h3 className="text-polaris-heading4 text-label-normal">{title}</h3>
           {description && (
             <p className="text-polaris-body2 text-label-neutral">{description}</p>
           )}

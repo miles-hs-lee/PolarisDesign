@@ -70,7 +70,7 @@ export const NovaInput = forwardRef<HTMLInputElement, NovaInputProps>(
     return (
       <div
         className={cn(
-          'flex flex-col gap-3 rounded-polaris-lg bg-background-normal',
+          'flex flex-col gap-3 rounded-polaris-lg bg-background-base',
           'border border-ai-pressed',
           'p-3.5',
           'shadow-polaris-ai',

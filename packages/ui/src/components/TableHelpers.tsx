@@ -368,7 +368,7 @@ export const TableSkeleton = forwardRef<HTMLDivElement, TableSkeletonProps>(
       >
         {showHeader && (
           <div
-            className="flex items-center gap-3 bg-background-alternative px-3 py-2.5 border-b border-line-neutral"
+            className="flex items-center gap-3 bg-fill-neutral px-3 py-2.5 border-b border-line-neutral"
             aria-hidden="true"
           >
             {Array.from({ length: columns }).map((_, i) => (

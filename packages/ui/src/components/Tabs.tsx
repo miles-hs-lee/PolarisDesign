@@ -37,7 +37,7 @@ export const TabsList = forwardRef<
       ref={ref}
       className={cn(
         'inline-flex items-center font-polaris',
-        variant === 'pill' && 'gap-1 rounded-polaris-md bg-background-alternative p-1',
+        variant === 'pill' && 'gap-1 rounded-polaris-md bg-fill-neutral p-1',
         variant === 'underline' && 'gap-polaris-md border-b border-line-neutral',
         className
       )}
@@ -63,7 +63,7 @@ export const TabsTrigger = forwardRef<
         variant === 'pill' && [
           'rounded-polaris-sm px-3 py-1.5 text-polaris-body2',
           'text-label-neutral hover:text-label-normal',
-          'data-[state=active]:bg-background-normal data-[state=active]:text-label-normal data-[state=active]:shadow-polaris-xs',
+          'data-[state=active]:bg-background-base data-[state=active]:text-label-normal data-[state=active]:shadow-polaris-xs',
         ],
         // Underline variant — flat row, active gets a brand bottom-border.
         // -mb-px aligns the active border with TabsList's bottom border so

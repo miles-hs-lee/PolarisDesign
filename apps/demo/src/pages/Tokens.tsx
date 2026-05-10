@@ -37,7 +37,7 @@ function isColorPair(v: unknown): v is ColorPair {
  *  plain hex strings (palette ramps, gray ramp). */
 function ColorSwatch({ name, value }: { name: string; value: ColorValue }) {
   return (
-    <div className="flex items-center gap-3 p-2 rounded-polaris-md hover:bg-background-alternative">
+    <div className="flex items-center gap-3 p-2 rounded-polaris-md hover:bg-fill-neutral">
       <div
         className="flex h-10 w-20 shrink-0 rounded-polaris-sm overflow-hidden border border-line-neutral"
         aria-hidden="true"
@@ -169,14 +169,10 @@ const SUPPLEMENTARY_RAMPS: Array<{ name: string; tokens: ColorGroup; desc?: stri
 ];
 
 const LEGACY_GROUPS: Array<{ name: string; tokens: ColorGroup; desc?: string }> = [
-  { name: 'brandPalette',  tokens: colors.brandPalette as ColorGroup,  desc: 'v0.6 5-step alias (램프는 위 brand ramps 사용)' },
-  { name: 'brand',         tokens: colors.brand as ColorGroup,         desc: 'rc.0 alias of accentBrand / ai' },
+  { name: 'brandPalette',  tokens: colors.brandPalette as ColorGroup,  desc: '5-color brand alias (램프는 위 brand ramps 사용)' },
   { name: 'fileType',      tokens: colors.fileType as ColorGroup,      desc: 'docx/hwp/xlsx/pptx/pdf 컬러 (29-type FileIcon에서 사용)' },
-  { name: 'status',        tokens: colors.status as ColorGroup,        desc: 'v0.6 — rc.1 state로 대체됨' },
-  { name: 'neutral',       tokens: colors.neutral as ColorGroup,       desc: 'v0.6 12-step neutral (rc.1 grayRamp 9-step 권장)' },
-  { name: 'surface',       tokens: colors.surface as ColorGroup,       desc: 'v0.6 — rc.1 layer/background로 대체됨' },
-  { name: 'text',          tokens: colors.text as ColorGroup,          desc: 'v0.6 — rc.1 label로 대체됨' },
-  { name: 'primary',       tokens: colors.primary as ColorGroup,       desc: 'rc.0 alias of accentBrand' },
+  { name: 'neutral',       tokens: colors.neutral as ColorGroup,       desc: 'v0.6 12-step neutral (v0.7 grayRamp 9-step 권장)' },
+  { name: 'surface',       tokens: colors.surface as ColorGroup,       desc: 'v0.7.5+ 엘리베이션 (popover / modal). v0.8 canvas/raised/sunken 제거됨' },
 ];
 
 export default function Tokens() {
@@ -187,7 +183,7 @@ export default function Tokens() {
         <h1 className="text-polaris-title mb-polaris-2xs">디자인 토큰</h1>
         <p className="text-polaris-body1 text-label-neutral max-w-2xl">
           v0.7-rc.2 토큰 전수 표시. 색상은{' '}
-          <code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">colors</code>{' '}
+          <code className="font-polaris-mono text-polaris-body2 bg-fill-neutral px-1 rounded-polaris-sm">colors</code>{' '}
           export에서 자동 iterate되므로 새 그룹 추가 시 자동 반영됩니다. 디자인 정의서:{' '}
           <a href="https://github.com/PolarisOffice/PolarisDesign/blob/main/DESIGN.md" target="_blank" rel="noreferrer" className="text-accent-brand-normal underline">DESIGN.md</a>.
         </p>
@@ -342,7 +338,7 @@ export default function Tokens() {
       >
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-polaris-md">
           {(Object.keys(shadow.light) as Array<keyof typeof shadow.light>).map((name) => (
-            <div key={name} className="flex flex-col items-center gap-polaris-2xs p-polaris-md bg-background-alternative rounded-polaris-md">
+            <div key={name} className="flex flex-col items-center gap-polaris-2xs p-polaris-md bg-fill-neutral rounded-polaris-md">
               <div
                 className="h-16 w-full rounded-polaris-md bg-layer-surface"
                 style={{ boxShadow: shadow.light[name] }}
@@ -450,7 +446,7 @@ export default function Tokens() {
           <CardBody>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-polaris-md">
               {Object.entries(breakpoint).map(([name, value]) => (
-                <div key={name} className="flex items-center justify-between gap-polaris-md py-polaris-2xs px-polaris-2xs rounded-polaris-sm hover:bg-background-alternative">
+                <div key={name} className="flex items-center justify-between gap-polaris-md py-polaris-2xs px-polaris-2xs rounded-polaris-sm hover:bg-fill-neutral">
                   <code className="font-polaris-mono text-polaris-caption1 text-label-normal">
                     {name}
                   </code>
@@ -478,15 +474,15 @@ export default function Tokens() {
                 /icons 페이지
               </a>
               . Import 경로:{' '}
-              <code className="font-polaris-mono text-polaris-caption1 bg-background-alternative px-1 rounded-polaris-2xs">
+              <code className="font-polaris-mono text-polaris-caption1 bg-fill-neutral px-1 rounded-polaris-2xs">
                 @polaris/ui/icons
               </code>
               ,{' '}
-              <code className="font-polaris-mono text-polaris-caption1 bg-background-alternative px-1 rounded-polaris-2xs">
+              <code className="font-polaris-mono text-polaris-caption1 bg-fill-neutral px-1 rounded-polaris-2xs">
                 @polaris/ui/file-icons
               </code>
               ,{' '}
-              <code className="font-polaris-mono text-polaris-caption1 bg-background-alternative px-1 rounded-polaris-2xs">
+              <code className="font-polaris-mono text-polaris-caption1 bg-fill-neutral px-1 rounded-polaris-2xs">
                 @polaris/ui/logos
               </code>
               .

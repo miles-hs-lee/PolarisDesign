@@ -28,14 +28,14 @@ import { cn } from '../lib/cn';
  * day at 09:30" (`<TimeInput>`) flows, native is the right tool.
  *
  * Visual pattern matches `<Input>` (52px height, sm radius, floating
- * label, error/hint slots) so forms read consistently across types.
+ * label, error/helperText slots) so forms read consistently across types.
  */
 
 type SharedProps = {
   /** Floating-style label rendered above the input. */
   label?: ReactNode;
   /** Helper text below the input. */
-  hint?: ReactNode;
+  helperText?: ReactNode;
   /** Error message — flips border to state-error and renders ⚠ icon below. */
   error?: ReactNode;
   /** Class for the outer container. */
@@ -101,17 +101,17 @@ export interface DateTimeInputProps
  * ```tsx
  * <DateTimeInput
  *   label="만료일"
- *   hint="브라우저 시간대 기준"
+ *   helperText="브라우저 시간대 기준"
  *   value={value}
  *   onChange={(e) => setValue(e.target.value)}
  * />
  * ```
  */
 export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(
-  ({ label, hint, error, containerClassName, className, id: providedId, ...props }, forwardedRef) => {
+  ({ label, helperText, error, containerClassName, className, id: providedId, ...props }, forwardedRef) => {
     const generatedId = useId();
     const id = providedId ?? generatedId;
-    const messageId = error || hint ? `${id}-msg` : undefined;
+    const messageId = error || helperText ? `${id}-msg` : undefined;
     const isError = Boolean(error);
     const localRef = useRef<HTMLInputElement | null>(null);
     useImperativeHandle(forwardedRef, () => localRef.current as HTMLInputElement);
@@ -141,9 +141,9 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(
             <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />
             <span>{error}</span>
           </p>
-        ) : hint ? (
+        ) : helperText ? (
           <p id={messageId} className="text-polaris-helper text-label-alternative">
-            {hint}
+            {helperText}
           </p>
         ) : null}
       </div>
@@ -170,10 +170,10 @@ export interface TimeInputProps
  * ```
  */
 export const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(
-  ({ label, hint, error, containerClassName, className, id: providedId, ...props }, forwardedRef) => {
+  ({ label, helperText, error, containerClassName, className, id: providedId, ...props }, forwardedRef) => {
     const generatedId = useId();
     const id = providedId ?? generatedId;
-    const messageId = error || hint ? `${id}-msg` : undefined;
+    const messageId = error || helperText ? `${id}-msg` : undefined;
     const isError = Boolean(error);
     const localRef = useRef<HTMLInputElement | null>(null);
     useImperativeHandle(forwardedRef, () => localRef.current as HTMLInputElement);
@@ -203,9 +203,9 @@ export const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(
             <ErrorIcon size={16} className="shrink-0 mt-px" aria-hidden="true" />
             <span>{error}</span>
           </p>
-        ) : hint ? (
+        ) : helperText ? (
           <p id={messageId} className="text-polaris-helper text-label-alternative">
-            {hint}
+            {helperText}
           </p>
         ) : null}
       </div>

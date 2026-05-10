@@ -34,7 +34,7 @@ describe('Switch', () => {
   });
 
   it('renders hint text below when no error', () => {
-    render(<Switch label="공개" hint="다른 팀에게도 보임" />);
+    render(<Switch label="공개" helperText="다른 팀에게도 보임" />);
     expect(screen.getByText('다른 팀에게도 보임')).toBeInTheDocument();
     expect(screen.queryByRole('alert')).toBeNull();
   });

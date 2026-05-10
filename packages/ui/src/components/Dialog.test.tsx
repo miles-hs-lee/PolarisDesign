@@ -28,7 +28,7 @@ function ControlledDialog() {
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="tertiary">Cancel</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

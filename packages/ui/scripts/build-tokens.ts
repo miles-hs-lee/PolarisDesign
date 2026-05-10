@@ -19,12 +19,9 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   brandPalette,
-  brand,
   fileType,
-  status,
   neutral,
   surface,
-  text,
   radius,
   shadow,
   fontFamily,
@@ -55,7 +52,6 @@ import {
   focus,
   staticColors,
   state,
-  primary,
   ai,
   type ColorPair,
 } from '../src/tokens';
@@ -79,17 +75,14 @@ type ColorGroup = Record<string, ColorPair>;
 
 /** Color groups + their CSS variable prefix. Empty prefix means the
  *  variable is named after the key directly (e.g. brandPalette.blue
- *  becomes --polaris-blue). */
+ *  becomes --polaris-blue). v0.8 emits only spec groups; legacy
+ *  `brand.*` / `status.*` / `text.*` / `primary.*` were removed. */
 const COLOR_GROUPS: Array<{ prefix: string; group: ColorGroup }> = [
-  // v0.6 groups (kept for backward compat — `surface.canvas` etc.)
-  { prefix: '',         group: brandPalette },
-  { prefix: 'brand',    group: brand },
-  { prefix: 'file',     group: fileType },
-  { prefix: 'status',   group: status },
-  { prefix: 'neutral',  group: neutral },
-  { prefix: 'surface',  group: surface },
-  { prefix: 'text',     group: text },
-  // v1 spec semantic tokens (v0.7-rc.1 expanded)
+  { prefix: '',              group: brandPalette },
+  { prefix: 'file',          group: fileType },
+  { prefix: 'neutral',       group: neutral },
+  { prefix: 'surface',       group: surface },
+  // v1 spec semantic tokens
   { prefix: 'label',         group: label },
   { prefix: 'background',    group: background },
   { prefix: 'layer',         group: layer },
@@ -101,8 +94,7 @@ const COLOR_GROUPS: Array<{ prefix: string; group: ColorGroup }> = [
   { prefix: 'focus',         group: focus },
   { prefix: 'static',        group: staticColors },
   { prefix: 'state',         group: state },
-  // legacy / Polaris-specific aliases (still emitted as CSS vars)
-  { prefix: 'primary',       group: primary },
+  // Polaris-specific
   { prefix: 'ai',            group: ai },
 ];
 
@@ -122,14 +114,9 @@ function emitColorBlock(mode: 'light' | 'dark'): string {
  *  dark-mode ramp yet). Each step gets its own custom property:
  *  `--polaris-blue-50`, `--polaris-purple-30`, `--polaris-blue-90`, etc.
  *
- *  v0.7-rc.1: brand ramps gain step `90` (darkest) and an `05`
- *  leading-zero key matching the design sheet. The legacy `5` key is
- *  emitted as a deprecated CSS variable for backward compat. Five new
- *  supplementary families (Sky Blue, Blue, Violet, Cyan, Yellow) are
- *  added per the primitive palette reference.
- *
- *  `dark-blue` (BI / corporate) is also emitted now; previously it
- *  lived only in the TS export.
+ *  v0.8: ramp keys are 05 → 90 (the legacy `5` no-leading-zero alias was
+ *  removed; codemod-v08 rewrites `bg-blue-5` to `bg-blue-05`). Brand,
+ *  supplementary, and dark-blue / gray ramps all emit here.
  */
 function emitRampBlock(): string {
   const ramps: Array<[string, Record<string, string>]> = [

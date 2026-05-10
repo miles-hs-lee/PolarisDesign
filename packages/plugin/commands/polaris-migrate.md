@@ -21,21 +21,41 @@ npx polaris-audit
 pnpm add -D @polaris/lint @polaris/ui
 ```
 
-## 2. 자동 codemod — v0.6 / rc.0 토큰 일괄 변환
+## 2. 자동 codemod — 옛 토큰 / 컴포넌트 일괄 변환
 
-이미 폴라리스를 쓰고 있는데 옛 토큰명이 남아 있는 프로젝트:
+쓰고 있는 폴라리스 버전에 따라 codemod를 단계적으로 돌립니다. v0.6 이전 / rc.0 → v0.7 이행이 끝났다면 v0.8 codemod 한 번이면 충분합니다.
+
+### v0.7 → v0.8 (가장 최신 — BREAKING 정리)
 
 ```sh
 # 미리 확인
-pnpm dlx @polaris/lint polaris-codemod-v07 src
+pnpm dlx @polaris/lint polaris-codemod-v08 src
 
 # 적용
+pnpm dlx @polaris/lint polaris-codemod-v08 --apply src
+```
+
+처리 범위:
+- **토큰 / Tailwind / CSS 변수**: 잔여 v0.6/rc.0 alias (`brand-*`, `text-*`, `surface-canvas/raised/sunken/border`, `status-*`, `primary-*`, `background-normal/alternative`) → spec 이름. typography legacy (`text-polaris-display-lg`, `-h1`~`-h5`, `-body`, `-meta`, `-tiny`) → spec (`text-polaris-display`, `-heading{1..4}`, `-body{1..3}`, `-caption{1,2}`). `rounded-polaris-full` → `-pill`. ramp `5` → `05`.
+- **JSX prop / component**:
+  - `<Button variant="outline">` → `<Button variant="tertiary">`
+  - `hint` → `helperText` (Input/Textarea/Switch/Checkbox/FileInput/FileDropZone/DateTimeInput/TimeInput)
+  - `<Progress tone=>` → `<Progress variant=>`
+  - `<Stat deltaTone=>` → `<Stat deltaVariant=>`
+  - `<HStack>` → `<Stack direction="row">`, `<VStack>` → `<Stack>`
+  - `@polaris/ui` import에서 `HStack`/`VStack` → `Stack`
+
+자세히 → [`docs/migration/v0.7-to-v0.8.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.7-to-v0.8.md).
+
+### v0.6 → v0.7 (이전 단계만 끝내야 한다면)
+
+```sh
 pnpm dlx @polaris/lint polaris-codemod-v07 --apply src
 ```
 
-처리 범위: TS 토큰 멤버 / Tailwind 클래스 / CSS 변수. 자세히 → [`docs/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md).
+자세히 → [`docs/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md).
 
-> **적용 범위 주의** — codemod는 consumer 코드 (`src/`, `apps/`, `app/`)에만 돌리세요. `@polaris/ui` 자체 소스 (특히 `packages/ui/src/{tokens,styles,tailwind}`)는 deprecated alias 정의가 의도적으로 들어있어서 false-positive를 보입니다.
+> **적용 범위 주의** — codemod는 consumer 코드 (`src/`, `apps/`, `app/`)에만 돌리세요. `@polaris/ui` 자체 소스 (특히 `packages/ui/src/{tokens,styles,tailwind}`)는 마이그레이션 안내용으로 옛 alias 이름이 docstring/주석에 들어있어서 false-positive를 보입니다.
 
 ## 3. lint 자동 수정
 

@@ -99,9 +99,31 @@ export const DialogDescription = forwardRef<
 ));
 DialogDescription.displayName = 'DialogDescription';
 
-export const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+export interface DialogFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * Stretch direct child Buttons to share the full row width (`flex-1`).
+   *
+   * Use case: narrow modals on mobile / drawer-style sheets where two
+   * actions read better as half-width pair than as right-aligned siblings.
+   * Without the prop, the default behavior stays — buttons sit at their
+   * natural width, right-aligned with `gap-polaris-2xs` between them.
+   *
+   * Implementation note: applies `flex-1` to direct `<button>` children
+   * via Tailwind's `[&>button]` selector so any button (including
+   * `<Button>` from this package, which renders `<button>`) participates
+   * automatically. Anchor-based actions (`asChild` + `<a>`) need to add
+   * their own `className="flex-1"` if they want to join.
+   */
+  fullWidthButtons?: boolean;
+}
+
+export const DialogFooter = ({ className, fullWidthButtons, ...props }: DialogFooterProps) => (
   <div
-    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end gap-polaris-2xs mt-polaris-lg', className)}
+    className={cn(
+      'flex flex-col-reverse sm:flex-row sm:justify-end gap-polaris-2xs mt-polaris-lg',
+      fullWidthButtons && 'sm:justify-stretch [&>button]:flex-1',
+      className
+    )}
     {...props}
   />
 );

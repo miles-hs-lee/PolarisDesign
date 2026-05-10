@@ -116,7 +116,7 @@ function OverlayIcon({ base, overlay }: { base: ReactNode; overlay: ReactNode })
 
 function EditorChrome() {
   return (
-    <div className="flex items-center gap-2 h-12 px-3 border-b border-line-neutral bg-background-normal">
+    <div className="flex items-center gap-2 h-12 px-3 border-b border-line-neutral bg-background-base">
       <Button variant="ghost" size="sm" aria-label="메뉴" className="!h-9 !w-9 !px-0 shrink-0">
         <MenuIcon className="h-5 w-5 text-accent-brand-normal" />
       </Button>
@@ -773,7 +773,7 @@ function NewDocPane() {
         <li key={doc.type}>
           <Button
             variant="ghost"
-            className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-background-alternative text-left"
+            className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-fill-neutral text-left"
           >
             <FileIcon type={doc.type} size={40} />
             <span className="flex flex-col items-start min-w-0">
@@ -809,7 +809,7 @@ function OpenDocPane() {
               variant="ghost"
               className={cn(
                 '!h-auto w-full !justify-start !py-3 !px-4 gap-3 rounded-polaris-md text-left',
-                active ? 'bg-accent-brand-normal-subtle hover:bg-accent-brand-normal-subtle' : 'hover:bg-background-alternative'
+                active ? 'bg-accent-brand-normal-subtle hover:bg-accent-brand-normal-subtle' : 'hover:bg-fill-neutral'
               )}
             >
               <Icon className={cn('h-5 w-5 shrink-0', place.iconClass)} aria-hidden="true" />
@@ -833,7 +833,7 @@ function DownloadPane() {
           <li key={type}>
             <Button
               variant="ghost"
-              className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-background-alternative text-left"
+              className="!h-auto w-full !justify-start !py-3 !px-4 gap-4 rounded-polaris-md hover:bg-fill-neutral text-left"
             >
               <FileIcon type={type} size={40} />
               <span className="text-polaris-body2">
@@ -854,7 +854,7 @@ function SaveToDrivePane() {
         폴라리스 드라이브의 위치를 선택하세요. 변경 사항이 자동으로 동기화됩니다.
       </p>
       <Input label="파일 이름" defaultValue="NewDocument 2026-05-07 211414" />
-      <div className="flex items-center gap-2 px-3 py-2 rounded-polaris-md border border-line-neutral bg-background-alternative text-polaris-body2">
+      <div className="flex items-center gap-2 px-3 py-2 rounded-polaris-md border border-line-neutral bg-fill-neutral text-polaris-body2">
         <FolderIcon className="h-4 w-4 text-label-alternative" aria-hidden="true" />
         <span className="text-label-neutral">/내 드라이브/문서</span>
       </div>
@@ -892,7 +892,7 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
     // lint 룰에 걸리므로 CSS 변수로 height를 노출 (의미 있는 이름) + 인라인
     // style로 적용. 만약 향후 chrome 높이가 토큰화되면 이 var만 갱신.
     <div
-      className="flex bg-background-normal"
+      className="flex bg-background-base"
       style={
         {
           '--editor-chrome-h': '3rem',
@@ -902,7 +902,7 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
       }
     >
       {/* Left drawer */}
-      <aside className="w-60 shrink-0 border-r border-line-neutral bg-background-alternative flex flex-col">
+      <aside className="w-60 shrink-0 border-r border-line-neutral bg-fill-neutral flex flex-col">
         <div className="p-3">
           <Button
             variant="ghost"
@@ -929,7 +929,7 @@ function FileBackstage({ onClose }: { onClose: () => void }) {
                     // 쓰지 않음 — 배경/색만으로 선택 표시.)
                     pane === item.id
                       ? '!bg-accent-brand-normal-subtle !text-accent-brand-normal'
-                      : '!text-label-neutral hover:!bg-background-alternative'
+                      : '!text-label-neutral hover:!bg-fill-neutral'
                   )}
                 >
                   {item.label}
@@ -967,7 +967,7 @@ export default function PolarisOffice() {
   // 숨기고 그 자리에 left drawer + right detail을 표시.
   if (activeTab === 'file') {
     return (
-      <div className="bg-background-alternative">
+      <div className="bg-fill-neutral">
         <EditorChrome />
         <FileBackstage onClose={() => setActiveTab('home')} />
       </div>
@@ -975,7 +975,7 @@ export default function PolarisOffice() {
   }
 
   return (
-    <div className="bg-background-alternative">
+    <div className="bg-fill-neutral">
       <EditorChrome />
 
       <Ribbon className="!border-b-2">
@@ -1027,13 +1027,13 @@ export default function PolarisOffice() {
             폴라리스 오피스 리본 재현
           </h1>
           <p className="text-polaris-body1 text-label-neutral mb-2">
-            이 화면은 <code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">@polaris/ui/ribbon</code>의 컴포넌트만으로 구성된
+            이 화면은 <code className="font-polaris-mono text-polaris-body2 bg-fill-neutral px-1 rounded-polaris-sm">@polaris/ui/ribbon</code>의 컴포넌트만으로 구성된
             폴라리스 오피스 워드 에디터의 리본 메뉴 모형입니다.
           </p>
           <p className="text-polaris-body2 text-label-alternative">
             상단의 탭(파일·홈·삽입·레이아웃·검토·보기·펜·AI 도구)을 클릭해 그룹과 컨트롤 구성을 확인할 수 있습니다.
-            아이콘은 디자인팀 ribbon-icon 세트(<code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">@polaris/ui/ribbon-icons</code>) 91종을 사용하며,
-            모든 색상은 v0.7 시맨틱 토큰(<code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">accentBrand.*</code>·<code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">state.*</code>·<code className="font-polaris-mono text-polaris-body2 bg-background-alternative px-1 rounded-polaris-sm">label.*</code>)으로 입혀졌습니다.
+            아이콘은 디자인팀 ribbon-icon 세트(<code className="font-polaris-mono text-polaris-body2 bg-fill-neutral px-1 rounded-polaris-sm">@polaris/ui/ribbon-icons</code>) 91종을 사용하며,
+            모든 색상은 v0.7 시맨틱 토큰(<code className="font-polaris-mono text-polaris-body2 bg-fill-neutral px-1 rounded-polaris-sm">accentBrand.*</code>·<code className="font-polaris-mono text-polaris-body2 bg-fill-neutral px-1 rounded-polaris-sm">state.*</code>·<code className="font-polaris-mono text-polaris-body2 bg-fill-neutral px-1 rounded-polaris-sm">label.*</code>)으로 입혀졌습니다.
           </p>
         </Card>
       </div>

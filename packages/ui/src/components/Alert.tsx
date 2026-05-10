@@ -12,7 +12,7 @@ const alertVariants = cva(
         success: 'bg-state-success-bg border-state-success text-label-normal',
         warning: 'bg-state-warning-bg border-state-warning text-label-normal',
         danger:  'bg-state-error-bg border-state-error text-label-normal',
-        neutral: 'bg-background-normal border-line-normal text-label-normal',
+        neutral: 'bg-background-base border-line-normal text-label-normal',
       },
     },
     defaultVariants: { variant: 'info' },

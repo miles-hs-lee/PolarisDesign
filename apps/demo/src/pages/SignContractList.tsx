@@ -175,7 +175,7 @@ export default function SignContractList() {
                     onClick={() => setFilter(f.value)}
                     className={cn(
                       'rounded-polaris-pill whitespace-nowrap',
-                      !active && 'bg-background-alternative hover:bg-background-alternative hover:text-label-normal'
+                      !active && 'bg-fill-neutral hover:bg-fill-neutral hover:text-label-normal'
                     )}
                   >
                     {f.label}
@@ -295,7 +295,7 @@ function ContractRow({ contract: c }: { contract: Contract }) {
                   {c.signed} / {c.total}
                 </span>
               </div>
-              <div className="h-1.5 rounded-polaris-pill bg-background-alternative overflow-hidden">
+              <div className="h-1.5 rounded-polaris-pill bg-fill-neutral overflow-hidden">
                 <div
                   className={cn('h-full rounded-polaris-pill transition-all', progressTone)}
                   style={{ width: `${progress}%` }}

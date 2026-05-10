@@ -18,7 +18,7 @@ describe('Input', () => {
   });
 
   it('shows hint text', () => {
-    render(<Input label="이름" hint="2~10글자" />);
+    render(<Input label="이름" helperText="2~10글자" />);
     expect(screen.getByText('2~10글자')).toBeInTheDocument();
   });
 

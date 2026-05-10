@@ -53,7 +53,7 @@ const fillVariants = cva(
   'h-full rounded-polaris-pill transition-[width] duration-polaris-normal ease-polaris-out',
   {
     variants: {
-      tone: {
+      variant: {
         accent:  'bg-accent-brand-normal',
         success: 'bg-state-success',
         warning: 'bg-state-warning',
@@ -61,7 +61,7 @@ const fillVariants = cva(
         ai:      'bg-ai-normal',
       },
     },
-    defaultVariants: { tone: 'accent' },
+    defaultVariants: { variant: 'accent' },
   }
 );
 
@@ -78,7 +78,7 @@ export interface ProgressProps
 }
 
 export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
-  ({ className, size, tone, value, min = 0, max = 100, ...props }, ref) => {
+  ({ className, size, variant, value, min = 0, max = 100, ...props }, ref) => {
     const isIndeterminate = value === null || value === undefined;
     const clamped = isIndeterminate ? 0 : Math.min(Math.max(value, min), max);
     const pct = isIndeterminate ? 0 : ((clamped - min) / (max - min)) * 100;
@@ -97,7 +97,7 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
           <div
             aria-hidden="true"
             className={cn(
-              fillVariants({ tone }),
+              fillVariants({ variant }),
               // Shuttle: a 40%-wide stripe slides left → right indefinitely.
               // Reduced-motion users see a static 40% bar (also valid as
               // "something is happening" without animation).
@@ -107,7 +107,7 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
         ) : (
           <div
             aria-hidden="true"
-            className={fillVariants({ tone })}
+            className={fillVariants({ variant })}
             style={{ width: `${pct}%` }}
           />
         )}

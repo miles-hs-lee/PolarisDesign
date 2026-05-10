@@ -284,7 +284,7 @@ export default function NovaWorkspace() {
           {/* Prompt templates: PromptChip grid + DropdownMenu for "+더보기" */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-polaris-heading-sm">자주 쓰는 프롬프트</h2>
+              <h2 className="text-polaris-heading4">자주 쓰는 프롬프트</h2>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm">
@@ -325,7 +325,7 @@ export default function NovaWorkspace() {
       {/* NOVA features grid — what you can do with NOVA */}
       <div className="max-w-5xl mx-auto px-6 pt-2">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-polaris-heading-sm">NOVA로 할 수 있는 것</h2>
+          <h2 className="text-polaris-heading4">NOVA로 할 수 있는 것</h2>
           <Button variant="ghost" size="sm">
             전체 보기 <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
           </Button>
@@ -345,7 +345,7 @@ export default function NovaWorkspace() {
               }}
               className="cursor-pointer hover:border-ai-normal hover:shadow-polaris-md transition-all overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ai-normal focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas"
             >
-              <div className="relative h-36 overflow-hidden bg-background-alternative">
+              <div className="relative h-36 overflow-hidden bg-fill-neutral">
                 {f.isNew && (
                   <Badge
                     variant="danger"
@@ -363,7 +363,7 @@ export default function NovaWorkspace() {
                 />
               </div>
               <div className="p-4">
-                <h3 className="text-polaris-heading-sm mb-1">{f.title}</h3>
+                <h3 className="text-polaris-heading4 mb-1">{f.title}</h3>
                 <p className="text-polaris-body2 text-label-neutral line-clamp-2">{f.desc}</p>
               </div>
             </Card>
@@ -374,7 +374,7 @@ export default function NovaWorkspace() {
       {/* Recent responses (no background) */}
       <div className="max-w-5xl mx-auto px-6 py-10">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-polaris-heading-sm">최근 응답</h2>
+          <h2 className="text-polaris-heading4">최근 응답</h2>
           <Button variant="ghost" size="sm">
             전체 보기
           </Button>

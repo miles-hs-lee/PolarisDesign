@@ -85,7 +85,7 @@ export const Ribbon = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEle
     <div
       ref={ref}
       className={cn(
-        'font-polaris text-label-normal bg-background-normal border-b border-line-neutral',
+        'font-polaris text-label-normal bg-background-base border-b border-line-neutral',
         className
       )}
       {...props}
@@ -143,7 +143,7 @@ export const RibbonTab = forwardRef<
     className={cn(
       'relative inline-flex items-center px-1 py-1.5 text-polaris-body2 text-label-alternative transition-colors',
       'hover:text-label-normal',
-      'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
+      'focus-visible:outline-none focus-visible:shadow-polaris-focus',
       // Active state: color shift + the brand-color underline accent below.
       // No bold — Office's actual ribbon doesn't bold the active tab label
       // (the underline + label-normal color is enough to indicate active).
@@ -302,7 +302,7 @@ const ribbonButtonStyles = cva(
   cn(
     'inline-flex items-center justify-center gap-1 rounded-polaris-sm text-label-normal transition-colors shrink-0',
     'hover:bg-accent-brand-normal-subtle',
-    'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
+    'focus-visible:outline-none focus-visible:shadow-polaris-focus',
     'disabled:opacity-40 disabled:pointer-events-none aria-disabled:opacity-40 aria-disabled:pointer-events-none',
     'data-[state=on]:bg-accent-brand-normal-subtle data-[state=on]:text-accent-brand-normal'
   ),

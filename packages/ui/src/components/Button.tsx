@@ -36,7 +36,7 @@ import { cn } from '../lib/cn';
  * matters.
  */
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 font-polaris transition-colors disabled:opacity-50 disabled:pointer-events-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring',
+  'inline-flex items-center justify-center gap-2 font-polaris transition-colors disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:shadow-polaris-focus',
   {
     variants: {
       variant: {
@@ -53,13 +53,9 @@ const buttonVariants = cva(
         dark:
           'bg-accent-action-normal text-static-white hover:bg-accent-action-strong',
         ai:
-          'bg-ai-normal text-label-inverse hover:bg-ai-strong focus-visible:outline-ai-normal',
+          'bg-ai-normal text-label-inverse hover:bg-ai-strong',
         danger:
           'bg-state-error text-label-inverse hover:bg-state-error/90',
-        // ───── deprecated aliases ─────
-        /** @deprecated rc.0. Use `tertiary`. */
-        outline:
-          'bg-fill-normal text-label-normal hover:bg-fill-strong',
       },
       size: {
         // 24 / 8px / Body3 13 / Medium 500 / radius xs (4)

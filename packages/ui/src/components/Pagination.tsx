@@ -40,7 +40,7 @@ export const PaginationItem = forwardRef<HTMLElement, PaginationItemProps>(
         aria-current={active ? 'page' : undefined}
         className={cn(
           'inline-flex h-9 min-w-9 items-center justify-center rounded-polaris-md px-3 text-polaris-body2 font-medium transition-colors',
-          'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary',
+          'focus-visible:outline-none focus-visible:shadow-polaris-focus',
           'disabled:opacity-50 disabled:pointer-events-none aria-disabled:opacity-50 aria-disabled:pointer-events-none',
           active
             ? 'bg-accent-brand-normal text-label-inverse'

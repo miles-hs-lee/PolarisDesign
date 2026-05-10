@@ -77,7 +77,7 @@ export function Layout() {
   return (
     <TooltipProvider delayDuration={200}>
       <ToastProvider swipeDirection="right">
-        <div className="min-h-screen flex bg-background-alternative text-label-normal font-polaris">
+        <div className="min-h-screen flex bg-fill-neutral text-label-normal font-polaris">
           {/* Sidebar — desktop persistent, mobile drawer */}
           {mobileOpen && (
             <div
@@ -102,7 +102,7 @@ export function Layout() {
                   <span className="inline-flex h-8 w-8 shrink-0 rounded-polaris-md bg-accent-brand-normal text-label-inverse items-center justify-center font-bold text-polaris-body2">
                     P
                   </span>
-                  <span className="text-polaris-heading-sm font-semibold truncate">Polaris</span>
+                  <span className="text-polaris-heading4 font-semibold truncate">Polaris</span>
                 </NavLink>
                 <Button
                   variant="ghost"
@@ -172,7 +172,7 @@ export function Layout() {
                 <span className="inline-flex h-7 w-7 rounded-polaris-md bg-accent-brand-normal text-label-inverse items-center justify-center font-bold text-polaris-caption1">
                   P
                 </span>
-                <span className="text-polaris-heading-sm font-semibold">Polaris</span>
+                <span className="text-polaris-heading4 font-semibold">Polaris</span>
               </NavbarBrand>
               <NavbarNav>
                 <div className="hidden md:block relative w-full max-w-md">
@@ -180,7 +180,7 @@ export function Layout() {
                   <Input
                     type="search"
                     placeholder="문서·계약·NOVA 응답 검색"
-                    className="pl-9 !h-9 bg-background-alternative border-line-neutral"
+                    className="pl-9 !h-9 bg-fill-neutral border-line-neutral"
                   />
                 </div>
               </NavbarNav>

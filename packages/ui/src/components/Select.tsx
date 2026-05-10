@@ -15,11 +15,11 @@ export const SelectTrigger = forwardRef<
     ref={ref}
     className={cn(
       'inline-flex h-10 w-full items-center justify-between gap-2 rounded-polaris-md',
-      'border border-line-normal bg-background-normal px-3 py-2',
+      'border border-line-normal bg-background-base px-3 py-2',
       'text-polaris-body2 font-polaris text-label-normal whitespace-nowrap',
       'data-[placeholder]:text-label-alternative',
       '[&>span]:truncate [&>span]:block [&>span]:min-w-0',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:border-brand-primary',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brand-normal focus-visible:border-accent-brand-normal',
       'disabled:cursor-not-allowed disabled:opacity-50',
       className
     )}

@@ -33,7 +33,7 @@ import { cn } from '../lib/cn';
  * @example
  * ```tsx
  * <Card variant="padded">
- *   <Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" />
+ *   <Stat label="조회수" value="1,234" delta="+12%" deltaVariant="positive" />
  * </Card>
  * ```
  *
@@ -43,7 +43,7 @@ import { cn } from '../lib/cn';
  *   <Card variant="padded"><Stat label="조회" value={views} /></Card>
  *   <Card variant="padded"><Stat label="고유 방문" value={unique} /></Card>
  *   <Card variant="padded"><Stat label="다운로드" value={downloads} /></Card>
- *   <Card variant="padded"><Stat label="차단" value={denied} deltaTone="negative" /></Card>
+ *   <Card variant="padded"><Stat label="차단" value={denied} deltaVariant="negative" /></Card>
  * </div>
  * ```
  */
@@ -52,14 +52,14 @@ const deltaVariants = cva(
   'inline-flex items-center gap-polaris-4xs text-polaris-helper font-medium',
   {
     variants: {
-      tone: {
+      variant: {
         neutral:  'text-label-neutral',
         positive: 'text-state-success',
         negative: 'text-state-error',
         accent:   'text-accent-brand-normal',
       },
     },
-    defaultVariants: { tone: 'neutral' },
+    defaultVariants: { variant: 'neutral' },
   }
 );
 
@@ -90,10 +90,10 @@ export interface StatProps
   numberFormat?: Intl.NumberFormatOptions;
   /** BCP-47 locale for `numberFormat`. Default: `undefined` → browser default. */
   numberLocale?: string;
-  /** Change indicator (e.g. "+12%"). Color via `deltaTone`. */
+  /** Change indicator (e.g. "+12%"). Color via `deltaVariant`. */
   delta?: ReactNode;
   /** Color tone for `delta`. Default: `"neutral"`. */
-  deltaTone?: VariantProps<typeof deltaVariants>['tone'];
+  deltaVariant?: VariantProps<typeof deltaVariants>['variant'];
   /** Leading icon (16-24px). Renders to the left of the label. */
   icon?: ReactNode;
   /** Small text below the value (e.g. comparison window: "지난 7일 기준"). */
@@ -127,7 +127,7 @@ function formatStatValue(
 }
 
 export const Stat = forwardRef<HTMLDivElement, StatProps>(
-  ({ className, label, value, numberFormat, numberLocale, delta, deltaTone, icon, helper, loading, ...props }, ref) => {
+  ({ className, label, value, numberFormat, numberLocale, delta, deltaVariant, icon, helper, loading, ...props }, ref) => {
     const formattedValue = formatStatValue(value, numberFormat, numberLocale);
     return (
       <div
@@ -156,7 +156,7 @@ export const Stat = forwardRef<HTMLDivElement, StatProps>(
           <div className="flex items-baseline gap-polaris-2xs">
             <span className="text-polaris-heading1 text-label-normal tabular-nums">{formattedValue}</span>
             {delta && (
-              <span className={cn(deltaVariants({ tone: deltaTone }))}>{delta}</span>
+              <span className={cn(deltaVariants({ variant: deltaVariant }))}>{delta}</span>
             )}
           </div>
         )}
@@ -191,7 +191,7 @@ Stat.displayName = 'Stat';
  * @example 4 KPI tiles
  * ```tsx
  * <StatGroup cols={4}>
- *   <Stat label="조회수" value={1234} delta="+12%" deltaTone="positive" />
+ *   <Stat label="조회수" value={1234} delta="+12%" deltaVariant="positive" />
  *   <Stat label="고유 방문" value={892} />
  *   <Stat label="다운로드" value={148} icon={<DownloadIcon />} />
  *   <Stat label="차단" value={7} helper="지난 7일" />
