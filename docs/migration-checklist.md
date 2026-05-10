@@ -22,10 +22,10 @@ PolarisDesign은 GitHub Release에 첨부된 `.tgz` 타르볼로 배포됩니다
 ```jsonc
 {
   "dependencies": {
-    "@polaris/ui": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.3/polaris-ui-0.7.3.tgz"
+    "@polaris/ui": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.7/polaris-ui-0.7.7.tgz"
   },
   "devDependencies": {
-    "@polaris/lint": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.3/polaris-lint-0.7.3.tgz"
+    "@polaris/lint": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.7/polaris-lint-0.7.7.tgz"
   }
 }
 ```

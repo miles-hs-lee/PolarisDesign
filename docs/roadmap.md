@@ -70,13 +70,80 @@ v0.7.0 위에 누적된 추가. **breaking 없음**, 디자인 시스템에 ribb
 
 ---
 
-## v0.7.x — 작은 패치 + 마이그레이션 도우미
+## ✅ v0.7.3 — 디자인팀 재검수 + tooling 강화 (완료)
 
-- **DataPagination 고수준 wrapper** (v0.5.x에서 미해결 carry-over)
-- **lucide → polaris 잔여 마이그레이션** — `@polaris/lint`의 `prefer-polaris-icon` warning 해소. ✅ template-next 완료(0.7.1), 데모는 80여건 잔여.
-- **prefer-polaris-icon auto-fix** — 단순 케이스(named import 1:1)는 `--fix`로 자동 변환.
-- **codemod 적용 범위 가드** — `@polaris/ui/src/{tokens,styles,tailwind}` 자동 제외.
-- **Form/Calendar/Command stable화** — v0.4 experimental 상태 평가 후 stable 또는 제거 결정.
+- 12+ 컴포넌트 hover/active 회귀 fix (`accent-brand-normal-subtle` Tailwind alias 누락)
+- `polaris-helper` 토큰 신설 (12 / 400 / lh 1.3) + Form 7곳 마이그레이션
+- `FormMessage` 자동 ErrorIcon prepend (DESIGN.md §4 / WCAG 1.4.1)
+- 신규 lint 룰 3개: `no-tailwind-default-color`, `no-deprecated-polaris-token`, `no-non-polaris-css-var`
+- `/proposal-platform` 데모 페이지 + `/polaris-brand-audit` 슬래시커맨드
+- `pnpm verify` 13-step 통합 (CI 회귀 차단)
+
+---
+
+## ✅ v0.7.5 — 컨슈머 피드백 + v0.8 후보 일괄 (완료)
+
+DocFlow 컨슈머 피드백을 받아 누적된 갭을 한 번에 해소. **BREAKING 없음.** 컴포넌트 37 → 51 (+14).
+
+- **신규 컴포넌트 14종**: feedback / utility (Progress · CopyButton · Stat · Disclosure) + file / time / pagination (FileInput · FileDropZone · DateTimeInput · TimeInput · PaginationFooter) + Table helpers (TableSearchInput · TableToolbar · TableSelectionBar · TableSkeleton + TableHead `sortable`)
+- **Badge `outline` tone** + `state-{success|warning|error|info}-strong` WCAG AA 토큰 4개
+- **Surface elevation 토큰**: `surface.popover` / `surface.modal` (다크 모드 elevation 강화)
+- **`shadow-polaris-focus` Tailwind utility** — 3px 시스템 포커스 링
+- 컨슈머 측 plugin install 가이드 fix (`.claude-plugin/marketplace.json` 추가) + `polaris-audit` temp config resolve fix
+
+---
+
+## ✅ v0.7.7 — 컴포넌트 완성도 리뷰 + 코덱스 리뷰 (완료, 2026-05-10)
+
+컴포넌트 완성도/범용도 리뷰 결과 도출된 갭을 메운 누적 patch + 코덱스 리뷰로 발견된 a11y/state-sync 회복. **BREAKING 없음.** 컴포넌트 51 → 58 family · 169 → 235 tests.
+
+**신규 컴포넌트 7종 (Tier 3.8)**:
+- `Combobox` (Popover + cmdk searchable Select, single + multiple + groups)
+- `PageHeader` / `SectionHeader` (페이지 / 섹션 레이아웃 표준)
+- `Tabs variant="underline"` (페이지 navigation 스타일)
+- `Accordion` (Radix Accordion 기반, type=single|multiple)
+- `CircularProgress` (라디얼 인디케이터, 4 size × 5 tone)
+- `AvatarGroup` (overlap row + +N 인디케이터)
+- `NavbarItem` (Sidebar/SidebarItem 패턴 미러 — `active`/`asChild`/`icon`/`href`)
+
+**API surface 채우기 — 13개 컴포넌트 props 추가**:
+- Textarea `autoResize` + `showCount`
+- Input `prefix` / `suffix` / `clearable` + `onClear`
+- Switch `label` / `hint` / `error` (Checkbox 일관성)
+- Skeleton `shape="rect|text|circle|bare"` + `lines={N}`
+- Alert `dismissible` + `action`
+- Badge `dismissible` + `icon`
+- Stat `loading`
+- Button `iconLeft` / `iconRight` / `fullWidth`
+- Card `interactive`
+- DropdownMenuItem `icon`
+- TableRow `selected` / `clickable` (keyboard activation 빌트인)
+- Toaster `defaultDuration`
+
+**코덱스 리뷰 9건 fix (a11y / state-sync 회복)**:
+- Combobox interactive nesting 해소 (clear button을 trigger SIBLING으로)
+- Input `value={0}` false-negative + controlled value reset 동기화
+- Textarea uncontrolled showCount + over-limit state-error 색
+- TableRow `clickable && onClick` 시 keyboard 활성화 + descendant click 격리
+- Surface elevation 토큰 first-party overlay 적용 (DropdownMenu/Select/Popover/Command → popover, Dialog/Drawer/Command → modal)
+- FileDropZone `multiple=false` drop 경로 제한 + consumer event handler compose
+- DateTimeInput JSDoc UTC shift 함정 제거
+- Badge outline tone WCAG AA (`state.*Strong` 매핑)
+- Skeleton (+ TableSkeleton) `motion-safe:animate-pulse`
+
+**Demo 카탈로그 재구성**:
+51 → 45 섹션 통합 (한 컴포넌트 = 한 섹션) + 6 카테고리 탭 (foundation / forms / navigation / overlays / data / polaris) + 카테고리 안 1부터 재번호 + sub-grouping (Variants / Sizes / States / Slots) + Toast outlet을 page root로 이동.
+
+**SKILL.md cookbook 18건 추가** — "Don't roll your own when these exist" 항목 강화.
+
+---
+
+## v0.7.x — 후속 patch
+
+- 컨슈머/코덱스 리뷰 후속 fix (필요 시)
+- 디자인팀 follow-up 합의분 흡수
+- DataPagination 고수준 wrapper (v0.5.x carry-over) — `<PaginationFooter>`로 부분 해소됨 평가
+- Form/Calendar/Command stable화 — v0.4 experimental 상태 평가 후 stable 또는 제거 결정
 
 ---
 
@@ -177,33 +244,55 @@ v0.4 사용자 보고 — `app-user-manager.tsx`, `price-book-activate-button.ts
 
 ---
 
-## v0.8.0 — Deprecated alias 제거 (BREAKING)
+## v0.8.0 — BREAKING 청소 (codemod 1회 마이그레이션)
 
-- v0.6 / rc.0 / rc.1 토큰 이름 alias 모두 제거 — `text.primary`, `surface.raised`, `brand.primary`, `bg-fg-*`, `text-polaris-h1` 등.
-- `polaris-codemod-v07` 가 마이그레이션 마무리해야 통과.
-- `@polaris/lint` deprecated alias warning 룰 추가 (v0.7.1 부터 운영, v0.8에서 error 승격).
-- Pretendard local hosting (CDN 졸업) — 폰트 로딩 안정성 확보.
-- v0.4 experimental (Calendar / DatePicker / CommandPalette) 결정 — stable promote 또는 별도 패키지 분리.
+v0.6/rc.0/rc.1 거치며 누적된 deprecated alias + naming 불일치를 한 번에 정리. 컨슈머는 `polaris-codemod-v08` 1회 실행으로 자동 마이그레이션.
+
+**Tailwind utility deprecated alias 제거** (`bg-fg-*`, `bg-surface-canvas/raised/sunken`, `bg-brand-primary*`, `bg-status-*`, `text-polaris-display-lg`/`-h1`~`-h5`/`-body`/`-meta`/`-tiny`, `bg-neutral-5` 등).
+
+**TS token alias 제거** (`text.*` / `surface.*` / `brand.*` / `primary.*` namespaces, `displayLg`/`displayMd`/`headingLg`/`headingMd`, ramp `'5'` no-leading-zero).
+
+**컴포넌트 prop 정리**:
+- `Button variant="outline"` 제거 (→ `tertiary`)
+- `radius.full` 제거 (→ `pill` 단일화)
+- **`Input.hint` → `helperText` rename** (다른 디자인 시스템과 정렬, 컨슈머 디스커버리 fix)
+- **`HStack` / `VStack` 제거** (→ `Stack direction` 단일 API. 이미 SKILL/README에선 Stack만 안내 중)
+
+**의존성**:
+- `polaris-codemod-v08` 신규 — Tailwind utility / TS token / prop 매핑 자동 변환
+- `@polaris/lint` `no-deprecated-polaris-token` 룰을 warning → **error** 승격
+
+**그 외**:
+- Pretendard local hosting (CDN 졸업) — 폰트 로딩 안정성 확보 (선택, 가능하면 v0.8.0에 묶기)
+- v0.4 experimental (Calendar / DatePicker / CommandPalette) 결정 — stable promote 또는 별도 패키지 분리
 
 ---
 
-## v0.9 — 신규 컴포넌트 (RFC 후)
+## v0.9 — 디자인팀 follow-up + 추가 신규 (RFC 후)
 
-- **DataTable** — sortable + filterable + virtualized. tanstack-table 위 또는 자체. v0.5 Table sticky+sortable 작업의 다음 단계.
-- **Combobox** — 검색 가능 select. 200+ option 매핑 케이스.
+**디자인팀 검수 보류분 (v0.7.2부터 누적, 합의 후 진행)**:
+- Tertiary 2종 분리 (흰 배경 + 회색 배경)
+- Modal/Dialog 풀 너비 버튼 layout
+- Checkbox 4종 (default / disabled / error / AI Purple)
+- Alert 결정 (variant 축 vs tone 축)
+- PolarisLogo `stacked` variant + symbol negative SVG
+- NovaLogo tone 옵션 확장
+
+**추가 컴포넌트 후보 (실 사용 요청 검증 후)**:
+- **DataTable** — sortable + filterable + virtualized. tanstack-table 위 또는 자체. v0.7.5 Table integration 위에서 다음 단계.
 - **NumberInput** — 한국어 IME 우회. 통화/단가 전용.
-- **AvatarGroup** — collaborator 표시.
-- **Slider/Range** — 가격/좌석 수 필터.
+- **Slider / Range** — 가격/좌석 수 필터.
 - **CodeBlock** — JSON debug view, RPC 결과.
+- **CheckboxGroup / RadioGroup** — 그룹 ARIA + horizontal/vertical layout.
 
 ---
 
 ## v1.0 — 사인오프
 
 - 모든 v0.5–v0.7 carry-over 완료
+- 디자인팀 v0.9 follow-up 완료
 - Tier 분류 + stability badge 정착
-- 사내 npm registry publish + 첫 파일럿 baseline 측정
-- Badge variant 축 BREAKING 재구성 (v0.4 RFC 보류 결정)
+- 사내 npm registry publish 검토 (현재는 GitHub Release tarball)
 - 시각 회귀 테스트 (Playwright) CI 통합 ✓ (v0.7 시점에 28 baselines 운영 중 — 사이즈 안정화 후 stable 마크)
 - 다중 스택 지원 검토 (사내 두 번째 스택 사용처가 의미 있을 때만)
 

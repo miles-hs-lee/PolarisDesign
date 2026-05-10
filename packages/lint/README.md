@@ -13,7 +13,7 @@ PolarisDesign이 사내 npm registry에 publish되기 전 단계라, `@polaris/l
 ```jsonc
 {
   "devDependencies": {
-    "@polaris/lint": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.3/polaris-lint-0.7.3.tgz",
+    "@polaris/lint": "https://github.com/PolarisOffice/PolarisDesign/releases/download/v0.7.7/polaris-lint-0.7.7.tgz",
     "eslint": "^9.0.0"
   }
 }
