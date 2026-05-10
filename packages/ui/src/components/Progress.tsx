@@ -50,7 +50,7 @@ const trackVariants = cva(
 );
 
 const fillVariants = cva(
-  'h-full rounded-polaris-pill transition-[width] duration-polaris-base ease-polaris-out',
+  'h-full rounded-polaris-pill transition-[width] duration-polaris-normal ease-polaris-out',
   {
     variants: {
       tone: {

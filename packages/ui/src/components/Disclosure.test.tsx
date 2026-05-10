@@ -77,4 +77,24 @@ describe('Disclosure', () => {
     await user.click(screen.getByRole('button', { name: '커스텀' }));
     expect(screen.getByText('세부')).toBeInTheDocument();
   });
+
+  it('asChild forwards Radix Slot to a single custom child (no built-in chevron)', async () => {
+    const user = userEvent.setup();
+    render(
+      <DisclosureRoot>
+        <DisclosureTrigger asChild>
+          <button type="button" data-testid="custom-trigger">옵션 보기</button>
+        </DisclosureTrigger>
+        <DisclosureContent>패널</DisclosureContent>
+      </DisclosureRoot>
+    );
+    const trigger = screen.getByTestId('custom-trigger');
+    expect(trigger).toBeInTheDocument();
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    // No built-in chevron when asChild is on — only consumer's child.
+    expect(trigger.querySelector('svg')).toBeNull();
+    await user.click(trigger);
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('패널')).toBeInTheDocument();
+  });
 });

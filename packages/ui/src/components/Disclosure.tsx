@@ -29,8 +29,19 @@ import { cn } from '../lib/cn';
  * </Disclosure>
  * ```
  *
- * @example Compound (when you need a custom trigger or summary text)
+ * @example Compound — custom summary text with our default styled trigger
  * ```tsx
+ * <DisclosureRoot>
+ *   <DisclosureTrigger>옵션 보기</DisclosureTrigger>
+ *   <DisclosureContent>...</DisclosureContent>
+ * </DisclosureRoot>
+ * ```
+ *
+ * @example asChild — fully custom trigger element (e.g. Button)
+ * ```tsx
+ * // When `asChild` is set, DisclosureTrigger gives up its built-in row
+ * // styling + chevron — your child element OWNS the rendering. Include
+ * // your own chevron if you want one.
  * <DisclosureRoot>
  *   <DisclosureTrigger asChild>
  *     <Button variant="ghost">옵션 보기</Button>
@@ -55,35 +66,56 @@ export interface DisclosureTriggerProps
   hideChevron?: boolean;
 }
 
-/** Default trigger: full-width row with a chevron that rotates 180° on open. */
+/**
+ * Default trigger: full-width row with a chevron that rotates 180° on open.
+ *
+ * `asChild` semantics: when set, the built-in row styling + span wrapper +
+ * chevron are all SKIPPED — the consumer's single child element owns the
+ * rendering and Radix Slot wires up `aria-expanded`/`aria-controls`/state
+ * data-attributes. (Mixing our chevron into a Slot child would violate
+ * Radix's "single React element" requirement and break at runtime, so we
+ * branch the render tree instead.)
+ *
+ * `hideChevron` only applies to the default (non-asChild) path.
+ */
 export const DisclosureTrigger = forwardRef<
   React.ElementRef<typeof CollapsiblePrimitive.Trigger>,
   DisclosureTriggerProps
->(({ className, children, hideChevron, ...props }, ref) => (
-  <CollapsiblePrimitive.Trigger
-    ref={ref}
-    className={cn(
-      'group flex w-full items-center justify-between gap-polaris-2xs',
-      'rounded-polaris-md px-polaris-md py-polaris-2xs font-polaris text-polaris-body2 text-label-normal',
-      'transition-colors hover:bg-interaction-hover',
-      'focus-visible:outline-none focus-visible:shadow-polaris-focus',
-      'data-[disabled]:opacity-50 data-[disabled]:pointer-events-none',
-      className
-    )}
-    {...props}
-  >
-    <span className="flex-1 text-left">{children}</span>
-    {!hideChevron && (
-      <ChevronDown
-        className={cn(
-          'h-4 w-4 shrink-0 text-label-alternative transition-transform duration-polaris-fast',
-          'group-data-[state=open]:rotate-180'
-        )}
-        aria-hidden="true"
-      />
-    )}
-  </CollapsiblePrimitive.Trigger>
-));
+>(({ className, children, hideChevron, asChild, ...props }, ref) => {
+  if (asChild) {
+    // Pure pass-through: consumer's child becomes the trigger via Radix Slot.
+    return (
+      <CollapsiblePrimitive.Trigger ref={ref} asChild className={className} {...props}>
+        {children}
+      </CollapsiblePrimitive.Trigger>
+    );
+  }
+  return (
+    <CollapsiblePrimitive.Trigger
+      ref={ref}
+      className={cn(
+        'group flex w-full items-center justify-between gap-polaris-2xs',
+        'rounded-polaris-md px-polaris-md py-polaris-2xs font-polaris text-polaris-body2 text-label-normal',
+        'transition-colors hover:bg-interaction-hover',
+        'focus-visible:outline-none focus-visible:shadow-polaris-focus',
+        'data-[disabled]:opacity-50 data-[disabled]:pointer-events-none',
+        className
+      )}
+      {...props}
+    >
+      <span className="flex-1 text-left">{children}</span>
+      {!hideChevron && (
+        <ChevronDown
+          className={cn(
+            'h-4 w-4 shrink-0 text-label-alternative transition-transform duration-polaris-fast',
+            'group-data-[state=open]:rotate-180'
+          )}
+          aria-hidden="true"
+        />
+      )}
+    </CollapsiblePrimitive.Trigger>
+  );
+});
 DisclosureTrigger.displayName = 'DisclosureTrigger';
 
 /** Content wrapper — pass-through of Radix Collapsible.Content. */

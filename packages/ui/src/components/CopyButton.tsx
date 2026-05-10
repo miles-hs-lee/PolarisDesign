@@ -43,7 +43,10 @@ import { cn } from '../lib/cn';
 export interface CopyButtonProps
   // `onCopy` / `onError` are reserved React DOM event handlers on HTMLElement;
   // omit them so we can re-define their signatures (text-based, not Event-based).
-  extends Omit<ButtonProps, 'onClick' | 'children' | 'onCopy' | 'onError'> {
+  // `asChild` is omitted because CopyButton always renders BOTH an icon and
+  // (optionally) a label as Button children — Radix Slot via `asChild` requires
+  // a single React child, so passing it through would break at runtime.
+  extends Omit<ButtonProps, 'onClick' | 'children' | 'onCopy' | 'onError' | 'asChild'> {
   /** Text to copy to the clipboard. Required. */
   text: string;
   /** Idle label. Default: "복사" preceded by a copy icon. */
