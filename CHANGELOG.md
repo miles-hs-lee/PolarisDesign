@@ -8,7 +8,76 @@
 
 ## [Unreleased]
 
-다음 릴리스 candidate — [docs/roadmap.md](docs/roadmap.md) v0.8 BREAKING 청소 후보.
+다음 릴리스 candidate — v0.8.0 BREAKING 청소 (deprecated alias 제거 + Input.hint→helperText + HStack/VStack→Stack + Button outline 제거).
+
+---
+
+## [0.7.7] — 2026-05-10
+
+컴포넌트 완성도/범용도 리뷰 결과 도출된 갭을 한 번에 메운 누적 patch. **BREAKING 없음** — 모두 additive (props 추가 / 신규 컴포넌트). 컴포넌트 51 → **58개** (+7), 테스트 169 → **208/208 ✓** (+39). (0.7.6은 별도 release 없이 0.7.7로 점프.)
+
+### `@polaris/ui` — API surface 채우기 (v0.7.6 분 — props 추가)
+
+기존 13개 컴포넌트에 "거의 매번 직접 만들었던" 패턴을 props로 노출. 모두 optional.
+
+- **Textarea** — `autoResize: boolean | { minRows, maxRows }` (scrollHeight 기반 + window resize 대응 + reduced-motion safe) + `showCount` (`current/maxLength` 카운터, 초과 시 state-error 색)
+- **Input** — `prefix` / `suffix` ReactNode slot (통화·단위·검색 아이콘 어드론먼트, 패딩 자동 조정) + `clearable` × 버튼 (synthetic input 이벤트 dispatch — controlled 호환) + `onClear` 콜백
+- **Switch** — `label` / `hint` / `error` (Checkbox 일관성). label-only / 폼 layout 전부 통일. error 시 `aria-invalid` + `role="alert"`
+- **Skeleton** — `shape="rect|text|circle|bare"` preset + `lines={N}` (text 멀티 라인, last-line 70% width). `role="status"` + `aria-busy`
+- **Alert** — `dismissible` × 버튼 + `action` slot (재시도 / 자세히 보기 등)
+- **Badge** — `dismissible` × 버튼 + `icon` slot (12-14px leading icon for filter chip 패턴)
+- **AvatarGroup (신규)** — 자식 Avatar overlap + max 초과 시 +N 인디케이터. `size` 자동 propagate
+- **Stat** — `loading` (Skeleton placeholder, 타일 높이 stable)
+- **Button** — `iconLeft` / `iconRight` slot (children 정렬 일관성, loading 시 자동 hidden) + `fullWidth`
+- **Card** — `interactive` (cursor-pointer + hover shadow + focus-visible ring). asChild + Link/button과 함께 사용
+- **DropdownMenuItem** — `icon` slot (DropdownMenuFormItem 일관성)
+- **TableRow** — `selected` (`aria-selected` + brand 틴트) + `clickable` (cursor + focus ring)
+- **Toaster** — `defaultDuration` prop (per-toast `duration` 미지정 시 fallback)
+
+### `@polaris/ui` — 신규 컴포넌트 6종 (v0.7.7)
+
+업무용 SaaS의 빈 자리:
+
+- **`<Combobox>`** — Popover + cmdk 기반 searchable Select. single + `multiple` 모드. 옵션 group / description / disabled. 키보드 nav (↑↓/Enter/Esc) 자동. SelectTrigger 시각과 swap-호환
+- **`<PageHeader>`** — title + description + breadcrumb + eyebrow + actions slot. `as="h1|h2"`, divider 옵션
+- **`<SectionHeader>`** — h2 (default) / h3. PageHeader의 카드-외부 sibling
+- **`<Tabs variant="underline">`** — TabsList variant 추가, context로 trigger에 자동 propagate. 기본 `pill`은 그대로 (in-card 세그먼트), `underline`은 page-nav용
+- **`<Accordion>`** — Radix Accordion 기반. `type="single|multiple"`, `collapsible`. 그룹 disclosure (FAQ / 설정 그룹). Disclosure는 single-item 그대로 유지
+- **`<CircularProgress>`** — SVG `stroke-dasharray` 라디얼. determinate / indeterminate, tone 5 + size 4. 인라인 / 카드 작은 영역 / 버튼 외부 async 표시. `prefers-reduced-motion` 자동
+
+### Demo 카탈로그 (#45~#50)
+
+- #45 v0.7.6 props 채우기 — Input/Textarea/Switch/Skeleton/Alert/Badge/AvatarGroup/Stat/Button/Card 다양한 케이스
+- #46 PageHeader (breadcrumb+eyebrow+actions) + SectionHeader
+- #47 CircularProgress 8 케이스 (size 4 × 톤 5, indeterminate 포함)
+- #48 Tabs pill ↔ underline 토글
+- #49 Accordion type=single+collapsible 3 항목
+- #50 Combobox single + multiple (옵션 그룹화)
+
+### SKILL.md cookbook
+
+"Don't roll your own when these exist"에 17개 항목 추가 — PageHeader/Combobox/Accordion/Tabs underline/CircularProgress + Textarea autoResize/Input prefix-suffix/Switch label/Badge dismissible/Alert action/Skeleton shape/AvatarGroup/Stat loading/Button icon slots/Card interactive/DropdownMenuItem icon/TableRow selected/Toaster defaultDuration.
+
+### Test infra (jsdom 폴리필)
+
+cmdk(Combobox/Command 사용)가 mount 시 `ResizeObserver` / `Element.prototype.scrollIntoView` / `hasPointerCapture` / `releasePointerCapture`를 호출 — jsdom 미제공이라 `setup.ts`에 no-op polyfill 추가. 실제 브라우저 영향 0.
+
+### 의존성
+
+- `@radix-ui/react-accordion` `^1.2.2` (Accordion)
+
+### 검증
+
+- `pnpm verify` 13/13 ✓ (70s)
+- `@polaris/ui` test 169 → **208/208 ✓** (+39 신규)
+
+### 컨슈머 영향
+
+**없음** — 모두 신규 export 또는 미사용 prop 추가. 기존 코드 변경 0건.
+
+- 모든 props는 optional, 기본값 그대로 두면 기존 동작 유지
+- Tabs는 `variant`를 prop으로 받으니 기존 호출은 자동으로 `pill` 사용
+- 다크모드 스타일 변경 없음
 
 ---
 

@@ -1,5 +1,39 @@
 # @polaris/ui
 
+## 0.7.7
+
+### Patch Changes
+
+- 컴포넌트 완성도/범용도 리뷰 결과 도출된 갭을 메운 누적 patch. **BREAKING 없음** — 모두 additive.
+
+  **API surface 채우기 (props 추가):**
+  - Textarea — `autoResize` + `showCount`
+  - Input — `prefix` / `suffix` slot + `clearable` + `onClear`
+  - Switch — `label` / `hint` / `error` (Checkbox 일관성)
+  - Skeleton — `shape="rect|text|circle|bare"` + `lines={N}` 멀티 라인
+  - Alert — `dismissible` + `action` slot
+  - Badge — `dismissible` + `icon` slot
+  - Stat — `loading`
+  - Button — `iconLeft` / `iconRight` / `fullWidth`
+  - Card — `interactive`
+  - DropdownMenuItem — `icon`
+  - TableRow — `selected` / `clickable`
+  - Toaster — `defaultDuration`
+
+  **신규 컴포넌트 7종 (51 → 58):**
+  - `AvatarGroup` (overlap row + +N 인디케이터)
+  - `Combobox` (Popover + cmdk searchable Select, single + multiple)
+  - `PageHeader` / `SectionHeader` (페이지 / 섹션 레이아웃 표준)
+  - `Tabs variant="underline"` (페이지 navigation 스타일 — pill은 default)
+  - `Accordion` + `AccordionItem`/`Trigger`/`Content` (Radix Accordion 기반, type=single|multiple)
+  - `CircularProgress` (라디얼 인디케이터, 4 size × 5 tone)
+
+  **Test infra:** jsdom에 `ResizeObserver` / `scrollIntoView` / `hasPointerCapture` / `releasePointerCapture` no-op polyfill (cmdk 호환).
+
+  **테스트:** 169 → **208/208 ✓** (+39).
+
+  자세한 narrative는 루트 [`CHANGELOG.md`](../../CHANGELOG.md#077--2026-05-10) 참조.
+
 ## 0.7.5
 
 ### Patch Changes

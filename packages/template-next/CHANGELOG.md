@@ -1,5 +1,11 @@
 # polaris-template-next
 
+## 0.7.7
+
+### Patch Changes
+
+- `@polaris/ui` 0.7.7로 업데이트 — 신규 컴포넌트 7종(AvatarGroup, Combobox, PageHeader, SectionHeader, Accordion, CircularProgress) + 13개 컴포넌트 props 추가 (autoResize / prefix-suffix / dismissible / icon slots 등). 기존 코드 변경 0.
+
 ## 0.7.5
 
 ### Patch Changes

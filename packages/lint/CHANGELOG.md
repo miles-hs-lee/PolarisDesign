@@ -1,5 +1,11 @@
 # @polaris/lint
 
+## 0.7.7
+
+### Patch Changes
+
+- `meta.version` `0.7.5` → `0.7.7` (sync-root-version에 의한 자동 갱신).
+
 ## 0.7.5
 
 ### Patch Changes
