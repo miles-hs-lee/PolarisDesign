@@ -43,16 +43,19 @@ export interface DatePickerProps {
   /** date-fns format for the hidden form-submission input. Default: `yyyy-MM-dd`. */
   valueFormat?: string;
   /**
-   * Sets the `required` attribute on the hidden form input.
+   * Sets the `required` DOM attribute on the hidden form input.
    *
-   * **Caveat — does NOT trigger native HTML form validation.** The
-   * browser's constraint validation (`<form noValidate>` / `:invalid`)
-   * does not run on `<input type="hidden">` (HTML spec, "barred from
-   * constraint validation"). This prop only flips the attribute so it
-   * shows up in serialized form payloads / server-side parsers that
-   * consult `formData.get('expiry')?.required`. If you need real
-   * required-field validation on a `<DatePicker>`, validate on the
-   * client (`onSubmit` guard) or on the server.
+   * **Caveat — has no effective behavior.** The HTML spec marks
+   * `<input type="hidden">` as "barred from constraint validation"
+   * (browser doesn't run `:invalid` / form-submit blocking on it),
+   * AND `FormData.get('name')` returns the *value* string only, never
+   * attribute metadata. So setting `required={true}` here neither
+   * blocks submit nor surfaces metadata to a server action — it only
+   * round-trips as a DOM attribute that custom client code could
+   * `querySelector` for. For real "this date is required" enforcement,
+   * validate on the client (zod / react-hook-form) and on the server
+   * (Server Action guard / route validator). Kept for API symmetry
+   * with native `<input>`; consider migrating callers off this prop.
    */
   required?: boolean;
   /** Form id this hidden input belongs to (rare; only when outside a `<form>` ancestor). */

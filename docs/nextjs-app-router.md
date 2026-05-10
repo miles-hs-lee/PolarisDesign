@@ -62,7 +62,7 @@ export function ThemeToggle() {
     document.documentElement.setAttribute('data-theme', next);
     document.cookie = `polaris-theme=${next}; path=/; max-age=31536000; samesite=lax`;
   };
-  return <Button variant="outline" size="sm" onClick={toggle}>...</Button>;
+  return <Button variant="tertiary" size="sm" onClick={toggle}>...</Button>;
 }
 ```
 

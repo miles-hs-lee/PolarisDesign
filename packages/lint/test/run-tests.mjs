@@ -353,6 +353,44 @@ tester.run('no-deprecated-polaris-token', polaris.rules['no-deprecated-polaris-t
       code: `const css = \`color: var(--polaris-primary-normal);\`;`,
       errors: [{ messageId: 'deprecatedCssVar' }],
     },
+    {
+      // v0.8 — typography legacy names removed
+      code: `const cls = "text-polaris-display-lg text-polaris-h1 text-polaris-body-sm";`,
+      errors: [
+        { messageId: 'deprecatedTailwind' }, // display-lg
+        { messageId: 'deprecatedTailwind' }, // h1
+        { messageId: 'deprecatedTailwind' }, // body-sm
+      ],
+    },
+    {
+      // v0.8 — typography meta/tiny/caption removed
+      code: `const cls = "text-polaris-meta text-polaris-tiny text-polaris-caption";`,
+      errors: [
+        { messageId: 'deprecatedTailwind' }, // meta
+        { messageId: 'deprecatedTailwind' }, // tiny
+        { messageId: 'deprecatedTailwind' }, // caption
+      ],
+    },
+    {
+      // v0.8 — `rounded-polaris-full` removed
+      code: `const cls = "rounded-polaris-full";`,
+      errors: [{ messageId: 'deprecatedTailwind' }],
+    },
+    {
+      // v0.8 — bare ramp step `5` (replaced by `05`)
+      code: `const cls = "bg-blue-5 text-purple-5 ring-green-5";`,
+      errors: [
+        { messageId: 'deprecatedTailwind' },
+        { messageId: 'deprecatedTailwind' },
+        { messageId: 'deprecatedTailwind' },
+      ],
+    },
+    {
+      // Negative-lookahead must protect `-50`, `-500` and `text-polaris-body1`/`-body2`
+      // — these are valid v0.8 spec, NOT errors. Mixed with one real `-5`.
+      code: `const cls = "bg-blue-50 bg-blue-500 text-polaris-body1 text-polaris-body2 mt-5 bg-blue-5";`,
+      errors: [{ messageId: 'deprecatedTailwind' }], // only the bg-blue-5
+    },
   ],
 });
 

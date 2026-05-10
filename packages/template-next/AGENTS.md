@@ -45,10 +45,11 @@ import { PolarisLogo, NovaLogo } from '@polaris/ui/logos';
 style={{ color: 'red' }}
 ```
 
-v0.6 / rc.0 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-raised`, `bg-status-danger`)는 v0.7에서 계속 작동하지만 deprecated. v0.8에서 제거. 자동 변환:
+v0.6 / rc.0 / v0.7 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-{canvas,raised,sunken,border}`, `bg-status-danger`, `bg-background-{normal,alternative}`, `text-polaris-{display-lg,h1..h5,body,meta,tiny}`, `rounded-polaris-full`, `bg-blue-5` 등)는 **v0.8에서 제거됨** — 빌드 시 emit 안 되므로 dead-class. 자동 변환:
 ```sh
-pnpm dlx @polaris/lint polaris-codemod-v07 --apply src
+pnpm dlx @polaris/lint polaris-codemod-v08 --apply src
 ```
+한 번에 token / Tailwind / CSS 변수 / JSX prop / `<HStack>`·`<VStack>` 까지 정리. 자세히 → [`docs/migration/v0.7-to-v0.8.md`](../../docs/migration/v0.7-to-v0.8.md).
 
 ### AI / NOVA 컨텍스트 (`ai.*` 보라)
 
@@ -93,8 +94,9 @@ import {
   DropdownMenu, Tooltip, Select, Sidebar, Navbar, PromptChip,
   // Tier 2 (7) — auxiliary UI
   Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
-  // Tier 2.5 (5) — layout / structural
-  Stack, HStack, VStack, Container, Drawer, Table, DescriptionList,
+  // Tier 2.5 (4) — layout / structural
+  Stack, Container, Drawer, Table, DescriptionList,
+  // (v0.8: HStack/VStack 제거 — `<Stack direction="row">` / `<Stack>` 으로 통합)
   // Tier 3 (5) — date / overlay / command (Calendar·Command은 experimental)
   Popover, Calendar, DatePicker, DateRangePicker,
   CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem,

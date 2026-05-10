@@ -73,7 +73,7 @@ prop·variants를 임의로 추가하지 말 것. 부족하다고 느끼면 4번
 | Motion | `duration-polaris-{instant,fast,normal,slow}`, `ease-polaris-{in-out,out,in}` |
 | Z-index | `z-polaris-{base,dropdown,sticky,dim,modal,toast}` |
 
-v0.6 / rc.0 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-raised`, `bg-status-danger`, `text-polaris-display-lg`, `text-polaris-h1`~`-h5` 등)는 v0.7에서 deprecated alias로 작동하지만 새 코드는 위 spec 이름 사용. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`.
+v0.6 / rc.0 / v0.7 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-{canvas,raised,sunken,border}`, `bg-status-danger`, `bg-background-{normal,alternative}`, `text-polaris-{display-lg,h1..h5,body,meta,tiny}`, `rounded-polaris-full`, `bg-blue-5` 등)은 **v0.8에서 제거**. 새 코드는 위 spec 이름만 사용. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v08 --apply src` (token / Tailwind / CSS 변수 / JSX prop / `<HStack>`·`<VStack>` 한 번에). 자세히 → `docs/migration/v0.7-to-v0.8.md`.
 
 `@polaris/ui` 안에 들어가야 할 정도로 재사용성이 있다면 4번으로.
 

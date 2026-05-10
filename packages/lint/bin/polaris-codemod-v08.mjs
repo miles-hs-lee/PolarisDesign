@@ -462,13 +462,81 @@ function transform(content, filePath) {
     apply(TAILWIND_RENAMES);
     apply(CSS_VAR_RENAMES);
     apply(JSX_RENAMES);
+    const after = normalizePolarisImports(out);
+    if (after !== out) changes += 1;
+    out = after;
   } else {
     // .ts / .js / .mjs / .cjs — token / class-string only (no JSX).
     apply(TS_TOKEN_RENAMES);
     apply(TAILWIND_RENAMES);
     apply(CSS_VAR_RENAMES);
+    const after = normalizePolarisImports(out);
+    if (after !== out) changes += 1;
+    out = after;
   }
   return { out, changes };
+}
+
+/** Post-pass: keep `@polaris/ui` / `@polaris/ui/tokens` named-import lines
+ *  in sync with the namespaces actually used in the file body.
+ *
+ *  The motivating case: `brand.secondary*` member-access rewrites to
+ *  `ai.*`, but the import-line rewrite only renames the binding to
+ *  `accentBrand`. Result: `import { accentBrand } …; const x = ai.normal;`
+ *  → consumer build breaks (`ai is not defined`). This pass scans the
+ *  file body for `\b<namespace>\.` usage and appends any namespace that
+ *  isn't yet imported to the FIRST `@polaris/ui[/tokens]` import line.
+ *
+ *  Caveats (regex-based, not AST):
+ *   - Local variables named like a v0.8 token namespace (e.g.
+ *     `const ai = …`) would be detected as "used" and trigger an
+ *     unnecessary import addition. Rare in practice for these names —
+ *     listed in the migration guide.
+ *   - Idempotent: a second run sees the namespace already imported and
+ *     adds nothing. */
+function normalizePolarisImports(content) {
+  // Match `import { ... } from '@polaris/ui'` or `'@polaris/ui/tokens'`.
+  const POLARIS_IMPORT_RE =
+    /import\s*(?:type\s+)?\{([^}]+)\}\s*from\s*['"]@polaris\/ui(?:\/tokens)?['"];?/g;
+
+  // v0.8 token namespaces that may appear via member-access rewrites
+  // (especially `brand.secondary*` → `ai.*`, `text.*` → `label.*`,
+  // `status.*` → `state.*`, `primary.*` → `accentBrand.*`).
+  const NAMESPACES_TO_CHECK = ['ai', 'accentBrand', 'state', 'label'];
+
+  const usedInBody = new Set(
+    NAMESPACES_TO_CHECK.filter((ns) =>
+      // Require an identifier character after the dot — excludes prose
+      // like "navigation state." in JSDoc comments, where `state.` is
+      // sentence punctuation rather than a member access.
+      new RegExp(`\\b${ns}\\.[a-zA-Z_$]`).test(content)
+    )
+  );
+  if (usedInBody.size === 0) return content;
+
+  const matches = [...content.matchAll(POLARIS_IMPORT_RE)];
+  if (matches.length === 0) return content;
+
+  const importedNames = new Set();
+  for (const m of matches) {
+    for (const part of m[1].split(',')) {
+      const ident = part.trim().match(/^([a-zA-Z_$][a-zA-Z0-9_$]*)/);
+      if (ident) importedNames.add(ident[1]);
+    }
+  }
+
+  const missing = [...usedInBody].filter((ns) => !importedNames.has(ns));
+  if (missing.length === 0) return content;
+
+  // Append to the first polaris import line; sibling lines unchanged.
+  let added = false;
+  return content.replace(POLARIS_IMPORT_RE, (match, body) => {
+    if (added) return match;
+    added = true;
+    const trimmed = body.trim();
+    const sep = trimmed ? ', ' : '';
+    return match.replace(`{${body}}`, `{ ${trimmed}${sep}${missing.join(', ')} }`);
+  });
 }
 
 // ───── Main ──────────────────────────────────────────────────────────

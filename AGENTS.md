@@ -36,8 +36,9 @@ import {
   DropdownMenu, Tooltip, Select, Sidebar, Navbar, PromptChip,
   // Tier 2 (7) — auxiliary UI
   Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
-  // Tier 2.5 (5) — layout / structural
-  Stack, HStack, VStack, Container, Drawer, Table, DescriptionList,
+  // Tier 2.5 (4) — layout / structural
+  Stack, Container, Drawer, Table, DescriptionList,
+  // (v0.8: HStack/VStack 제거 — `<Stack direction="row">` / `<Stack>` 으로 통합)
   // Tier 3 — date / overlay / command (Calendar · Command은 experimental)
   Popover, Calendar, DatePicker, DateRangePicker,
   CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem,
@@ -73,7 +74,7 @@ native `<button>`, `<input>`, `<textarea>`, `<select>`, `<dialog>`은 **feature 
 
 ### 2. 색상 — v0.7 spec 토큰 우선
 
-**v0.7부터 시맨틱 토큰이 spec 명명으로 재정렬됐습니다.** 새 코드는 아래 표 기준 사용. v0.6 / rc.0 alias는 여전히 작동하지만 v0.8에서 제거 예정 (codemod로 자동 변환 가능: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`).
+**v0.7부터 시맨틱 토큰이 spec 명명으로 재정렬됐고, v0.8에서 v0.6/rc.0/v0.7 alias가 모두 제거됐습니다.** 새 코드는 아래 표 기준 spec 이름만 사용. 옛 alias가 남아 있는 코드는 codemod 한 번으로 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v08 --apply src` (v0.6→v0.8 점프도 한 번에 처리). 자세히 → [`docs/migration/v0.7-to-v0.8.md`](docs/migration/v0.7-to-v0.8.md).
 
 | 역할 | Tailwind class | TS 토큰 |
 |---|---|---|

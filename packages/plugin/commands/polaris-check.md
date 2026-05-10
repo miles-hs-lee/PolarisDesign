@@ -35,21 +35,27 @@ v0.7+ 에서 두 가지 warn 룰이 추가됐습니다 (lint를 실패시키진 
 - **`@polaris/state-color-with-icon`** — `text-state-{success,warning,error}` 가 아이콘 동반 없이 사용되면 경고. WCAG 1.4.1 (정보를 색상만으로 전달하지 않음). 처리: `<ErrorIcon />`/`<CheckIcon />` 등 아이콘 추가, 18px+ Bold 사용, 또는 `bg-state-{}-bg` 뱃지 패턴.
 - **`@polaris/prefer-polaris-icon`** — `lucide-react` 에서 폴라리스 대응 아이콘 있을 때 권장. 처리: `import { ChevronRightIcon } from '@polaris/ui/icons'` 같은 식으로 점진 교체.
 
-### 옛 (v0.6 / rc.0) 토큰 이름이 코드에 남아 있으면
+### 옛 (v0.6 / rc.0 / v0.7) 토큰 이름이 코드에 남아 있으면
 
-v0.7 spec 이름으로 일괄 변환:
+v0.8 spec 이름으로 일괄 변환 (token + Tailwind + CSS 변수 + JSX prop + `<HStack>`/`<VStack>` 한 번에):
 
 ```sh
 # 미리 확인 (변경 없음)
-pnpm dlx @polaris/lint polaris-codemod-v07 src
+pnpm dlx @polaris/lint polaris-codemod-v08 src
 
 # 적용
-pnpm dlx @polaris/lint polaris-codemod-v07 --apply src
+pnpm dlx @polaris/lint polaris-codemod-v08 --apply src
 ```
 
-처리: TS 토큰 멤버 (`text.primary` → `label.normal`), Tailwind 클래스 (`bg-brand-primary` → `bg-accent-brand-normal`, `text-polaris-h1` → `text-polaris-display`), CSS 변수 (`--polaris-text-primary` → `--polaris-label-normal`), 컬러 램프 step (`bg-blue-5` → `bg-blue-05`), `rounded-polaris-full` → `rounded-polaris-pill`.
+처리:
+- TS 토큰 멤버 (`text.primary` → `label.normal`, `brand.secondary` → `ai.normal` — import도 자동 normalize)
+- Tailwind 클래스 (`bg-brand-primary` → `bg-accent-brand-normal`, `text-polaris-h1` → `text-polaris-display`, `bg-surface-{canvas,raised,sunken,border}` → split, `bg-status-danger` → `bg-state-error`)
+- CSS 변수 (`--polaris-text-primary` → `--polaris-label-normal`)
+- 컬러 램프 step (`bg-blue-5` → `bg-blue-05`)
+- Radius (`rounded-polaris-full` → `rounded-polaris-pill`)
+- 컴포넌트 prop / 식별자 (`<Button variant="outline">` → `tertiary`, `hint` → `helperText` 폼 8종, `<Progress tone>` / `<Stat deltaTone>` → `variant` / `deltaVariant`, `<HStack>` → `<Stack direction="row">`, `<VStack>` → `<Stack>`)
 
-자세한 매핑 표 / 적용 범위 주의사항: [`docs/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md).
+자세한 매핑 표 / 적용 범위 주의사항: [`docs/migration/v0.7-to-v0.8.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.7-to-v0.8.md). v0.6 → v0.7 점프가 필요한 환경이라면 `polaris-codemod-v07`도 별도로 배포되어 있지만, v0.8 codemod 한 번으로 v0.6 → v0.8 점프도 가능합니다 (모든 alias가 codemod table에 들어 있음).
 
 전체 진단 (자주 등장 hex 분석 등) 이 필요하면 `npx polaris-audit` 로 요약 리포트 확인. 페이지 단위 마이그레이션은 `/polaris-migrate`.
 

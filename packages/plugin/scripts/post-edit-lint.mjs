@@ -105,16 +105,17 @@ function main() {
 
 ${blocks}
 
-수정 가이드 (v0.7+ spec):
+수정 가이드 (v0.8 spec):
 - hex 색상 → 시맨틱 토큰 클래스. 예: bg-accent-brand-normal · text-label-normal · border-line-normal · bg-state-error-bg · bg-layer-surface · bg-ai-normal
 - Tailwind 임의값 (bg-[#xxx], p-[13px], z-[숫자]) → 토큰 기반 클래스 (p-4 또는 p-polaris-md, z-polaris-modal)
 - font-family 직접 지정 → var(--polaris-font-sans) 또는 font-polaris
 - font-['...'] Tailwind 임의값 → font-polaris
 - native <button>/<input>/<textarea>/<select>/<dialog> → @polaris/ui 컴포넌트로 교체
 - inline style 색상 named-color → 토큰
-- v0.6 / rc.0 alias (bg-brand-primary, text-fg-primary, bg-surface-raised, bg-status-danger, text-polaris-h1~h5 등)이 남아 있으면: pnpm dlx @polaris/lint polaris-codemod-v07 --apply src
+- v0.8에서 제거된 alias (bg-brand-primary, text-fg-primary, bg-surface-{canvas,raised,sunken,border}, bg-status-danger, bg-background-{normal,alternative}, text-polaris-{display-lg,h1~h5,body,meta,tiny}, rounded-polaris-full, bg-blue-5 등)이 남아 있으면: pnpm dlx @polaris/lint polaris-codemod-v08 --apply src
+- 컴포넌트 prop 변경: <Input/Textarea/Switch/Checkbox/FileInput/DateTimeInput hint=> → helperText=, <Button variant="outline"> → variant="tertiary", <Progress tone=> → variant=, <Stat deltaTone=> → deltaVariant=, <HStack/VStack> → <Stack direction="row"|""> (codemod v08가 모두 처리)
 
-자동 수정 가능 항목은 프로젝트의 lint --fix 명령으로 처리 (예: pnpm lint --fix 또는 pnpm --filter <pkg> lint --fix). 자세한 토큰 매핑: /polaris-component 또는 docs/migration/v0.6-to-v0.7.md.
+자동 수정 가능 항목은 프로젝트의 lint --fix 명령으로 처리 (예: pnpm lint --fix 또는 pnpm --filter <pkg> lint --fix). 자세한 토큰 매핑: /polaris-component 또는 docs/migration/v0.7-to-v0.8.md.
 
 이 위반들이 모두 해결될 때까지 작업 완료를 보고하지 마세요.`
     );

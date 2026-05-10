@@ -197,18 +197,18 @@ import { Card, CardHeader, CardTitle, CardDescription, CardBody, CardFooter } fr
 
 각 슬롯은 spec 토큰으로 패딩·텍스트 색을 정해두니, `.panel h2` 같은 자체 CSS를 쓸 필요 없습니다.
 
-### Input — `label`·`hint`·`error` 표준
+### Input — `label`·`helperText`·`error` 표준
 
 ```tsx
 <Input
-  label="묶음 이름"           // floating label (rc.0의 above-label 대체)
-  hint="공유 시 상대에게 표시됨" // helper text — below input, label-alternative
-  error={errors.name?.message} // ⚠ 아이콘 + state-error 자동, ARIA invalid 자동
+  label="묶음 이름"                 // floating label (rc.0의 above-label 대체)
+  helperText="공유 시 상대에게 표시됨" // below input, label-alternative
+  error={errors.name?.message}     // ⚠ 아이콘 + state-error 자동, ARIA invalid 자동
   placeholder="2025-Q4"
 />
 ```
 
-(`hint` = 다른 시스템의 `helperText` / `description`. 명명 다르니 검색이 어렵죠.)
+v0.8에서 `hint` → `helperText`로 rename — Input / Textarea / Switch / Checkbox / FileInput / FileDropZone / DateTimeInput / TimeInput 8종 모두 동일. HTML spec / shadcn 컨벤션 정렬. 옛 코드는 `pnpm dlx @polaris/lint polaris-codemod-v08 --apply src` 한 번이면 자동 변환.
 
 ### Toast — imperative API 한 줄 호출
 
@@ -518,7 +518,7 @@ import { TableToolbar, TableSelectionBar, TableSkeleton } from '@polaris/ui';
 `<DatePicker>`(Popover + Calendar UI)와 별개로, **만료일 / 알림 시각** 같은 단순 case에는 native input wrapper 사용:
 
 ```tsx
-<DateTimeInput label="만료일" hint="브라우저 시간대 기준"
+<DateTimeInput label="만료일" helperText="브라우저 시간대 기준"
   value={value} onChange={(e) => setValue(e.target.value)} />
 <TimeInput label="알림 시각" value="09:30" onChange={(e) => setT(e.target.value)} />
 ```

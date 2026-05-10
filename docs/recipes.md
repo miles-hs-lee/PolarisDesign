@@ -143,7 +143,7 @@ export function DeleteContractButton({ id }: { id: string }) {
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">취소</Button>
+            <Button variant="tertiary">취소</Button>
           </DialogClose>
           <Button variant="danger" onClick={onDelete} loading={pending}>삭제</Button>
         </DialogFooter>

@@ -148,6 +148,54 @@ const TAILWIND_DEPRECATED_REGEX = new RegExp(
   'g'
 );
 
+/**
+ * Typography / radius classes that don't fit the
+ * `(prefix)-(color-suffix)` pattern. v0.8 removed all of these — listed
+ * here so the rule reports the same set the codemod handles.
+ */
+const DEPRECATED_FULL_CLASSES: Record<string, string> = {
+  // typography (v0.6 / rc.0 names)
+  'text-polaris-display-lg': 'text-polaris-display',
+  'text-polaris-display-md': 'text-polaris-title',
+  'text-polaris-heading-lg': 'text-polaris-heading2',
+  'text-polaris-heading-md': 'text-polaris-heading3',
+  'text-polaris-heading-sm': 'text-polaris-heading4',
+  'text-polaris-h1':         'text-polaris-display',
+  'text-polaris-h2':         'text-polaris-title',
+  'text-polaris-h3':         'text-polaris-heading1',
+  'text-polaris-h4':         'text-polaris-heading2',
+  'text-polaris-h5':         'text-polaris-heading4',
+  'text-polaris-body':       'text-polaris-body1',
+  'text-polaris-body-lg':    'text-polaris-body1',
+  'text-polaris-body-sm':    'text-polaris-body2',
+  'text-polaris-meta':       'text-polaris-caption1',
+  'text-polaris-tiny':       'text-polaris-caption2',
+  'text-polaris-caption':    'text-polaris-caption1',
+  // radius
+  'rounded-polaris-full':    'rounded-polaris-pill',
+};
+
+const FULL_CLASS_DEPRECATED_REGEX = new RegExp(
+  // Negative lookahead `(?!\d|-(?:lg|md|sm|xs|2xs|xl|2xl|pill))` keeps
+  // `text-polaris-body1` (digit follows) and similar v0.8 spec names
+  // from matching when their prefix happens to overlap. We list each
+  // legacy key explicitly with `\b` to avoid prefix collisions.
+  `\\b(${Object.keys(DEPRECATED_FULL_CLASSES).map(k => k.replace(/-/g, '-')).join('|')})\\b(?!\\d|-)`,
+  'g',
+);
+
+/**
+ * Color ramp step `5` (no leading zero) — removed in v0.8 in favor of
+ * `05` so all ramp steps share two-digit alignment. Gray ramp is
+ * 10-90 only and not affected.
+ */
+const RAMP_BARE_5_REGEX = new RegExp(
+  // (utility prefix)-(family)-5  (NOT followed by another digit, so
+  // -50, -500 stay clean)
+  `\\b(?:${TAILWIND_UTIL_PREFIXES})-(blue|dark-blue|green|orange|red|purple|sky-blue|blue-supplementary|violet|cyan|yellow)-5\\b(?!\\d)`,
+  'g',
+);
+
 /** `var(--polaris-neutral-600)` style references. */
 const CSS_VAR_REGEX = /var\(\s*(--polaris-[a-z0-9-]+)\s*[,)]/g;
 
@@ -167,7 +215,7 @@ const rule: Rule.RuleModule = {
   },
   create(context) {
     function check(value: string, node: Rule.Node) {
-      // 1. Tailwind class deprecations
+      // 1. Tailwind class deprecations (color tokens — `(prefix)-(suffix)`)
       TAILWIND_DEPRECATED_REGEX.lastIndex = 0;
       let tm: RegExpExecArray | null;
       while ((tm = TAILWIND_DEPRECATED_REGEX.exec(value)) !== null) {
@@ -182,7 +230,32 @@ const rule: Rule.RuleModule = {
           data: { value: match, replacement },
         });
       }
-      // 2. CSS variable references
+      // 2. Full-class deprecations (typography + radius — fixed names)
+      FULL_CLASS_DEPRECATED_REGEX.lastIndex = 0;
+      let fm: RegExpExecArray | null;
+      while ((fm = FULL_CLASS_DEPRECATED_REGEX.exec(value)) !== null) {
+        const match = fm[0];
+        const replacement = DEPRECATED_FULL_CLASSES[match];
+        if (!replacement) continue;
+        context.report({
+          node,
+          messageId: 'deprecatedTailwind',
+          data: { value: match, replacement },
+        });
+      }
+      // 3. Color ramp step `5` (replaced by `05` for visual alignment)
+      RAMP_BARE_5_REGEX.lastIndex = 0;
+      let rm: RegExpExecArray | null;
+      while ((rm = RAMP_BARE_5_REGEX.exec(value)) !== null) {
+        const match = rm[0];
+        const replacement = match.replace(/-5$/, '-05');
+        context.report({
+          node,
+          messageId: 'deprecatedTailwind',
+          data: { value: match, replacement },
+        });
+      }
+      // 4. CSS variable references
       CSS_VAR_REGEX.lastIndex = 0;
       let cm: RegExpExecArray | null;
       while ((cm = CSS_VAR_REGEX.exec(value)) !== null) {

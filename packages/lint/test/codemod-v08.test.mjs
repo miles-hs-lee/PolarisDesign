@@ -392,6 +392,71 @@ test('rewrites named-import bindings on @polaris/ui AND @polaris/ui/tokens', () 
   } finally { cleanup(dir); }
 });
 
+test('brand.secondary* → ai.* member access AUTO-ADDS the `ai` import (rc.1 regression)', () => {
+  // The bug: TS_TOKEN_RENAMES rewrites `brand.secondary` → `ai.normal`
+  // and `brand.secondaryHover` → `ai.strong`, but the import-binding
+  // rename only swaps `brand` → `accentBrand`. Result before fix:
+  //   import { accentBrand } from '@polaris/ui';
+  //   const x = ai.normal;       // ← undefined, build breaks
+  // The post-pass `normalizePolarisImports` scans the file body for
+  // `\b<ns>\.` usage and appends missing namespaces to the first
+  // polaris import.
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'mix.ts'), [
+      `import { brand } from '@polaris/ui/tokens';`,
+      `const a = brand.primary;       // → accentBrand.normal`,
+      `const b = brand.secondary;     // → ai.normal (this is the broken case)`,
+      `const c = brand.secondaryHover;// → ai.strong`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'mix.ts'), 'utf8');
+    assert.match(out, /accentBrand\.normal/);
+    assert.match(out, /ai\.normal/);
+    assert.match(out, /ai\.strong/);
+    // Both namespaces must end up in the import — that's the whole point.
+    assert.match(out, /import\s*\{[^}]*\baccentBrand\b[^}]*\}\s*from\s*['"]@polaris\/ui\/tokens['"]/);
+    assert.match(out, /import\s*\{[^}]*\bai\b[^}]*\}\s*from\s*['"]@polaris\/ui\/tokens['"]/);
+    // No bare `brand` left
+    assert.doesNotMatch(out, /\bbrand\.\w/);
+  } finally { cleanup(dir); }
+});
+
+test('does NOT re-add an already-imported namespace (idempotent)', () => {
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'idem.ts'), [
+      `import { accentBrand, ai } from '@polaris/ui/tokens';`,
+      `const a = ai.normal;`,
+      `const b = accentBrand.normal;`,
+    ].join('\n'));
+    const r1 = runCodemod(dir, ['--apply']);
+    assert.equal(r1.status, 0);
+    const r2 = runCodemod(dir, ['--check']);
+    assert.equal(r2.status, 0, '--check should pass on already-correct code');
+    const out = readFileSync(join(dir, 'idem.ts'), 'utf8');
+    // Single ai import — no duplicate
+    const aiCount = (out.match(/\bai\b/g) ?? []).length;
+    assert.ok(aiCount >= 2, 'ai still referenced in body');
+    const aiInImports = (out.match(/import\s*\{[^}]*\bai\b/g) ?? []).length;
+    assert.equal(aiInImports, 1, 'exactly one import has `ai`');
+  } finally { cleanup(dir); }
+});
+
+test('does NOT touch files without an existing @polaris/ui import', () => {
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'unrelated.ts'), [
+      `// File doesn't import from @polaris/ui — codemod must NOT add one.`,
+      `function getColor() { return ai.normal; } // local variable named 'ai'`,
+      `const ai = { normal: '#fff' };`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'unrelated.ts'), 'utf8');
+    assert.doesNotMatch(out, /from\s*['"]@polaris\/ui/);
+  } finally { cleanup(dir); }
+});
+
 test('skips ignored directories (node_modules)', () => {
   const dir = setup();
   try {

@@ -12,6 +12,35 @@
 
 ---
 
+## [0.8.0-rc.2] — 2026-05-10
+
+Codex 리뷰 후속 5건 (P1 2 / P2 3) 반영. **rc.1 대비 BREAKING 변경 없음** — 모두 rc.0/rc.1이 놓친 미진 부분 + agent-facing 문서 정합성. 진행 중인 마이그레이션은 그대로 ok, codemod-v08을 한 번 더 돌리면 새로 추가된 import normalization도 포함해 처리됩니다.
+
+### P1 — 정식 v0.8.0 게이트 항목
+
+- **codemod-v08가 `brand.secondary*` 케이스에서 import를 깨뜨리던 버그 fix** — TS 멤버 access가 `ai.normal` / `ai.strong`으로 rewrite되는데 import 라인은 `accentBrand`만 추가해서 `import { accentBrand } …; const x = ai.normal;` 같은 build-broken 결과가 나왔음. **`normalizePolarisImports` post-pass 추가** — TS/JSX 파일 rewrite 마지막에 file body의 실제 namespace 사용 (`\bai\.<ident>` / `\baccentBrand\.<ident>` / `\bstate\.<ident>` / `\blabel\.<ident>`)을 스캔해 누락된 namespace를 첫 `@polaris/ui[/tokens]` import에 자동 추가. 멱등 (두 번 돌려도 no-op). `state.` 같은 흔한 단어는 prose/JSDoc 오탐 방지를 위해 dot 뒤 identifier 글자 필수 (예: `navigation state.` 같은 문장은 매칭 안 됨). **3 신규 테스트** (brand.secondary 회귀 / 멱등성 / non-polaris 파일 무시).
+- **agent-facing 문서가 v0.8 따라오지 못해 에이전트가 다시 deprecated API 작성하던 문제 fix** — root `AGENTS.md`, `packages/template-next/AGENTS.md`, `packages/plugin/scripts/post-edit-lint.mjs` (PostToolUse 훅 메시지), `packages/plugin/commands/polaris-component.md`, `packages/plugin/commands/polaris-check.md` 모두 v0.7 alias 안내 + `polaris-codemod-v07` 추천 → **v0.8 명명 + `polaris-codemod-v08` 안내** + JSX prop / HStack-VStack 변경 명시. 에이전트가 violation 만났을 때 가장 먼저 보는 메시지가 v0.7을 안내하던 게 잡혔음.
+
+### P2
+
+- **`@polaris/no-deprecated-polaris-token` 룰의 색상-only gap fix** — typography legacy (`text-polaris-{display-lg,display-md,heading-lg,heading-md,heading-sm,h1..h5,body,body-lg,body-sm,meta,tiny,caption}`), radius (`rounded-polaris-full`), color ramp 단계 `5` (`bg-blue-5` 등 11 family) 제거 alias가 룰에서 잡히지 않던 문제. 별도 regex 2개 추가 (`FULL_CLASS_DEPRECATED_REGEX` + `RAMP_BARE_5_REGEX`)로 codemod와 동일 set 커버. negative-lookahead로 `text-polaris-body1` / `bg-blue-50` 같은 spec 이름은 보호. **5 신규 lint 테스트** (typography 3 + radius 1 + ramp 1).
+- **DatePicker `required` jsdoc 정정** — 이전 jsdoc에 "shows up in serialized form payloads / `formData.get('expiry')?.required`" 라고 적혀 있었는데 사실관계 오류. `<input type="hidden">`은 HTML spec상 (a) constraint validation 대상이 아니고 (b) `FormData.get(name)`은 *값 문자열만* 반환 (속성 메타데이터 없음). 실제로는 DOM attribute round-trip 외엔 효과 없음을 명시 + 실제 required 검증은 schema (zod / RHF) + Server Action guard 사용 권장. prop 자체는 native `<input>` API 대칭성을 위해 유지.
+- **`packages/ui/README.md` + `docs/recipes.md` + `docs/nextjs-app-router.md` 코드 샘플 v0.8로** — Input.hint → helperText, DateTimeInput.hint → helperText, Dialog 취소 Button.variant="outline" → "tertiary", theme-toggle Button.variant="outline" → "tertiary".
+
+### 검증
+
+- `pnpm verify` **14/14 ✓**
+- `@polaris/lint`: 99 → **104** (+5 — typography/radius/ramp lint cases)
+- `polaris-codemod-v08`: 17 → **20** (+3 — brand.secondary 회귀 / 멱등 / non-polaris 무시)
+- `@polaris/ui`: 변동 없음
+
+### 알려진 caveat (rc.2에서도 유지)
+
+- e2e visual snapshot 12 page baseline drift는 의도된 v0.8 시각 변경 (surface-* 토큰 분할에 따른 미세 톤 변화 등)일 가능성이 높아 **별도 PR로 분리** — 디자인팀 검토 후 `--update-snapshots` 갱신 + baseline 커밋. ribbon locator는 rc.1에서 fix되어 ribbon tab 테스트는 통과하지만 page-level snapshot은 의도 검증 전엔 잠가두지 않음.
+- `normalizePolarisImports`는 regex 기반이라 local 변수가 v0.8 namespace 이름과 같은 (`const ai = …`) 드문 케이스에서 false positive로 import를 추가할 수 있음. namespace 이름이 흔치 않아 실전에서 거의 발생하지 않지만 마이그레이션 가이드 caveat에 추가됨.
+
+---
+
 ## [0.8.0-rc.1] — 2026-05-10
 
 Codex 리뷰 8건 반영. **rc.0 대비 BREAKING 변경 없음** — 모두 rc.0이 놓친 케이스 보강 / 잔존 dead-class 제거 / 문서 정합성. rc.0에서 진행 중인 마이그레이션은 그대로 ok, codemod-v08 한 번 더 돌리면 새로 추가된 surface-border bg/divide / token import 케이스도 잡힙니다.
