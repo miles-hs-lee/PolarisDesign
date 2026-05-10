@@ -4,8 +4,8 @@
 
 ### Patch Changes
 
-- SKILL.md "Don't roll your own when these exist" cookbook에 17개 항목 추가 — PageHeader / SectionHeader / Combobox / Accordion / Tabs underline / CircularProgress / Textarea autoResize / Input prefix-suffix / Switch label / Badge dismissible / Alert action / Skeleton shape / AvatarGroup / Stat loading / Button icon slots / Card interactive / DropdownMenuItem icon / TableRow selected / Toaster defaultDuration.
-- 권장 import 목록에 v0.7.6/0.7.7 신규 7종 (AvatarGroup, PageHeader, SectionHeader, CircularProgress, Accordion 4종, Combobox) 노출.
+- SKILL.md "Don't roll your own when these exist" cookbook에 18개 항목 추가 — PageHeader / SectionHeader / Combobox / Accordion / Tabs underline / CircularProgress / **NavbarItem** / Textarea autoResize / Input prefix-suffix / Switch label / Badge dismissible / Alert action / Skeleton shape / AvatarGroup / Stat loading / Button icon slots / Card interactive / DropdownMenuItem icon / TableRow selected / Toaster defaultDuration.
+- 권장 import 목록에 v0.7.6/0.7.7 신규 7종 (AvatarGroup, PageHeader, SectionHeader, CircularProgress, Accordion 4종, Combobox) + **NavbarItem** 노출.
 
 ## 0.7.5
 

@@ -103,7 +103,7 @@ import {
   Button, Input, Textarea, Card, Badge, Avatar, Dialog, Toast, Tabs,
   FileIcon, FileCard, NovaInput,
   // Tier 1 (6) — 셸 + 메뉴
-  DropdownMenu, Tooltip, Select, Sidebar, Navbar, PromptChip,
+  DropdownMenu, Tooltip, Select, Sidebar, Navbar, NavbarItem, PromptChip,
   // Tier 2 (7) — 보조 UI
   Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
   // Tier 2.5 (5) — layout / structural
@@ -492,6 +492,36 @@ import { TableToolbar, TableSelectionBar, TableSkeleton } from '@polaris/ui';
 - 모바일에서 OS native picker (iOS 휠 / Android 시간 picker) 자동
 - i18n / 12h vs 24h 표시는 브라우저가 처리
 - 값 형식: datetime-local = `YYYY-MM-DDTHH:MM`, time = `HH:MM` (24h)
+
+### Navbar — `<NavbarItem>` active 상태 빌트인
+
+이전엔 `<NavbarNav>` 안에 raw `<a className="px-3 py-1.5 ... bg-accent-brand-normal-subtle text-accent-brand-normal">`를 매번 직접 작성했어요. `NavbarItem`은 SidebarItem과 같은 API:
+
+```tsx
+import { Navbar, NavbarBrand, NavbarNav, NavbarItem, NavbarActions } from '@polaris/ui';
+// Next.js App Router
+const pathname = usePathname();
+const isActive = (href: string, exact = false) =>
+  exact ? pathname === href : pathname.startsWith(href);
+
+<Navbar>
+  <NavbarBrand>...</NavbarBrand>
+  <NavbarNav>
+    <NavbarItem asChild active={isActive('/dashboard', true)}>
+      <Link href="/dashboard">대시보드</Link>
+    </NavbarItem>
+    <NavbarItem asChild active={isActive('/docs')} icon={<Sparkles />}>
+      <Link href="/docs">문서</Link>
+    </NavbarItem>
+  </NavbarNav>
+  <NavbarActions>...</NavbarActions>
+</Navbar>
+
+// 또는 라우터 없이 정적 <a href>
+<NavbarItem href="/dashboard" active={pathname === '/dashboard'}>대시보드</NavbarItem>
+```
+
+활성 매칭(exact vs prefix)은 컨슈머가 넘김 — 라우터 신호가 프레임워크별로 다르니 컴포넌트가 라우터에 결합되면 안 됨. `aria-current="page"` + brand 틴트 자동.
 
 ### `shadow-polaris-focus` — 커스텀 인터랙티브 요소의 시스템 포커스 링
 

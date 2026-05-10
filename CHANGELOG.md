@@ -14,7 +14,7 @@
 
 ## [0.7.7] — 2026-05-10
 
-컴포넌트 완성도/범용도 리뷰 결과 도출된 갭을 한 번에 메운 누적 patch. **BREAKING 없음** — 모두 additive (props 추가 / 신규 컴포넌트). 컴포넌트 51 → **58개** (+7), 테스트 169 → **208/208 ✓** (+39). (0.7.6은 별도 release 없이 0.7.7로 점프.)
+컴포넌트 완성도/범용도 리뷰 결과 도출된 갭을 한 번에 메운 누적 patch + 코덱스 리뷰로 발견된 a11y/state-sync/관성 패턴 fix. **BREAKING 없음** — 모두 additive (props 추가 / 신규 컴포넌트) 또는 동작 fix. 컴포넌트 51 → **58개 family** (+7, NavbarItem 포함), 테스트 169 → **235/235 ✓** (+66). (0.7.6은 별도 release 없이 0.7.7로 점프.)
 
 ### `@polaris/ui` — API surface 채우기 (v0.7.6 분 — props 추가)
 
@@ -45,18 +45,67 @@
 - **`<Accordion>`** — Radix Accordion 기반. `type="single|multiple"`, `collapsible`. 그룹 disclosure (FAQ / 설정 그룹). Disclosure는 single-item 그대로 유지
 - **`<CircularProgress>`** — SVG `stroke-dasharray` 라디얼. determinate / indeterminate, tone 5 + size 4. 인라인 / 카드 작은 영역 / 버튼 외부 async 표시. `prefers-reduced-motion` 자동
 
-### Demo 카탈로그 (#45~#50)
+### `@polaris/ui` — Sidebar/Navbar 일관성
 
-- #45 v0.7.6 props 채우기 — Input/Textarea/Switch/Skeleton/Alert/Badge/AvatarGroup/Stat/Button/Card 다양한 케이스
-- #46 PageHeader (breadcrumb+eyebrow+actions) + SectionHeader
-- #47 CircularProgress 8 케이스 (size 4 × 톤 5, indeterminate 포함)
-- #48 Tabs pill ↔ underline 토글
-- #49 Accordion type=single+collapsible 3 항목
-- #50 Combobox single + multiple (옵션 그룹화)
+- **`<NavbarItem>` (신규, Navbar family)** — `active` / `asChild` / `icon` / `href` props. SidebarItem 패턴 그대로 미러링 (Navbar는 구조 컨테이너만 제공해서 컨슈머가 raw `<a>` + `bg-accent-brand-normal-subtle` className을 매번 직접 작성하던 문제 fix). 활성 매칭(exact vs prefix)은 컨슈머 라우터에 위임. `aria-current="page"` + brand 틴트 자동, `<TabsList variant="underline">`이 아니라 페이지 nav 자체용
 
-### SKILL.md cookbook
+### `@polaris/ui` — 코덱스 리뷰 9건 fix (additive, a11y/state 회복)
 
-"Don't roll your own when these exist"에 17개 항목 추가 — PageHeader/Combobox/Accordion/Tabs underline/CircularProgress + Textarea autoResize/Input prefix-suffix/Switch label/Badge dismissible/Alert action/Skeleton shape/AvatarGroup/Stat loading/Button icon slots/Card interactive/DropdownMenuItem icon/TableRow selected/Toaster defaultDuration.
+**P2 — Combobox interactive nesting 해소**
+- 이전: trigger `<button role="combobox">` 안에 `<span role="button" tabIndex={-1}>` clear control이 nested. WAI-ARIA 위반(interactive-in-interactive), tabIndex={-1}라 키보드 접근 불가
+- fix: clear button을 trigger의 SIBLING으로 이동 (wrapper `<div className="relative">`). 둘 다 진짜 button + 각자 tab 순서. propagation 격리되어 popover 안 열림
+
+**P2 — Input hasValue / value=0 sync**
+- 이전: `Boolean(value)` 사용으로 controlled value reset 시 동기화 안 되고, `value={0}`을 빈 값으로 잘못 처리 (숫자/금액 입력에서 0은 유효한데 floating label 안 뜨고 clear 안 보임)
+- fix: `isPresent(v)` helper (`v !== null && v !== undefined && String(v).length > 0`). `useEffect`로 controlled value 변화 감지 → setHasValue 동기화
+
+**P2 — Textarea uncontrolled showCount + over-limit**
+- 이전: uncontrolled mode에서 입력 중 internal state 변경 없어 카운터 0/N에서 멈춤. controlled value가 maxLength 초과해도 색 변화 없음
+- fix: `internalLen` state 도입 (handleChange에서 항상 갱신). controlled 시 value 우선, uncontrolled 시 internal. controlled value 변화 시 useEffect sync. over-limit 케이스 (value="abcd" + maxLength=3 → 4/3 + state-error 색)도 검증
+
+**P2 — TableRow clickable 키보드 + descendant click 격리**
+- 이전: clickable이 시각만 추가하고 keyboard 미제공 → 마우스 전용 회귀. onClick은 `{...props}` spread로 그대로 붙어 있어서 row 안 button/checkbox 클릭 시 row.onClick까지 발화 ("row 열기 + 행 액션 동시")
+- fix:
+  - `clickable && onClick`이면 `tabIndex={0}` + Enter/Space → onClick (keyboard activation)
+  - onClick wrapping handler에서 `target → currentTarget` walk-up으로 interactive descendant 감지 (button/a/input/select/textarea/label/summary + role=button/link/checkbox/menuitem/menuitemcheckbox/menuitemradio/switch/tab/combobox). descendant 클릭 시 row.onClick suppressed
+
+**P2 — Surface elevation 토큰 first-party overlay 적용**
+- 이전: `surface.popover` / `surface.modal` 토큰을 v0.7.5에 추가했지만 컨슈머가 직접 안 쓰면 다크모드 elevation 효과 안 보임. DropdownMenu/Select/Popover 등이 `bg-background-normal` 사용 중
+- fix: DropdownMenu / SelectContent / PopoverContent / Command → `bg-surface-popover`. Dialog / Drawer / CommandDialog → `bg-surface-modal`. light는 모두 #FFFFFF라 시각 동일, dark에서만 살짝 더 밝아짐 (의도된 depth 강화)
+
+**P2 — FileDropZone multiple=false drop 경로 + consumer event compose**
+- 이전 1: native picker는 `multiple={multiple}`로 single 강제하지만 drag&drop은 `e.dataTransfer.files`를 그대로 onFilesChange에 넘김 → 단일 첨부 필드에서도 다중 파일 통과
+- 이전 2: divProps(consumer onClick/onDrag/onKeyDown 등)가 `{...divProps}` spread로 마지막에 와서 우리 picker 활성화 핸들러를 덮어씀
+- fix: processFiles 진입 시 `multiple ? Array.from(list) : Array.from(list).slice(0, 1)`. consumer 핸들러 명시 destructure → 먼저 호출 → `defaultPrevented`로 우리 로직 opt-out 가능
+
+**P2 — DateTimeInput JSDoc UTC shift 함정 제거**
+- 이전: `date.toISOString().slice(0, 16)` 권장 코드가 UTC로 시프트해 Asia/Seoul 09:00이 00:00으로 표시되는 함정
+- fix: `toLocalDatetime(d: Date)` helper 예시(`getFullYear/getMonth/.../padStart`)로 교체 + 9h shift 함정 명시 + UTC ↔ local 변환은 onSubmit 경계에서만 하라는 가이드
+
+**P2 — Badge outline tone WCAG AA**
+- 이전: `text-state-warning` 2.40:1 / `success` 2.66:1 / `error` 3.13:1 / `brand|info` 3.85:1 — 12px 텍스트 모두 AA fail
+- fix: `state.{success|warning|error|info}Strong` 신규 토큰 4개 (light: ramp 70 / dark: ramp 30, ≥4.5:1). Badge outline의 state variant는 strong 사용. brand/secondary는 기존 `accent-brand-strong` / `ai-strong`. file-* outline은 border만 file color + text는 `label-normal`로 시프트
+
+**P3 — Skeleton (+ TableSkeleton) motion-safe**
+- 이전: JSDoc은 reduced-motion 자동 존중이라 했지만 plain `animate-pulse`. Tailwind v3 기본은 motion-safe 자동 X
+- fix: `animate-pulse` → `motion-safe:animate-pulse` (Skeleton 2곳 + TableSkeleton 2곳). prefers-reduced-motion 사용자는 정적 블록 표시 (loading 의미는 유지)
+
+### Demo 카탈로그 — 카테고리 탭 분리 + 51 → 45 섹션 통합
+
+4번의 release cycle을 거치며 누적된 50+ 섹션이 정신없는 상태였음 (같은 컴포넌트 흩어짐: Badge #4 + #40, Pagination #22 + #41, Tabs #8 + #48, EmptyState #24 + #30. #45 "v0.7.6 API surface"는 10개 컴포넌트 props 추가를 한 섹션에 묶어둠).
+
+**한 컴포넌트 = 한 섹션 원칙**으로 통합 + 카테고리 탭으로 분리:
+- Tabs underline variant 사용한 sticky `<TabsList>` (foundation / forms / navigation / overlays / data / polaris 6개)
+- `<Section cat="..." current={catTab}>` — 비매칭 시 unmount
+- 카테고리 안 1부터 재번호 (예: foundation 1~9, forms 1~10)
+- 변종 많은 섹션은 sub-heading으로 그루핑 (Variants / Sizes / States / Slots / Composition)
+- "(v0.7.4)" / "(Tier 2)" 같은 history-leaking 마커 제거
+- Toast outlet은 page root로 이동 — 어떤 카테고리 탭에서 호출해도 토스트 보임 (이전엔 `cat="overlays"` Section에 있어서 polaris 탭에서 CopyButton onCopy 콜백이 silenced)
+- 헤더 stale 문구 fix ("37개 (Tier 0~4)" → "60+개의 variant·상태·조합 검증")
+
+### SKILL.md cookbook — 18건 추가
+
+"Don't roll your own when these exist"에 — PageHeader / SectionHeader / Combobox / Accordion / Tabs underline / CircularProgress + NavbarItem + Textarea autoResize / Input prefix-suffix / Switch label / Badge dismissible / Alert action / Skeleton shape / AvatarGroup / Stat loading / Button icon slots / Card interactive / DropdownMenuItem icon / TableRow selected / Toaster defaultDuration.
 
 ### Test infra (jsdom 폴리필)
 
@@ -68,16 +117,18 @@ cmdk(Combobox/Command 사용)가 mount 시 `ResizeObserver` / `Element.prototype
 
 ### 검증
 
-- `pnpm verify` 13/13 ✓ (70s)
-- `@polaris/ui` test 169 → **208/208 ✓** (+39 신규)
+- `pnpm verify` 13/13 ✓ (~60s)
+- `@polaris/ui` test 169 → **235/235 ✓** (+66 신규 — props 추가, NavbarItem, 코덱스 fix 검증)
 
 ### 컨슈머 영향
 
-**없음** — 모두 신규 export 또는 미사용 prop 추가. 기존 코드 변경 0건.
+**없음** — 모두 신규 export 또는 미사용 prop 추가, 기존 동작 fix(회귀 회복). 컨슈머 측 codemod 불필요.
 
 - 모든 props는 optional, 기본값 그대로 두면 기존 동작 유지
 - Tabs는 `variant`를 prop으로 받으니 기존 호출은 자동으로 `pill` 사용
-- 다크모드 스타일 변경 없음
+- 다크모드 popover/modal이 살짝 더 밝아짐 (의도된 elevation 강화 — light 동일)
+- TableRow의 row 안 button/checkbox 클릭이 이전엔 row.onClick까지 발화했는데, 이제 descendant-owned (의도 정정)
+- Input value=0이 이제 present로 인식 (이전엔 빈 값 취급)
 
 ---
 

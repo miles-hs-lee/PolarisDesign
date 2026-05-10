@@ -27,10 +27,22 @@
   - `Tabs variant="underline"` (페이지 navigation 스타일 — pill은 default)
   - `Accordion` + `AccordionItem`/`Trigger`/`Content` (Radix Accordion 기반, type=single|multiple)
   - `CircularProgress` (라디얼 인디케이터, 4 size × 5 tone)
+  - `NavbarItem` (Navbar family) — `active` / `asChild` / `icon` / `href`. SidebarItem 패턴 미러링. 이전엔 컨슈머가 raw `<a>` + brand-tint className을 매번 직접 작성했던 갭
+
+  **코덱스 리뷰 9건 fix (a11y/state-sync 회복):**
+  - Combobox — clear button을 trigger의 SIBLING으로 이동 (interactive nesting + tabIndex={-1} 키보드 차단 해소)
+  - Input — `Boolean(value)` → `isPresent(v)` helper. `value={0}` 정상 처리 + controlled value reset 시 `useEffect` 동기화
+  - Textarea — uncontrolled showCount internal state, controlled value over-limit 시 state-error 색
+  - TableRow — `clickable && onClick`이면 `tabIndex=0` + Enter/Space → onClick. `target → currentTarget` walk-up으로 interactive descendant(button/checkbox/menuitem/role=button|link 등) 클릭 시 row.onClick 격리
+  - Surface elevation 토큰 first-party overlay 적용 — DropdownMenu/Select/Popover/Command → `bg-surface-popover`, Dialog/Drawer/CommandDialog → `bg-surface-modal`
+  - FileDropZone — `multiple=false`이면 drop 경로도 첫 1개로 제한. consumer onClick/onDrag/onKeyDown 등을 명시 destructure → consumer 먼저 호출 → `defaultPrevented`로 opt-out
+  - DateTimeInput JSDoc — `toISOString().slice(0,16)` UTC shift 함정 제거, `toLocalDatetime(d)` helper 가이드
+  - Badge outline tone — WCAG AA 충족하는 `state.{success|warning|error|info}Strong` 토큰으로 매핑 (light: ramp 70 / dark: ramp 30, ≥4.5:1)
+  - Skeleton (+ TableSkeleton) — `motion-safe:animate-pulse`로 prefers-reduced-motion 자동 존중
 
   **Test infra:** jsdom에 `ResizeObserver` / `scrollIntoView` / `hasPointerCapture` / `releasePointerCapture` no-op polyfill (cmdk 호환).
 
-  **테스트:** 169 → **208/208 ✓** (+39).
+  **테스트:** 169 → **235/235 ✓** (+66).
 
   자세한 narrative는 루트 [`CHANGELOG.md`](../../CHANGELOG.md#077--2026-05-10) 참조.
 
