@@ -208,25 +208,80 @@ describe('TableRow — clickable a11y', () => {
     expect(screen.getByTestId('row')).not.toHaveAttribute('tabindex');
   });
 
-  it('row keyboard handler does NOT fire an EXTRA onClick when focus is on a child', async () => {
-    // Pressing Enter on an inner <button> still bubbles a click to the
-    // row (that's normal React event delegation). The guarantee we
-    // want is that our row keyboard handler doesn't ALSO call onClick
-    // on top of that — i.e. exactly 1 invocation, not 2.
+  it('clicking a descendant button does NOT fire row.onClick (descendant owns the click)', async () => {
+    // The whole point of having an action button inside a clickable row
+    // is that the button does its own thing — opening the row drawer
+    // simultaneously is a UX bug. The previous implementation let the
+    // click bubble straight through to row.onClick.
+    const user = userEvent.setup();
+    const onRowClick = vi.fn();
+    const onBtnClick = vi.fn();
+    render(
+      <Table>
+        <TableBody>
+          <TableRow clickable onClick={onRowClick} data-testid="row">
+            <TableCell>
+              <button type="button" onClick={onBtnClick}>액션</button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+    await user.click(screen.getByRole('button', { name: '액션' }));
+    expect(onBtnClick).toHaveBeenCalledTimes(1);
+    expect(onRowClick).not.toHaveBeenCalled();
+  });
+
+  it('clicking a checkbox inside the row does NOT fire row.onClick', async () => {
+    const user = userEvent.setup();
+    const onRowClick = vi.fn();
+    const onCheck = vi.fn();
+    render(
+      <Table>
+        <TableBody>
+          <TableRow clickable onClick={onRowClick}>
+            <TableCell>
+              <input type="checkbox" aria-label="선택" onChange={onCheck} />
+            </TableCell>
+            <TableCell>홍길동</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+    await user.click(screen.getByRole('checkbox', { name: '선택' }));
+    expect(onCheck).toHaveBeenCalled();
+    expect(onRowClick).not.toHaveBeenCalled();
+  });
+
+  it('clicking a TableCell area (no descendant interactive) DOES fire row.onClick', async () => {
+    const user = userEvent.setup();
+    const onRowClick = vi.fn();
+    render(
+      <Table>
+        <TableBody>
+          <TableRow clickable onClick={onRowClick}>
+            <TableCell data-testid="cell">홍길동</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+    await user.click(screen.getByTestId('cell'));
+    expect(onRowClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('keyboard activation: focus on the row, Enter fires onClick exactly once', async () => {
     const user = userEvent.setup();
     const onRowClick = vi.fn();
     render(
       <Table>
         <TableBody>
           <TableRow clickable onClick={onRowClick} data-testid="row">
-            <TableCell>
-              <button type="button">액션</button>
-            </TableCell>
+            <TableCell>홍길동</TableCell>
           </TableRow>
         </TableBody>
       </Table>
     );
-    screen.getByRole('button', { name: '액션' }).focus();
+    screen.getByTestId('row').focus();
     await user.keyboard('{Enter}');
     expect(onRowClick).toHaveBeenCalledTimes(1);
   });

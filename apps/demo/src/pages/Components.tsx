@@ -2000,12 +2000,14 @@ function Section({
   current: SectionCategory;
   children: React.ReactNode;
 }) {
-  // Hide instead of unmount so that any stateful child (open Dialogs,
-  // Disclosure default-open, controlled inputs) doesn't lose its
-  // mount state when the user tabs around. `display: none` keeps the
-  // tree alive but visually hides + skips layout cost.
-  // (For demo perf we accept the DOM cost — this page is the catalog,
-  // not a hot path. Switching to mount/unmount later is trivial.)
+  // Tab switching unmounts the inactive sections (returns null). That
+  // means the demo state inside a non-active tab — e.g. an open Dialog,
+  // a typed-in Textarea, a Disclosure forced open via `defaultOpen` —
+  // is lost when the user tabs back. For a catalog page this is fine:
+  // each section is self-contained and meant to be inspected fresh.
+  // If we ever needed to preserve state across tabs, the swap is from
+  // `return null` to `<section hidden={cat !== current}>` (display:none
+  // keeps the React tree alive at the cost of full DOM presence).
   if (cat !== current) return null;
   return (
     <section className="mb-10">

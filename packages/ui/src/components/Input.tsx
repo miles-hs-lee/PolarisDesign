@@ -102,16 +102,25 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     // whether the label should float.
     const localRef = useRef<HTMLInputElement | null>(null);
     useImperativeHandle(forwardedRef, () => localRef.current as HTMLInputElement);
+    // Presence check that distinguishes "no value" from "falsy value".
+    // `Boolean(value)` was wrong for numeric inputs: `value={0}` is a
+    // perfectly valid amount, but `Boolean(0) === false` would have hidden
+    // the floating label and clear button. We treat null/undefined/empty
+    // string as absent and EVERYTHING ELSE (including 0, false, …) as
+    // present.
+    const isPresent = (v: unknown): boolean =>
+      v !== null && v !== undefined && String(v).length > 0;
+
     const [focused, setFocused] = useState(false);
     const [hasValue, setHasValue] = useState(
-      value !== undefined ? Boolean(value) : Boolean(defaultValue)
+      value !== undefined ? isPresent(value) : isPresent(defaultValue)
     );
     // Sync `hasValue` with controlled `value` whenever the parent updates it
     // (form reset, react-hook-form `reset()`, URL state restore, …). Without
     // this, the floating label and clear button stay in their stale state
     // because the initial `useState` lazy-init only ran once at mount.
     useEffect(() => {
-      if (value !== undefined) setHasValue(Boolean(value));
+      if (value !== undefined) setHasValue(isPresent(value));
     }, [value]);
     const labelFloating = focused || hasValue;
     const showClear = clearable && hasValue && !disabled && !readOnly;

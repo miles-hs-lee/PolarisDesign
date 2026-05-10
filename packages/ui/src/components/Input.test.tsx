@@ -104,4 +104,24 @@ describe('Input', () => {
       expect(screen.queryByRole('button', { name: '입력 지우기' })).toBeNull();
     });
   });
+
+  it('treats value={0} as a present value (not empty) — floating label + clear visible', () => {
+    // `Boolean(0)` is false, but 0 is a perfectly valid number input.
+    // The floating label must lift, and the clear × must show.
+    render(<Input label="amount" value={0} onChange={() => {}} clearable />);
+    // Clear button visible.
+    expect(screen.getByRole('button', { name: '입력 지우기' })).toBeInTheDocument();
+    // Floating label has the floating-state class (top-2 + helper text size).
+    const label = screen.getByText('amount');
+    expect(label.className).toContain('top-2');
+  });
+
+  it('value={null} or undefined is correctly treated as absent', () => {
+    const { rerender } = render(
+      <Input label="x" value={null as unknown as string} onChange={() => {}} clearable />
+    );
+    expect(screen.queryByRole('button', { name: '입력 지우기' })).toBeNull();
+    rerender(<Input label="x" value={undefined} onChange={() => {}} clearable />);
+    expect(screen.queryByRole('button', { name: '입력 지우기' })).toBeNull();
+  });
 });

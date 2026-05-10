@@ -35,13 +35,22 @@ describe('Textarea', () => {
     expect(screen.getByText('5/50')).toBeInTheDocument();
   });
 
-  it('showCount turns state-error color when over the limit', async () => {
+  it('showCount turns state-error color when OVER the limit (controlled value past maxLength)', () => {
+    // The browser truncates user typing at `maxLength`, so `user.type`
+    // can't actually push the count past it — but a controlled `value`
+    // CAN exceed `maxLength` (e.g. when the parent is loading data that
+    // doesn't pass through the input). The counter must turn red in
+    // that case so the operator sees they're past the limit.
+    render(<Textarea label="t" maxLength={3} showCount value="abcd" onChange={() => {}} />);
+    const counter = screen.getByText('4/3');
+    expect(counter).toHaveClass('text-state-error');
+  });
+
+  it('showCount stays in label-alternative color while AT (not over) the limit', async () => {
     const user = userEvent.setup();
-    // No maxLength enforcement → set an unreachable maxLength so we can
-    // simulate "over limit" by typing past it.
     render(<Textarea label="설명" maxLength={3} showCount />);
     await user.type(screen.getByLabelText('설명'), 'abc');
-    // At limit (not over) → still alternative color.
+    // At limit (3/3) → still alternative color (not state-error).
     expect(screen.getByText('3/3')).not.toHaveClass('text-state-error');
   });
 

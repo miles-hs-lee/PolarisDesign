@@ -113,9 +113,42 @@ export interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement>
   clickable?: boolean;
 }
 
+/** Selectors that mark a descendant as "owns its own click" — the row
+ *  click handler skips when the click bubbled up through one of these.
+ *  Without this, clicking a checkbox / action button / dropdown trigger
+ *  inside a clickable row would BOTH toggle the descendant AND fire
+ *  the row's onClick (e.g. open a detail drawer for a row whose row-
+ *  action menu the user just opened). Covers native + ARIA roles. */
+const ROW_INTERACTIVE_DESCENDANT_SELECTOR =
+  'button, a, input, select, textarea, label, summary, [role="button"], [role="link"], [role="checkbox"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [role="switch"], [role="tab"], [role="combobox"]';
+
 export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
-  ({ className, selected, clickable, onKeyDown, tabIndex, ...props }, ref) => {
-    const isInteractive = clickable && Boolean(props.onClick);
+  ({ className, selected, clickable, onClick, onKeyDown, tabIndex, ...props }, ref) => {
+    const isInteractive = clickable && Boolean(onClick);
+
+    /** Walk up from `target` until we hit `currentTarget`. If we cross
+     *  an interactive element along the way, the click belongs to that
+     *  descendant — suppress the row handler. */
+    const clickOriginatedFromDescendant = (
+      e: React.SyntheticEvent<HTMLTableRowElement>
+    ): boolean => {
+      let el: HTMLElement | null = e.target as HTMLElement;
+      while (el && el !== e.currentTarget) {
+        if (el.matches?.(ROW_INTERACTIVE_DESCENDANT_SELECTOR)) return true;
+        el = el.parentElement;
+      }
+      return false;
+    };
+
+    const handleClick = (e: React.MouseEvent<HTMLTableRowElement>) => {
+      if (!isInteractive) return;
+      // A descendant button/checkbox/menu item should own its click —
+      // the row's onClick must NOT fire on top of that, otherwise a
+      // simple row-action menu (kebab-menu in the last cell) opens AND
+      // navigates / selects the row simultaneously.
+      if (clickOriginatedFromDescendant(e)) return;
+      onClick?.(e);
+    };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTableRowElement>) => {
       onKeyDown?.(e);
@@ -126,7 +159,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
       if (!isInteractive) return;
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        props.onClick?.(e as unknown as React.MouseEvent<HTMLTableRowElement>);
+        onClick?.(e as unknown as React.MouseEvent<HTMLTableRowElement>);
       }
     };
 
@@ -138,6 +171,10 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
         // Only join the tab order when actually interactive — caller
         // can still force tabIndex=-1 if they manage focus themselves.
         tabIndex={isInteractive ? (tabIndex ?? 0) : tabIndex}
+        // Always wire our composed onClick (no-op when not interactive).
+        // The original onClick is consumed via destructuring above so it
+        // doesn't get re-applied through `{...props}`.
+        onClick={isInteractive ? handleClick : onClick}
         onKeyDown={handleKeyDown}
         className={cn(
           'transition-colors',
