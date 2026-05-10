@@ -232,8 +232,8 @@ export default function Tokens() {
       </Section>
 
       <Section
-        title="5. 레거시 alias (deprecated)"
-        description="v0.6 / rc.0 호환용. 새 코드는 위 시맨틱 토큰 사용. v0.8에서 제거 예정."
+        title="5. 레거시 / 보존 토큰"
+        description="새 코드는 위 시맨틱 토큰 사용. brandPalette / fileType / neutral은 4-color brand × 파일타입 매핑이라 v0.8 이후로도 유지. surface는 v0.7.5 elevation tier (popover/modal)만 살아남았고 canvas/raised/sunken alias는 v0.8에서 제거됨."
       >
         <div className="space-y-polaris-lg">
           {LEGACY_GROUPS.map((g) => (

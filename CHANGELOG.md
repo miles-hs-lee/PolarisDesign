@@ -12,6 +12,32 @@
 
 ---
 
+## [0.8.0-rc.3] — 2026-05-10
+
+Codex 추가 후속 리뷰 3건 반영. **rc.2 대비 BREAKING 변경 없음** — codemod의 type-import 처리 버그(consumer typecheck 깨짐)와 잔여 "alias 작동" 안내 문서 정리. e2e visual baseline 12건은 의도된 demo content 추가 + v0.8 토큰 미세 shift로 확인되어 사용자 사인오프 후 별도 PR로 baseline 갱신 예정.
+
+### P1 — release-gate
+
+- **codemod-v08 normalizePolarisImports가 `import type`에 값 namespace를 추가하던 버그 fix** — rc.2에서 추가한 import 자동 normalize 로직이 첫 번째 polaris import 라인을 무조건 매칭해서, 그 라인이 `import type { … }` 면 결과가 `import type { ButtonProps, ai } …` 가 되어 consumer typecheck 깨짐 (TS2693: "ai only refers to a type, but is being used as a value"). type-only / value import 명시 분리 — value import 가 있으면 거기에만 추가, 없으면 동일 subpath로 새 `import { … } from '@polaris/ui[/tokens]'` 라인을 합성. **2 신규 테스트** (type-only + value 혼합 / type-only 단독).
+
+### P2
+
+- **잔여 "alias 아직 작동" / "v0.8에서 제거 예정" 안내 정리** — root `AGENTS.md` (file-icon alias / typography legacy alias 안내), `packages/template-next/DESIGN.md` (예시 yaml의 `text-on-brand` / `rounded.full` 토큰 이름), `apps/demo/src/pages/Tokens.tsx` (legacy alias section description), `docs/tailwind-v4-migration.md` (v3↔v4 동일 클래스명 안내에서 `bg-brand-primary` 같은 v0.8-제거 alias가 v4에서도 그대로 작동한다고 잘못 안내) 모두 v0.8 spec 명명 + "제거됨" 사실관계로 갱신.
+- **e2e visual baseline 12건 enumerate** — 6 페이지(home / components-catalog / tokens / assets / nova-workspace / crm-contract) × 2 viewport(desktop / mobile). Diff 분석 결과: 페이지 높이가 ~10px 늘어나고 (4% 픽셀 diff), 사이드바에 새 데모 페이지 항목이 추가됨. **v0.8 토큰 변경에 의한 시각 회귀가 아니라 demo가 자라면서 추가된 content** + v0.8 토큰 분할에 따른 미세 spacing 조정. 디자인팀 / 사용자 사인오프 후 `pnpm test:e2e:update` 로 baseline 갱신 후 별도 commit. `pnpm verify` 14단계는 e2e를 포함하지 않으므로 release-gate에 영향 없음.
+
+### 검증
+
+- `pnpm verify` **14/14 ✓**
+- `@polaris/lint`: 104 (no-deprecated-polaris-token, 변동 없음)
+- `polaris-codemod-v08`: 20 → **22** (+2 — type-import 처리 / type-only 단독 케이스)
+
+### 알려진 caveat (rc.3에서도 유지)
+
+- e2e visual snapshot 12 page baseline drift는 의도된 demo 성장 + v0.8 토큰 미세 shift로 확인됨. 정식 v0.8.0 태그 전에 사용자 사인오프 → `pnpm test:e2e:update` → baseline commit 필요. ribbon tab 테스트는 모두 통과 중.
+- `normalizePolarisImports`는 regex 기반이라 (a) 로컬 변수가 v0.8 namespace 이름과 같은 경우 false positive, (b) 둘 이상의 namespace를 추가하는 동시에 type/value 분리가 둘 다 필요한 케이스에서 새 import가 한 줄로 합쳐서 생성됨. 모두 마이그레이션 가이드에 caveat 추가됨.
+
+---
+
 ## [0.8.0-rc.2] — 2026-05-10
 
 Codex 리뷰 후속 5건 (P1 2 / P2 3) 반영. **rc.1 대비 BREAKING 변경 없음** — 모두 rc.0/rc.1이 놓친 미진 부분 + agent-facing 문서 정합성. 진행 중인 마이그레이션은 그대로 ok, codemod-v08을 한 번 더 돌리면 새로 추가된 import normalization도 포함해 처리됩니다.

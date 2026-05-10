@@ -496,8 +496,12 @@ function transform(content, filePath) {
  *     adds nothing. */
 function normalizePolarisImports(content) {
   // Match `import { ... } from '@polaris/ui'` or `'@polaris/ui/tokens'`.
+  // Capture groups:
+  //   [1] = `type ` if `import type` (else undefined) — type-only import
+  //   [2] = body inside braces
+  //   [3] = `/tokens` subpath if present (else undefined)
   const POLARIS_IMPORT_RE =
-    /import\s*(?:type\s+)?\{([^}]+)\}\s*from\s*['"]@polaris\/ui(?:\/tokens)?['"];?/g;
+    /import\s*(type\s+)?\{([^}]+)\}\s*from\s*['"]@polaris\/ui(\/tokens)?['"];?/g;
 
   // v0.8 token namespaces that may appear via member-access rewrites
   // (especially `brand.secondary*` → `ai.*`, `text.*` → `label.*`,
@@ -517,10 +521,13 @@ function normalizePolarisImports(content) {
   const matches = [...content.matchAll(POLARIS_IMPORT_RE)];
   if (matches.length === 0) return content;
 
+  // Names already imported (across both type and value imports).
+  // Strip a leading `type ` modifier if present so e.g. `type Foo`
+  // contributes `Foo` to the set — we don't want to double-import.
   const importedNames = new Set();
   for (const m of matches) {
-    for (const part of m[1].split(',')) {
-      const ident = part.trim().match(/^([a-zA-Z_$][a-zA-Z0-9_$]*)/);
+    for (const part of m[2].split(',')) {
+      const ident = part.trim().match(/^(?:type\s+)?([a-zA-Z_$][a-zA-Z0-9_$]*)/);
       if (ident) importedNames.add(ident[1]);
     }
   }
@@ -528,15 +535,39 @@ function normalizePolarisImports(content) {
   const missing = [...usedInBody].filter((ns) => !importedNames.has(ns));
   if (missing.length === 0) return content;
 
-  // Append to the first polaris import line; sibling lines unchanged.
-  let added = false;
-  return content.replace(POLARIS_IMPORT_RE, (match, body) => {
-    if (added) return match;
-    added = true;
-    const trimmed = body.trim();
-    const sep = trimmed ? ', ' : '';
-    return match.replace(`{${body}}`, `{ ${trimmed}${sep}${missing.join(', ')} }`);
-  });
+  // Find the FIRST value (non-type-only) polaris import — that's where we
+  // can safely append. `import type { … }` cannot host value bindings;
+  // appending a value name there would make TypeScript treat it as a
+  // type-only binding (TS2693: "X only refers to a type, but is being
+  // used as a value here") even with `verbatimModuleSyntax: true`.
+  let valueMatchIdx = -1;
+  for (let i = 0; i < matches.length; i++) {
+    if (!matches[i][1]) { valueMatchIdx = i; break; }
+  }
+
+  if (valueMatchIdx >= 0) {
+    // Append to the matched value import; siblings (incl. type imports)
+    // unchanged.
+    let count = 0;
+    let added = false;
+    return content.replace(POLARIS_IMPORT_RE, (match, isType, body) => {
+      const idx = count++;
+      if (idx !== valueMatchIdx || added) return match;
+      added = true;
+      const trimmed = body.trim();
+      const sep = trimmed ? ', ' : '';
+      return match.replace(`{${body}}`, `{ ${trimmed}${sep}${missing.join(', ')} }`);
+    });
+  }
+
+  // No value import — every existing polaris import is `import type`.
+  // Synthesize a fresh value import. Pick the same subpath as the first
+  // existing polaris import so we stay on `/tokens` when the file
+  // already uses that subpath, and keep the bare `@polaris/ui` otherwise.
+  const firstSubpath = matches[0][3] ?? '';
+  const insertAt = matches[0].index ?? 0;
+  const newImport = `import { ${missing.join(', ')} } from '@polaris/ui${firstSubpath}';\n`;
+  return content.slice(0, insertAt) + newImport + content.slice(insertAt);
 }
 
 // ───── Main ──────────────────────────────────────────────────────────

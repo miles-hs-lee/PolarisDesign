@@ -55,8 +55,8 @@ components:
   # Example: a contract status pill specific to this product
   # contract-status-pill:
   #   backgroundColor: "{colors.contract-active}"
-  #   textColor: "{colors.text-on-brand}"
-  #   rounded: "{rounded.full}"
+  #   textColor: "{colors.label-inverse}"     # v0.8: was `text-on-brand` in v0.7
+  #   rounded: "{rounded.pill}"               # v0.8: was `rounded.full` in v0.7
   #   padding: 4px
 ---
 

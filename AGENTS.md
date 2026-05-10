@@ -139,7 +139,7 @@ import { label, background, layer, line, accentBrand, state, ai } from '@polaris
 import { DocxIcon, XlsxIcon } from '@polaris/ui/file-icons';  // direct import (tree-shaking)
 ```
 
-색상은 SVG 안에 baked-in. `text-file-*` 같은 v0.6 alias 클래스는 여전히 작동하지만 새 코드는 컴포넌트 사용.
+색상은 SVG 안에 baked-in. `text-file-*` 같은 v0.6 alias 클래스는 v0.8에서 제거됐습니다 — `<FileIcon>` / file-icon import만 사용.
 
 ### 5. 타이포그래피 (v0.7 spec)
 
@@ -147,7 +147,7 @@ import { DocxIcon, XlsxIcon } from '@polaris/ui/file-icons';  // direct import (
 - 스케일: `text-polaris-display` (40) / `-title` (32) / `-heading1`~`-heading4` (28/24/20/18) / `-body1`~`-body3` (16/14/13) / `-caption1` (12) / `-caption2` (11)
 - 모든 heading + caption은 weight 700. body는 400.
 - 모바일 (≤767px) 자동 한 단계 축소 (tokens.css의 @media)
-- v0.6 / rc.0 alias (`text-polaris-display-lg`, `-h1`~`-h5`, `-body`, `-meta`, `-tiny`) 도 작동하지만 새 코드는 spec 이름 사용.
+- v0.6 / rc.0 alias (`text-polaris-display-lg`, `-h1`~`-h5`, `-body`, `-meta`, `-tiny`) 은 **v0.8에서 제거** — Tailwind 빌드 시 dead-class. 잔존 코드는 `pnpm dlx @polaris/lint polaris-codemod-v08 --apply src` 로 변환.
 - `font-family: ...` 직접 지정 금지
 - `font-['Inter']` Tailwind 임의값 금지
 - letter-spacing 수정 금지 — Pretendard 자체 메트릭 사용

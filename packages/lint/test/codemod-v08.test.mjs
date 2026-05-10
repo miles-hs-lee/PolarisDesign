@@ -443,6 +443,59 @@ test('does NOT re-add an already-imported namespace (idempotent)', () => {
   } finally { cleanup(dir); }
 });
 
+test('does NOT add value namespaces to `import type { ... }` lines (typecheck preservation)', () => {
+  // Bug Codex caught: prior code blindly appended `ai` to the first
+  // polaris import, even if it was `import type { … }`. Result:
+  //   import type { ButtonProps, ai } from '@polaris/ui';
+  //   const x = ai.normal;  // TS2693 — ai is a type, not a value
+  // The fix splits matches into (type-only, value) and only ever
+  // appends to a value import. If none exists, a fresh value import
+  // is synthesized at the position of the first existing polaris import.
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'mix.ts'), [
+      `import type { ButtonProps } from '@polaris/ui';`,
+      `import { brand } from '@polaris/ui/tokens';`,
+      `const x = brand.secondary;     // → ai.normal (post-pass adds ai import)`,
+      `export type Props = ButtonProps;`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'mix.ts'), 'utf8');
+    // Type-only import must remain type-only and NOT pick up `ai`
+    assert.match(out, /import type \{ ButtonProps \} from '@polaris\/ui'/);
+    assert.doesNotMatch(out, /import type \{[^}]*\bai\b/);
+    // ai must end up in a VALUE import (the existing /tokens one)
+    assert.match(out, /import \{[^}]*\bai\b[^}]*\} from '@polaris\/ui\/tokens'/);
+    // Member access still rewritten
+    assert.match(out, /ai\.normal/);
+    assert.doesNotMatch(out, /\bbrand\./);
+  } finally { cleanup(dir); }
+});
+
+test('synthesizes a fresh value import when only type imports exist', () => {
+  // Edge case: file imports ONLY types from @polaris/ui, but member
+  // access (legacy or fresh) needs a value namespace. We can't append
+  // to any existing line — must create a new `import { ai } from …`.
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'typesonly.ts'), [
+      `import type { ButtonProps, CardProps } from '@polaris/ui';`,
+      `// later code references ai.normal directly — perhaps post-rewrite`,
+      `const c: ButtonProps = {} as ButtonProps;`,
+      `const tone = ai.normal;`,  // pre-existing reference, no brand.* to rewrite
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'typesonly.ts'), 'utf8');
+    // Original type import preserved verbatim
+    assert.match(out, /import type \{ ButtonProps, CardProps \} from '@polaris\/ui'/);
+    // New synthesized value import for `ai`, on the same root subpath
+    // as the first existing polaris import (here: bare @polaris/ui).
+    assert.match(out, /^import \{ ai \} from '@polaris\/ui';/m);
+    // No type-pollution — ai must NOT be inside an `import type {...}` block
+    assert.doesNotMatch(out, /import type \{[^}]*\bai\b/);
+  } finally { cleanup(dir); }
+});
+
 test('does NOT touch files without an existing @polaris/ui import', () => {
   const dir = setup();
   try {
