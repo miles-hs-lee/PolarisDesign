@@ -336,6 +336,62 @@ test('rewrites <HStack> / <VStack> → <Stack direction="row"> / <Stack>', () =>
   } finally { cleanup(dir); }
 });
 
+test('rewrites surface-border / -strong across all utility prefixes (bg / divide / ring / etc.)', () => {
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'sb.tsx'), `
+      <hr className="bg-surface-border" />
+      <ul className="divide-y divide-surface-border" />
+      <Switch className="data-[state=unchecked]:bg-surface-border-strong" />
+      <div className="ring-1 ring-surface-border" />
+      <div className="border border-surface-border-strong" />
+      <span className="text-surface-border" />
+    `);
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'sb.tsx'), 'utf8');
+    assert.match(out, /bg-line-neutral/);
+    assert.match(out, /divide-line-neutral/);
+    assert.match(out, /bg-line-normal/);             // surface-border-strong
+    assert.match(out, /ring-line-neutral/);
+    assert.match(out, /border-line-normal/);
+    // text-* prefix isn't in the prefix list (intentional — text colors
+    // never used this token), so it's left for human review.
+    assert.match(out, /text-surface-border/);
+    // No residual surface-border / -strong in covered prefixes
+    assert.doesNotMatch(out, /bg-surface-border\b/);
+    assert.doesNotMatch(out, /divide-surface-border\b/);
+    assert.doesNotMatch(out, /bg-surface-border-strong\b/);
+    assert.doesNotMatch(out, /ring-surface-border\b/);
+    assert.doesNotMatch(out, /border-surface-border-strong\b/);
+  } finally { cleanup(dir); }
+});
+
+test('rewrites named-import bindings on @polaris/ui AND @polaris/ui/tokens', () => {
+  const dir = setup();
+  try {
+    writeFileSync(join(dir, 'imp.ts'), [
+      `import { text } from '@polaris/ui';`,
+      `import { brand } from '@polaris/ui/tokens';`,
+      `import { status, accentBrand } from '@polaris/ui/tokens';`,
+      `import { text, label } from '@polaris/ui/tokens';`,
+      `import { primary, line } from '@polaris/ui';`,
+      // Non-polaris import — must NOT be touched
+      `import { text } from 'some-other-pkg';`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'imp.ts'), 'utf8');
+    // Single-name renames
+    assert.match(out, /import \{ label \} from '@polaris\/ui'/);
+    assert.match(out, /import \{ accentBrand \} from '@polaris\/ui\/tokens'/);
+    // Mixed-import rename — leaves siblings intact
+    assert.match(out, /import \{ state, accentBrand \} from '@polaris\/ui\/tokens'/);
+    assert.match(out, /import \{ label, label \} from '@polaris\/ui\/tokens'/); // 중복 — TS가 잡음 (문서화된 caveat)
+    assert.match(out, /import \{ accentBrand, line \} from '@polaris\/ui'/);
+    // Non-polaris untouched
+    assert.match(out, /import \{ text \} from 'some-other-pkg'/);
+  } finally { cleanup(dir); }
+});
+
 test('skips ignored directories (node_modules)', () => {
   const dir = setup();
   try {

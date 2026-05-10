@@ -49,4 +49,14 @@ describe('DatePicker', () => {
     const hidden = container.querySelector('input[type="hidden"]');
     expect(hidden).toHaveAttribute('required');
   });
+
+  it('mirrors disabled to the hidden input so disabled fields drop out of form payloads', () => {
+    // HTML spec: disabled controls are NOT serialized into FormData. If
+    // we forgot to mirror `disabled` onto the hidden input, a disabled
+    // DatePicker would still ship its last value to the server — the
+    // exact bug Codex review caught at v0.8.0-rc.0.
+    const { container } = render(<DatePicker name="x" value={new Date(2026, 11, 31)} disabled />);
+    const hidden = container.querySelector('input[type="hidden"]');
+    expect(hidden).toHaveAttribute('disabled');
+  });
 });

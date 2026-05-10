@@ -27,23 +27,38 @@ PolarisDesign이 사내 npm registry에 publish되기 전 단계라, `@polaris/u
 
 ```ts
 import {
-  brand,        // brand.primary, brand.secondary, brand.blue/green/orange/red/purple
-  fileType,     // fileType.docx (= brand.blue), .xlsx, .pptx, .pdf, .hwp
-  status,       // status.success/warning/danger/info
-  neutral,      // neutral['0'] ~ neutral['1000']
-  surface,      // surface.canvas/raised/sunken/border/borderStrong
-  text,         // text.primary/secondary/muted/onBrand
-  radius,       // radius.sm/md/lg/xl/full
-  shadow,       // shadow.light/dark
-  textStyle,    // displayLg, headingMd, bodyLg, …
-  spacing,      // Tailwind 기본 그대로
+  // 브랜드 / 액션 / AI
+  accentBrand,  // accentBrand.normal/strong/bg/bgHover (PO Blue, 단일 소스 별칭 = fileType.docx)
+  accentAction, // accentAction.normal/strong (Black 버튼, 다크모드 자동 반전)
+  ai,           // ai.normal/strong/hover/pressed (NOVA Purple)
+  // 라벨 / 배경 / 표면 / 보더 / 인터랙션
+  label,        // label.normal/neutral/alternative/assistive/inverse/disabled
+  background,   // background.base/disabled
+  layer,        // layer.surface/overlay
+  fill,         // fill.neutral/normal/strong
+  line,         // line.neutral/normal/strong/disabled
+  interaction,  // interaction.hover/pressed
+  // 상태 / 포커스 / 정적
+  state,        // state.success/warning/error/info/new (+ *Bg 페어)
+  focus,        // focus.ring
+  staticColors, // staticColors.white/black
+  // 파일 / 컬러 램프
+  fileType,     // fileType.docx (= accentBrand.normal), .xlsx, .pptx, .pdf, .hwp
+  bluePalette, grayRamp, /* 등 11 family */
+  // 그 외 토큰 시스템
+  radius,       // radius.{2xs,xs,sm,md,lg,xl,2xl,pill}
+  shadow,       // shadow.xs/sm/md/lg/ai/focus
+  textStyle,    // display, title, heading1..heading4, body1..body3, caption1..caption2
+  spacing,      // 4xs..4xl (named) + Tailwind 기본
+  zIndex,       // base/dropdown/sticky/dim/modal/toast
+  motion,       // duration + easing
   breakpoint,
   fontFamily,
   fontWeight,
 } from '@polaris/ui/tokens';
 
-brand.primary; // { light: '#2B7FFF', dark: '#5C9FFF' }
-brand.primary === fileType.docx; // true — 단일 소스 별칭
+accentBrand.normal; // { light: '#1D7FF9', dark: '#1D7FF9' } (다크모드도 동일 hue)
+accentBrand.normal === fileType.docx; // true — 4-color 브랜드 = 파일 타입 단일 소스
 ```
 
 ## CSS 변수
@@ -93,7 +108,7 @@ export default {
 | Z-index | `z-polaris-{base,dropdown,sticky,dim,modal,toast}` |
 | Motion | `duration-polaris-{instant,fast,normal,slow}`, `ease-polaris-{in-out,out,in}` |
 
-v0.6 / rc.0 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-raised`, `bg-status-danger`, `text-polaris-display-lg` 등)는 deprecated alias로 작동. v0.8에서 제거. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`.
+v0.6 / rc.0 / v0.7 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-{canvas,raised,sunken,border}`, `bg-status-danger`, `bg-background-{normal,alternative}`, `text-polaris-display-lg` / `-h1`~`-h5` / `-body` / `-meta` / `-tiny`, `rounded-polaris-full`, `bg-blue-5` 등)는 **v0.8에서 제거됨** — 빌드 시 emit 안 되므로 dead-class. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v08 --apply src`. v0.7 → v0.8 자세히는 [`docs/migration/v0.7-to-v0.8.md`](../../docs/migration/v0.7-to-v0.8.md).
 
 ## 컴포넌트 (59개)
 
@@ -289,7 +304,7 @@ import { CopyButton } from '@polaris/ui';
 import { Stat, StatGroup } from '@polaris/ui';
 
 <StatGroup cols={4}>
-  <Stat label="조회수" value={1234567} delta="+12%" deltaTone="positive" />
+  <Stat label="조회수" value={1234567} delta="+12%" deltaVariant="positive" />
   <Stat label="고유 방문" value={892} />
   <Stat label="매출" value={3500000} numberLocale="ko-KR"
         numberFormat={{ style: 'currency', currency: 'KRW', maximumFractionDigits: 0 }} />
@@ -574,19 +589,19 @@ const isActive = (href: string, exact = false) =>
 - **그림자도 light/dark 페어**: `shadow-polaris-md` 등은 두 테마 자동 매칭. 직접 `box-shadow: 0 4px ...` 쓰면 다크에서 안 보임.
 - **포커스 링도 다크 자동 대응**: `shadow-polaris-focus`는 light에서 alpha 35%, dark에서 45%로 컨트라스트 자동 조정.
 
-### Surface elevation 단계 (v0.7.5)
+### Surface elevation 단계 (v0.7.5 → v0.8 정리)
 
-다크모드에서 카드 위 카드 / popover 위 카드 같은 **계층 elevation**이 필요할 때, `surface.raised` 위에 두 단계가 추가됐습니다 (light는 모두 흰색 — 깊이는 shadow로 표현):
+다크모드에서 카드 위 카드 / popover 위 카드 같은 **계층 elevation**이 필요할 때 (light는 모두 흰색 — 깊이는 shadow로 표현):
 
-| 클래스 | 역할 | dark mode |
-|---|---|---|
-| `bg-surface-canvas` | 페이지 배경 (가장 깊음) | `#0B0B12` |
-| `bg-surface-sunken` | 페이지 안 inset (well, code) | `#131320` |
-| `bg-surface-raised` | 카드, 패널 | `#1B1B2A` |
-| `bg-surface-popover` ⬆ NEW | popover, 메뉴, 드롭다운 | `#232336` |
-| `bg-surface-modal` ⬆ NEW | 모달, dialog, 시트 | `#2D2D45` |
+| 클래스 | 역할 | dark mode | 비고 |
+|---|---|---|---|
+| `bg-background-base` | 페이지 배경 (가장 깊음) | `#0B0B12` | v0.7 alias `bg-surface-canvas` 제거됨 |
+| `bg-fill-neutral` | 페이지 안 inset (well, code) | `#131320` | v0.7 alias `bg-surface-sunken` 제거됨 |
+| `bg-layer-surface` | 카드, 패널 | `#1B1B2A` | v0.7 alias `bg-surface-raised` 제거됨 |
+| `bg-surface-popover` | popover, 메뉴, 드롭다운 | `#232336` | v0.7.5 신규 elevation tier — v0.8에서도 유지 |
+| `bg-surface-modal` | 모달, dialog, 시트 | `#2D2D45` | v0.7.5 신규 elevation tier — v0.8에서도 유지 |
 
-→ `color-mix(...)`로 즉석 elevation 합성 안 해도 됨. `surface.modal`은 모달의 *패널* 표면 (light overlay/scrim은 `layer.overlay` — 별개 토큰).
+→ `color-mix(...)`로 즉석 elevation 합성 안 해도 됨. `surface-popover` / `surface-modal`은 *진짜 elevation 토큰*이라 v0.8 alias 청소 대상이 아님 — `surface-canvas/raised/sunken`만 제거됐습니다.
 
 ### Subpath imports — 필요한 사람만
 

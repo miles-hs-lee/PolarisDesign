@@ -11,25 +11,26 @@ description: Replace this template with the actual product spec. Inherits Polari
 # from your prose ("uses Polaris primary") rather than duplicating
 # every value here.
 colors:
-  primary: "{polaris.colors.primary}"           # Polaris blue — same hex
-  secondary: "{polaris.colors.secondary}"       # NOVA purple (only if your product has AI features)
-  surface-canvas: "{polaris.colors.surface-canvas}"
-  surface-raised: "{polaris.colors.surface-raised}"
-  text-primary: "{polaris.colors.text-primary}"
+  accent-brand-normal: "{polaris.colors.accent-brand-normal}"   # Polaris blue (was rc.0 `primary`)
+  ai-normal: "{polaris.colors.ai-normal}"                       # NOVA purple (only if your product has AI features)
+  background-base: "{polaris.colors.background-base}"           # page bg (was v0.7 alias `surface-canvas`)
+  layer-surface: "{polaris.colors.layer-surface}"               # raised cards/dialogs (was `surface-raised`)
+  label-normal: "{polaris.colors.label-normal}"                 # primary text (was `text-primary`)
   # Add product-specific accents below if needed:
-  # contract-active: "#16A34A"   # status.success
-  # contract-warning: "#EAB308"  # status.warning
+  # contract-active: "#16A34A"   # state.success
+  # contract-warning: "#EAB308"  # state.warning
 
 # Most products use Polaris's full typography scale unchanged. List the
 # levels your product actually uses; the rest are still available via
-# the @polaris/ui Tailwind preset.
+# the @polaris/ui Tailwind preset. v0.8 spec names — see /DESIGN.md §3.
 typography:
-  display-md: "{polaris.typography.display-md}"
-  heading-lg: "{polaris.typography.heading-lg}"
-  heading-md: "{polaris.typography.heading-md}"
-  body-lg: "{polaris.typography.body-lg}"
-  body-sm: "{polaris.typography.body-sm}"
-  caption: "{polaris.typography.caption}"
+  display: "{polaris.typography.display}"     # 40 / Bold (was rc.0 `display-lg`)
+  title: "{polaris.typography.title}"         # 32 / Bold (was `display-md`)
+  heading2: "{polaris.typography.heading2}"   # 24 / Bold (was `heading-lg`)
+  heading3: "{polaris.typography.heading3}"   # 20 / Bold (was `heading-md`)
+  body1: "{polaris.typography.body1}"         # 16 / Regular (was `body-lg`)
+  body2: "{polaris.typography.body2}"         # 14 / Regular (was `body-sm`)
+  caption1: "{polaris.typography.caption1}"   # 12 / Bold (was bare `caption`)
 
 # Polaris's radius scale unchanged in 95% of cases.
 rounded:
@@ -37,7 +38,7 @@ rounded:
   md: "{polaris.rounded.md}"
   lg: "{polaris.rounded.lg}"
   xl: "{polaris.rounded.xl}"
-  full: "{polaris.rounded.full}"
+  pill: "{polaris.rounded.pill}"             # circular avatar / chip (was v0.7 alias `full`)
 
 spacing:
   xs: "{polaris.spacing.xs}"
@@ -89,20 +90,21 @@ ecosystem?
 Inherits Polaris's full palette. Add product-specific notes here:
 
 - The product's primary action is **contract approval** — uses
-  `{polaris.colors.primary}` (Polaris blue) for the approve button on
-  every contract detail page.
-- Contract states map to Polaris status colors: 진행중 → `status.info`,
-  완료 → `status.success`, 만료 → `status.danger`, 결재 대기 → `status.warning`.
+  `{polaris.colors.accent-brand-normal}` (Polaris blue) for the approve
+  button on every contract detail page.
+- Contract states map to Polaris state colors: 진행중 → `state.info`,
+  완료 → `state.success`, 만료 → `state.error`, 결재 대기 → `state.warning`.
+  (v0.8 renamed `status.danger` → `state.error`.)
 - No new color tokens introduced in this product.
 
 ## Typography
 
-Inherits Polaris's 8-level scale. The product uses:
+Inherits Polaris's 11-level scale (v0.8 spec). The product uses:
 
-- `display-md` for page titles (e.g., "계약 상세")
-- `heading-lg` / `heading-md` for sections (e.g., "결재선", "첨부 파일")
-- `body-lg` / `body-sm` for content
-- `caption` for metadata (작성일, 결재자, 파일 크기)
+- `title` for page titles (e.g., "계약 상세")
+- `heading2` / `heading3` for sections (e.g., "결재선", "첨부 파일")
+- `body1` / `body2` for content
+- `caption1` for metadata (작성일, 결재자, 파일 크기)
 
 ## Layout
 
@@ -117,9 +119,10 @@ Polaris's 4px Tailwind base. Product-specific decisions:
 
 Inherits all Polaris primitives. Product-specific composite components:
 
-- **ContractStatusPill** — wraps `<Badge variant="success|warning|danger|info">`
+- **ContractStatusPill** — wraps `<Badge tone="success|warning|error|info">`
   with consistent contract state mapping. Avoids each page deciding
-  state-to-variant mapping ad hoc.
+  state-to-tone mapping ad hoc. (v0.8: Badge uses `tone`, and `danger` →
+  `error`.)
 - **ApprovalLine** — vertical timeline of approvers using `<Card>` +
   `<Avatar>` + `<Badge>`. Reused on contract detail / approval inbox /
   notification email previews.

@@ -19,15 +19,16 @@
  *   3. DESIGN.md sync
  *   4. root version sync
  *   5. @polaris/lint build
- *   6. typecheck (all packages)
- *   7. @polaris/ui tests (vitest 89 + node:test 3)
- *   8. @polaris/lint tests (rule + codemod)
- *   9. @polaris/plugin tests (PostToolUse hook smoke)
- *  10. demo lint (warnings allowed, errors fail)
- *  11. template-next lint (--max-warnings=0 strict)
- *  12. demo build
- *  13. template-next build
- *  14. (optional) e2e visual regression
+ *   6. ui-source dead-alias scan (polaris-codemod-v08 --check)
+ *   7. typecheck (all packages)
+ *   8. @polaris/ui tests (vitest + node:test)
+ *   9. @polaris/lint tests (rule + codemod)
+ *  10. @polaris/plugin tests (PostToolUse hook smoke)
+ *  11. demo lint (warnings allowed, errors fail)
+ *  12. template-next lint (--max-warnings=0 strict)
+ *  13. demo build
+ *  14. template-next build
+ *  15. (optional) e2e visual regression
  *
  * Each step runs in a child process. We don't bypass the existing scripts
  * — we drive `pnpm` exactly the way CI does — so behavior stays in sync.
@@ -70,6 +71,16 @@ const STEPS = [
   driftStep('Verify DESIGN.md sync',   'DESIGN.md'),
   ['Verify root version sync',         ['node', 'scripts/sync-root-version.mjs', '--check']],
   ['Build @polaris/lint',              ['pnpm', '--filter', '@polaris/lint', 'build']],
+  // v0.8 release-gate: catch dead-class / dead-token usage in @polaris/ui
+  // sources before they ship. Codex review found 5 components on
+  // `bg-surface-border*` after rc.0 because no automated check covered
+  // the package's own source. We scope to `components/` and `ribbon/`
+  // since `tokens/` and `tailwind/` legitimately mention legacy names
+  // in JSDoc / migration comments (codemod would false-positive there).
+  ['Check ui sources for deprecated alias',
+                                       ['node', 'packages/lint/bin/polaris-codemod-v08.mjs', '--check',
+                                        'packages/ui/src/components',
+                                        'packages/ui/src/ribbon']],
   ['Typecheck (all packages)',         ['pnpm', '-r', 'typecheck']],
   ['Test — @polaris/ui',               ['pnpm', '--filter', '@polaris/ui', 'test']],
   ['Test — @polaris/lint rules',       ['pnpm', '--filter', '@polaris/lint', 'test']],

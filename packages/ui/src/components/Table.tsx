@@ -67,7 +67,7 @@ export const TableBody = forwardRef<HTMLTableSectionElement, React.HTMLAttribute
   ({ className, ...props }, ref) => (
     <tbody
       ref={ref}
-      className={cn('divide-y divide-surface-border', className)}
+      className={cn('divide-y divide-line-neutral', className)}
       {...props}
     />
   )

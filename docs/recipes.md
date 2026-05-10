@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
-  Input, Textarea, Checkbox, Button, VStack, toast,
+  Input, Textarea, Checkbox, Button, Stack, toast,
 } from '@polaris/ui';
 import {
   Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage,
@@ -39,7 +39,7 @@ export function ContactForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <VStack gap={4}>
+        <Stack gap={4}>
           <FormField
             control={form.control}
             name="name"
@@ -91,7 +91,7 @@ export function ContactForm() {
             )}
           />
           <Button type="submit" loading={form.formState.isSubmitting}>전송</Button>
-        </VStack>
+        </Stack>
       </form>
     </Form>
   );
@@ -100,11 +100,11 @@ export function ContactForm() {
 
 장점:
 - `FormLabel`이 자동으로 input과 `htmlFor` wiring
-- error 시 label 색이 자동으로 status-danger
+- error 시 label 색이 자동으로 `state.error` (v0.8: was `status.danger`)
 - `aria-invalid` / `aria-describedby` 자동 연결
 - error 메시지는 `<FormMessage />`가 자동으로 RHF의 errors 읽음
 
-복잡한 wiring 없는 단순 form은 기존 `<Input label hint error />` 패턴도 여전히 OK.
+복잡한 wiring 없는 단순 form은 기존 `<Input label helperText error />` 패턴도 여전히 OK. (v0.8: `hint` → `helperText`.)
 
 ---
 
@@ -160,7 +160,7 @@ export function DeleteContractButton({ id }: { id: string }) {
 대시보드용 KPI:
 
 ```tsx
-import { Card, CardBody, HStack, VStack, Badge } from '@polaris/ui';
+import { Card, CardBody, Stack, Badge } from '@polaris/ui';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
 export function StatCard({
@@ -176,29 +176,31 @@ export function StatCard({
 }) {
   return (
     <Card variant="padded">
-      <VStack gap={1}>
-        <span className="text-polaris-caption text-fg-muted uppercase tracking-wider">{label}</span>
-        <span className="text-polaris-display-md text-fg-primary">{value}</span>
-        <HStack gap={1} align="center">
-          <Badge variant={trend === 'up' ? 'success' : 'danger'}>
+      <Stack gap={1}>
+        <span className="text-polaris-caption1 text-label-alternative uppercase tracking-wider">{label}</span>
+        <span className="text-polaris-title text-label-normal">{value}</span>
+        <Stack direction="row" gap={1} align="center">
+          <Badge tone={trend === 'up' ? 'success' : 'error'}>
             {trend === 'up' ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
             {delta}
           </Badge>
-          <span className="text-polaris-caption text-fg-muted">전월 대비</span>
-        </HStack>
-      </VStack>
+          <span className="text-polaris-caption1 text-label-alternative">전월 대비</span>
+        </Stack>
+      </Stack>
     </Card>
   );
 }
 ```
 
+> **v0.8 note** — `<HStack>` / `<VStack>` 제거 → `<Stack>` 단일화. `text-polaris-caption` → `caption1`, `text-polaris-display-md` → `title`, `text-fg-primary/muted` → `text-label-normal/alternative`. Badge는 `variant` 대신 `tone` (status 색은 `tone`, 시각 강도는 `variant`로 분리). `pnpm dlx @polaris/lint polaris-codemod-v08 --apply` 한 번이면 다 자동 변환.
+
 사용:
 ```tsx
-<HStack gap={4}>
+<Stack direction="row" gap={4}>
   <StatCard label="MRR" value="₩12.4M" delta="+8.2%" trend="up" />
   <StatCard label="신규 계약" value="42" delta="+12" trend="up" />
   <StatCard label="이탈률" value="2.1%" delta="-0.4pp" trend="down" />
-</HStack>
+</Stack>
 ```
 
 ---
@@ -290,7 +292,7 @@ export function UserMenu({ name, email }: { name: string; email: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="!h-8 !w-8 !px-0 !rounded-polaris-full">
+        <Button variant="ghost" size="sm" className="!h-8 !w-8 !px-0 !rounded-polaris-pill">
           <Avatar size="sm">
             <AvatarFallback>{name[0]}</AvatarFallback>
           </Avatar>
@@ -298,7 +300,7 @@ export function UserMenu({ name, email }: { name: string; email: string }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-48">
         <DropdownMenuLabel>{name}</DropdownMenuLabel>
-        <div className="px-2.5 pb-1.5 text-polaris-caption text-fg-muted">{email}</div>
+        <div className="px-2.5 pb-1.5 text-polaris-caption1 text-label-alternative">{email}</div>
         <DropdownMenuSeparator />
         <DropdownMenuItem><User className="h-4 w-4" /> 계정 설정</DropdownMenuItem>
         <DropdownMenuItem><Settings className="h-4 w-4" /> 환경설정</DropdownMenuItem>

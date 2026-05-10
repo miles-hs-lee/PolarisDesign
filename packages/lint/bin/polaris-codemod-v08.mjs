@@ -144,18 +144,50 @@ const TS_TOKEN_RENAMES = [
   [/\btextStyle\.caption\b(?!\d)/g,    'textStyle.caption1'],
 
   // ───── named-imports cleanup — { brand } / { status } / { text } / { primary } ─────
-  // These run last so the previous member-access rewrites have already
-  // landed. We rewrite the import binding itself; downstream uses are
-  // already mapped to the new namespace via the rules above.
-  // NOTE: the following named-import rewrites are conservative — we only
-  // touch import lists that import ONLY the deprecated namespace. Mixed
-  // imports (e.g. `{ text, label }`) get a partial fix and may need a
-  // manual cleanup of duplicates afterward.
-  [/(import\s*\{\s*)text(\s*\}\s*from\s*['"]@polaris\/ui['"])/g,    '$1label$2'],
-  [/(import\s*\{\s*)brand(\s*\}\s*from\s*['"]@polaris\/ui['"])/g,   '$1accentBrand, ai$2'],
-  [/(import\s*\{\s*)status(\s*\}\s*from\s*['"]@polaris\/ui['"])/g,  '$1state$2'],
-  [/(import\s*\{\s*)primary(\s*\}\s*from\s*['"]@polaris\/ui['"])/g, '$1accentBrand$2'],
+  // Runs last so the member-access rewrites above have already landed.
+  // Targets both `@polaris/ui` (root barrel) and `@polaris/ui/tokens`
+  // (the recommended path for token namespaces). Walks the named-import
+  // list so mixed imports (`import { text, label } from '@polaris/ui'`)
+  // are partially rewritten without false-positives on `text` / `brand` /
+  // `status` / `primary` identifiers used elsewhere in the file.
+  //
+  // NOTE on `brand` — rc.0 `brand.primary` (→ `accentBrand.normal`) and
+  // `brand.secondary` (→ `ai.normal`) split into TWO namespaces. The
+  // import rename only adds `accentBrand`; if the consumer used
+  // `brand.secondary`, member-access rewrites will reference `ai.*`,
+  // and TypeScript will flag the missing `ai` import on the next build.
+  // Reviewers add `, ai` by hand. This is documented in the migration
+  // guide caveat list.
+  [/(import\s*(?:type\s+)?\{)([^}]+)(\}\s*from\s*['"]@polaris\/ui(?:\/tokens)?['"])/g,
+    rewritePolarisTokenImport],
 ];
+
+/** Renames inside a `@polaris/ui` / `@polaris/ui/tokens` named-import list.
+ *  Replaces deprecated namespace bindings (`text` / `brand` / `status` /
+ *  `primary`) with their v0.8 names. Per-identifier so mixed imports
+ *  rewrite cleanly. */
+const TOKEN_IMPORT_IDENT_RENAMES = {
+  text:    'label',
+  brand:   'accentBrand',
+  status:  'state',
+  primary: 'accentBrand',
+};
+
+function rewritePolarisTokenImport(_match, p1Open, body, p3Close) {
+  const renamedBody = body
+    .split(',')
+    .map((part) => {
+      // Match the leading identifier (preserves leading whitespace +
+      // any trailing `as Alias` / type-only modifiers).
+      const ident = part.match(/^(\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\b/);
+      if (!ident) return part;
+      const next = TOKEN_IMPORT_IDENT_RENAMES[ident[2]];
+      if (!next) return part;
+      return ident[1] + next + part.slice(ident[0].length);
+    })
+    .join(',');
+  return `${p1Open}${renamedBody}${p3Close}`;
+}
 
 /** Tailwind class renames. Match on full class names with hyphenated
  *  prefixes so we don't accidentally rewrite substrings inside larger
@@ -172,8 +204,15 @@ const TAILWIND_RENAMES = [
   [/\bbg-surface-canvas\b/g,            'bg-background-base'],
   [/\bbg-surface-raised\b/g,            'bg-layer-surface'],
   [/\bbg-surface-sunken\b/g,            'bg-fill-neutral'],
-  [/\bborder-surface-border-strong\b/g, 'border-line-normal'],
-  [/\bborder-surface-border\b/g,        'border-line-neutral'],
+  // `surface-border-strong` / `surface-border` show up across more
+  // utility prefixes than border-* (v0.7 components used `bg-` for thin
+  // separators, `divide-` for table dividers, `ring-` for focus halos).
+  // Catch them all in one sweep — the line-* family takes the same set
+  // of utility prefixes downstream so a single rewrite is safe.
+  [/\b(bg|border|divide|ring|outline|fill|stroke|caret|accent|placeholder|from|via|to)-surface-border-strong\b/g,
+    '$1-line-normal'],
+  [/\b(bg|border|divide|ring|outline|fill|stroke|caret|accent|placeholder|from|via|to)-surface-border\b/g,
+    '$1-line-neutral'],
   // surface-popover / surface-modal stay (v0.7.5 elevation tier).
 
   // ───── brand-* family (incl. all utility prefixes) → accent-brand-* / ai-* ─────

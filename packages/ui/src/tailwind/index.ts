@@ -153,15 +153,19 @@ const polarisPreset: Partial<Config> = {
            * Subtle brand-tinted hover/active background. v0.7.1 fix:
            * `bg-accent-brand-normal-subtle` was used by 12+ components
            * (Sidebar, Pagination, Calendar, Drawer, Command, Badge,
-           * Select, DropdownMenu, FileCard, Ribbon, …) but never defined
-           * in the v0.7 token map — Tailwind silently emitted no CSS,
-           * making every hover state across the system invisible.
-           * Mapped to the existing `brand-primary-subtle` CSS var so all
-           * call sites work without a migration. v0.8 should consolidate
-           * into a single canonical name (`accent-brand-bg-subtle`?) and
-           * remove this entry alongside the rest of the rc.0 aliases.
+           * Select, DropdownMenu, FileCard, Ribbon, …). v0.7.3 hotfix
+           * surfaced this missing token; the canonical CSS variable is
+           * `--polaris-accent-brand-normal-subtle` (light `#E8F2FE` /
+           * dark `#1A2238`), defined in `tokens.css` + the v4 theme map.
+           *
+           * **The v3 preset previously pointed at `--polaris-accent-brand-bg`**
+           * (the stronger `#D9EAFF` / `#0B3263` value used for Secondary
+           * button background). v3 and v4 builds therefore rendered hover
+           * highlights at different intensities — Codex review (rc.0)
+           * caught this as a v0.8 release-gate blocker. Now both builds
+           * share `--polaris-accent-brand-normal-subtle`.
            */
-          'normal-subtle': token('--polaris-accent-brand-bg'),
+          'normal-subtle': token('--polaris-accent-brand-normal-subtle'),
         },
         'accent-action': {
           normal: token('--polaris-accent-action-normal'),

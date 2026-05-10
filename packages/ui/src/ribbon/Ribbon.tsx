@@ -84,6 +84,11 @@ export const Ribbon = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEle
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
+      // `data-polaris-ribbon` — stable selector for e2e snapshots and any
+      // host that needs to grab the ribbon root without depending on
+      // tailwind class strings (those churn between releases — see
+      // visual.spec.ts breakage at v0.7→v0.8 transition).
+      data-polaris-ribbon=""
       className={cn(
         'font-polaris text-label-normal bg-background-base border-b border-line-neutral',
         className

@@ -19,7 +19,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <TooltipProvider delayDuration={200}>
       <ToastProvider>
-        <div className="min-h-screen flex bg-surface-canvas text-fg-primary font-polaris">
+        <div className="min-h-screen flex bg-background-base text-label-normal font-polaris">
           {/* 좌측 — desktop sticky, mobile drawer */}
           <Sidebar width="15rem" className="hidden md:flex sticky top-0 h-screen">
             <SidebarHeader>...</SidebarHeader>

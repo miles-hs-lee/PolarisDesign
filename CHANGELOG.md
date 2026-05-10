@@ -12,7 +12,43 @@
 
 ---
 
-## [0.8.0-rc.0] — 2026-05-10
+## [0.8.0-rc.1] — 2026-05-10
+
+Codex 리뷰 8건 반영. **rc.0 대비 BREAKING 변경 없음** — 모두 rc.0이 놓친 케이스 보강 / 잔존 dead-class 제거 / 문서 정합성. rc.0에서 진행 중인 마이그레이션은 그대로 ok, codemod-v08 한 번 더 돌리면 새로 추가된 surface-border bg/divide / token import 케이스도 잡힙니다.
+
+### P1 — 정식 v0.8.0 게이트 막아야 하는 항목
+
+- **`@polaris/ui` 소스에 `surface-border*` dead-class 5건** (Table / DropdownMenu / Select / Command 구분선 + Switch unchecked track) — v0.8 빌드에서 emit 안 되는 alias 그대로 남아 있어 visual silently broken. `bg-line-neutral` / `divide-line-neutral` / `bg-line-normal`로 수정.
+- **v3 Tailwind preset의 `accent-brand-normal-subtle`이 잘못된 CSS var 매핑** — 토큰/CSS/v4 theme는 `--polaris-accent-brand-normal-subtle` (E8F2FE)인데 v3 preset만 `--polaris-accent-brand-bg` (D9EAFF, 더 강한 톤)을 가리켜 v3↔v4 빌드가 다른 hover 강도를 렌더했음. 이제 양쪽 일치 + 회귀 방지용 vitest 4건 추가 (preset.test.ts).
+- **codemod-v08가 `@polaris/ui/tokens` named import 미처리** — 권장 import 경로가 `@polaris/ui/tokens`인데 codemod는 root barrel만 매칭. 함수 기반 rewrite로 교체해 `@polaris/ui` + `@polaris/ui/tokens` 모두 + 혼합 import (`{ text, label }`) 까지 처리. `brand` 케이스만 caveat: `accentBrand`로 rename되며, `brand.secondary`를 쓴 코드는 member-access rewrite로 `ai.*`가 등장 → TypeScript가 missing import 즉시 잡음 (수동으로 `, ai` 추가).
+
+### P2 — rc.1에 한 번에 흡수
+
+- **codemod-v08 `surface-border` 변환을 전 utility prefix로 확장** — `bg-`, `divide-`, `ring-`, `outline-`, `fill-`, `stroke-`, `caret-`, `accent-`, `placeholder-`, `from-/via-/to-` 모두 커버. rc.0에선 `border-` prefix만 잡고 있었음. ui 소스 5건도 사실 이 누락 때문에 발생.
+- **DatePicker `required` jsdoc 정확히 + `disabled` mirror** — hidden input은 HTML spec상 constraint validation 대상이 아니므로 native form validation 안 됨을 명시. `disabled` 값을 hidden input에도 mirror해 disabled 필드가 submit payload에 stale 값을 남기지 않도록. 회귀 테스트 1건 추가.
+- **`packages/template-next/DESIGN.md` v0.8 명명으로 갱신** — AGENTS 지침상 에이전트가 반드시 읽는 spec인데 `surface-canvas`/`text-primary`/`heading-lg`/`rounded.full` 등 v0.7 alias가 그대로 남아 있어 새 프로젝트가 dead alias로 시작할 위험. v0.8 토큰 이름 + state.error / Badge tone 명명까지 정리.
+- **e2e Ribbon locator stale fix** — `<Ribbon>` root에 `data-polaris-ribbon` 속성 추가, `visual.spec.ts`가 `[data-polaris-ribbon]` 으로 잡도록 변경. 이전엔 `bg-background-normal` (v0.8에서 emit 사라진 alias)에 묶여 timeout. snapshot baseline 갱신은 별도 작업으로 분리 (locator stale ≠ 의도된 visual diff).
+
+### P3 — 공개 문서
+
+- **`packages/ui/README.md`** — 토큰 import 예시 v0.8 namespace로 (`accentBrand` / `label` / `state` 등) + Stat 예시 `deltaTone` → `deltaVariant` + Surface elevation 표 v0.8 명명 (background-base / fill-neutral / layer-surface) + alias 안내 codemod 링크를 v08로
+- **`docs/recipes.md`** — Form 예시 코드 `VStack` → `Stack`, KPI 예시 `<HStack>` / `<VStack>` / `text-polaris-display-md` / `text-fg-muted` / `Badge variant=danger` → v0.8 이름들로. UserMenu 예시 `rounded-polaris-full` → `-pill`, `text-polaris-caption text-fg-muted` → `text-polaris-caption1 text-label-alternative`
+- **`docs/app-shell-layout.md`** — `bg-surface-canvas text-fg-primary` → `bg-background-base text-label-normal`
+
+### Verify gate 강화 (Codex 권고)
+
+`pnpm verify`에 step 6 신규 추가: `polaris-codemod-v08 --check packages/ui/src/components packages/ui/src/ribbon` — `@polaris/ui` 자체 소스에 dead alias가 들어와도 release 전에 0.1초만에 차단. rc.0에서 발견된 `surface-border*` 잔존 같은 케이스가 자동으로 잡힘. 13/13 → **14/14**.
+
+### 테스트 / 검증
+
+- `@polaris/ui`: vitest **+5** (Tailwind preset 4 + DatePicker disabled mirror 1)
+- `@polaris/lint`: 99 → **그대로 99** (rule cases) + codemod 15 → **17/17** (+2: surface-border 전 prefix / token import 혼합)
+- `pnpm verify` **14/14 ✓** (60s)
+
+### 알려진 caveat (rc.1에서도 유지)
+
+- v4-theme.css는 컬러 ramp primitive (`bg-blue-50`, `bg-gray-30`)를 `--color-*`로 노출하지 않음 — v3 preset과 v4 builds 사이에 의도된 scope 차이. Codex가 캐치한 `accent-brand-normal-subtle` 드리프트는 fix됐지만 ramp 단계는 v0.9 별도 작업으로 분리 (semantic-token이 아니라 primitive라 컨슈머가 직접 쓰는 빈도가 낮음).
+- e2e visual baseline은 의도된 v0.8 visual diff (예: surface-* 토큰값 미세 변화) 가 있을 수 있어 `--update-snapshots` 갱신은 디자인팀 검토 후 별도 PR로 진행.
 
 **v0.8.0의 주제는 "쌓아둔 alias / 미세 비일관성을 한 번에 정리"** 입니다. 디자인팀 컨펌이 필요한 항목은 기본값으로 적용해 두었고, 추후 컨펌이 들어오면 그대로 유지하거나 토큰 수치만 조정합니다. 사내 컨슈머가 아직 소수일 때 구조적 변경을 끝내기 위한 BREAKING 정리 릴리스. 모든 변경은 **하나의 codemod (`polaris-codemod-v08`)로 자동 변환**됩니다.
 

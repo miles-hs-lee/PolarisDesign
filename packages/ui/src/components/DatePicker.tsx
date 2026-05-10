@@ -42,7 +42,18 @@ export interface DatePickerProps {
   name?: string;
   /** date-fns format for the hidden form-submission input. Default: `yyyy-MM-dd`. */
   valueFormat?: string;
-  /** Required-ness for the hidden form input. Forwarded to the `<input>`. */
+  /**
+   * Sets the `required` attribute on the hidden form input.
+   *
+   * **Caveat — does NOT trigger native HTML form validation.** The
+   * browser's constraint validation (`<form noValidate>` / `:invalid`)
+   * does not run on `<input type="hidden">` (HTML spec, "barred from
+   * constraint validation"). This prop only flips the attribute so it
+   * shows up in serialized form payloads / server-side parsers that
+   * consult `formData.get('expiry')?.required`. If you need real
+   * required-field validation on a `<DatePicker>`, validate on the
+   * client (`onSubmit` guard) or on the server.
+   */
   required?: boolean;
   /** Form id this hidden input belongs to (rare; only when outside a `<form>` ancestor). */
   form?: string;
@@ -82,13 +93,19 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
           * Rendered only when `name` is set to avoid leaking empty fields
           * into form submissions for purely controlled / display-only
           * usages. The input is pure-presentational `hidden` (not just
-          * visually hidden) — no aria attributes needed. */}
+          * visually hidden) — no aria attributes needed.
+          *
+          * `disabled` is mirrored so a disabled DatePicker doesn't ship
+          * a stale value in submit payloads (HTML spec: disabled
+          * controls don't serialize). Without this, server actions saw
+          * the last-selected value even after the field was disabled. */}
         {name && (
           <input
             type="hidden"
             name={name}
             value={value ? format(value, valueFormat, { locale }) : ''}
             required={required}
+            disabled={disabled}
             form={form}
           />
         )}

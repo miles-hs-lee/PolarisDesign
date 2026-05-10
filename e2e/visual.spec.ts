@@ -50,9 +50,14 @@ test.describe('Polaris Office ribbon tabs', () => {
       await page.waitForTimeout(150);
       // Snapshot the ribbon region only — canvas content underneath
       // doesn't change between tabs.
-      // v0.7: surface.raised → background.normal, surface.border → line.neutral
-    const ribbon = page.locator('div.bg-background-normal:not([class*="border-b border-line-neutral bg-background-normal"]) >> nth=0');
-      await expect(ribbon.first()).toHaveScreenshot(`ribbon-${tab}.png`);
+      //
+      // Locator strategy: `[data-polaris-ribbon]` is a stable attribute
+      // emitted by `<Ribbon>` itself (see packages/ui/src/ribbon/Ribbon.tsx).
+      // The previous version locked onto `div.bg-background-normal` which
+      // broke at v0.8 (alias removed) and produced timeouts. Attribute-
+      // based selectors survive class-name churn.
+      const ribbon = page.locator('[data-polaris-ribbon]').first();
+      await expect(ribbon).toHaveScreenshot(`ribbon-${tab}.png`);
     });
   }
 });

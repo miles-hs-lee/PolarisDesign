@@ -54,7 +54,7 @@ export const Switch = forwardRef<
         'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-polaris-pill border-2 border-transparent transition-colors',
         'focus-visible:outline-none focus-visible:shadow-polaris-focus',
         'disabled:cursor-not-allowed disabled:opacity-50',
-        'data-[state=checked]:bg-accent-brand-normal data-[state=unchecked]:bg-surface-border-strong',
+        'data-[state=checked]:bg-accent-brand-normal data-[state=unchecked]:bg-line-normal',
         isError && 'data-[state=unchecked]:bg-state-error/40',
         className
       )}
