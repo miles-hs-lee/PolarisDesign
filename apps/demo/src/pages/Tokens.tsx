@@ -132,23 +132,52 @@ function Section({
 }
 
 // ─────────────────────────────────────────────────────────────────────
-// Color group taxonomy — auto-iterated. Adding a new group to
+// Color group taxonomy (v0.8) — auto-iterated. Adding a new group to
 // `colors` in `@polaris/ui/tokens` and slotting it into the right
 // bucket here is a 1-line change.
+//
+// Ordering rationale:
+//   1. Brand identity   — 4-color × 파일 타입 단일 별칭 (story anchor)
+//   2. Semantic         — UI 구현의 1차 선택지 (label/background/layer/…)
+//   3. Brand ramps      — 10-step 미세조정 (단일 별칭 vs ramp는 use-case 따라)
+//   4. Supplementary    — 차트 / 플랜 / 미디어 등 사이드 팔레트
+//   5. Gray             — UI 백본 (텍스트/보더/surface/interaction의 베이스)
 // ─────────────────────────────────────────────────────────────────────
+
+/** PO 시그니처 4-color + AI Purple, 그리고 그것의 파일타입 별칭.
+ *  brandPalette / fileType은 같은 hex를 가리키는 단일 소스 — 컴포넌트는
+ *  주로 시맨틱 토큰(`accentBrand` 등)을 거쳐 적용하지만, 차트 / 헤더 /
+ *  태그처럼 "브랜드 식별"이 의도된 자리에선 이 그룹을 직접 참조해도 OK. */
+const BRAND_IDENTITY: Array<{ name: string; tokens: ColorGroup; desc?: string }> = [
+  {
+    name: 'brandPalette',
+    tokens: colors.brandPalette as ColorGroup,
+    desc: 'PO 시그니처 4-color (blue / green / orange / red) + AI Purple. 단일 별칭 — 10-step 램프는 §3 참고.',
+  },
+  {
+    name: 'fileType',
+    tokens: colors.fileType as ColorGroup,
+    desc: '29 파일 확장자 → 4-color 매핑 (docx·hwp = blue, xlsx = green, pptx = orange, pdf = red). <FileIcon type="docx" /> 컴포넌트가 자동 적용 — 텍스트로 "DOCX" 라벨 달지 말 것.',
+  },
+];
+
+/** 시맨틱 토큰 — UI 구현의 1차 선택지. hex / 임의값 직접 사용 금지
+ *  (`@polaris/lint` 룰이 차단). v0.7.5에서 추가된 `surface` (popover /
+ *  modal elevation tier)는 `layer` 와 같은 elevation 가족이라 인접 배치. */
 const SEMANTIC_GROUPS: Array<{ name: string; tokens: ColorGroup; desc?: string }> = [
   { name: 'label',         tokens: colors.label as ColorGroup,         desc: '텍스트 + 아이콘 (normal / neutral / alternative / assistive / inverse / disabled)' },
-  { name: 'background',    tokens: colors.background as ColorGroup,    desc: '페이지 레벨 배경 (base / disabled). rc.0 alias normal / alternative 포함' },
-  { name: 'layer',         tokens: colors.layer as ColorGroup,         desc: 'rc.1 NEW — 카드 / 다이얼로그 surface, modal overlay' },
-  { name: 'interaction',   tokens: colors.interaction as ColorGroup,   desc: 'hover / pressed' },
-  { name: 'fill',          tokens: colors.fill as ColorGroup,          desc: '틴트된 표면 (neutral 가장 옅음 → strong 가장 진함)' },
+  { name: 'background',    tokens: colors.background as ColorGroup,    desc: '페이지 레벨 배경 (base / disabled)' },
+  { name: 'layer',         tokens: colors.layer as ColorGroup,         desc: '카드 / 다이얼로그 surface, modal dim overlay (scrim)' },
+  { name: 'surface',       tokens: colors.surface as ColorGroup,       desc: 'elevation tier — popover (menu / dropdown / combobox) / modal (dialog / drawer / sheet) 패널. light는 모두 흰색, 다크에서만 단계별로 밝아짐 (layer.surface < surface.popover < surface.modal).' },
+  { name: 'interaction',   tokens: colors.interaction as ColorGroup,   desc: 'hover / pressed (모든 클릭 가능 surface 공통)' },
+  { name: 'fill',          tokens: colors.fill as ColorGroup,          desc: '틴트된 표면 (neutral 가장 옅음 → strong 가장 진함). Tertiary 버튼·필 칩·선택된 항목.' },
   { name: 'line',          tokens: colors.line as ColorGroup,          desc: '보더 / 디바이더 (neutral / normal / strong / disabled)' },
-  { name: 'accentBrand',   tokens: colors.accentBrand as ColorGroup,   desc: 'PO Blue 강조 (Primary CTA / Secondary tint)' },
-  { name: 'accentAction',  tokens: colors.accentAction as ColorGroup,  desc: 'rc.1 NEW — Black "Primary Dark" 버튼 (다크모드 자동 반전)' },
-  { name: 'focus',         tokens: colors.focus as ColorGroup,         desc: '키보드 포커스 ring' },
-  { name: 'staticColors',  tokens: colors.staticColors as ColorGroup,  desc: 'rc.1 NEW — 모드 무관 흰색/검정' },
-  { name: 'state',         tokens: colors.state as ColorGroup,         desc: 'success / warning / error / info / new + bg 변형 (rc.1 spec)' },
-  { name: 'ai',            tokens: colors.ai as ColorGroup,            desc: 'Polaris 확장 — AI Purple (NOVA 전용)' },
+  { name: 'accentBrand',   tokens: colors.accentBrand as ColorGroup,   desc: 'PO Blue 강조 — Primary CTA (normal/strong) / Secondary tint (bg/bgHover) / hover-subtle' },
+  { name: 'accentAction',  tokens: colors.accentAction as ColorGroup,  desc: 'Black "Primary Dark" 버튼 (다크모드 자동 반전)' },
+  { name: 'state',         tokens: colors.state as ColorGroup,         desc: 'success / warning / error / info / new + bg 페어. 작은 텍스트 단독 사용은 contrast AA 미달 — 아이콘 동반 필수 (WCAG 1.4.1).' },
+  { name: 'ai',            tokens: colors.ai as ColorGroup,            desc: 'NOVA Purple — AI 컨텍스트 전용. brand-blue로 위장하지 말 것 — 사용자가 AI 기능인지 인지 못 함.' },
+  { name: 'focus',         tokens: colors.focus as ColorGroup,         desc: '키보드 포커스 ring (light alpha 35% / dark 45% 자동)' },
+  { name: 'staticColors',  tokens: colors.staticColors as ColorGroup,  desc: '모드 무관 흰색 / 검정 (브랜드 마크 위 텍스트 등 어떤 테마에서도 고정 색이 필요한 경우)' },
 ];
 
 const BRAND_RAMPS: Array<{ name: string; tokens: ColorGroup; desc?: string }> = [
@@ -168,13 +197,6 @@ const SUPPLEMENTARY_RAMPS: Array<{ name: string; tokens: ColorGroup; desc?: stri
   { name: 'yellowPalette',            tokens: colors.yellowPalette as ColorGroup,            desc: '노트 / 하이라이트 (warning과 다름)' },
 ];
 
-const LEGACY_GROUPS: Array<{ name: string; tokens: ColorGroup; desc?: string }> = [
-  { name: 'brandPalette',  tokens: colors.brandPalette as ColorGroup,  desc: '5-color brand alias (램프는 위 brand ramps 사용)' },
-  { name: 'fileType',      tokens: colors.fileType as ColorGroup,      desc: 'docx/hwp/xlsx/pptx/pdf 컬러 (29-type FileIcon에서 사용)' },
-  { name: 'neutral',       tokens: colors.neutral as ColorGroup,       desc: 'v0.6 12-step neutral (v0.7 grayRamp 9-step 권장)' },
-  { name: 'surface',       tokens: colors.surface as ColorGroup,       desc: 'v0.7.5+ 엘리베이션 (popover / modal). v0.8 canvas/raised/sunken 제거됨' },
-];
-
 export default function Tokens() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-12 space-y-polaris-3xl">
@@ -182,7 +204,7 @@ export default function Tokens() {
         <Badge variant="secondary" className="mb-polaris-sm">@polaris/ui/tokens</Badge>
         <h1 className="text-polaris-title mb-polaris-2xs">디자인 토큰</h1>
         <p className="text-polaris-body1 text-label-neutral max-w-2xl">
-          v0.7-rc.2 토큰 전수 표시. 색상은{' '}
+          v0.8 토큰 전수 표시. 색상은{' '}
           <code className="font-polaris-mono text-polaris-body2 bg-fill-neutral px-1 rounded-polaris-sm">colors</code>{' '}
           export에서 자동 iterate되므로 새 그룹 추가 시 자동 반영됩니다. 디자인 정의서:{' '}
           <a href="https://github.com/PolarisOffice/PolarisDesign/blob/main/DESIGN.md" target="_blank" rel="noreferrer" className="text-accent-brand-normal underline">DESIGN.md</a>.
@@ -191,8 +213,19 @@ export default function Tokens() {
 
       {/* ──────────── 색상 ──────────── */}
       <Section
-        title="1. 시맨틱 토큰 (rc.1 spec)"
-        description="UI 구현 시 항상 이 시맨틱 토큰부터 사용. 다크모드는 [data-theme=&quot;dark&quot;]로 자동 스위칭."
+        title="1. 브랜드 정체성 (4-color × 파일 타입 단일 별칭)"
+        description="PO 시그니처 4-color + AI Purple. 컴포넌트는 보통 시맨틱 토큰을 거쳐 적용하지만, 차트 카테고리 / 헤더 / 태그처럼 '브랜드 식별'이 의도된 자리에선 이 그룹을 직접 참조해도 OK. 4-color = 파일 타입 단일 소스라 brandPalette ≡ fileType 별칭."
+      >
+        <div className="space-y-polaris-lg">
+          {BRAND_IDENTITY.map((g) => (
+            <GroupBlock key={g.name} {...g} />
+          ))}
+        </div>
+      </Section>
+
+      <Section
+        title="2. 시맨틱 토큰"
+        description="UI 구현의 1차 선택지. 다크모드는 [data-theme=&quot;dark&quot;]로 자동 스위칭. hex / rgb / Tailwind 임의값 직접 사용은 금지 (lint 룰이 차단)."
         specImage="foundation/color.png"
       >
         <div className="space-y-polaris-lg">
@@ -203,8 +236,8 @@ export default function Tokens() {
       </Section>
 
       <Section
-        title="2. 브랜드 컬러 램프 (10단계)"
-        description="brand 5색 + Dark Blue. 차트 / hover / pressed 미세조정용. 시맨틱 토큰으로 표현 안 되는 경우만 직접 사용."
+        title="3. 브랜드 컬러 램프 (10단계 05~90)"
+        description="brand 5색 + Dark Blue 각각 10단계. 차트 / hover / pressed / 그라디언트 등 시맨틱 토큰으로 표현 안 되는 미세조정에만 직접 사용. step 50 = brandPalette 단일 별칭의 light 값."
       >
         <div className="space-y-polaris-lg">
           {BRAND_RAMPS.map((g) => (
@@ -214,8 +247,8 @@ export default function Tokens() {
       </Section>
 
       <Section
-        title="3. 서브 팔레트 (rc.1 신설)"
-        description="primitive-color-palette 참조. 차트 카테고리 / 플랜 뱃지 / 파일 확장자 등."
+        title="4. 서브 팔레트"
+        description="primitive-color-palette 참조. 차트 카테고리 / 플랜 뱃지 / 미디어 포맷 등 — 메인 브랜드 컬러와 같은 화면에서 충돌 회피가 필요한 자리."
       >
         <div className="space-y-polaris-lg">
           {SUPPLEMENTARY_RAMPS.map((g) => (
@@ -225,27 +258,16 @@ export default function Tokens() {
       </Section>
 
       <Section
-        title="4. Gray Ramp (UI 백본)"
-        description="텍스트 / 보더 / surface / interaction의 베이스. 9 steps 10 → 90."
+        title="5. Gray Ramp (UI 백본)"
+        description="텍스트 / 보더 / surface / interaction 시맨틱 토큰의 베이스. 9 steps (10 → 90). 시맨틱 토큰을 거치는 게 1순위 — gray-* 직접 사용은 차트/장식 등 시맨틱이 안 맞는 곳에만."
       >
         <GroupBlock name="grayRamp" tokens={colors.grayRamp as ColorGroup} />
-      </Section>
-
-      <Section
-        title="5. 레거시 / 보존 토큰"
-        description="새 코드는 위 시맨틱 토큰 사용. brandPalette / fileType / neutral은 4-color brand × 파일타입 매핑이라 v0.8 이후로도 유지. surface는 v0.7.5 elevation tier (popover/modal)만 살아남았고 canvas/raised/sunken alias는 v0.8에서 제거됨."
-      >
-        <div className="space-y-polaris-lg">
-          {LEGACY_GROUPS.map((g) => (
-            <GroupBlock key={g.name} {...g} />
-          ))}
-        </div>
       </Section>
 
       {/* ──────────── 타이포그래피 ──────────── */}
       <Section
         title="6. 타이포그래피"
-        description="Pretendard Variable. 11단계 (rc.1 spec). letter-spacing 사용 금지 — Pretendard 자체 메트릭 사용."
+        description="Pretendard Variable. 11단계 (display / title / heading1-4 / body1-3 / caption1-2). letter-spacing 수정 금지 — Pretendard 자체 메트릭 사용."
         specImage="foundation/typography.png"
       >
         <Card>
@@ -284,8 +306,8 @@ export default function Tokens() {
 
       {/* ──────────── Spacing ──────────── */}
       <Section
-        title="7. Spacing (rc.1 NEW)"
-        description="4px 베이스 + 12레벨 named scale. Tailwind class form: p-polaris-md, gap-polaris-lg 등."
+        title="7. Spacing"
+        description="4px 베이스 + 12레벨 named scale (4xs / 3xs / 2xs / xs / sm / md / lg / xl / 2xl / 3xl / 4xl). Tailwind class form: p-polaris-md, gap-polaris-lg 등. Tailwind 기본 (p-4 등)도 OK — 임의값(예: 13px 직접 박기)만 금지."
         specImage="foundation/grid.png"
       >
         <div className="space-y-polaris-2xs">
@@ -312,8 +334,8 @@ export default function Tokens() {
 
       {/* ──────────── Radius ──────────── */}
       <Section
-        title="8. Radius (rc.1 — md 12px default)"
-        description="rounded-polaris-* 유틸. 기본값 md(12). Input은 sm(8). 큰 CTA는 lg(16). 모달 xl(24). 바텀시트 2xl(38)."
+        title="8. Radius (md 12px default)"
+        description="rounded-polaris-* 유틸. 기본값 md(12). Input은 sm(8). 큰 CTA는 lg(16). 모달 xl(24). 바텀시트 2xl(38). 원형은 pill (avatar / chip / 아이콘 버튼)."
         specImage="foundation/radius.png"
       >
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-polaris-2xs">
@@ -333,8 +355,8 @@ export default function Tokens() {
 
       {/* ──────────── Shadow ──────────── */}
       <Section
-        title="9. Shadow (5단계 + AI glow)"
-        description="shadow-polaris-* 유틸. xs(hover) / sm(card) / md(dropdown) / lg(modal) / ai(AI 표면 보라 글로우, rc.1 NEW)."
+        title="9. Shadow (5단계 + AI glow + focus ring)"
+        description="shadow-polaris-* 유틸. xs(hover) / sm(card) / md(dropdown) / lg(modal) / ai(AI 표면 보라 글로우) / focus(3px 시스템 포커스 링, light/dark 자동 alpha)."
       >
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-polaris-md">
           {(Object.keys(shadow.light) as Array<keyof typeof shadow.light>).map((name) => (
@@ -352,8 +374,8 @@ export default function Tokens() {
 
       {/* ──────────── Motion ──────────── */}
       <Section
-        title="10. Motion (rc.1 NEW)"
-        description="duration-polaris-* / ease-polaris-* 유틸. 박스에 hover하면 적용 미리보기."
+        title="10. Motion"
+        description="duration-polaris-* / ease-polaris-* 유틸. 박스에 hover하면 적용 미리보기. prefers-reduced-motion은 컴포넌트가 알아서 처리."
       >
         <div className="space-y-polaris-md">
           <div>
@@ -397,7 +419,7 @@ export default function Tokens() {
 
       {/* ──────────── Z-index ──────────── */}
       <Section
-        title="11. Z-index (rc.1 NEW)"
+        title="11. Z-index"
         description="z-polaris-* 유틸. 6단계로 floating 요소 정리. 임의 z 값 사용 금지 — 새 단계가 필요하면 이 스케일을 확장."
       >
         <Card>
@@ -440,7 +462,7 @@ export default function Tokens() {
       {/* ──────────── Breakpoint ──────────── */}
       <Section
         title="12. Breakpoint"
-        description="Tailwind 기본 5단계 + rc.1에서 추가된 시맨틱 4단계 (mobile / tablet-v / tablet-h / desktop)."
+        description="Tailwind 기본 5단계 + 시맨틱 4단계 (mobile / tablet-v / tablet-h / desktop)."
       >
         <Card>
           <CardBody>
