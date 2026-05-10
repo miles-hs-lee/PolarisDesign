@@ -1,7 +1,8 @@
-import { forwardRef, type ElementType } from 'react';
+import { forwardRef, useId, type ElementType, type ReactNode } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { MoreHorizontal } from 'lucide-react';
 import { ChevronLeftIcon, ChevronRightIcon } from '../icons';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './Select';
 import { cn } from '../lib/cn';
 
 export const Pagination = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
@@ -124,3 +125,167 @@ export function pageNumberItems(current: number, total: number, siblings = 2): P
   items.push(total);
   return items;
 }
+
+/* ================================================================== *
+ * PaginationFooter — high-level wrapper                  v0.7.5 NEW
+ * ================================================================== *
+ *
+ * `<Pagination>` + helpers cover navigation buttons, but most tables
+ * also need (a) a "rows per page" selector and (b) a "X-Y of N" total
+ * indicator. Consumers were reaching for `<Select>` separately and
+ * laying out the row by hand on every page. `PaginationFooter` bundles
+ * the standard pattern.
+ *
+ * Layout (left → right):
+ *
+ *   [ "X-Y of N" 인디케이터 ]   …   [ pageSize Select ]   [ ‹ 1 2 … N › ]
+ *
+ * Each region is independently optional — pass `showTotal={false}` /
+ * `pageSizeOptions={undefined}` to hide.
+ *
+ * Controlled component: parent owns `page` + `pageSize` state and
+ * receives `onPageChange` / `onPageSizeChange` callbacks. The page number
+ * sequence with ellipses is computed from `pageNumberItems(page, totalPages)`.
+ *
+ * @example
+ * ```tsx
+ * <PaginationFooter
+ *   page={page}
+ *   pageSize={pageSize}
+ *   total={total}
+ *   onPageChange={setPage}
+ *   onPageSizeChange={(n) => { setPageSize(n); setPage(1); }}
+ *   pageSizeOptions={[10, 25, 50, 100]}
+ * />
+ * ```
+ */
+
+export interface PaginationFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Current page (1-based). */
+  page: number;
+  /** Total item count (used for the `X-Y of N` indicator and to derive `totalPages`). */
+  total: number;
+  /** Page size. */
+  pageSize: number;
+  /** Page size options for the selector. Pass `undefined` to hide the selector. Default: `[10, 25, 50, 100]`. */
+  pageSizeOptions?: number[];
+  onPageChange: (page: number) => void;
+  /** Required when `pageSizeOptions` is passed. Typically also resets the page to 1. */
+  onPageSizeChange?: (pageSize: number) => void;
+  /** Hide the `X-Y of N` indicator. */
+  showTotal?: boolean;
+  /** Sibling pages on each side of the current page. Default: 2. */
+  siblings?: number;
+  /** Localized label parts. */
+  labels?: {
+    /** Receives a function that interpolates start, end, total — render the
+     *  "X-Y of N" indicator. Default: `"{start}-{end} / {total}"`. */
+    total?: (start: number, end: number, total: number) => ReactNode;
+    /** Label for the page-size selector. Default: "페이지당". */
+    pageSize?: ReactNode;
+  };
+}
+
+const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
+
+export const PaginationFooter = forwardRef<HTMLDivElement, PaginationFooterProps>(
+  (
+    {
+      page,
+      total,
+      pageSize,
+      pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
+      onPageChange,
+      onPageSizeChange,
+      showTotal = true,
+      siblings = 2,
+      labels,
+      className,
+      ...props
+    },
+    ref
+  ) => {
+    const totalPages = Math.max(1, Math.ceil(total / pageSize));
+    const safePage = Math.min(Math.max(page, 1), totalPages);
+    const start = total === 0 ? 0 : (safePage - 1) * pageSize + 1;
+    const end = Math.min(safePage * pageSize, total);
+    const items = pageNumberItems(safePage, totalPages, siblings);
+    const pageSizeId = useId();
+
+    const totalLabel =
+      labels?.total ?? ((s, e, t) => `${s}-${e} / ${t.toLocaleString()}`);
+    const pageSizeLabel = labels?.pageSize ?? '페이지당';
+
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          'flex flex-wrap items-center justify-between gap-polaris-sm font-polaris',
+          className
+        )}
+        {...props}
+      >
+        {showTotal ? (
+          <p className="text-polaris-body3 text-label-alternative">
+            {totalLabel(start, end, total)}
+          </p>
+        ) : (
+          <span aria-hidden="true" />
+        )}
+
+        <div className="flex items-center gap-polaris-sm">
+          {pageSizeOptions && onPageSizeChange ? (
+            <div className="flex items-center gap-polaris-2xs">
+              <label
+                htmlFor={pageSizeId}
+                className="text-polaris-body3 text-label-alternative"
+              >
+                {pageSizeLabel}
+              </label>
+              <Select
+                value={String(pageSize)}
+                onValueChange={(v) => onPageSizeChange(Number(v))}
+              >
+                <SelectTrigger id={pageSizeId} className="h-9 w-[5.5rem]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {pageSizeOptions.map((n) => (
+                    <SelectItem key={n} value={String(n)}>
+                      {n}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ) : null}
+
+          <Pagination>
+            <PaginationPrev
+              disabled={safePage <= 1}
+              onClick={() => onPageChange(safePage - 1)}
+            />
+            {items.map((it, i) =>
+              it === PAGE_ELLIPSIS ? (
+                <PaginationEllipsis key={`ellipsis-${i}`} />
+              ) : (
+                <PaginationItem
+                  key={it}
+                  active={it === safePage}
+                  onClick={() => onPageChange(it)}
+                >
+                  {it}
+                </PaginationItem>
+              )
+            )}
+            <PaginationNext
+              disabled={safePage >= totalPages}
+              onClick={() => onPageChange(safePage + 1)}
+            />
+          </Pagination>
+        </div>
+      </div>
+    );
+  }
+);
+PaginationFooter.displayName = 'PaginationFooter';

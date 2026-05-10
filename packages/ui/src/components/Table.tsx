@@ -1,10 +1,12 @@
-import { forwardRef, createContext, useContext } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
+import { ChevronDown, ChevronUp, ChevronsUpDown } from 'lucide-react';
 import { cn } from '../lib/cn';
 
 /**
  * Polaris table primitive — semantic `<table>` with token-driven styling and
- * a `density` axis. Sorting / virtualization / column-defs are out of scope
- * (planned as `DataTable` in v0.4 on top of this primitive).
+ * a `density` axis. Sorting affordance is built into `<TableHead sortable>`;
+ * virtualization and column-def codegen remain out of scope (planned as
+ * `DataTable` on top of this primitive).
  *
  * The density context propagates to TableRow/TableCell so callers don't have
  * to thread a prop through every cell.
@@ -94,21 +96,115 @@ export const TableRow = forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTM
 );
 TableRow.displayName = 'TableRow';
 
-export const TableHead = forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<HTMLTableCellElement>>(
-  ({ className, ...props }, ref) => {
+/** Sort direction for `<TableHead sortable>`. `null` means unsorted (cycle starts at asc). */
+export type TableSortDirection = 'asc' | 'desc' | null;
+
+export interface TableHeadProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
+  /**
+   * Render the header cell content as a sort-toggle button.
+   *
+   * When set, the cell:
+   *   - wraps `children` in a `<button>` with `aria-sort` reflecting the
+   *     current direction (`ascending` / `descending` / `none`)
+   *   - shows a leading chevron that visually encodes direction
+   *     (matched icon + `aria-sort` for AT users — color alone is not used)
+   *   - on click, calls `onSortChange(nextDirection)` cycling
+   *     `null → asc → desc → null` (or your `cycle`)
+   *
+   * Pair with parent state (`useState<TableSortDirection>` per column) and
+   * a `useMemo` that re-sorts the row data based on the active column.
+   *
+   * @example
+   * ```tsx
+   * const [sort, setSort] = useState<{ key: 'name' | 'created'; dir: TableSortDirection }>({ key: 'name', dir: 'asc' });
+   * <TableHead
+   *   sortable
+   *   sortDirection={sort.key === 'name' ? sort.dir : null}
+   *   onSortChange={(dir) => setSort({ key: 'name', dir })}
+   * >
+   *   이름
+   * </TableHead>
+   * ```
+   */
+  sortable?: boolean;
+  /** Current sort direction (null = unsorted). Only meaningful when `sortable`. */
+  sortDirection?: TableSortDirection;
+  /** Fires with the next direction in the cycle. Only used when `sortable`. */
+  onSortChange?: (direction: TableSortDirection) => void;
+  /**
+   * Direction cycle order. Default: `['asc', 'desc', null]` — three states.
+   * Pass `['asc', 'desc']` for two-state (always sorted, no clear).
+   */
+  cycle?: TableSortDirection[];
+}
+
+const DEFAULT_SORT_CYCLE: TableSortDirection[] = ['asc', 'desc', null];
+
+function nextSortDirection(
+  current: TableSortDirection,
+  cycle: TableSortDirection[]
+): TableSortDirection {
+  const i = cycle.indexOf(current);
+  if (i === -1) return cycle[0] ?? null;
+  return cycle[(i + 1) % cycle.length] ?? null;
+}
+
+function SortIcon({ direction }: { direction: TableSortDirection }) {
+  if (direction === 'asc') {
+    return <ChevronUp className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />;
+  }
+  if (direction === 'desc') {
+    return <ChevronDown className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />;
+  }
+  return (
+    <ChevronsUpDown
+      className="h-3.5 w-3.5 shrink-0 text-label-assistive"
+      aria-hidden="true"
+    />
+  );
+}
+
+export const TableHead = forwardRef<HTMLTableCellElement, TableHeadProps>(
+  ({ className, sortable, sortDirection, onSortChange, cycle, children, ...props }, ref) => {
     const density = useContext(DensityContext);
+    const baseClass = cn(
+      CELL_PAD_X,
+      ROW_PAD[density],
+      'text-left font-semibold text-polaris-caption1 uppercase tracking-wider',
+      className
+    );
+
+    if (!sortable) {
+      return <th ref={ref} scope="col" className={baseClass} {...props}>{children}</th>;
+    }
+
+    const direction: TableSortDirection = sortDirection ?? null;
+    const ariaSort: React.AriaAttributes['aria-sort'] =
+      direction === 'asc' ? 'ascending' : direction === 'desc' ? 'descending' : 'none';
+
+    const handleClick = () => {
+      if (!onSortChange) return;
+      onSortChange(nextSortDirection(direction, cycle ?? DEFAULT_SORT_CYCLE));
+    };
+
     return (
-      <th
-        ref={ref}
-        scope="col"
-        className={cn(
-          CELL_PAD_X,
-          ROW_PAD[density],
-          'text-left font-semibold text-polaris-caption1 uppercase tracking-wider',
-          className
-        )}
-        {...props}
-      />
+      <th ref={ref} scope="col" aria-sort={ariaSort} className={baseClass} {...props}>
+        {/* eslint-disable-next-line @polaris/prefer-polaris-component -- primitive layer */}
+        <button
+          type="button"
+          onClick={handleClick}
+          className={cn(
+            'inline-flex items-center gap-polaris-3xs',
+            '-mx-1 px-1 rounded-polaris-xs',
+            'transition-colors hover:text-label-normal',
+            'focus-visible:outline-none focus-visible:shadow-polaris-focus',
+            direction !== null && 'text-label-normal'
+          )}
+        >
+          <span>{children as ReactNode}</span>
+          <SortIcon direction={direction} />
+        </button>
+      </th>
     );
   }
 );

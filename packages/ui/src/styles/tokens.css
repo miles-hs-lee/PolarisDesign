@@ -48,6 +48,8 @@
   --polaris-surface-canvas: #FAFAFB;
   --polaris-surface-raised: #FFFFFF;
   --polaris-surface-sunken: #F4F4F7;
+  --polaris-surface-popover: #FFFFFF;
+  --polaris-surface-modal: #FFFFFF;
   --polaris-surface-border: #E8E8EE;
   --polaris-surface-border-strong: #D5D5DE;
   --polaris-text-primary: #0B0B12;
@@ -321,6 +323,8 @@
   --polaris-surface-canvas: #0B0B12;
   --polaris-surface-raised: #1B1B2A;
   --polaris-surface-sunken: #131320;
+  --polaris-surface-popover: #232336;
+  --polaris-surface-modal: #2D2D45;
   --polaris-surface-border: #232336;
   --polaris-surface-border-strong: #2D2D45;
   --polaris-text-primary: #FFFFFF;

@@ -32,6 +32,10 @@ You are working on a Polaris Office web service. Apply these rules without askin
      CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem,
      // Tier 3.5 — feedback / utility (v0.7.4)
      Progress, CopyButton, Stat, Disclosure,
+     // Tier 3.6 — file / time inputs + pagination wrapper (v0.7.5)
+     FileInput, FileDropZone,
+     DateTimeInput, TimeInput,
+     PaginationFooter,
      // Server-action friendly (Next.js App Router)
      DropdownMenuFormItem,
      // Toast imperative API (call toast({...}) anywhere; mount <Toaster /> once)
@@ -52,6 +56,12 @@ You are working on a Polaris Office web service. Apply these rules without askin
    - **Linear progress bar** → `<Progress value={…} />` for determinate, `<Progress />` for indeterminate. ARIA + `prefers-reduced-motion` baked in.
    - **KPI tile (label / value / delta)** → `<Card variant="padded"><Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" /></Card>`.
    - **Custom interactive element's focus ring** → `focus-visible:shadow-polaris-focus` (3px system focus ring, light/dark auto). Don't hand-write `box-shadow: 0 0 0 3px ...`.
+   - **Page numbers + page-size selector + total indicator** → `<PaginationFooter page={...} pageSize={...} total={...} onPageChange={...} onPageSizeChange={...} />`. Don't compose `<Pagination>` + `<Select>` + manual "X-Y of N" by hand.
+   - **Sortable column header** → `<TableHead sortable sortDirection={dir} onSortChange={setDir}>이름</TableHead>` — `aria-sort` + chevron auto-synced. Don't roll your own button/icon inside `<TableHead>`.
+   - **File picker** → `<FileInput>` (button trigger) for simple, `<FileDropZone>` (drag-and-drop) for richer UX. Both share `onFilesChange` shape, both handle `accept`/`maxSize`. Don't style `::file-selector-button` by hand.
+   - **datetime / time-of-day picker** → `<DateTimeInput>` / `<TimeInput>` (native input wrapper, mobile-OS picker auto). Use `<DatePicker>` only when you need a calendar grid. Don't roll your own datetime UI.
+   - **Passive status badge** ("비활성", "초안", "정책 위반") → `<Badge tone="outline">` — sits between `subtle` (can disappear) and `solid` (demands attention).
+   - **Layered elevation in dark mode** (popover-on-card, modal-on-popover) → `bg-surface-popover` / `bg-surface-modal` (v0.7.5 new tiers). Don't `color-mix()` your way around `surface.raised`.
 
    **Subpath imports** — keep root barrel light:
    ```ts

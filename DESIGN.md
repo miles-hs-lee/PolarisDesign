@@ -102,6 +102,8 @@ colors:
   surface-canvas: "#FAFAFB"
   surface-raised: "#FFFFFF"
   surface-sunken: "#F4F4F7"
+  surface-popover: "#FFFFFF"
+  surface-modal: "#FFFFFF"
   surface-border: "#E8E8EE"
   surface-border-strong: "#D5D5DE"
   text-primary: "#0B0B12"

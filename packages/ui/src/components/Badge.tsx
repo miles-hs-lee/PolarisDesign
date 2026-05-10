@@ -28,6 +28,11 @@ const badgeVariants = cva(
         /** Filled bg + on-brand white text. Use over images, dark
          *  backgrounds, or anywhere maximum legibility matters. */
         solid: '',
+        /** v0.7.5 NEW — transparent bg + colored 1px border + colored text.
+         *  Use for *passive* states ("비활성", "초안", "정책 위반") where
+         *  visual weight should sit between subtle (background-tint, can
+         *  disappear) and solid (filled, demands attention). */
+        outline: 'bg-transparent border',
       },
     },
     compoundVariants: [
@@ -57,6 +62,19 @@ const badgeVariants = cva(
       { variant: 'pptx',      tone: 'solid', class: 'bg-file-pptx text-label-inverse' },
       { variant: 'pdf',       tone: 'solid', class: 'bg-file-pdf text-label-inverse' },
       { variant: 'hwp',       tone: 'solid', class: 'bg-file-hwp text-label-inverse' },
+      // Outline (transparent bg + colored border) — v0.7.5
+      { variant: 'neutral',   tone: 'outline', class: 'border-line-strong text-label-neutral' },
+      { variant: 'primary',   tone: 'outline', class: 'border-accent-brand-normal text-accent-brand-normal' },
+      { variant: 'secondary', tone: 'outline', class: 'border-ai-normal text-ai-normal' },
+      { variant: 'success',   tone: 'outline', class: 'border-state-success text-state-success' },
+      { variant: 'warning',   tone: 'outline', class: 'border-state-warning text-state-warning' },
+      { variant: 'danger',    tone: 'outline', class: 'border-state-error text-state-error' },
+      { variant: 'info',      tone: 'outline', class: 'border-state-info text-state-info' },
+      { variant: 'docx',      tone: 'outline', class: 'border-file-docx text-file-docx' },
+      { variant: 'xlsx',      tone: 'outline', class: 'border-file-xlsx text-file-xlsx' },
+      { variant: 'pptx',      tone: 'outline', class: 'border-file-pptx text-file-pptx' },
+      { variant: 'pdf',       tone: 'outline', class: 'border-file-pdf text-file-pdf' },
+      { variant: 'hwp',       tone: 'outline', class: 'border-file-hwp text-file-hwp' },
     ],
     defaultVariants: {
       variant: 'neutral',

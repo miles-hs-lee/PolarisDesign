@@ -1,6 +1,6 @@
 # @polaris/ui
 
-폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 41개 React 컴포넌트.
+폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 47개 React 컴포넌트.
 
 루트 [README](../../README.md)에 전체 시스템 설명이 있습니다. 이 문서는 패키지 사용법만 다룹니다.
 
@@ -95,7 +95,7 @@ export default {
 
 v0.6 / rc.0 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-raised`, `bg-status-danger`, `text-polaris-display-lg` 등)는 deprecated alias로 작동. v0.8에서 제거. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`.
 
-## 컴포넌트 (41개)
+## 컴포넌트 (47개)
 
 ```tsx
 import {
@@ -114,6 +114,10 @@ import {
   CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem,  // experimental
   // Tier 3.5 (4) — feedback / utility (v0.7.4)
   Progress, CopyButton, Stat, Disclosure,
+  // Tier 3.6 (4) — file / time inputs + pagination wrapper (v0.7.5)
+  FileInput, FileDropZone,
+  DateTimeInput, TimeInput,
+  PaginationFooter,                                               // (Pagination 헬퍼)
   // 부속 (server-action friendly)
   DropdownMenuFormItem,
   // Toast imperative API
@@ -278,6 +282,96 @@ import { CopyButton } from '@polaris/ui';
 
 대시보드 4-up 레이아웃은 `<Card><Stat /></Card>`를 grid로 묶어 쓰세요. `helper`로 비교 윈도우(“지난 7일 기준”)도 함께 표시 가능.
 
+### Badge — `outline` 톤
+
+`subtle`(기본)·`solid` 외 **`outline`** 톤이 v0.7.5에 추가됐습니다. 비활성/초안/위반같은 *passive* 상태에 적합 — subtle처럼 사라지지 않고 solid처럼 무게 잡지도 않음:
+
+```tsx
+<Badge variant="danger" tone="outline">정책 위반</Badge>
+<Badge variant="neutral" tone="outline">초안</Badge>
+```
+
+### Pagination — `<PaginationFooter>` 한 줄 통합
+
+페이지 번호 + "X-Y of N" 인디케이터 + 페이지사이즈 셀렉터를 한 row로 묶어주는 wrapper. 컨트롤드 패턴:
+
+```tsx
+import { PaginationFooter } from '@polaris/ui';
+
+<PaginationFooter
+  page={page}
+  pageSize={pageSize}
+  total={total}
+  onPageChange={setPage}
+  onPageSizeChange={(n) => { setPageSize(n); setPage(1); }}
+  pageSizeOptions={[10, 25, 50, 100]}
+/>
+```
+
+각 영역은 prop으로 끄기 가능 — `showTotal={false}`로 인디케이터 숨김, `onPageSizeChange` 미전달 시 셀렉터 자동 비활성. 라벨은 `labels` prop으로 i18n.
+
+### Table — `<TableHead sortable>` 빌트인
+
+```tsx
+import { TableHead, type TableSortDirection } from '@polaris/ui';
+
+const [sort, setSort] = useState<{ key: string; dir: TableSortDirection }>({ key: 'name', dir: 'asc' });
+
+<TableHead
+  sortable
+  sortDirection={sort.key === 'name' ? sort.dir : null}
+  onSortChange={(dir) => setSort({ key: 'name', dir })}
+>
+  이름
+</TableHead>
+```
+
+- `aria-sort`(`ascending`/`descending`/`none`)와 chevron 아이콘이 자동 동기화 (WCAG 1.4.1 — 색상만으로 sort 상태 전달 X)
+- 사이클 기본값: `null → asc → desc → null`. `cycle={['asc', 'desc']}`로 2-state 강제 가능
+- `sortable` 미전달 시 기존 동작 그대로 — 마이그레이션 없음
+
+### FileInput / FileDropZone
+
+**간단 케이스** — 트리거 버튼 + 선택 파일명:
+
+```tsx
+<FileInput
+  label="첨부 파일"
+  accept=".pdf,.docx"
+  multiple
+  onFilesChange={setFiles}
+  error={errors.files?.message}
+/>
+```
+
+**드래그&드롭 + 파일 형식/크기 검증**:
+
+```tsx
+<FileDropZone
+  accept=".pdf,.docx"
+  multiple
+  maxSize={10 * 1024 * 1024}            // 10 MB
+  onFilesChange={(files) => upload(files)}
+  onReject={(rejections) => toast({ variant: 'destructive', title: rejections[0].reason })}
+/>
+```
+
+`onReject` 콜백은 `{ file, code: 'file-too-large' | 'file-invalid-type', reason }` 배열 — toast로 띄우기 좋음. ARIA `role="button"` + Enter/Space 키로 picker 열기 + `:focus-visible`에 `shadow-polaris-focus` 자동.
+
+### DateTimeInput / TimeInput
+
+`<DatePicker>`(Popover + Calendar UI)와 별개로, **만료일 / 알림 시각** 같은 단순 case에는 native input wrapper 사용:
+
+```tsx
+<DateTimeInput label="만료일" hint="브라우저 시간대 기준"
+  value={value} onChange={(e) => setValue(e.target.value)} />
+<TimeInput label="알림 시각" value="09:30" onChange={(e) => setT(e.target.value)} />
+```
+
+- 모바일에서 OS native picker (iOS 휠 / Android 시간 picker) 자동
+- i18n / 12h vs 24h 표시는 브라우저가 처리
+- 값 형식: datetime-local = `YYYY-MM-DDTHH:MM`, time = `HH:MM` (24h)
+
 ### `shadow-polaris-focus` — 커스텀 인터랙티브 요소의 시스템 포커스 링
 
 `Button`/`Input` 외 직접 만든 클릭 가능한 요소에:
@@ -309,6 +403,20 @@ import { CopyButton } from '@polaris/ui';
 - **자동 대응되지 않는 케이스**: `color-mix()`로 토큰을 즉석 합성하거나, `rgba(...)` 하드코딩, `style={{ color: '#fff' }}` 같은 인라인 스타일은 다크에서 깨집니다. → `@polaris/lint`의 `no-hardcoded-color` / `no-arbitrary-tailwind` 룰이 검출.
 - **그림자도 light/dark 페어**: `shadow-polaris-md` 등은 두 테마 자동 매칭. 직접 `box-shadow: 0 4px ...` 쓰면 다크에서 안 보임.
 - **포커스 링도 다크 자동 대응**: `shadow-polaris-focus`는 light에서 alpha 35%, dark에서 45%로 컨트라스트 자동 조정.
+
+### Surface elevation 단계 (v0.7.5)
+
+다크모드에서 카드 위 카드 / popover 위 카드 같은 **계층 elevation**이 필요할 때, `surface.raised` 위에 두 단계가 추가됐습니다 (light는 모두 흰색 — 깊이는 shadow로 표현):
+
+| 클래스 | 역할 | dark mode |
+|---|---|---|
+| `bg-surface-canvas` | 페이지 배경 (가장 깊음) | `#0B0B12` |
+| `bg-surface-sunken` | 페이지 안 inset (well, code) | `#131320` |
+| `bg-surface-raised` | 카드, 패널 | `#1B1B2A` |
+| `bg-surface-popover` ⬆ NEW | popover, 메뉴, 드롭다운 | `#232336` |
+| `bg-surface-modal` ⬆ NEW | 모달, dialog, 시트 | `#2D2D45` |
+
+→ `color-mix(...)`로 즉석 elevation 합성 안 해도 됨. `surface.modal`은 모달의 *패널* 표면 (light overlay/scrim은 `layer.overlay` — 별개 토큰).
 
 ### Subpath imports — 필요한 사람만
 

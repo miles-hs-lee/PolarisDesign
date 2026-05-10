@@ -6,7 +6,7 @@
 'demo': patch
 ---
 
-v0.7.3 리뷰의 🟢 nice-to-have 7건 정리 + 컨슈머 피드백 8건 반영 (컴포넌트 4종 신규 + 토큰/문서 보강).
+v0.7.3 리뷰의 🟢 nice-to-have 7건 정리 + 컨슈머 피드백 8건 반영 (컴포넌트 4종 신규 + 토큰/문서 보강) + v0.7.5 후보 6건도 함께 묶어 처리 (컴포넌트 6종 신규/확장 + surface elevation 토큰 2단).
 
 **컨슈머 피드백 fix (CLI/플러그인):**
 - `packages/plugin/README.md` — 옵션 A "로컬 심링크" 절차가 현재 Claude Code에서 동작하지 않음. 루트에 [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json) 추가하고 README를 mini-marketplace 흐름(`/plugin marketplace add .` + `/plugin install polaris-design@polaris-design`)으로 갱신. Claude **데스크탑** 앱은 plugin 시스템 노출 안 한다는 한계도 명시.
@@ -34,6 +34,32 @@ v0.7.3 리뷰의 🟢 nice-to-have 7건 정리 + 컨슈머 피드백 8건 반영
 
 **Test infra note:** `userEvent.setup()`이 `navigator.clipboard`를 자체 폴리필로 덮어쓰기 때문에 CopyButton 테스트는 `userEvent.setup()` *이후* `vi.spyOn(navigator.clipboard, 'writeText')` 패턴을 사용. 헬퍼 함수 `setupClipboardMock(user)`로 묶음.
 
+**v0.7.5 후보 6건 — 컴포넌트 4종 신규 + 기존 2종 확장 (41 → 47):**
+- `FileInput` — 트리거 버튼 + 선택 파일명 표시 + 멀티파일 제거 UI. native `<input type="file">` wrap, `accept`/`multiple`/`disabled`/`error`/`hint` props.
+- `FileDropZone` — 드래그&드롭 zone. `accept`/`maxSize` 검증 + `onFilesChange`/`onReject({ file, code, reason }[])`. ARIA `role="button"` + Enter/Space 키로 picker 활성화.
+- `DateTimeInput` — native `<input type="datetime-local">` wrap. `<Input>`과 동일한 52px 높이 + sm radius + label/hint/error slots. 모바일 OS native picker 자동.
+- `TimeInput` — native `<input type="time">` wrap. 24h 값 형식 + 브라우저 i18n 처리.
+- `Badge` — `outline` tone 추가 (12 variants × 3 tones = 36 compound entries). transparent bg + colored 1px border + colored text. 비활성/초안/위반 같은 passive 상태용.
+- `Pagination` — `PaginationFooter` wrapper 신규. 페이지 번호 + "X-Y of N" 인디케이터 + 페이지사이즈 셀렉터를 한 row로 묶음. 컨트롤드 패턴 (`page`/`pageSize`/`total` + `onPageChange`/`onPageSizeChange`). `labels` prop으로 i18n.
+- `Table` — `TableHead`에 `sortable`/`sortDirection`/`onSortChange`/`cycle` props 추가. `aria-sort` 자동 (none/ascending/descending) + 3-state chevron 아이콘 (`asc`/`desc`/null). 기본 cycle `null → asc → desc → null`, 2-state cycle도 지원. `sortable` 미전달 시 기존 동작 그대로 — non-breaking.
+
+**v0.7.5 후보 — 토큰:**
+- `surface.popover` (light: `#FFFFFF` / dark: `#232336`) — popover/dropdown/menu/combobox panel 표면.
+- `surface.modal` (light: `#FFFFFF` / dark: `#2D2D45`) — modal/dialog/drawer/sheet panel 표면.
+- 의미 분리: `layer.overlay`(기존, scrim/dim용 rgba)와 `surface.modal`(NEW, 모달의 패널 자체)는 별개 토큰.
+
+**v0.7.5 테스트 (+33건, 117 → 150/151):**
+- Pagination/PaginationFooter: 8 (이미 있던 5 + PaginationFooter 8 새로 + pageNumberItems 2)
+- Table: 5 (sortable button render, aria-sort 매핑, 3-state cycle, custom 2-state cycle 등)
+- FileInput: 5 (label, error, onFilesChange, multi-summary, remove)
+- FileDropZone: 5 (Enter activation, accepted/rejected size/type, disabled)
+- DateTimeInput / TimeInput: 6 (type, error border, hint, value forwarding)
+- Badge: 2 (outline tone, neutral border-strong)
+
+**v0.7.5 SKILL/README 업데이트:**
+- README "자주 놓치는 패턴" 섹션에 7개 신규 사용 예시 1줄씩 + Surface elevation 표.
+- SKILL.md "Don't roll your own when these exist"에 7개 항목 추가.
+
 
 
 **`apps/demo`:**
@@ -57,9 +83,9 @@ v0.7.3 리뷰의 🟢 nice-to-have 7건 정리 + 컨슈머 피드백 8건 반영
 
 **검증:**
 - `pnpm verify` → 13/13 ✓
-- `pnpm test:e2e` → baseline 변동 없음 (Progress/CopyButton/Stat/Disclosure는 demo 카탈로그에 아직 미노출 — 다음 패치 후보)
+- `pnpm test:e2e` → baseline 변동 없음 (신규 컴포넌트는 demo 카탈로그에 아직 미노출 — 다음 패치 후보)
 - `pnpm --filter @polaris/lint test` → 95/95 ✓
-- `pnpm --filter @polaris/ui test` → **89 → 117/117 ✓** (+28 신규)
+- `pnpm --filter @polaris/ui test` → **89 → 151/151 ✓** (+62 신규)
 - demo lint warning **80 → 36** (-44, 55% 감소)
 
-Patch only — additive. 컨슈머 영향 없음 (모든 신규 export, 기존 API 변경 없음).
+Patch only — additive. 컨슈머 영향 없음 (모든 신규 export, 기존 API 변경 없음). `TableHead`의 `sortable`/`sortDirection`/`onSortChange`/`cycle` props도 모두 optional이라 미전달 시 기존 동작 그대로.

@@ -42,3 +42,6 @@ export * from './Progress';
 export * from './CopyButton';
 export * from './Stat';
 export * from './Disclosure';
+// Tier 3.6 — file / time inputs (v0.7.5)
+export * from './FileInput';
+export * from './DateTimeInput';

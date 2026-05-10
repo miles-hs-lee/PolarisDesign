@@ -88,6 +88,10 @@ const polarisPreset: Partial<Config> = {
           canvas:          token('--polaris-surface-canvas'),
           raised:          token('--polaris-surface-raised'),
           sunken:          token('--polaris-surface-sunken'),
+          /** v0.7.5 NEW — popover/dropdown/menu panel surface. Above raised. */
+          popover:         token('--polaris-surface-popover'),
+          /** v0.7.5 NEW — modal/dialog/drawer panel surface. Top of stack. */
+          modal:           token('--polaris-surface-modal'),
           border:          token('--polaris-surface-border'),
           'border-strong': token('--polaris-surface-border-strong'),
         },

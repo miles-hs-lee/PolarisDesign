@@ -28,4 +28,27 @@ describe('Badge', () => {
     expect(screen.getByText('new')).toHaveClass('bg-accent-brand-normal');
     expect(screen.getByText('new')).toHaveClass('text-label-inverse');
   });
+
+  it('applies outline tone classes when tone="outline"', () => {
+    render(
+      <Badge variant="danger" tone="outline">
+        정책 위반
+      </Badge>
+    );
+    const el = screen.getByText('정책 위반');
+    // Transparent bg + 1px border + colored text/border.
+    expect(el).toHaveClass('bg-transparent');
+    expect(el).toHaveClass('border');
+    expect(el).toHaveClass('border-state-error');
+    expect(el).toHaveClass('text-state-error');
+  });
+
+  it('outline tone applies neutral border-strong for neutral variant', () => {
+    render(
+      <Badge variant="neutral" tone="outline">
+        초안
+      </Badge>
+    );
+    expect(screen.getByText('초안')).toHaveClass('border-line-strong');
+  });
 });

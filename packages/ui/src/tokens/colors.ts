@@ -57,10 +57,41 @@ export const neutral = {
   '1000': { light: '#0B0B12', dark: '#FFFFFF' },
 } as const satisfies Record<string, ColorPair>;
 
+/**
+ * Surface elevation tokens.
+ *
+ * Light mode: every surface above `canvas` is white(-ish). Depth comes
+ * from `shadow-polaris-{xs,sm,md,lg}`, not from background tone.
+ *
+ * Dark mode: depth is conveyed by progressively lighter neutrals because
+ * shadows lose contrast on dark backgrounds. The ladder runs:
+ *
+ *   canvas (deepest, page bg)
+ *     ← sunken (insets within canvas — well, code blocks)
+ *     ← raised (cards, panels)
+ *     ← popover (NEW — menus, dropdowns, comboboxes — sits above raised)
+ *     ← modal   (NEW — dialogs, drawers, full-screen sheets — top of stack)
+ *
+ * Why this matters: a Card inside a Dialog inside a Popover all picking
+ * the same `raised` token loses depth in dark mode (consumer feedback in
+ * v0.7.4 review — "color-mix() on top of `--surface` to fake elevation").
+ * Use the explicit tier whose role matches your component.
+ *
+ * NOTE on the `layer.overlay` vs new `surface.modal` distinction:
+ *   - `layer.overlay`     = dimmed scrim BEHIND a modal (rgba black ~50%)
+ *   - `surface.modal`     = the modal's PANEL surface itself
+ *   They're not interchangeable.
+ */
 export const surface = {
   canvas:       { light: neutral['50'].light,  dark: neutral['0'].dark },
   raised:       { light: neutral['0'].light,   dark: neutral['100'].dark },
   sunken:       { light: neutral['100'].light, dark: neutral['50'].dark },
+  /** Popover / menu / dropdown / combobox panel. Above `raised`, below `modal`.
+   *  Light = white (depth via shadow); dark = a tier brighter than `raised`. */
+  popover:      { light: neutral['0'].light,   dark: '#232336' },
+  /** Modal / dialog / drawer / sheet panel. Top of the elevation stack.
+   *  Light = white; dark = the brightest surface tier. */
+  modal:        { light: neutral['0'].light,   dark: '#2D2D45' },
   border:       { light: neutral['200'].light, dark: neutral['200'].dark },
   borderStrong: { light: neutral['300'].light, dark: neutral['300'].dark },
 } as const satisfies Record<string, ColorPair>;
