@@ -8,7 +8,34 @@
 
 ## [Unreleased]
 
-다음 릴리스 candidate — v0.8.0 BREAKING 청소 (deprecated alias 제거 + Input.hint→helperText + HStack/VStack→Stack + Button outline 제거).
+DocFlow 컨슈머 v0.7.7 사용 후 피드백 추가 반영. **BREAKING 없음**, 다음 patch (v0.7.8) 후보.
+
+### `@polaris/ui` — 미세 갭 메우기 (additive props)
+
+- **`Stat value` numeric auto-format** — `value: ReactNode | number | bigint`. number/bigint면 `Intl.NumberFormat` 자동 (locale + options 커스터마이즈). 컨슈머가 `1234.toLocaleString()` 매번 박는 패턴 제거. `tabular-nums`로 정렬 안정.
+- **`StatGroup` (신규)** — KPI 4-up grid + auto-rows-fr + `<Stat>` 자식 자동 `<Card variant="padded" h-full>` wrap. helper 텍스트 유무에 상관없이 같은 높이. 비-Stat children은 그대로 통과.
+- **`Disclosure headingLevel` prop** — `'h2'`~`'h6'`. SR heading 목록(NVDA/JAWS H 키 nav) 노출용. button 자체는 그대로 (heading은 layout-transparent `contents`).
+- **`TableCell nowrap` prop** — `whitespace-nowrap` 적용. date/amount/id 컬럼에서 `className="whitespace-nowrap"` 매번 박는 것 제거.
+- **`PaginationFooter showPageSize` 명시 boolean** — `pageSizeOptions={undefined}` 우회 대신. backwards-compat (legacy 동작 유지). 외부 컨트롤이 페이지 사이즈 갖고 있을 때 셀렉터 명시적으로 숨김.
+- **`DatePicker name` / `valueFormat` / `required` / `form`** — hidden input 자동 렌더로 `<form action={serverAction}>` 직결. 이전엔 50줄 wrapper(ExpiryDateField) 강제 작성. ISO `yyyy-MM-dd` 기본, `valueFormat`으로 커스텀.
+
+### `Badge` dismissible × hover (코덱스 후속 fix)
+
+이전 patch에서 발견된 visual regression: solid tone Badge에서 light gray hover patch가 white X 위에 깔려 hover 시 X가 흐릿. tone-aware hover tint (solid → `static-white/25`, subtle/outline → `static-black/10`).
+
+### 테스트
+
+236 → **254/254 ✓** (+18) — Stat NumberFormat 3 / StatGroup 3 / Disclosure heading 2 / TableCell nowrap 1 / PaginationFooter showPageSize 2 / DatePicker name+hidden input 7.
+
+### 검증
+
+`pnpm verify` 13/13 ✓ (62s) · 컨슈머 측 codemod 불필요.
+
+### Tracking
+
+- v0.8.0 BREAKING 청소에 추가: `tone` ↔ `variant` 명명 통일 (Progress=tone, Badge=variant, Stat=deltaTone — 한 컴포넌트 안에서도 deltaTone vs tone 혼재). 디자인 의도가 다르긴 하지만 컨슈머 시각에선 헷갈림.
+- v0.9 follow-up: 폼 chrome 시각 일관성 (Input 52px floating-inside vs DateTimeInput 52px label-above vs DatePicker button height). 디자인팀 합의 필요 — "같은 폼에서 swappable" 원칙 명문화.
+- 로드맵: Storybook 또는 컴포넌트 matrix 페이지 검토 (디스커버리 강화 — 현재 demo 카탈로그가 부분 대체 중).
 
 ---
 

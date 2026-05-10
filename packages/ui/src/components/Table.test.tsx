@@ -269,6 +269,19 @@ describe('TableRow — clickable a11y', () => {
     expect(onRowClick).toHaveBeenCalledTimes(1);
   });
 
+  it('TableCell nowrap prop applies whitespace-nowrap', () => {
+    render(
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableCell nowrap data-testid="c">2026-12-31</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+    expect(screen.getByTestId('c')).toHaveClass('whitespace-nowrap');
+  });
+
   it('keyboard activation: focus on the row, Enter fires onClick exactly once', async () => {
     const user = userEvent.setup();
     const onRowClick = vi.fn();

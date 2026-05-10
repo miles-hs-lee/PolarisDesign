@@ -146,4 +146,32 @@ describe('PaginationFooter', () => {
     expect(screen.getByText('11-20 / 20')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '2' })).toHaveAttribute('aria-current', 'page');
   });
+
+  it('showPageSize={false} hides the selector even with onPageSizeChange set', () => {
+    render(
+      <PaginationFooter
+        page={1}
+        pageSize={10}
+        total={50}
+        onPageChange={() => {}}
+        onPageSizeChange={() => {}}
+        showPageSize={false}
+      />
+    );
+    expect(screen.queryByText('페이지당')).toBeNull();
+  });
+
+  it('showPageSize={true} forces the selector visible (legacy behavior)', () => {
+    render(
+      <PaginationFooter
+        page={1}
+        pageSize={10}
+        total={50}
+        onPageChange={() => {}}
+        onPageSizeChange={() => {}}
+        showPageSize
+      />
+    );
+    expect(screen.getByText('페이지당')).toBeInTheDocument();
+  });
 });

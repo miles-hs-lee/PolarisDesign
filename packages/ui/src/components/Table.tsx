@@ -307,13 +307,30 @@ export const TableHead = forwardRef<HTMLTableCellElement, TableHeadProps>(
 );
 TableHead.displayName = 'TableHead';
 
-export const TableCell = forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<HTMLTableCellElement>>(
-  ({ className, ...props }, ref) => {
+export interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
+  /**
+   * Apply `whitespace-nowrap` so this cell's content stays on one line
+   * regardless of column width. Common for date / amount / ID columns
+   * where wrapping a number across two lines is worse than horizontal
+   * scroll. Without this prop consumers were adding `className="whitespace-nowrap"`
+   * on most cells in dense data tables.
+   */
+  nowrap?: boolean;
+}
+
+export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(
+  ({ className, nowrap, ...props }, ref) => {
     const density = useContext(DensityContext);
     return (
       <td
         ref={ref}
-        className={cn(CELL_PAD_X, ROW_PAD[density], 'text-label-normal', className)}
+        className={cn(
+          CELL_PAD_X,
+          ROW_PAD[density],
+          'text-label-normal',
+          nowrap && 'whitespace-nowrap',
+          className
+        )}
         {...props}
       />
     );

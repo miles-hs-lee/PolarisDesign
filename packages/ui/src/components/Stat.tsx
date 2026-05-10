@@ -1,5 +1,6 @@
-import { forwardRef, type ReactNode } from 'react';
+import { Children, forwardRef, isValidElement, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { Card } from './Card';
 import { Skeleton } from './Skeleton';
 import { cn } from '../lib/cn';
 
@@ -66,8 +67,29 @@ export interface StatProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** What the value measures (e.g. "조회수"). */
   label: ReactNode;
-  /** The headline number. Pre-format strings on the call site. */
-  value: ReactNode;
+  /**
+   * The headline number.
+   *
+   * - **`number`** (or `bigint`): formatted via `Intl.NumberFormat` with
+   *   the user's locale (browser `navigator.language` — `ko-KR` etc.).
+   *   `1234` → `"1,234"` automatically. Fine-tune via `numberFormat`.
+   * - **`ReactNode`** (string / JSX): rendered as-is. Pre-format yourself
+   *   when you need locale-aware formatting outside of the default.
+   *
+   * Why both: the default behavior covers ~90% of dashboards (raw count
+   * → comma-formatted string). Custom currency / percentage / abbreviated
+   * (`1.2M`) cases stay flexible by passing a string.
+   */
+  value: ReactNode | number | bigint;
+  /**
+   * Custom `Intl.NumberFormat` options applied when `value` is a number.
+   * Ignored when `value` is a string/ReactNode.
+   * @example `{ style: 'currency', currency: 'KRW', maximumFractionDigits: 0 }`
+   * @example `{ style: 'percent', maximumFractionDigits: 1 }`
+   */
+  numberFormat?: Intl.NumberFormatOptions;
+  /** BCP-47 locale for `numberFormat`. Default: `undefined` → browser default. */
+  numberLocale?: string;
   /** Change indicator (e.g. "+12%"). Color via `deltaTone`. */
   delta?: ReactNode;
   /** Color tone for `delta`. Default: `"neutral"`. */
@@ -85,8 +107,28 @@ export interface StatProps
   loading?: boolean;
 }
 
+/** Format a numeric `value` via `Intl.NumberFormat`; pass anything else through.
+ *  We check for `number | bigint` rather than typeof === 'number' so that
+ *  TypeScript narrowing aligns with the union in `StatProps['value']`. */
+function formatStatValue(
+  value: ReactNode | number | bigint,
+  options?: Intl.NumberFormatOptions,
+  locale?: string
+): ReactNode {
+  if (typeof value === 'number' || typeof value === 'bigint') {
+    try {
+      return new Intl.NumberFormat(locale, options).format(value);
+    } catch {
+      // Bad locale / bad options — fall back to raw string.
+      return String(value);
+    }
+  }
+  return value;
+}
+
 export const Stat = forwardRef<HTMLDivElement, StatProps>(
-  ({ className, label, value, delta, deltaTone, icon, helper, loading, ...props }, ref) => {
+  ({ className, label, value, numberFormat, numberLocale, delta, deltaTone, icon, helper, loading, ...props }, ref) => {
+    const formattedValue = formatStatValue(value, numberFormat, numberLocale);
     return (
       <div
         ref={ref}
@@ -112,7 +154,7 @@ export const Stat = forwardRef<HTMLDivElement, StatProps>(
           </div>
         ) : (
           <div className="flex items-baseline gap-polaris-2xs">
-            <span className="text-polaris-heading1 text-label-normal">{value}</span>
+            <span className="text-polaris-heading1 text-label-normal tabular-nums">{formattedValue}</span>
             {delta && (
               <span className={cn(deltaVariants({ tone: deltaTone }))}>{delta}</span>
             )}
@@ -126,3 +168,92 @@ export const Stat = forwardRef<HTMLDivElement, StatProps>(
   }
 );
 Stat.displayName = 'Stat';
+
+/* ================================================================== *
+ * StatGroup — equal-height KPI grid                          v0.7.8
+ * ================================================================== *
+ *
+ * Most dashboards reach for the same shape: 2-4 KPI tiles in a row,
+ * each `<Card><Stat /></Card>`, all the same height. Without StatGroup
+ * each consumer wires `grid grid-cols-{n} gap-polaris-md` + `<Card>`
+ * around every Stat by hand, and *equal height* requires CSS care
+ * (auto-rows-fr or items-stretch + h-full).
+ *
+ * `<StatGroup>` is a thin wrapper that:
+ *   1. Lays out children as a responsive grid (auto cols × `cols`, mobile
+ *      stacks to 1 → 2 columns)
+ *   2. Wraps each *direct* `<Stat>` child in a `<Card variant="padded">`
+ *      with `h-full` so all tiles align even when one has `helper` text
+ *      and another doesn't
+ *   3. Skips wrapping for non-`Stat` children (custom card content stays
+ *      as-is)
+ *
+ * @example 4 KPI tiles
+ * ```tsx
+ * <StatGroup cols={4}>
+ *   <Stat label="조회수" value={1234} delta="+12%" deltaTone="positive" />
+ *   <Stat label="고유 방문" value={892} />
+ *   <Stat label="다운로드" value={148} icon={<DownloadIcon />} />
+ *   <Stat label="차단" value={7} helper="지난 7일" />
+ * </StatGroup>
+ * ```
+ *
+ * @example 2 KPIs + 1 custom card
+ * ```tsx
+ * <StatGroup cols={3}>
+ *   <Stat label="총 매출" value={3500000} numberFormat={{ style: 'currency', currency: 'KRW' }} />
+ *   <Stat label="구독자" value={subscribers} />
+ *   <Card variant="padded">  // custom block — passed through as-is
+ *     <CardTitle>차트</CardTitle>
+ *     <Sparkline data={...} />
+ *   </Card>
+ * </StatGroup>
+ * ```
+ */
+
+export interface StatGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Number of columns at md+. Default: 4. Mobile collapses to 1 → 2. */
+  cols?: 2 | 3 | 4 | 5 | 6;
+  /** Skip auto-wrapping children in `<Card variant="padded">`. Default: false. */
+  unwrapped?: boolean;
+}
+
+const COLS_CLASS: Record<NonNullable<StatGroupProps['cols']>, string> = {
+  2: 'grid-cols-1 sm:grid-cols-2',
+  3: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
+  4: 'grid-cols-2 md:grid-cols-4',
+  5: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-5',
+  6: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6',
+};
+
+export const StatGroup = forwardRef<HTMLDivElement, StatGroupProps>(
+  ({ cols = 4, unwrapped, className, children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        // `auto-rows-fr` makes every grid row the same height — sibling
+        // Stat tiles align even when one has `helper` text and another
+        // doesn't. Without it, intrinsic-height rows leave the helper-
+        // tiles taller than the bare-tile siblings.
+        className={cn('grid auto-rows-fr gap-polaris-md', COLS_CLASS[cols], className)}
+        {...props}
+      >
+        {Children.map(children, (child) => {
+          if (!isValidElement(child)) return child;
+          if (unwrapped) return child;
+          // Auto-wrap only `<Stat>` children. Anything else (custom Card,
+          // chart, etc.) passes through so the consumer keeps full control.
+          if (child.type === Stat) {
+            return (
+              <Card variant="padded" className="h-full">
+                {child}
+              </Card>
+            );
+          }
+          return child;
+        })}
+      </div>
+    );
+  }
+);
+StatGroup.displayName = 'StatGroup';

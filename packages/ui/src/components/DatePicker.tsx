@@ -28,6 +28,24 @@ export interface DatePickerProps {
   className?: string;
   /** aria-label for the trigger. */
   ariaLabel?: string;
+  /**
+   * `name` for form submission — when set, a hidden `<input>` with the
+   * date's ISO-YYYY-MM-DD value is rendered alongside the trigger so
+   * the field participates in `<form action={...}>` server actions and
+   * vanilla form submits. Without this prop, only `onChange` was usable
+   * and consumers had to wrap DatePicker in a 50-line ExpiryDateField
+   * helper to bridge to react-hook-form / server actions.
+   *
+   * The hidden input's value uses ISO date format (`2026-12-31`) — pass
+   * `valueFormat` to override (e.g. `'yyyyMMdd'`, `'yyyy/MM/dd'`).
+   */
+  name?: string;
+  /** date-fns format for the hidden form-submission input. Default: `yyyy-MM-dd`. */
+  valueFormat?: string;
+  /** Required-ness for the hidden form input. Forwarded to the `<input>`. */
+  required?: boolean;
+  /** Form id this hidden input belongs to (rare; only when outside a `<form>` ancestor). */
+  form?: string;
 }
 
 export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
@@ -40,6 +58,10 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
     disabled,
     className,
     ariaLabel = '날짜 선택',
+    name,
+    valueFormat = 'yyyy-MM-dd',
+    required,
+    form,
   }, ref) => {
     const [open, setOpen] = useState(false);
     return (
@@ -56,6 +78,20 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             {value ? format(value, formatStr, { locale }) : placeholder}
           </Button>
         </PopoverTrigger>
+        {/* Hidden input mirrors the picker value into the form payload.
+          * Rendered only when `name` is set to avoid leaking empty fields
+          * into form submissions for purely controlled / display-only
+          * usages. The input is pure-presentational `hidden` (not just
+          * visually hidden) — no aria attributes needed. */}
+        {name && (
+          <input
+            type="hidden"
+            name={name}
+            value={value ? format(value, valueFormat, { locale }) : ''}
+            required={required}
+            form={form}
+          />
+        )}
         <PopoverContent align="start">
           <Calendar
             mode="single"

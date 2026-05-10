@@ -146,6 +146,23 @@ export interface DisclosureProps
   triggerClassName?: string;
   /** Tailwind class for the content wrapper. */
   contentClassName?: string;
+  /**
+   * Wrap the trigger in a semantic heading element (`h2`–`h6`).
+   *
+   * Pure visual disclosures don't need a heading — but for FAQ /
+   * settings groups / docs sections, screen-reader users navigate by
+   * heading list (`H` key in NVDA/JAWS), so the trigger needs to carry
+   * a heading role. Without this prop the trigger renders as a plain
+   * `<button>` which doesn't appear in the heading outline.
+   *
+   * The Radix `<Trigger>` button stays the interactive element — the
+   * heading only wraps it semantically. ARIA `aria-expanded` and the
+   * keyboard behavior are unchanged.
+   *
+   * Default: no heading (plain button). Set to `'h2'` / `'h3'` / etc.
+   * to opt in.
+   */
+  headingLevel?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
 
 /**
@@ -159,15 +176,28 @@ export const Disclosure = forwardRef<
   DisclosureProps
 >(
   (
-    { title, hideChevron, children, className, triggerClassName, contentClassName, ...rootProps },
+    { title, hideChevron, headingLevel, children, className, triggerClassName, contentClassName, ...rootProps },
     ref
-  ) => (
-    <CollapsiblePrimitive.Root ref={ref} className={cn('font-polaris', className)} {...rootProps}>
+  ) => {
+    const trigger = (
       <DisclosureTrigger hideChevron={hideChevron} className={triggerClassName}>
         {title}
       </DisclosureTrigger>
-      <DisclosureContent className={contentClassName}>{children}</DisclosureContent>
-    </CollapsiblePrimitive.Root>
-  )
+    );
+    // Wrap the trigger in a semantic heading when requested. The
+    // heading element is purely structural — Tailwind `contents` makes
+    // it layout-transparent so existing visual styling stays the same.
+    const Heading = headingLevel;
+    return (
+      <CollapsiblePrimitive.Root ref={ref} className={cn('font-polaris', className)} {...rootProps}>
+        {Heading ? (
+          <Heading className="contents">{trigger}</Heading>
+        ) : (
+          trigger
+        )}
+        <DisclosureContent className={contentClassName}>{children}</DisclosureContent>
+      </CollapsiblePrimitive.Root>
+    );
+  }
 );
 Disclosure.displayName = 'Disclosure';

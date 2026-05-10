@@ -1,6 +1,6 @@
 # @polaris/ui
 
-폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 58개 React 컴포넌트.
+폴라리스 디자인 시스템의 런타임 자산 — 토큰, CSS 변수, Tailwind preset, 59개 React 컴포넌트.
 
 루트 [README](../../README.md)에 전체 시스템 설명이 있습니다. 이 문서는 패키지 사용법만 다룹니다.
 
@@ -95,7 +95,7 @@ export default {
 
 v0.6 / rc.0 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-raised`, `bg-status-danger`, `text-polaris-display-lg` 등)는 deprecated alias로 작동. v0.8에서 제거. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`.
 
-## 컴포넌트 (58개)
+## 컴포넌트 (59개)
 
 ```tsx
 import {
@@ -113,7 +113,7 @@ import {
   Calendar, DatePicker, DateRangePicker,                          // experimental
   CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem,  // experimental
   // Tier 3.5 (4) — feedback / utility (v0.7.4)
-  Progress, CopyButton, Stat, Disclosure,
+  Progress, CopyButton, Stat, StatGroup, Disclosure,
   // Tier 3.6 (4) — file / time inputs + pagination wrapper (v0.7.5)
   FileInput, FileDropZone,
   DateTimeInput, TimeInput,
@@ -281,15 +281,34 @@ import { CopyButton } from '@polaris/ui';
 `tone`: `accent`(default) / `success` / `warning` / `danger` / `ai`.
 `size`: `sm` / `md`(default) / `lg`. 인디터미네이트는 `prefers-reduced-motion`을 자동 존중.
 
-### Stat — KPI 타일
+### Stat — KPI 타일 + StatGroup
+
+`Stat`은 카드 안에서 단일 KPI를 표시. 여러 개를 한 row에 가지런히 정렬할 땐 `<StatGroup>` (auto-rows-fr로 helper 텍스트 유무에 상관없이 같은 높이):
 
 ```tsx
-<Card variant="padded">
-  <Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" />
-</Card>
+import { Stat, StatGroup } from '@polaris/ui';
+
+<StatGroup cols={4}>
+  <Stat label="조회수" value={1234567} delta="+12%" deltaTone="positive" />
+  <Stat label="고유 방문" value={892} />
+  <Stat label="매출" value={3500000} numberLocale="ko-KR"
+        numberFormat={{ style: 'currency', currency: 'KRW', maximumFractionDigits: 0 }} />
+  <Stat label="차단" value={7} helper="지난 7일" />
+</StatGroup>
 ```
 
-대시보드 4-up 레이아웃은 `<Card><Stat /></Card>`를 grid로 묶어 쓰세요. `helper`로 비교 윈도우(“지난 7일 기준”)도 함께 표시 가능.
+`value`가 **number / bigint이면 `Intl.NumberFormat`으로 자동 포맷** — `1234567` → `"1,234,567"`. `numberLocale` / `numberFormat`으로 currency·percent 등 커스터마이즈. 이미 포맷한 string ("1.2M") 또는 ReactNode를 넘기면 그대로 통과.
+
+### Disclosure — heading semantics
+
+기본은 plain `<button>` 트리거이지만 FAQ / 설정 그룹 / docs 섹션처럼 **screen-reader heading 목록 (NVDA/JAWS의 H 키)에 노출되어야 하는** 경우 `headingLevel`로 시맨틱 wrap:
+
+```tsx
+<Disclosure title="결제 관련" headingLevel="h2">...</Disclosure>
+<Disclosure title="보안 / 로그인" headingLevel="h2">...</Disclosure>
+```
+
+`<button>` 자체는 그대로라 `aria-expanded` / 키보드는 동일. heading은 layout-transparent (`className="contents"`).
 
 ### Badge — `outline` 톤
 
@@ -317,7 +336,7 @@ import { PaginationFooter } from '@polaris/ui';
 />
 ```
 
-각 영역은 prop으로 끄기 가능 — `showTotal={false}`로 인디케이터 숨김, `onPageSizeChange` 미전달 시 셀렉터 자동 비활성. 라벨은 `labels` prop으로 i18n.
+각 영역은 prop으로 끄기 가능 — `showTotal={false}`로 인디케이터 숨김, **`showPageSize={false}`로 셀렉터 숨김** (외부 컨트롤이 페이지 사이즈를 갖고 있을 때). 라벨은 `labels` prop으로 i18n.
 
 ### Table — `<TableHead sortable>` 빌트인
 

@@ -167,11 +167,25 @@ export interface PaginationFooterProps extends React.HTMLAttributes<HTMLDivEleme
   total: number;
   /** Page size. */
   pageSize: number;
-  /** Page size options for the selector. Pass `undefined` to hide the selector. Default: `[10, 25, 50, 100]`. */
+  /** Page size options for the selector. Default: `[10, 25, 50, 100]`. */
   pageSizeOptions?: number[];
   onPageChange: (page: number) => void;
-  /** Required when `pageSizeOptions` is passed. Typically also resets the page to 1. */
+  /** Required to show the page-size selector — passing this opts in. Typically also resets the page to 1. */
   onPageSizeChange?: (pageSize: number) => void;
+  /**
+   * Show the page-size selector. Default: `true` *iff* `onPageSizeChange`
+   * is provided (the selector is meaningless without a change handler).
+   *
+   * Pass `false` explicitly to hide the selector even when
+   * `onPageSizeChange` is set — useful when an external control owns
+   * the page-size choice (e.g. a Settings panel) and the footer should
+   * stay info-only.
+   *
+   * Previously the only way to hide was passing `pageSizeOptions={undefined}`
+   * which read like "no options" rather than "hide". This explicit
+   * boolean is preferred; the old behavior still works as a fallback.
+   */
+  showPageSize?: boolean;
   /** Hide the `X-Y of N` indicator. */
   showTotal?: boolean;
   /** Sibling pages on each side of the current page. Default: 2. */
@@ -197,6 +211,7 @@ export const PaginationFooter = forwardRef<HTMLDivElement, PaginationFooterProps
       pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
       onPageChange,
       onPageSizeChange,
+      showPageSize,
       showTotal = true,
       siblings = 2,
       labels,
@@ -234,7 +249,12 @@ export const PaginationFooter = forwardRef<HTMLDivElement, PaginationFooterProps
         )}
 
         <div className="flex items-center gap-polaris-sm">
-          {pageSizeOptions && onPageSizeChange ? (
+          {/* Resolve showPageSize: explicit boolean wins; otherwise default
+            *  to "show iff change-handler + options are present" (legacy).
+            *  Passing `pageSizeOptions={undefined}` still hides the selector
+            *  for backwards-compat with v0.7.5 callers, but is no longer
+            *  the recommended way (`showPageSize={false}` reads better). */}
+          {(showPageSize ?? Boolean(pageSizeOptions && onPageSizeChange)) && pageSizeOptions && onPageSizeChange ? (
             <div className="flex items-center gap-polaris-2xs">
               <label
                 htmlFor={pageSizeId}

@@ -78,6 +78,27 @@ describe('Disclosure', () => {
     expect(screen.getByText('세부')).toBeInTheDocument();
   });
 
+  it('headingLevel wraps the trigger in a semantic heading element', () => {
+    render(
+      <Disclosure title="결제 관련" headingLevel="h2">
+        <p>body</p>
+      </Disclosure>
+    );
+    // Screen-readers expose the trigger under a heading outline (H key nav).
+    expect(screen.getByRole('heading', { level: 2, name: '결제 관련' })).toBeInTheDocument();
+    // The actual click target is still the button inside the heading.
+    expect(screen.getByRole('button', { name: '결제 관련' })).toBeInTheDocument();
+  });
+
+  it('omits the heading wrapper when headingLevel is unset', () => {
+    render(
+      <Disclosure title="t">
+        <p>body</p>
+      </Disclosure>
+    );
+    expect(screen.queryByRole('heading')).toBeNull();
+  });
+
   it('asChild forwards Radix Slot to a single custom child (no built-in chevron)', async () => {
     const user = userEvent.setup();
     render(
