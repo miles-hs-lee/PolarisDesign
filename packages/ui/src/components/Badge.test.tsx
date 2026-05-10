@@ -85,6 +85,24 @@ describe('Badge', () => {
     expect(onDismiss).toHaveBeenCalled();
   });
 
+  it('dismiss hover bg is tone-aware (solid → white tint, subtle/outline → black tint)', () => {
+    // On solid tone the badge text/X is WHITE on a dark filled bg —
+    // a light-gray hover patch would blend with the white X. Use a
+    // translucent WHITE tint instead.
+    const { rerender } = render(
+      <Badge variant="primary" tone="solid" dismissible>x</Badge>
+    );
+    expect(screen.getByRole('button', { name: '제거' }).className).toContain('hover:bg-static-white/25');
+
+    // On subtle/outline tones the X is colored on a light bg, so the
+    // visible hover patch should be a translucent BLACK tint.
+    rerender(<Badge variant="primary" tone="subtle" dismissible>x</Badge>);
+    expect(screen.getByRole('button', { name: '제거' }).className).toContain('hover:bg-static-black/10');
+
+    rerender(<Badge variant="danger" tone="outline" dismissible>x</Badge>);
+    expect(screen.getByRole('button', { name: '제거' }).className).toContain('hover:bg-static-black/10');
+  });
+
   it('renders icon slot before the children', () => {
     render(<Badge icon={<svg data-testid="badge-ic" />}>완료</Badge>);
     const el = screen.getByText('완료');

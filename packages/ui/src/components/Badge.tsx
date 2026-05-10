@@ -118,26 +118,49 @@ export interface BadgeProps
 }
 
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ className, variant, tone, icon, dismissible, onDismiss, dismissLabel = '제거', children, ...props }, ref) => (
-    <span ref={ref} className={cn(badgeVariants({ variant, tone }), className)} {...props}>
-      {icon && (
-        <span className="inline-flex shrink-0 items-center [&>svg]:h-3 [&>svg]:w-3" aria-hidden="true">
-          {icon}
-        </span>
-      )}
-      {children}
-      {dismissible && (
-        <button
-          type="button"
-          onClick={onDismiss}
-          aria-label={dismissLabel}
-          className="-mr-1 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-polaris-pill hover:bg-interaction-hover focus-visible:outline-none focus-visible:shadow-polaris-focus"
-        >
-          <X className="h-3 w-3" aria-hidden="true" />
-        </button>
-      )}
-    </span>
-  )
+  ({ className, variant, tone, icon, dismissible, onDismiss, dismissLabel = '제거', children, ...props }, ref) => {
+    // Hover background for the dismiss × button must be tone-aware.
+    // The previous `bg-interaction-hover` (light gray) worked on subtle
+    // / outline tones (dark text on light bg) but on `solid` tones the
+    // X is white-on-brand-color, and a light-gray hover patch sits
+    // under the white X — making the icon nearly invisible at hover.
+    //
+    // Rule:
+    //   - solid tone → translucent WHITE tint (visible against the dark
+    //     filled bg, doesn't blend with the white X)
+    //   - subtle / outline → translucent BLACK tint (visible against the
+    //     light tinted/transparent bg, doesn't blend with the colored X)
+    const dismissHover =
+      tone === 'solid'
+        ? 'hover:bg-static-white/25'
+        : 'hover:bg-static-black/10';
+
+    return (
+      <span ref={ref} className={cn(badgeVariants({ variant, tone }), className)} {...props}>
+        {icon && (
+          <span className="inline-flex shrink-0 items-center [&>svg]:h-3 [&>svg]:w-3" aria-hidden="true">
+            {icon}
+          </span>
+        )}
+        {children}
+        {dismissible && (
+          <button
+            type="button"
+            onClick={onDismiss}
+            aria-label={dismissLabel}
+            className={cn(
+              '-mr-1 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-polaris-pill',
+              'transition-colors',
+              dismissHover,
+              'focus-visible:outline-none focus-visible:shadow-polaris-focus'
+            )}
+          >
+            <X className="h-3 w-3" aria-hidden="true" />
+          </button>
+        )}
+      </span>
+    );
+  }
 );
 Badge.displayName = 'Badge';
 
