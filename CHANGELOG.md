@@ -10,6 +10,14 @@
 
 다음 patch / minor 후보. 비어 있음.
 
+### e2e visual baseline 갱신 (2026-05-10)
+
+rc.3 시점 페이지 + Tokens 데모 재정리 직후 상태로 baseline 12장 갱신
+(6 페이지 × desktop + mobile). 사용자 사인오프 후 `pnpm test:e2e:update`
+로 일괄 갱신. ribbon tab 스크린샷은 변경 없음 (locator fix가 시각에는
+영향 없었음). `pnpm test:e2e` 30/30 ✓ — 정식 v0.8.0 태그 게이트의
+"디자인팀 검토 후 baseline 사인오프" 항목이 닫힘.
+
 ---
 
 ## [0.8.0-rc.3] — 2026-05-10
