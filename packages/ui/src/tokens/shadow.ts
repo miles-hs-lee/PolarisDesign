@@ -16,6 +16,7 @@ export type ShadowScale = {
   readonly md: string;
   readonly lg: string;
   readonly ai: string;
+  readonly focus: string;
 };
 
 export const shadow = {
@@ -27,6 +28,10 @@ export const shadow = {
     /** Purple glow for AI surfaces (composer, response cards). Layered
      *  shadow with two stops — outer soft halo + inner crisp edge. */
     ai: '0 8px 32px rgba(111, 58, 208, 0.18), 0 2px 6px rgba(111, 58, 208, 0.10)',
+    /** Standard 3px focus ring — applies the `--polaris-focus-ring` token
+     *  at 35% alpha. Use as `focus-visible:shadow-polaris-focus` on custom
+     *  interactive elements to match the system focus outline (WCAG 2.4.7). */
+    focus: '0 0 0 3px color-mix(in srgb, var(--polaris-focus-ring) 35%, transparent)',
   },
   dark: {
     xs: '0 1px 2px rgba(0, 0, 0, 0.40)',
@@ -36,5 +41,8 @@ export const shadow = {
     /** AI glow stays purple-tinted in dark mode (slightly stronger
      *  alpha so the halo reads against a dark surface). */
     ai: '0 8px 32px rgba(155, 133, 255, 0.30), 0 2px 6px rgba(155, 133, 255, 0.18)',
+    /** Dark-mode focus ring — same 3px ring, slightly stronger alpha (45%)
+     *  for contrast against dark surfaces. */
+    focus: '0 0 0 3px color-mix(in srgb, var(--polaris-focus-ring) 45%, transparent)',
   },
 } as const satisfies Record<'light' | 'dark', ShadowScale>;

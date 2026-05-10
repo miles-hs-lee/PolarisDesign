@@ -37,3 +37,8 @@ export * from './Popover';
 export * from './Calendar';
 export * from './DatePicker';
 export * from './Command';
+// Tier 3.5 — feedback / utility (v0.7.4)
+export * from './Progress';
+export * from './CopyButton';
+export * from './Stat';
+export * from './Disclosure';

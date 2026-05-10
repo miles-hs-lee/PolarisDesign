@@ -250,6 +250,7 @@
   --polaris-shadow-md: 0 8px 20px rgba(15, 15, 35, 0.10);
   --polaris-shadow-lg: 0 20px 40px rgba(15, 15, 35, 0.14);
   --polaris-shadow-ai: 0 8px 32px rgba(111, 58, 208, 0.18), 0 2px 6px rgba(111, 58, 208, 0.10);
+  --polaris-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--polaris-focus-ring) 35%, transparent);
 
   --polaris-spacing-none: 0;
   --polaris-spacing-4xs: 2px;
@@ -378,6 +379,7 @@
   --polaris-shadow-md: 0 8px 20px rgba(0, 0, 0, 0.50);
   --polaris-shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.60);
   --polaris-shadow-ai: 0 8px 32px rgba(155, 133, 255, 0.30), 0 2px 6px rgba(155, 133, 255, 0.18);
+  --polaris-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--polaris-focus-ring) 45%, transparent);
 }
 
 @media (max-width: 767px) {

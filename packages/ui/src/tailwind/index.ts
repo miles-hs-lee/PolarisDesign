@@ -283,6 +283,10 @@ const polarisPreset: Partial<Config> = {
         'polaris-lg': 'var(--polaris-shadow-lg)',
         // AI Purple glow — for prompt composers / response cards only.
         'polaris-ai': 'var(--polaris-shadow-ai)',
+        /** Standard 3px focus ring (`--polaris-focus-ring` token at 35% / 45%
+         *  alpha for light/dark). Apply as `focus-visible:shadow-polaris-focus`
+         *  on custom interactive elements to match the system focus outline. */
+        'polaris-focus': 'var(--polaris-shadow-focus)',
       },
 
       fontFamily: {
@@ -389,6 +393,21 @@ const polarisPreset: Partial<Config> = {
         'polaris-in-out': 'var(--polaris-ease-in-out)',
         'polaris-out':    'var(--polaris-ease-out)',
         'polaris-in':     'var(--polaris-ease-in)',
+      },
+
+      // v0.7.4 NEW — keyframes for indeterminate Progress shuttle.
+      // Reduced-motion users get a static 40% bar (motion-safe: prefix in
+      // the component) — still valid as "something is happening" without
+      // the animation, and respects WCAG 2.3.3 Animation from Interactions.
+      keyframes: {
+        'polaris-progress-indeterminate': {
+          '0%':   { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(350%)' },
+        },
+      },
+      animation: {
+        'polaris-progress-indeterminate':
+          'polaris-progress-indeterminate 1.4s var(--polaris-ease-in-out, ease-in-out) infinite',
       },
     },
   },

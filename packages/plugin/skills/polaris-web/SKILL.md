@@ -25,11 +25,13 @@ You are working on a Polaris Office web service. Apply these rules without askin
      // Tier 2 — auxiliary UI
      Checkbox, Switch, Skeleton, Alert, Pagination, Breadcrumb, EmptyState,
      // Tier 2.5 — layout / structural
-     Stack, HStack, VStack, Container, Drawer, Table, DescriptionList,
+     Stack, Container, Drawer, Table, DescriptionList,
      // Tier 3 — date / overlay / command (Calendar·Command are experimental — APIs may change)
      Popover, PopoverTrigger, PopoverContent,
      Calendar, DatePicker, DateRangePicker,
      CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem,
+     // Tier 3.5 — feedback / utility (v0.7.4)
+     Progress, CopyButton, Stat, Disclosure,
      // Server-action friendly (Next.js App Router)
      DropdownMenuFormItem,
      // Toast imperative API (call toast({...}) anywhere; mount <Toaster /> once)
@@ -37,6 +39,19 @@ You are working on a Polaris Office web service. Apply these rules without askin
    } from '@polaris/ui';
    ```
 2. If a needed component doesn't exist in `@polaris/ui`, build it inline using ONLY Polaris tokens (rule 3). Don't bring in shadcn/Radix/MUI directly.
+
+   **Don't roll your own when these exist** (frequently re-implemented by mistake):
+   - **Inline / HStack / `justify="between"` row** → `<Stack direction="row" justify="between" align="center">`. No separate `Inline`/`HStack` exports.
+   - **Card with header/footer slots** → use `bare` Card + `<CardHeader>`/`<CardTitle>`/`<CardDescription>`/`<CardBody>`/`<CardFooter>` slots (already exported).
+   - **Helper text / description below input** → `<Input hint="…" error="…" />` (note: prop is `hint`, not `helperText`/`description`).
+   - **Toast imperative call** → `import { toast } from '@polaris/ui'; toast({ title, description, variant })`. Mount `<Toaster />` once.
+   - **EmptyState CTA button** → `<EmptyState action={<Button>…</Button>} />`.
+   - **Dropdown item that submits a form / server action** → `<DropdownMenuFormItem action={signOut} destructive>` (avoids Radix unmount-before-submit race).
+   - **Collapsible / Disclosure with chevron rotation** → `<Disclosure title="…">…</Disclosure>` (compound: `DisclosureRoot/Trigger/Content`). Don't roll your own `<details>` + CSS.
+   - **Copy-to-clipboard button with success feedback** → `<CopyButton text={…} />` (clipboard API + 1.5s success state + ARIA live).
+   - **Linear progress bar** → `<Progress value={…} />` for determinate, `<Progress />` for indeterminate. ARIA + `prefers-reduced-motion` baked in.
+   - **KPI tile (label / value / delta)** → `<Card variant="padded"><Stat label="조회수" value="1,234" delta="+12%" deltaTone="positive" /></Card>`.
+   - **Custom interactive element's focus ring** → `focus-visible:shadow-polaris-focus` (3px system focus ring, light/dark auto). Don't hand-write `box-shadow: 0 0 0 3px ...`.
 
    **Subpath imports** — keep root barrel light:
    ```ts
@@ -142,6 +157,11 @@ NEVER write any of:
 - ✅ 뱃지 (`bg-state-{}-bg` + Caption1 12 / 700)
 - ❌ 14px 본문에서 `text-state-error` 단독 사용 (lint 룰 `@polaris/state-color-with-icon` 가 경고)
 
+**`label.*` vs `state.*` 의미 분리** — 흔한 혼동:
+- `label.*` = 일반 텍스트의 위계(`normal/neutral/alternative/assistive/inverse/disabled`). 상태 의미 없음.
+- `state.*` = "이 텍스트는 success/warning/error를 의미한다"는 시맨틱.
+- → "위반 라벨"용으로 `label-danger` 같은 토큰은 **없습니다**(시맨틱이 흐려지므로 추가 안 함). 위반/오류 색은 `text-state-error` + 아이콘. 
+
 ### 6. File-type contexts (Polaris-specific)
 
 29개 파일 타입 SVG가 `@polaris/ui` 에서 제공됩니다 — `<FileIcon type="docx" />` 또는 직접 import:
@@ -162,9 +182,19 @@ import { DocxIcon, XlsxIcon, PptxIcon, PdfIcon, FolderIcon } from '@polaris/ui/f
 ### 8. Spacing / radius / shadow / motion / z-index
 - **Spacing** (v0.7 named): `p-polaris-md`, `gap-polaris-lg` 등 (4xs/3xs/2xs/xs/sm/md/lg/xl/2xl/3xl/4xl). Tailwind 기본 `p-4` 도 OK. Never `p-[13px]`.
 - **Radius**: `rounded-polaris-{2xs,xs,sm,md,lg,xl,2xl,pill}`. Default for buttons/cards/modals = `md` (12px). Input = `sm` (8). Large CTA = `lg` (16). Modal = `xl` (24).
-- **Shadow**: `shadow-polaris-{xs,sm,md,lg,ai}`. AI surfaces (NovaInput / response cards) = `ai` (purple glow).
+- **Shadow**: `shadow-polaris-{xs,sm,md,lg,ai,focus}`. AI surfaces (NovaInput / response cards) = `ai` (purple glow). Custom interactive elements = `focus-visible:shadow-polaris-focus` for the system focus ring (3px, light/dark auto).
 - **Motion**: `duration-polaris-{instant,fast,normal,slow}` + `ease-polaris-{in-out,out,in}`.
 - **Z-index**: `z-polaris-{base,dropdown,sticky,dim,modal,toast}`. Never `z-[999]`.
+
+### 8-1. Dark mode — what's automatic vs. what breaks
+
+- **Automatic**: every CSS token (`label.*`, `background.*`, `layer.*`, `accentBrand.*`, `state.*`, `ai.*`, `shadow-polaris-*`, `shadow-polaris-focus`) has a light/dark pair in `tokens.css`. Toggling `data-theme="dark"` on `<html>` switches everything automatically *as long as components use token classes*.
+- **Breaks in dark**:
+  - `style={{ color: '#fff' }}` / inline hex / `rgba(0,0,0,0.5)` — caught by `@polaris/no-hardcoded-color`.
+  - Tailwind arbitrary values (`bg-[#fff]`, `border-[hsl(...)]`, `p-[13px]`) — caught by `@polaris/no-arbitrary-tailwind`.
+  - Direct `box-shadow: 0 4px 12px rgba(0,0,0,0.1)` — invisible on dark surfaces. Use `shadow-polaris-md` instead.
+  - `color-mix(in srgb, #1D7FF9 20%, transparent)` with hex inputs — use the token: `color-mix(in srgb, var(--polaris-accent-brand-normal) 20%, transparent)`.
+- **Verify in dark**: temporarily set `<html data-theme="dark">` and visually scan the page before reporting done. The lint rules catch most issues, but pixel-level checks (e.g. low-contrast borders) still need a human eyeball.
 
 ### 8. Verify before reporting done
 After meaningful changes, run `/polaris-check`. Don't tell the user the task is complete while violations remain.
