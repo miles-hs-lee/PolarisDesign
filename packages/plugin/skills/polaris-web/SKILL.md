@@ -89,6 +89,7 @@ You are working on a Polaris Office web service. Apply these rules without askin
    - **DropdownMenuItem with icon** → `<DropdownMenuItem icon={<EditIcon />}>수정</DropdownMenuItem>`.
    - **Selected/clickable table row** → `<TableRow selected clickable onClick={...}>`.
    - **Toast default duration** → `<Toaster defaultDuration={5000} />` once at app root.
+   - **Navbar nav links with active state** → `<NavbarItem active={pathname.startsWith('/docs')} asChild><Link href="/docs">문서</Link></NavbarItem>`. Don't render raw `<a>` with hand-written `bg-accent-brand-normal-subtle text-accent-brand-normal` className — `NavbarItem` mirrors `<SidebarItem>`'s API (active/asChild/icon/href) so navbar/sidebar feel symmetric. Active matching (exact vs prefix) stays the consumer's call so we don't couple to a specific router.
    - **Data-table chrome** (search bar, filter chips, "+ 추가") → `<TableToolbar>` with `search`/`onSearchChange` + `chips`/`activeChip`/`onChipChange` + `actions` slot. Don't compose Search input + filter chips by hand.
    - **Bulk-action bar when rows selected** → `<TableSelectionBar count={...} onCancel={...} actions={...} />` *in place of* the toolbar (conditional render). Don't roll your own brand-tinted strip.
    - **Async-loading table placeholder** → `<TableSkeleton rows={5} columns={4} />` (ARIA `aria-busy=true` + Skeleton shimmer). Don't manually render a `<Table>` of `<Skeleton>` cells.

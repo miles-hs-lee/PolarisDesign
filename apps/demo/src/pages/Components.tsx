@@ -55,6 +55,7 @@ import {
   Navbar,
   NavbarBrand,
   NavbarNav,
+  NavbarItem,
   NavbarActions,
   PromptChip,
   Checkbox,
@@ -563,9 +564,9 @@ export default function Components() {
               <span className="text-polaris-heading-sm font-semibold">Polaris Office</span>
             </NavbarBrand>
             <NavbarNav>
-              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body2 font-medium bg-accent-brand-normal-subtle text-accent-brand-normal">홈</a>
-              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body2 font-medium text-label-neutral hover:bg-accent-brand-normal-subtle">드라이브</a>
-              <a className="px-3 py-1.5 rounded-polaris-md text-polaris-body2 font-medium text-label-neutral hover:bg-accent-brand-normal-subtle">NOVA</a>
+              <NavbarItem href="#" active>홈</NavbarItem>
+              <NavbarItem href="#">드라이브</NavbarItem>
+              <NavbarItem href="#" icon={<Sparkles />}>NOVA</NavbarItem>
             </NavbarNav>
             <NavbarActions>
               <SimpleTooltip label="알림" side="bottom">
