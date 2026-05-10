@@ -709,6 +709,98 @@ test('preserves multi-line import body when adding missing namespace (rc.5 regre
   } finally { cleanup(dir); }
 });
 
+test('ABORTS the file when rewrite would shadow a local declaration (rc.6 silent-bug fix)', () => {
+  // Codex's real-consumer regression: previous rc.5 safeguard SKIPPED
+  // adding the import while still applying the rewrite — so
+  // `surface.border` became `line.neutral`, which then bound to the
+  // local `const line = …`, build passed, runtime value was wrong.
+  // The fix: detect upfront, leave file untouched, exit non-zero with
+  // explicit warning so the consumer fixes by hand.
+  const dir = setup();
+  try {
+    const original = [
+      `import { surface } from '@polaris/ui/tokens';`,
+      `const line = { normal: 1 };`,
+      `export const x = surface.border;`,
+    ].join('\n');
+    writeFileSync(join(dir, 'shadow.ts'), original);
+    const r = runCodemod(dir, ['--apply']);
+    // Conflict path → exit 1
+    assert.equal(r.status, 1);
+    // Stderr names the file and explains the conflict
+    assert.match(r.stderr, /shadow\.ts/);
+    assert.match(r.stderr, /local 'line'/);
+    // File untouched — original content intact, no rewrite, no import added
+    const out = readFileSync(join(dir, 'shadow.ts'), 'utf8');
+    assert.equal(out, original);
+  } finally { cleanup(dir); }
+});
+
+test('ABORTS the file when an aliased polaris import shadows the destination namespace', () => {
+  // `import { ai as aiToken }` means the bare `ai` binding is NOT in
+  // scope. If codemod rewrote `brand.secondary` → `ai.normal`, the
+  // result would reference an undefined `ai`. Detect upstream, abort.
+  const dir = setup();
+  try {
+    const original = [
+      `import { brand, ai as aiToken } from '@polaris/ui/tokens';`,
+      `const _stay = aiToken;`,
+      `export const x = brand.secondary;`,
+    ].join('\n');
+    writeFileSync(join(dir, 'aliased.ts'), original);
+    const r = runCodemod(dir, ['--apply']);
+    assert.equal(r.status, 1);
+    assert.match(r.stderr, /aliased\.ts/);
+    assert.match(r.stderr, /'ai as <alias>'/);
+    const out = readFileSync(join(dir, 'aliased.ts'), 'utf8');
+    assert.equal(out, original);
+  } finally { cleanup(dir); }
+});
+
+test('ABORTS the file when HStack/VStack are imported with an alias (JSX tag rewrite gap)', () => {
+  // `<Row>` won't match the codemod's `<HStack>` / `<VStack>` JSX-tag
+  // pattern, so `direction="row"` would be silently dropped from the
+  // rewrite — a layout-semantics regression. Treat as conflict.
+  const dir = setup();
+  try {
+    const original = [
+      `import { Stack, HStack as Row } from '@polaris/ui';`,
+      `export const x = <Row gap={2} />;`,
+    ].join('\n');
+    writeFileSync(join(dir, 'alias-stack.tsx'), original);
+    const r = runCodemod(dir, ['--apply']);
+    assert.equal(r.status, 1);
+    assert.match(r.stderr, /alias-stack\.tsx/);
+    assert.match(r.stderr, /HStack\/VStack with an alias/);
+    const out = readFileSync(join(dir, 'alias-stack.tsx'), 'utf8');
+    assert.equal(out, original);
+  } finally { cleanup(dir); }
+});
+
+test('dedupe by BINDING preserves `Stack as Row` even when bare `Stack` exists', () => {
+  // Sibling concern: when an aliased-stack-import survives because the
+  // user fixed it manually before re-running, the dedupe pass must NOT
+  // drop the alias. Codex caught this on the previous rc — dedupe was
+  // matching on specifier (`Stack`) and dropping `Stack as Row`.
+  // (We can't trigger this through HStack since it's now caught as a
+  // conflict; use a synthetic case where both Stack and `Stack as Row`
+  // appear with no alias-stack import to test the dedupe primitive.)
+  const dir = setup();
+  try {
+    // Use a pure-rewrite trigger that doesn't touch the imports.
+    writeFileSync(join(dir, 'd.tsx'), [
+      `import { Stack, Stack as RenamedStack } from '@polaris/ui';`,
+      `// rewrite trigger: bg-fg-primary → bg-label-normal`,
+      `const cls = "bg-fg-primary";`,
+      `export const x = <Stack /><RenamedStack /> as any;`,
+    ].join('\n'));
+    runCodemod(dir, ['--apply']);
+    const out = readFileSync(join(dir, 'd.tsx'), 'utf8');
+    // Both bindings preserved (binding=Stack and binding=RenamedStack)
+    assert.match(out, /import \{ Stack, Stack as RenamedStack \}/);
+  } finally { cleanup(dir); }
+});
+
 test('does NOT touch files without an existing @polaris/ui import', () => {
   const dir = setup();
   try {

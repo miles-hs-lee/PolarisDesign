@@ -445,8 +445,95 @@ function* walk(start) {
   }
 }
 
+/** Source-pattern → destination-namespace map for conflict detection.
+ *  Each entry mirrors a TS_TOKEN_RENAMES rewrite that would introduce
+ *  a NEW destination namespace at the call site. We use these to detect
+ *  *before* applying any rewrite whether the destination would shadow
+ *  a local binding the user already defined — running the rewrite in
+ *  that situation can produce silent semantic bugs (e.g. `surface.border`
+ *  → `line.neutral` would silently bind to a local `const line = …`,
+ *  build passes, runtime value is wrong).
+ *
+ *  Codex caught this in a real consumer migration. Fail-loud beats
+ *  silent rewrite. */
+const REWRITE_DESTINATIONS = [
+  // [source-pattern matched in file body, destination namespace introduced]
+  [/\btext\.[a-zA-Z_$]/,                                'label'],
+  [/\bsurface\.canvas\b/,                               'background'],
+  [/\bsurface\.raised\b/,                               'layer'],
+  [/\bsurface\.sunken\b/,                               'fill'],
+  [/\bsurface\.border(?:Strong)?\b/,                    'line'],
+  [/\bbrand\.primary(?:Hover|Subtle)?\b/,               'accentBrand'],
+  [/\bbrand\.secondary(?:Hover|Subtle)?\b/,             'ai'],
+  [/\bprimary\.(?:normal|strong)\b/,                    'accentBrand'],
+  [/\bstatus\.[a-zA-Z_$]/,                              'state'],
+  [/\bbackground\.normal\b/,                            'background'],
+  [/\bbackground\.alternative\b/,                       'fill'],
+  [/\bradius\.full\b/,                                  'radius'],
+];
+
+/** Detect rewrites that would silently shadow an existing local binding
+ *  or aliased polaris import. Returns a list of conflict descriptors
+ *  — caller should leave the file untouched and surface these to the
+ *  user for manual resolution. */
+function detectNamespaceConflicts(content) {
+  const conflicts = [];
+  const seen = new Set();
+
+  for (const [src, dest] of REWRITE_DESTINATIONS) {
+    if (!src.test(content)) continue;
+
+    // Already reported this destination via another source pattern —
+    // user only needs to know about the conflict once.
+    if (seen.has(dest)) continue;
+
+    // (a) local declaration: `const | let | var | function | class <dest>`
+    const localRe = new RegExp(
+      `\\b(?:const|let|var|function|class)\\s+${dest}\\b`,
+    );
+    if (localRe.test(content)) {
+      conflicts.push({ kind: 'local-binding', destination: dest });
+      seen.add(dest);
+      continue;
+    }
+
+    // (b) aliased polaris import that uses `<dest>` as the source
+    //     specifier, leaving the bare `<dest>` binding unavailable:
+    //     `import { ai as aiToken } from '@polaris/ui/tokens'`
+    const aliasRe = new RegExp(
+      `import\\s*(?:type\\s+)?\\{[^}]*\\b${dest}\\s+as\\s+\\w+[^}]*\\}\\s*from\\s*['"]@polaris\\/ui(?:\\/\\w+)?['"]`,
+    );
+    if (aliasRe.test(content)) {
+      conflicts.push({ kind: 'aliased-polaris-import', destination: dest });
+      seen.add(dest);
+    }
+  }
+
+  // (c) Aliased `<HStack>` / `<VStack>` imports — JSX tag rewrite scans
+  //     for literal `<HStack>` / `<VStack>` tags. If the consumer aliased
+  //     them on import (`HStack as Row`), tags appear as `<Row>` in JSX
+  //     and codemod misses them, leaving a layout-semantics gap (no
+  //     `direction="row"` injected). Treat as conflict so the file
+  //     stays untouched and the consumer fixes by hand.
+  if (/import\s*(?:type\s+)?\{[^}]*\b(?:H|V)Stack\s+as\s+\w+[^}]*\}\s*from\s*['"]@polaris\/ui['"]/.test(content)) {
+    conflicts.push({ kind: 'aliased-stack-import', destination: 'Stack' });
+  }
+
+  return conflicts;
+}
+
 function transform(content, filePath) {
   const ext = extname(filePath);
+  // Conflict pre-check for JS/TS-family files before any rewrite. CSS /
+  // SCSS / MDX skip — none of the rewrite collisions surface there.
+  if (ext === '.ts' || ext === '.tsx' || ext === '.js' || ext === '.jsx' ||
+      ext === '.mjs' || ext === '.cjs') {
+    const conflicts = detectNamespaceConflicts(content);
+    if (conflicts.length > 0) {
+      // Leave file untouched; let main loop surface conflicts to user.
+      return { out: content, changes: 0, conflicts };
+    }
+  }
   let out = content;
   let changes = 0;
   const apply = (table) => {
@@ -567,37 +654,35 @@ function normalizePolarisImports(content) {
   ];
 
   const usedInBody = new Set(
-    NAMESPACES_TO_CHECK.filter((ns) => {
+    NAMESPACES_TO_CHECK.filter((ns) =>
       // Require an identifier character after the dot — excludes prose
       // like "navigation state." in JSDoc comments, where `state.` is
       // sentence punctuation rather than a member access.
-      if (!new RegExp(`\\b${ns}\\.[a-zA-Z_$]`).test(content)) return false;
-      // Skip if the file declares a local of the same name. We'd
-      // otherwise add `import { line }` to a file that has
-      // `const line = { … }`, breaking the build with a duplicate
-      // declaration. The check covers `const | let | var | function |
-      // class <ns>` and JSX-style ` ${ns}:` destructuring — the
-      // common ways a user might name a local.
-      const localDeclRe = new RegExp(
-        `\\b(?:const|let|var|function|class)\\s+${ns}\\b`,
-      );
-      if (localDeclRe.test(content)) return false;
-      return true;
-    })
+      new RegExp(`\\b${ns}\\.[a-zA-Z_$]`).test(content),
+    ),
   );
   if (usedInBody.size === 0) return content;
+  // Note: local-binding shadow check is NOT here. The transform-level
+  // `detectNamespaceConflicts` catches that upstream and skips the
+  // whole file *before* any rewrite runs — silently dropping the
+  // import while still applying the rewrite (the rc.5 approach) is
+  // worse than not running the codemod at all, because the rewritten
+  // expression now binds to the local object (silent semantic bug).
 
   const matches = [...content.matchAll(POLARIS_IMPORT_RE)];
   if (matches.length === 0) return content;
 
-  // Names already imported (across both type and value imports).
-  // Strip a leading `type ` modifier if present so e.g. `type Foo`
-  // contributes `Foo` to the set — we don't want to double-import.
+  // Bindings already in scope (across both type and value imports).
+  // Track the LOCAL binding (the alias if present) — `ai as aiToken`
+  // contributes `aiToken`, not `ai`. That distinction matters for
+  // computing `missing`: if codemod's rewrite produces `ai.normal` but
+  // the file only has `ai as aiToken`, the bare `ai` binding is NOT
+  // available and we'd need to add it. (Conflict detector catches
+  // this upstream — but keep the binding bookkeeping correct anyway.)
   const importedNames = new Set();
   for (const m of matches) {
-    for (const part of m[2].split(',')) {
-      const ident = part.trim().match(/^(?:type\s+)?([a-zA-Z_$][a-zA-Z0-9_$]*)/);
-      if (ident) importedNames.add(ident[1]);
+    for (const e of parseImportBody(m[2])) {
+      importedNames.add(e.binding);
     }
   }
 
@@ -640,14 +725,28 @@ function normalizePolarisImports(content) {
 /** Parse the inside-`{}` of an `import { … }` line into individual entries.
  *  Each entry retains the original raw text so we can rebuild the body
  *  faithfully (including `type X` modifiers, `as Alias`, etc.).
- *  Empty entries (from trailing commas or `, ,`) are dropped. */
+ *
+ *  Returns `{ specifier, binding, raw }` per entry:
+ *   - `specifier` — the imported name as it appears in the module export
+ *     (`Stack` for both `Stack` and `Stack as Row`).
+ *   - `binding`   — the local binding inside this file (`Stack` for `Stack`,
+ *     `Row` for `Stack as Row`). Dedupe MUST run on `binding`, not
+ *     `specifier`, otherwise `Stack` and `Stack as Row` look identical
+ *     and one gets dropped (rc.6 regression Codex caught).
+ *
+ *  Empty entries (from trailing commas) are dropped. */
 function parseImportBody(body) {
   return body.split(',')
     .map((part) => part.trim())
     .filter((part) => part.length > 0)
     .map((part) => {
-      const m = part.match(/^(?:type\s+)?([a-zA-Z_$][a-zA-Z0-9_$]*)/);
-      return { name: m ? m[1] : '', raw: part };
+      // `type Foo` / `Foo` / `Foo as Bar` / `type Foo as Bar`
+      const m = part.match(
+        /^(?:type\s+)?([a-zA-Z_$][a-zA-Z0-9_$]*)(?:\s+as\s+([a-zA-Z_$][a-zA-Z0-9_$]*))?/,
+      );
+      const specifier = m ? m[1] : '';
+      const binding = m ? (m[2] ?? m[1]) : '';
+      return { specifier, binding, raw: part, name: specifier };
     });
 }
 
@@ -671,11 +770,14 @@ function rebuildImportBody(entries, multiline) {
 function appendToImportBody(body, namesToAdd) {
   const multiline = body.includes('\n');
   const entries = parseImportBody(body);
-  const existing = new Set(entries.map((e) => e.name));
+  // Track bindings (the names actually visible in the local scope),
+  // not specifiers — otherwise `ai as aiToken` would block adding a
+  // bare `ai` import even though the local `ai` binding is missing.
+  const existing = new Set(entries.map((e) => e.binding));
   for (const n of namesToAdd) {
     if (!existing.has(n)) {
       existing.add(n);
-      entries.push({ name: n, raw: n });
+      entries.push({ specifier: n, binding: n, raw: n, name: n });
     }
   }
   return rebuildImportBody(entries, multiline);
@@ -705,8 +807,11 @@ function dedupePolarisImports(content) {
     const seen = new Set();
     const deduped = [];
     for (const e of entries) {
-      if (seen.has(e.name)) continue;
-      seen.add(e.name);
+      // Dedupe by LOCAL BINDING, not the imported specifier. Otherwise
+      // `Stack` and `Stack as Row` collide and `Stack as Row` gets
+      // dropped — losing the `Row` identifier the consumer is using.
+      if (seen.has(e.binding)) continue;
+      seen.add(e.binding);
       deduped.push(e);
     }
     if (deduped.length === entries.length) return match; // no-op
@@ -719,12 +824,17 @@ function dedupePolarisImports(content) {
 let totalChanges = 0;
 let totalFiles = 0;
 const changedFiles = [];
+const conflictFiles = [];
 
 for (const target of targets) {
   for (const file of walk(target)) {
     let content;
     try { content = readFileSync(file, 'utf8'); } catch { continue; }
-    const { out, changes } = transform(content, file);
+    const { out, changes, conflicts } = transform(content, file);
+    if (conflicts && conflicts.length > 0) {
+      conflictFiles.push({ file, conflicts });
+      continue;
+    }
     if (changes === 0) continue;
     totalChanges += changes;
     totalFiles += 1;
@@ -750,7 +860,38 @@ if (!APPLY && !CHECK && totalFiles > 0) {
     });
 }
 
-if (CHECK && totalChanges > 0) {
+// Conflict reporting — fail-loud on namespace collisions. Silent rewrite
+// in this case would create either a build break or a runtime semantic
+// bug (e.g. `surface.border` rewritten to `line.neutral` would bind to
+// a local `const line = …`, build passes, value is wrong). Better to
+// stop, list each conflict, and let the consumer resolve manually.
+if (conflictFiles.length > 0) {
+  console.error(`\n⚠️  ${conflictFiles.length} file${conflictFiles.length === 1 ? '' : 's'} skipped due to namespace conflicts. Resolve manually before re-running:\n`);
+  for (const { file, conflicts } of conflictFiles) {
+    console.error(`  ${relative(process.cwd(), file)}`);
+    for (const c of conflicts) {
+      const explanation = {
+        'local-binding':         `would rewrite to '${c.destination}.*' but file declares a local '${c.destination}' (const/let/var/function/class). Codemod aborts to avoid binding rewritten code to your local — rename the local first.`,
+        'aliased-polaris-import': `would rewrite to '${c.destination}.*' but file imports '${c.destination} as <alias>' from @polaris/ui. The bare '${c.destination}' binding isn't in scope — change the import to add bare '${c.destination}' or remove the alias.`,
+        'aliased-stack-import':  `imports HStack/VStack with an alias (e.g. \`HStack as Row\`). Codemod can't rewrite \`<Row>\` JSX tags to inject \`direction="row"\` — replace the alias with bare HStack/VStack first, or convert tags by hand.`,
+      }[c.kind] ?? `unknown conflict on '${c.destination}'`;
+      console.error(`    - ${explanation}`);
+    }
+  }
+  console.error('\nFiles above were left untouched. Other files were processed normally.');
+}
+
+// Exit codes:
+//   0 — clean (no rewrite needed, or APPLY succeeded)
+//   1 — `--check` mode and rewrites are pending OR conflicts present
+const checkFailed = CHECK && (totalChanges > 0 || conflictFiles.length > 0);
+const conflictFailed = conflictFiles.length > 0;
+if (checkFailed) {
   console.error('\n--check: codemod is needed. Re-run with --apply.');
+  process.exit(1);
+}
+if (conflictFailed) {
+  // Even outside `--check`, conflicts are exit-1 so CI / chained scripts
+  // notice. Files were left untouched so this is non-destructive.
   process.exit(1);
 }

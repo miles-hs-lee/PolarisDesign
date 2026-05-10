@@ -12,6 +12,38 @@
 
 ---
 
+## [0.8.0-rc.7] — 2026-05-10
+
+실전 컨슈머 마이그레이션 리뷰에서 발견된 P1 2건 + P3 1건 fix. **rc.6 대비 BREAKING 변경 없음** — codemod의 동작 모델이 "best effort + caveat"에서 "**conflict 감지 시 fail-loud**"로 전환된 게 가장 큰 의미 있는 변화. silent rewrite로 빌드 깨뜨리는 케이스 두 건이 명시적 abort + 사용자 안내로 바뀜.
+
+### P1 — codemod conflict detection (silent semantic bug → fail-loud)
+
+- **`detectNamespaceConflicts` 신규 — rewrite destination namespace가 로컬 식별자를 silent하게 shadowing하던 케이스 차단** — rc.5의 `normalizePolarisImports` 안전망이 false positive를 막으려고 추가된 거였는데, 실제 rewrite가 일어나는 파일에서도 import 추가만 skip하니까 rewrite는 그대로 적용되어 결과가 *로컬*에 binding되는 silent bug 발생 (예: `surface.border` → `line.neutral`, 파일에 `const line = { … }` 있으면 빌드 통과하면서 잘못된 값 가리킴 — 컨슈머가 진짜 마이그레이션하다 빌드 통과 + 시각 회귀로 발견). transform-level에서 사전 감지하는 방식으로 재설계: rewrite가 도입할 destination namespace가 로컬 `const|let|var|function|class` 와 충돌하거나, `import { ai as aiToken }` 같은 alias된 polaris import로 destination binding이 점유된 경우, 또는 `<HStack as Row>` 같은 alias된 stack import (JSX 태그 rewrite가 안 잡는 케이스)가 있으면 **그 파일에 어떤 변경도 가하지 않고** stderr에 명시적 안내 + exit code 1. 사용자에게 manual resolution 요청.
+- **`parseImportBody` 가 alias를 인식하지 못하던 dedupe 버그 fix** — `import { Stack, HStack as Row }` 의 두 entry를 specifier `Stack`만 보고 dedupe해서 `Stack as Row` 가 통째로 사라지던 결함. binding 필드 (`Row`) 별도 추출 + dedupe를 binding 기준으로. 이제 `Stack` (binding=Stack) 과 `Stack as Row` (binding=Row) 는 둘 다 보존. (이 결함은 `import { brand, ai as aiToken }` 같은 token alias 케이스에도 같은 family — destination conflict로 abort되는 path와 함께 안전망이 됨.)
+- **rc.5 안전망 제거** — `normalizePolarisImports` 안에 있던 "로컬 변수가 namespace 이름과 같으면 import 추가 skip" 로직이 silent bug의 직접 원인이라 transform-level conflict gate로 대체. 안전망 자체가 위험하던 케이스.
+
+### P3 — 마이그레이션 가이드
+
+- `docs/migration/v0.7-to-v0.8.md` 의 "HStack/VStack import에 이미 Stack이 있으면 중복 식별자 결과 수동 정리" caveat — rc.6 dedupe 도입으로 해소된 부분. line-through로 표시 + 새 conflict abort 동작 안내 추가. "Conflict abort — 무엇을 보고 어떻게 풀까" 섹션 신규 (3 kind 각각의 해결 패턴).
+
+### 검증
+
+- `pnpm verify` **14/14 ✓**
+- `polaris-codemod-v08` **29 → 33/33** (+4 — local conflict abort / aliased polaris-import abort / aliased H/VStack abort / alias dedupe preserve)
+
+### 동작 변경 요약 (소비자 영향)
+
+| rc.6 이전 | rc.7 이후 |
+|---|---|
+| 로컬 `const line` + `surface.border` rewrite → 빌드 통과 + 잘못된 값 binding (silent bug) | 사전 감지 → 파일 untouched + stderr 안내 + exit 1 |
+| `import { ai as aiToken }` + `brand.secondary` rewrite → 빌드 깨짐 | 사전 감지 → 파일 untouched + stderr 안내 |
+| `import { HStack as Row }` + `<Row>` JSX → `direction="row"` 누락 (시각 회귀) | 사전 감지 → 파일 untouched + stderr 안내 |
+| `import { Stack, HStack as Row }` dedupe → `Stack as Row` 사라짐 | binding 기준 dedupe → 둘 다 보존 |
+
+> **CI 통합 시**: `polaris-codemod-v08 --check` 가 conflict가 있으면 exit 1 반환. PR이 conflict 파일을 포함하면 자동 차단되도록 워크플로우에 추가 권장.
+
+---
+
 ## [0.8.0-rc.6] — 2026-05-10
 
 Codex 후속 리뷰 P1 2건 fix + P2 1건. **rc.5 대비 BREAKING 변경 없음** — codemod의 import dedupe 누락과 multi-line body corruption 두 결함이 같은 함수에서 발견됨, 같은 사이클에 함께 수정. 추가로 v0.7.7에서 `TableCell.nowrap`만 추가됐던 API 비대칭이 v0.8까지 남아 있던 부분 정리.
