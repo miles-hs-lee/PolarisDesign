@@ -285,7 +285,36 @@ v0.6/rc.0/rc.1/v0.7 거치며 누적된 deprecated alias + naming 불일치 + to
 
 ---
 
-## v0.9 — 디자인팀 follow-up + 폼 chrome 일관성 + 추가 신규 (RFC 후)
+## v0.8.x patch — 컨슈머 피드백 즉시 fix 묶음 (코드 변경 필요, 사용자 결정 대기)
+
+실전 마이그레이션 프로젝트 피드백 (2026-05-11) 에서 발견된 작은 갭들 — additive 또는 1줄 fix라 v0.8.x patch 사이클에 묶이는 게 자연스러움. **사용자 결정 대기 — A 묶음으로 한 번에 진행할지 / 개별로 흩어 진행할지**.
+
+- **`<Stat valueVariant>` prop 추가** — `deltaVariant` 와 동일 enum (`positive` / `negative` / `accent` / `neutral`). KPI 타일에서 "활성 12" 같은 직접 색 신호 표현. 컨슈머가 자체 Stat에 `tone="emerald"` 같은 식으로 쓰던 패턴이 폴라리스 도입 후 모두 흑색 numeric으로 평준화되어 시각 신호 손실. ⚠️ 디자인팀 confirm 필요 — `<Stat>` value 색 입힘이 spec 허용인지 (followup `DT-A`)
+- **v4-theme.css 에 `--font-sans` / `--font-mono` alias** — 1줄 fix. 현재 `--font-polaris` 만 노출되어 Tailwind default `--font-sans` 가 alias 안 됨. 컨슈머 globals.css에 별도 블록 유지 중인 friction
+- **`<PaginationFooter buildHref>` prop** — `(page) => string` 콜백. RSC + `<Link href>` 환경에서 controlled `onPageChange` 대신 anchor 자체 렌더. Next.js 16 App Router 사용자가 가장 자주 막히는 단일 컴포넌트
+- **`@polaris/no-shadowed-polaris-name` lint 룰** — 동일 파일 안에 `function Stat()` / `const Stat = …` 같은 로컬 정의가 폴라리스 export와 이름 충돌 시 경고. 컨슈머가 폴라리스 Stat 을 import 안 했는데도 같은 파일 419줄에 `function Stat()` 이 있어서 hoisting으로 빌드 통과했던 케이스 — code review로만 잡힘. ESLint plugin 0.5일 작업
+
+**근거**: `docs/component-history.md`, `docs/migration/legacy-css-patterns.md`, 실전 컨슈머 마이그레이션 피드백 (#5/#7/#1-partial/#10).
+
+---
+
+## v0.9 — 디자인팀 follow-up + 폼 chrome 일관성 + RSC 친화 + 추가 신규 (RFC 후)
+
+**RSC + `<Link href>` 일급 시민화 (컨슈머 피드백 #1, 가장 큰 갭)**:
+- 현재 `<PaginationFooter>` / `<TableSearchInput>` / `<TableToolbar>` / `<Combobox>` / `<Tabs>` 등이 모두 *client-side controlled* 가정 (`value + onChange` 콜백). Next.js 16 App Router 의 RSC 환경에서 검색은 `<form action="/path" method="get">`, 페이지네이션은 `<Link href={buildPageHref(n)}>`, 필터는 URL params 으로 풀려는데 콜백이 안 만들어져 컨슈머가 *모든 high-level 컴포넌트를 skip* 한 사례 있음
+- 해결 방향: 모든 controlled 컴포넌트에 **anchor mode 일관 지원**
+  - (A) controlled (value + onChange) — 현재 패턴 그대로
+  - (B) anchor mode (`asChild` + 내부 자식 `<Link/a>` 받기) 또는 `buildHref={(state) => string}` prop
+- spec 작업 필요: 어느 prop name 으로 통일할지 (`asChild` Radix Slot 호환 / `buildHref` 콜백 / `as="a"` 등), 어느 컴포넌트가 우선순위인지 (PaginationFooter > TableSearchInput > Tabs > NavbarItem 순)
+- 부분 fix는 v0.8.x patch에 (PaginationFooter `buildHref`)
+
+**PageHeader card 변종 (컨슈머 피드백 #2)**:
+- 현재 `<PageHeader>` 는 page-level (Card 외부, divider 아래) 기본. 컨슈머는 "title 카드 + 컨텐츠 카드" stacked-card 레이아웃이라 자체 HeroPanel을 Card로 만들고 있었는데 PageHeader 마이그 시 divider 추가 / Card 배경 제거 / 패딩 미세 차이로 시각 변화
+- 해결 후보:
+  - (A) `<PageHeader variant="card">` (또는 prop 이름 협의) — 카드 안 배치용. divider 제거 + 카드 패딩 정합
+  - (B) `<PageHeaderCard>` 별도 컴포넌트 — card 안 hero 용
+  - (C) 패턴 가이드만 (현재 변종 없음, 컨슈머 wrapper 권장)
+- 디자인팀 결정 필요 — `<PageHeader>` 의 default 시각이 page-level 의도인지 confirm + card-내부 변종 신설 여부 (followup `DT-B`)
 
 **폼 시각 chrome 일관성 (DocFlow 컨슈머 피드백 v0.7.7)**:
 - 같은 폼에서 `Input` (52px floating-label-inside) / `DateTimeInput` (52px label-above) / `DatePicker` (button + 자연 너비 + 다른 시각)이 섞이면 시각 정렬이 안 자연스러움

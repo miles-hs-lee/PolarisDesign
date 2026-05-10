@@ -458,6 +458,36 @@
 
 **받아야 할 답**: 신규 lint 룰 `@polaris/brand-link-underline` 추가 — 14px 이하 `text-accent-brand-normal` 사용 시 underline 동반 강제. 디자인팀이 spec 명문화 후 룰 추가.
 
+### DT-A. `<Stat>` value 색상 입힘 허용 여부 (컨슈머 피드백 #5)
+
+**현재 상태**: `<Stat>` 의 `delta` 만 `deltaVariant` (positive/negative/accent/neutral) 로 색 적용 가능. `value` 자체는 항상 `label-normal` (흑색 numeric).
+
+**컨슈머 케이스**: 자체 KPI 컴포넌트가 `tone="emerald"` (활성) / `tone="amber"` (대기) 같은 *상태 신호* 를 value에 적용하던 패턴. 폴라리스 도입 후 모두 흑색 numeric으로 평준화되어 시각 신호 손실. `value={<span className="text-state-success">12</span>}` 같은 inline span으로 우회 가능하지만 *컴포넌트 의도 (semantic token-only API)* 와 어긋남.
+
+**받아야 할 답**:
+1. `<Stat>` 의 value 색은 *흑색 권위 유지가 spec* 인지 — KPI 는 숫자가 차분해야 한다는 의도인지
+2. 또는 `valueVariant` prop 추가가 디자인팀 의도와 정합한지 — `deltaVariant` 와 같은 enum (`positive` / `negative` / `accent` / `neutral`)
+3. 정합이라면 — value 색 입히는 use case 가이드 (활성/대기/위험 상태 KPI 등)
+4. 정합 아니라면 — 컨슈머가 시각 신호를 어떻게 표현해야 하는지 대안 (예: delta 색 강조만 사용, Badge 동반)
+
+**결정 후 작업** (정합 경로): `<Stat valueVariant>` prop 추가. additive 변경이라 v0.8.x patch에 즉시 가능.
+
+### DT-B. `<PageHeader>` 의 카드 안 변종 (컨슈머 피드백 #2)
+
+**현재 상태**: `<PageHeader>` 는 page-level (Card 외부, divider 아래) 기본 spec. 컨슈머는 "title 카드 + 컨텐츠 카드" stacked-card 레이아웃이 표준이라 자체 HeroPanel을 Card로 만들고 있었음.
+
+**컨슈머 케이스**: PageHeader 마이그 시 시각 변화 — divider 추가됨 / Card 배경 제거됨 / 버튼 정렬 / 패딩 미세 차이. 우리 wrapper 가 PageHeader 로 *내부 교체*되면서 시각 변화 누적.
+
+**받아야 할 답**:
+1. `<PageHeader>` 의 default 시각 (page-level, divider 아래) 이 *유일한 spec* 인지 — card 안 hero는 별도 패턴이어야 하는지
+2. 또는 card-내부 변종 신설이 디자인팀 의도에 부합하는지:
+   - (A) `<PageHeader variant="card">` (또는 prop 이름 협의) — divider 제거 + 카드 패딩 정합
+   - (B) `<PageHeaderCard>` 별도 컴포넌트 — card 안 hero 용
+   - (C) 패턴 가이드만 (현재 변종 없음, 컨슈머 wrapper 권장)
+3. 결정 시 시각 spec — divider / 패딩 / 액션 정렬 / Card 와의 관계
+
+**결정 후 작업** (A/B 경로): `<PageHeader>` API 확장 또는 `<PageHeaderCard>` 신규. v0.9 minor 후보. (C 경로): docs/component-use-cases/page-header.md 패턴 가이드만 작성.
+
 ## 🟢 확장 — 정의서에 추가 후보 (디자인팀 confirm 후 정합화)
 
 이 항목들은 우리 구현이 정의서를 *넘어* 추가한 것입니다. 디자인팀이 confirm해 주시면 정의서에 추가 → 정합 처리됩니다.
