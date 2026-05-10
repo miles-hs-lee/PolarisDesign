@@ -216,6 +216,14 @@ const polarisPreset: Partial<Config> = {
           'error-bg':    token('--polaris-state-error-bg'),
           info:          token('--polaris-state-info'),
           'info-bg':     token('--polaris-state-info-bg'),
+          /** v0.7.5 NEW — WCAG-AA-compliant darker tier of each state color
+           *  for small outline labels / dense status text. Use the base
+           *  `state-*` for icons / banners / 18px+ bold; use `state-*-strong`
+           *  for body-size text on light surfaces. */
+          'success-strong': token('--polaris-state-success-strong'),
+          'warning-strong': token('--polaris-state-warning-strong'),
+          'error-strong':   token('--polaris-state-error-strong'),
+          'info-strong':    token('--polaris-state-info-strong'),
         },
         /** @deprecated rc.0 alias of `accent-brand`. */
         primary: {

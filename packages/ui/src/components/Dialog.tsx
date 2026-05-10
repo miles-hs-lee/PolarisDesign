@@ -46,7 +46,7 @@ export const DialogContent = forwardRef<
       className={cn(
         'fixed left-1/2 top-1/2 z-polaris-modal -translate-x-1/2 -translate-y-1/2',
         'w-[calc(100vw-2rem)] max-w-[480px] p-polaris-lg',
-        'bg-layer-surface text-label-normal rounded-polaris-xl shadow-polaris-lg',
+        'bg-surface-modal text-label-normal rounded-polaris-xl shadow-polaris-lg',
         'focus-visible:outline-none',
         'data-[state=open]:opacity-100 data-[state=closed]:opacity-0',
         'data-[state=open]:translate-y-[calc(-50%+0px)] data-[state=closed]:translate-y-[calc(-50%+8px)]',

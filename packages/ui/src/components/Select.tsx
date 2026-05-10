@@ -43,7 +43,7 @@ export const SelectContent = forwardRef<
       position={position}
       className={cn(
         'relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-polaris-md',
-        'border border-line-neutral bg-background-normal text-label-normal shadow-polaris-md',
+        'border border-line-neutral bg-surface-popover text-label-normal shadow-polaris-md',
         position === 'popper' && 'translate-y-1',
         className
       )}

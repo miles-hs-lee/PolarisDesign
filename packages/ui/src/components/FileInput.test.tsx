@@ -121,4 +121,56 @@ describe('FileDropZone', () => {
     expect(clickSpy).not.toHaveBeenCalled();
     expect(zone).toHaveAttribute('aria-disabled', 'true');
   });
+
+  it('limits dropped files to 1 when multiple is omitted (single-file constraint)', () => {
+    const onFilesChange = vi.fn();
+    const { container } = render(<FileDropZone onFilesChange={onFilesChange} />);
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+    fireEvent.change(input, {
+      target: { files: [makeFile('a.txt'), makeFile('b.txt'), makeFile('c.txt')] },
+    });
+    // multiple omitted (default false) → only first file passes through.
+    expect(onFilesChange).toHaveBeenCalledWith([expect.objectContaining({ name: 'a.txt' })]);
+  });
+
+  it('passes all dropped files when multiple=true', () => {
+    const onFilesChange = vi.fn();
+    const { container } = render(<FileDropZone multiple onFilesChange={onFilesChange} />);
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+    fireEvent.change(input, {
+      target: { files: [makeFile('a.txt'), makeFile('b.txt')] },
+    });
+    expect(onFilesChange).toHaveBeenCalledWith([
+      expect.objectContaining({ name: 'a.txt' }),
+      expect.objectContaining({ name: 'b.txt' }),
+    ]);
+  });
+
+  it('composes consumer onClick with our picker activation (both fire)', async () => {
+    const user = userEvent.setup();
+    const consumerOnClick = vi.fn();
+    const { container } = render(<FileDropZone onClick={consumerOnClick} />);
+    const zone = screen.getByRole('button');
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+    const clickSpy = vi.spyOn(input, 'click').mockImplementation(() => {});
+    await user.click(zone);
+    expect(consumerOnClick).toHaveBeenCalled();
+    expect(clickSpy).toHaveBeenCalled();
+  });
+
+  it('consumer can preventDefault to opt out of picker activation', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <FileDropZone
+        onClick={(e) => {
+          e.preventDefault();
+        }}
+      />
+    );
+    const zone = screen.getByRole('button');
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+    const clickSpy = vi.spyOn(input, 'click').mockImplementation(() => {});
+    await user.click(zone);
+    expect(clickSpy).not.toHaveBeenCalled();
+  });
 });

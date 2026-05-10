@@ -62,19 +62,27 @@ const badgeVariants = cva(
       { variant: 'pptx',      tone: 'solid', class: 'bg-file-pptx text-label-inverse' },
       { variant: 'pdf',       tone: 'solid', class: 'bg-file-pdf text-label-inverse' },
       { variant: 'hwp',       tone: 'solid', class: 'bg-file-hwp text-label-inverse' },
-      // Outline (transparent bg + colored border) — v0.7.5
-      { variant: 'neutral',   tone: 'outline', class: 'border-line-strong text-label-neutral' },
-      { variant: 'primary',   tone: 'outline', class: 'border-accent-brand-normal text-accent-brand-normal' },
-      { variant: 'secondary', tone: 'outline', class: 'border-ai-normal text-ai-normal' },
-      { variant: 'success',   tone: 'outline', class: 'border-state-success text-state-success' },
-      { variant: 'warning',   tone: 'outline', class: 'border-state-warning text-state-warning' },
-      { variant: 'danger',    tone: 'outline', class: 'border-state-error text-state-error' },
-      { variant: 'info',      tone: 'outline', class: 'border-state-info text-state-info' },
-      { variant: 'docx',      tone: 'outline', class: 'border-file-docx text-file-docx' },
-      { variant: 'xlsx',      tone: 'outline', class: 'border-file-xlsx text-file-xlsx' },
-      { variant: 'pptx',      tone: 'outline', class: 'border-file-pptx text-file-pptx' },
-      { variant: 'pdf',       tone: 'outline', class: 'border-file-pdf text-file-pdf' },
-      { variant: 'hwp',       tone: 'outline', class: 'border-file-hwp text-file-hwp' },
+      // Outline (transparent bg + colored border + WCAG-AA text) — v0.7.5
+      // NOTE: Base `state.{success|warning|error|info}` are tuned for icons
+      // + 18px+ bold (2.4-3.1:1 on white — fails AA for body-size text).
+      // Outline badges are 12px text, so we use the `*-strong` tier introduced
+      // in v0.7.5 (ramp 70 / 30 — meets 4.5:1 AA in both light & dark).
+      // For brand/ai variants, the existing `*-strong` tokens are already
+      // ramp 70 and pass AA at 12px. File-type variants use the file color
+      // for the BORDER (visual identity preserved) but `label-normal` for
+      // the TEXT — file colors are ramp-50 and don't meet small-text AA.
+      { variant: 'neutral',   tone: 'outline', class: 'border-line-strong text-label-normal' },
+      { variant: 'primary',   tone: 'outline', class: 'border-accent-brand-strong text-accent-brand-strong' },
+      { variant: 'secondary', tone: 'outline', class: 'border-ai-strong text-ai-strong' },
+      { variant: 'success',   tone: 'outline', class: 'border-state-success-strong text-state-success-strong' },
+      { variant: 'warning',   tone: 'outline', class: 'border-state-warning-strong text-state-warning-strong' },
+      { variant: 'danger',    tone: 'outline', class: 'border-state-error-strong text-state-error-strong' },
+      { variant: 'info',      tone: 'outline', class: 'border-state-info-strong text-state-info-strong' },
+      { variant: 'docx',      tone: 'outline', class: 'border-file-docx text-label-normal' },
+      { variant: 'xlsx',      tone: 'outline', class: 'border-file-xlsx text-label-normal' },
+      { variant: 'pptx',      tone: 'outline', class: 'border-file-pptx text-label-normal' },
+      { variant: 'pdf',       tone: 'outline', class: 'border-file-pdf text-label-normal' },
+      { variant: 'hwp',       tone: 'outline', class: 'border-file-hwp text-label-normal' },
     ],
     defaultVariants: {
       variant: 'neutral',

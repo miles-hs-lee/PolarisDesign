@@ -285,7 +285,12 @@ export const FileDropZone = forwardRef<HTMLInputElement, FileDropZoneProps>(
 
     const processFiles = useCallback(
       (list: FileList | File[]) => {
-        const arr = Array.from(list);
+        // Native `<input type="file">` enforces `multiple={false}` on its
+        // own picker, but the drag-and-drop path doesn't — the OS hands us
+        // every file the user dropped. Trim BEFORE accept/size checks so
+        // we don't accidentally reject a valid second file when the
+        // consumer only wanted the first one anyway.
+        const arr = multiple ? Array.from(list) : Array.from(list).slice(0, 1);
         const accepted: File[] = [];
         const rejected: FileRejection[] = [];
         for (const f of arr) {
@@ -310,7 +315,7 @@ export const FileDropZone = forwardRef<HTMLInputElement, FileDropZoneProps>(
         if (accepted.length > 0) onFilesChange?.(accepted);
         if (rejected.length > 0) onReject?.(rejected);
       },
-      [accept, maxSize, onFilesChange, onReject]
+      [accept, maxSize, multiple, onFilesChange, onReject]
     );
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -343,6 +348,22 @@ export const FileDropZone = forwardRef<HTMLInputElement, FileDropZoneProps>(
       inputRef.current?.click();
     };
 
+    // Compose our internal handlers with whatever the consumer passes
+    // through `divProps`. Pulling them out before the spread lets us:
+    //   1. fire the consumer's handler first (e.g. analytics logging)
+    //   2. honor `event.defaultPrevented` so opt-out works
+    //   3. still run our drag/drop / picker activation logic afterwards
+    // Without this composition, a consumer's `onClick` would silently
+    // overwrite our picker activation handler when spread last.
+    const {
+      onClick: consumerOnClick,
+      onKeyDown: consumerOnKeyDown,
+      onDragOver: consumerOnDragOver,
+      onDragLeave: consumerOnDragLeave,
+      onDrop: consumerOnDrop,
+      ...restDivProps
+    } = divProps;
+
     return (
       <div className="flex flex-col gap-polaris-2xs font-polaris">
         <div
@@ -350,16 +371,31 @@ export const FileDropZone = forwardRef<HTMLInputElement, FileDropZoneProps>(
           tabIndex={disabled ? -1 : 0}
           aria-disabled={disabled || undefined}
           aria-describedby={messageId}
-          onClick={onZoneActivate}
+          {...restDivProps}
+          onClick={(e) => {
+            consumerOnClick?.(e);
+            if (!e.defaultPrevented) onZoneActivate();
+          }}
           onKeyDown={(e) => {
+            consumerOnKeyDown?.(e);
+            if (e.defaultPrevented) return;
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               onZoneActivate();
             }
           }}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
+          onDragOver={(e) => {
+            consumerOnDragOver?.(e);
+            if (!e.defaultPrevented) handleDragOver(e);
+          }}
+          onDragLeave={(e) => {
+            consumerOnDragLeave?.(e);
+            if (!e.defaultPrevented) handleDragLeave(e);
+          }}
+          onDrop={(e) => {
+            consumerOnDrop?.(e);
+            if (!e.defaultPrevented) handleDrop(e);
+          }}
           className={cn(
             'flex flex-col items-center justify-center gap-polaris-2xs',
             'rounded-polaris-md border-2 border-dashed px-polaris-md py-polaris-lg text-center',
@@ -372,7 +408,6 @@ export const FileDropZone = forwardRef<HTMLInputElement, FileDropZoneProps>(
             disabled && 'cursor-not-allowed opacity-50',
             className
           )}
-          {...divProps}
         >
           <Upload className="h-6 w-6 text-label-alternative" aria-hidden="true" />
           <p className="text-polaris-body2 text-label-normal">

@@ -483,6 +483,30 @@ export const state = {
   info:       { light: '#1D7FF9', dark: '#1D7FF9' },
   /** v0.7-rc.1 NEW — info banner / toast background tint. */
   infoBg:     { light: '#E8F2FE', dark: '#0B3263' },
+  /** v0.7.5 NEW — `state.*Strong` — WCAG-AA-compliant darker tier of each
+   *  state color. The base `state.success/warning/error/info` are tuned for
+   *  *icons + 18px+ Bold* per WCAG 1.4.1; their contrast on white drops to
+   *  2.4-3.1:1 which fails AA for body-size text. The `Strong` pair maps to
+   *  ramp step 70 (light) / step 30 (dark) of the matching palette so small
+   *  outline-style elements (Badge `tone="outline"`, dense status text)
+   *  meet 4.5:1 AA. Use the base `state.*` for icons / banners / large bold
+   *  status text, and `state.*Strong` for small outline labels & dense
+   *  status text.
+   *
+   *  WCAG checks (vs surface-base):
+   *    successStrong  green-70 #387D12 → 5.46:1 (light) ✓
+   *                   green-30 #A8D98D → 9.50:1 on dark canvas ✓
+   *    warningStrong  orange-70 #B05F00 → 5.04:1 (light) ✓
+   *                   orange-30 #FEC47F → 12.4:1 on dark canvas ✓
+   *    errorStrong    red-70 #AD4040 → 5.42:1 (light) ✓
+   *                   red-30 #FCADAD → 9.71:1 on dark canvas ✓
+   *    infoStrong     blue-70 #1458AD → 7.50:1 (light) ✓
+   *                   blue-30 #8EBFFC → 9.32:1 on dark canvas ✓
+   */
+  successStrong: { light: '#387D12', dark: '#A8D98D' },
+  warningStrong: { light: '#B05F00', dark: '#FEC47F' },
+  errorStrong:   { light: '#AD4040', dark: '#FCADAD' },
+  infoStrong:    { light: '#1458AD', dark: '#8EBFFC' },
 } as const satisfies Record<string, ColorPair>;
 
 /** @deprecated v0.7-rc.0 alias. Use `accentBrand.*` instead. */

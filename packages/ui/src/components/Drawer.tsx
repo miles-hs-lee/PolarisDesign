@@ -35,7 +35,7 @@ DrawerOverlay.displayName = 'DrawerOverlay';
 
 const drawerVariants = cva(
   cn(
-    'fixed z-50 bg-background-normal text-label-normal border-line-neutral shadow-polaris-lg',
+    'fixed z-50 bg-surface-modal text-label-normal border-line-neutral shadow-polaris-lg',
     'flex flex-col',
     'focus-visible:outline-none',
     'transition-transform duration-200 ease-out'

@@ -29,26 +29,49 @@ describe('Badge', () => {
     expect(screen.getByText('new')).toHaveClass('text-label-inverse');
   });
 
-  it('applies outline tone classes when tone="outline"', () => {
+  it('applies outline tone classes when tone="outline" — WCAG AA *-strong tokens', () => {
     render(
       <Badge variant="danger" tone="outline">
         정책 위반
       </Badge>
     );
     const el = screen.getByText('정책 위반');
-    // Transparent bg + 1px border + colored text/border.
+    // Transparent bg + 1px border + the WCAG-AA `*-strong` state tier
+    // (ramp 70 light / ramp 30 dark — passes 4.5:1 AA at 12px).
     expect(el).toHaveClass('bg-transparent');
     expect(el).toHaveClass('border');
-    expect(el).toHaveClass('border-state-error');
-    expect(el).toHaveClass('text-state-error');
+    expect(el).toHaveClass('border-state-error-strong');
+    expect(el).toHaveClass('text-state-error-strong');
   });
 
-  it('outline tone applies neutral border-strong for neutral variant', () => {
+  it('outline tone applies neutral border-strong + label-normal text for neutral variant', () => {
     render(
       <Badge variant="neutral" tone="outline">
         초안
       </Badge>
     );
     expect(screen.getByText('초안')).toHaveClass('border-line-strong');
+    expect(screen.getByText('초안')).toHaveClass('text-label-normal');
+  });
+
+  it('outline tone uses brand-strong / ai-strong (not -normal) for primary/secondary', () => {
+    const { rerender } = render(
+      <Badge variant="primary" tone="outline">검토 중</Badge>
+    );
+    expect(screen.getByText('검토 중')).toHaveClass('text-accent-brand-strong');
+
+    rerender(<Badge variant="secondary" tone="outline">AI 임시</Badge>);
+    expect(screen.getByText('AI 임시')).toHaveClass('text-ai-strong');
+  });
+
+  it('outline tone uses label-normal text for file variants (file ramp-50 fails AA at 12px)', () => {
+    render(
+      <Badge variant="docx" tone="outline">DOCX</Badge>
+    );
+    const el = screen.getByText('DOCX');
+    // Border keeps the file color (visual identity) but text shifts to
+    // label-normal so 12px text passes WCAG AA on white.
+    expect(el).toHaveClass('border-file-docx');
+    expect(el).toHaveClass('text-label-normal');
   });
 });

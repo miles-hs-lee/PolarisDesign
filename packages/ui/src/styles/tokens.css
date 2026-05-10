@@ -96,6 +96,10 @@
   --polaris-state-error-bg: #FEEEEE;
   --polaris-state-info: #1D7FF9;
   --polaris-state-info-bg: #E8F2FE;
+  --polaris-state-success-strong: #387D12;
+  --polaris-state-warning-strong: #B05F00;
+  --polaris-state-error-strong: #AD4040;
+  --polaris-state-info-strong: #1458AD;
   --polaris-primary-normal: #1D7FF9;
   --polaris-primary-strong: #1458AD;
   --polaris-ai-normal: #6F3AD0;
@@ -371,6 +375,10 @@
   --polaris-state-error-bg: #632424;
   --polaris-state-info: #1D7FF9;
   --polaris-state-info-bg: #0B3263;
+  --polaris-state-success-strong: #A8D98D;
+  --polaris-state-warning-strong: #FEC47F;
+  --polaris-state-error-strong: #FCADAD;
+  --polaris-state-info-strong: #8EBFFC;
   --polaris-primary-normal: #1D7FF9;
   --polaris-primary-strong: #60A5FA;
   --polaris-ai-normal: #9B85FF;

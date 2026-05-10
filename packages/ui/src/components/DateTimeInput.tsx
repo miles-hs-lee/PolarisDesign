@@ -67,12 +67,35 @@ export interface DateTimeInputProps
  * `<input type="datetime-local">` styled to match the Polaris Input.
  *
  * Value format: `YYYY-MM-DDTHH:MM` (browser-defined; pass directly to /
- * read directly from form state). Convert to/from `Date` at the boundary
- * via `new Date(value)` and `date.toISOString().slice(0, 16)`.
+ * read directly from form state).
  *
- * Tip on time zones: native `datetime-local` is **time-zone-naive**.
- * If your backend stores UTC, convert in your form `onSubmit` — don't
- * try to render a UTC instant in this input.
+ * **Time zones — read this if you're storing dates in UTC.**
+ *
+ * Native `datetime-local` is **time-zone-naive**: the value the user
+ * sees and the value the input emits are *local clock time*. Round-
+ * tripping through `Date.prototype.toISOString().slice(0, 16)` will
+ * silently shift the displayed time by your UTC offset (e.g. Asia/Seoul
+ * 09:00 local becomes `00:00` UTC, then `00:00` shows in the input —
+ * looks like a 9-hour bug).
+ *
+ * Convert at the boundary using a local-aware formatter:
+ *
+ * ```ts
+ * // Date → input value (local clock)
+ * function toLocalDatetime(d: Date): string {
+ *   const pad = (n: number) => String(n).padStart(2, '0');
+ *   return [
+ *     d.getFullYear(), '-', pad(d.getMonth() + 1), '-', pad(d.getDate()),
+ *     'T', pad(d.getHours()), ':', pad(d.getMinutes()),
+ *   ].join('');
+ * }
+ *
+ * // input value → Date (local clock interpreted as the user's TZ)
+ * const date = new Date(inputValue); // safe: `new Date("2026-12-31T23:59")` is local
+ * ```
+ *
+ * If your backend stores UTC, do the UTC ↔ local conversion only in
+ * your form's `onSubmit` / data-fetch boundary — never in render.
  *
  * @example
  * ```tsx

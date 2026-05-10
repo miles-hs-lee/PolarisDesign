@@ -40,7 +40,7 @@ export const Command = forwardRef<
   <CommandPrimitive
     ref={ref}
     className={cn(
-      'flex h-full w-full flex-col overflow-hidden rounded-polaris-md bg-background-normal text-label-normal font-polaris',
+      'flex h-full w-full flex-col overflow-hidden rounded-polaris-md bg-surface-popover text-label-normal font-polaris',
       className
     )}
     {...props}
@@ -82,7 +82,7 @@ export const CommandDialog = ({
         className={cn(
           'fixed left-1/2 top-[20%] z-50 -translate-x-1/2',
           'w-[calc(100vw-2rem)] max-w-lg overflow-hidden',
-          'bg-background-normal border border-line-neutral rounded-polaris-xl shadow-polaris-lg',
+          'bg-surface-modal border border-line-neutral rounded-polaris-xl shadow-polaris-lg',
           'focus:outline-none'
         )}
       >
