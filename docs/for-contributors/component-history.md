@@ -1,5 +1,7 @@
 # 컴포넌트 진화 매트릭스 (v0.4 → v0.8)
 
+> **현재 수동 유지** (Phase 4-b backlog — `packages/ui/src/components/*.tsx` 의 JSDoc `@since v0.x` annotation 파싱으로 auto-gen 예정). 새 컴포넌트 추가 / breaking 변경 시 이 파일도 함께 갱신.
+
 **의도**: v0.4 또는 v0.6에서 곧장 v0.8로 점프하는 컨슈머가 *컴포넌트별 진화*를 한 페이지에서 파악할 수 있도록 정리. CHANGELOG 1000+ 줄을 traverse하지 않아도 됨.
 
 **범례**:

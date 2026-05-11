@@ -14,7 +14,8 @@
   },
   "files": [
     "dist",
-    "bin"
+    "bin",
+    "RULES.md"
   ],
   "bin": {
     "polaris-audit": "./bin/polaris-audit.mjs",
@@ -22,7 +23,8 @@
     "polaris-codemod-v08": "./bin/polaris-codemod-v08.mjs"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "pnpm build:rules-md && tsup",
+    "build:rules-md": "tsx scripts/build-rules-md.ts",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "test": "node test/run-tests.mjs && node --test test/codemod-v07.test.mjs && node --test test/codemod-v08.test.mjs",
@@ -38,6 +40,7 @@
     "@types/eslint": "^9.6.1",
     "eslint": "^9.18.0",
     "tsup": "^8.3.5",
+    "tsx": "^4.21.0",
     "typescript": "^5.7.3"
   }
 }

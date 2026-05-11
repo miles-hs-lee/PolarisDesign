@@ -1,0 +1,79 @@
+name: Docs CI
+
+on:
+  pull_request:
+    paths:
+      - '**.md'
+      - '.github/workflows/docs.yml'
+  push:
+    branches: [main]
+    paths:
+      - '**.md'
+
+permissions:
+  contents: read
+
+jobs:
+  # Internal link check — every `[label](relative/path.md)` must resolve.
+  # Catches Phase 1-style mv breakage at PR time.
+  link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Internal markdown link check
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --offline
+            --no-progress
+            --include-fragments
+            --exclude-path node_modules
+            --exclude-path dist
+            --exclude-path .next
+            --exclude-path .turbo
+            './**/*.md'
+          fail: true
+
+  # Auto-generated docs must stay in sync with their source. If a
+  # consumer edits the generated file directly without regenerating,
+  # CI catches the drift.
+  generated-docs-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Regenerate component catalog
+        run: pnpm --filter @polaris/ui exec tsx scripts/build-component-catalog.ts
+      - name: Regenerate lint rules README
+        run: pnpm --filter @polaris/lint build:rules-md
+      - name: Verify no drift
+        run: |
+          if ! git diff --exit-code packages/ui/COMPONENTS.md packages/lint/RULES.md; then
+            echo "::error ::Generated docs drifted. Regenerate locally:"
+            echo "  pnpm --filter @polaris/ui exec tsx scripts/build-component-catalog.ts"
+            echo "  pnpm --filter @polaris/lint build:rules-md"
+            exit 1
+          fi
+
+  # SSoT freshness — detect cases where the same multi-sentence block
+  # appears in multiple files (drift risk). Soft warning only.
+  duplicate-content:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run jscpd
+        run: |
+          npx --yes jscpd \
+            --pattern "**/*.md" \
+            --ignore "**/node_modules/**,**/dist/**,**/CHANGELOG.md,**/archive/**" \
+            --min-tokens 60 \
+            --min-lines 5 \
+            --reporters consoleFull \
+            --format markdown \
+            . || true
