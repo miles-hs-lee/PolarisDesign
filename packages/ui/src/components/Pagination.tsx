@@ -1,5 +1,5 @@
 import { forwardRef, useId, type ElementType, type ReactNode } from 'react';
-import { Slot } from '@radix-ui/react-slot';
+import { Slot, Slottable } from '@radix-ui/react-slot';
 import { MoreHorizontal } from 'lucide-react';
 import { ChevronLeftIcon, ChevronRightIcon } from '../icons';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './Select';
@@ -60,25 +60,69 @@ PaginationItem.displayName = 'PaginationItem';
 export interface PaginationStepProps extends PaginationItemProps {
   /** aria-label override. Default: `이전 페이지` / `다음 페이지`. */
   label?: string;
+  /**
+   * Custom icon to render before (Prev) / after (Next) the label. Default:
+   * `ChevronLeftIcon` / `ChevronRightIcon` at 16px. Pass `null` to omit
+   * the icon entirely.
+   *
+   * Compatible with `asChild`: when both are set, the icon is rendered as
+   * a sibling of the user's child element via Radix `Slottable` — no
+   * `React.Children.only` violation. Prior to v0.8.0-rc.8 the chevron and
+   * `children` were spread as two siblings into `<Slot>`, which broke
+   * the asChild + `<Link>` pattern that RSC consumers need.
+   */
+  icon?: ReactNode;
 }
 
 export const PaginationPrev = forwardRef<HTMLElement, PaginationStepProps>(
-  ({ className, children, label = '이전 페이지', ...props }, ref) => (
-    <PaginationItem ref={ref} className={className} aria-label={label} {...props}>
-      <ChevronLeftIcon size={16} aria-hidden="true" />
-      {children}
-    </PaginationItem>
-  )
+  ({ className, children, label = '이전 페이지', icon, asChild, ...props }, ref) => {
+    const chevron = icon === null
+      ? null
+      : icon ?? <ChevronLeftIcon size={16} aria-hidden="true" />;
+    // Slot path: chevron sits as a SIBLING of `<Slottable>{children}</Slottable>`.
+    // Radix Slot finds Slottable, extracts the user's element as the render
+    // target, and re-inserts siblings (chevron) into the cloned element's
+    // children alongside the user's original children. Wrapping both chevron
+    // and children inside Slottable would crash (Slottable expects a single
+    // child as the merge target).
+    if (asChild) {
+      return (
+        <PaginationItem ref={ref} className={className} aria-label={label} asChild {...props}>
+          {chevron}
+          <Slottable>{children}</Slottable>
+        </PaginationItem>
+      );
+    }
+    return (
+      <PaginationItem ref={ref} className={className} aria-label={label} {...props}>
+        {chevron}
+        {children}
+      </PaginationItem>
+    );
+  }
 );
 PaginationPrev.displayName = 'PaginationPrev';
 
 export const PaginationNext = forwardRef<HTMLElement, PaginationStepProps>(
-  ({ className, children, label = '다음 페이지', ...props }, ref) => (
-    <PaginationItem ref={ref} className={className} aria-label={label} {...props}>
-      {children}
-      <ChevronRightIcon size={16} aria-hidden="true" />
-    </PaginationItem>
-  )
+  ({ className, children, label = '다음 페이지', icon, asChild, ...props }, ref) => {
+    const chevron = icon === null
+      ? null
+      : icon ?? <ChevronRightIcon size={16} aria-hidden="true" />;
+    if (asChild) {
+      return (
+        <PaginationItem ref={ref} className={className} aria-label={label} asChild {...props}>
+          <Slottable>{children}</Slottable>
+          {chevron}
+        </PaginationItem>
+      );
+    }
+    return (
+      <PaginationItem ref={ref} className={className} aria-label={label} {...props}>
+        {children}
+        {chevron}
+      </PaginationItem>
+    );
+  }
 );
 PaginationNext.displayName = 'PaginationNext';
 
@@ -97,34 +141,14 @@ export const PaginationEllipsis = forwardRef<HTMLSpanElement, React.HTMLAttribut
 );
 PaginationEllipsis.displayName = 'PaginationEllipsis';
 
-/** Sentinel value indicating an ellipsis position in `pageNumberItems()` output. */
-export const PAGE_ELLIPSIS = '…' as const;
-export type PageNumberItem = number | typeof PAGE_ELLIPSIS;
-
-/**
- * Compute the visible page-number sequence with ellipses around the current
- * page. Returns numbers for clickable items and `PAGE_ELLIPSIS` for gaps.
- *
- * Example: `pageNumberItems(7, 20)` → `[1, '…', 5, 6, 7, 8, 9, '…', 20]`
- *
- * @param current   Current page (1-based).
- * @param total     Total page count.
- * @param siblings  Pages shown on each side of `current`. Default: 2.
- */
-export function pageNumberItems(current: number, total: number, siblings = 2): PageNumberItem[] {
-  if (total <= 0) return [];
-  if (total <= 7 + (siblings - 2) * 2) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-  const start = Math.max(2, current - siblings);
-  const end = Math.min(total - 1, current + siblings);
-  const items: PageNumberItem[] = [1];
-  if (start > 2) items.push(PAGE_ELLIPSIS);
-  for (let p = start; p <= end; p++) items.push(p);
-  if (end < total - 1) items.push(PAGE_ELLIPSIS);
-  items.push(total);
-  return items;
-}
+// Pure pagination utilities (sentinel + computation) moved to
+// `@polaris/ui/utils` in v0.8.0-rc.8 so RSC consumers can import them
+// without dragging the client bundle in. Re-exported here for
+// back-compat — existing `import { pageNumberItems } from '@polaris/ui'`
+// keeps working.
+import { PAGE_ELLIPSIS, pageNumberItems, type PageNumberItem } from '../utils';
+export { PAGE_ELLIPSIS, pageNumberItems };
+export type { PageNumberItem };
 
 /* ================================================================== *
  * PaginationFooter — high-level wrapper                  v0.7.5 NEW
@@ -160,7 +184,12 @@ export function pageNumberItems(current: number, total: number, siblings = 2): P
  * ```
  */
 
-export interface PaginationFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+/**
+ * Shared (mode-agnostic) props for PaginationFooter — every render mode
+ * needs page / total / pageSize, an optional page-size selector, and the
+ * shared visual options.
+ */
+interface PaginationFooterCommonProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Current page (1-based). */
   page: number;
   /** Total item count (used for the `X-Y of N` indicator and to derive `totalPages`). */
@@ -169,21 +198,11 @@ export interface PaginationFooterProps extends React.HTMLAttributes<HTMLDivEleme
   pageSize: number;
   /** Page size options for the selector. Default: `[10, 25, 50, 100]`. */
   pageSizeOptions?: number[];
-  onPageChange: (page: number) => void;
   /** Required to show the page-size selector — passing this opts in. Typically also resets the page to 1. */
   onPageSizeChange?: (pageSize: number) => void;
   /**
    * Show the page-size selector. Default: `true` *iff* `onPageSizeChange`
-   * is provided (the selector is meaningless without a change handler).
-   *
-   * Pass `false` explicitly to hide the selector even when
-   * `onPageSizeChange` is set — useful when an external control owns
-   * the page-size choice (e.g. a Settings panel) and the footer should
-   * stay info-only.
-   *
-   * Previously the only way to hide was passing `pageSizeOptions={undefined}`
-   * which read like "no options" rather than "hide". This explicit
-   * boolean is preferred; the old behavior still works as a fallback.
+   * is provided. See JSDoc on the prop below for legacy fallback details.
    */
   showPageSize?: boolean;
   /** Hide the `X-Y of N` indicator. */
@@ -192,13 +211,98 @@ export interface PaginationFooterProps extends React.HTMLAttributes<HTMLDivEleme
   siblings?: number;
   /** Localized label parts. */
   labels?: {
-    /** Receives a function that interpolates start, end, total — render the
-     *  "X-Y of N" indicator. Default: `"{start}-{end} / {total}"`. */
+    /** "X-Y of N" renderer. Default: `"{start}-{end} / {total}"`. */
     total?: (start: number, end: number, total: number) => ReactNode;
     /** Label for the page-size selector. Default: "페이지당". */
     pageSize?: ReactNode;
   };
 }
+
+/**
+ * Controlled mode — parent owns `page` in React state and reacts to
+ * `onPageChange` to update it. Used inside client components.
+ */
+interface PaginationFooterControlledProps extends PaginationFooterCommonProps {
+  /** Required in controlled mode. Fires when the user picks a page. */
+  onPageChange: (page: number) => void;
+  buildHref?: never;
+  linkAs?: never;
+}
+
+/**
+ * Anchor mode — each pagination item is rendered as a real `<a>` /
+ * `<Link>` with `href={buildHref(p)}`. Use inside client islands that
+ * want URL-state pagination (Next.js App Router + Link). `onPageChange`
+ * stays optional — supplies prefetch / optimistic UI / scroll behavior
+ * *in addition to* the anchor navigation.
+ *
+ * ⚠ **Server Component caveat** — `@polaris/ui` root bundle is `"use client"`,
+ * so PaginationFooter is itself a client component. `buildHref` (function)
+ * and `linkAs` (component) cannot be passed from a React Server Component
+ * — they're not serializable. Two safe RSC patterns:
+ *
+ *   1. **Client island** — wrap PaginationFooter in a `'use client'`
+ *      file and pass `page` / `pageSize` / `total` (serializable) from
+ *      the server; the island declares `buildHref` / `linkAs` locally.
+ *   2. **Raw `<Link>` assembly** — for pure-RSC pagination, use
+ *      `pageNumberItems` from `@polaris/ui/utils` (server-safe) and
+ *      render `<Link>` elements directly. Skip PaginationFooter.
+ *
+ * @example Client-island pattern
+ * ```tsx
+ * // app/contracts/page.tsx (SERVER COMPONENT)
+ * import { ContractsPagination } from './pagination-island';
+ * export default async function Page({ searchParams }) {
+ *   const page = Number(searchParams.page ?? 1);
+ *   const total = await getTotalCount();
+ *   return <ContractsPagination page={page} total={total} pageSize={20} />;
+ * }
+ *
+ * // app/contracts/pagination-island.tsx (CLIENT COMPONENT)
+ * 'use client';
+ * import Link from 'next/link';
+ * import { PaginationFooter } from '@polaris/ui';
+ * export function ContractsPagination(props) {
+ *   return <PaginationFooter {...props}
+ *     buildHref={(p) => `?page=${p}`}
+ *     linkAs={Link}
+ *   />;
+ * }
+ * ```
+ */
+interface PaginationFooterAnchorProps extends PaginationFooterCommonProps {
+  /**
+   * Required in anchor mode — function `(page) => href` invoked per item.
+   * Returns the navigation URL for each page link.
+   */
+  buildHref: (page: number) => string;
+  /**
+   * Element type for anchor-mode rendering. Default: `'a'`. Pass a custom
+   * `<Link>` component (Next.js, React Router, TanStack) for client-side
+   * routing + prefetch. Receives a string `href` prop.
+   *
+   * ⚠ Same serializability caveat as `buildHref` — must be declared inside
+   * a client component / island. See `PaginationFooterAnchorProps` JSDoc
+   * above for safe RSC patterns.
+   */
+  linkAs?: ElementType;
+  /**
+   * Optional in anchor mode — fires *in addition to* native anchor navigation.
+   * Use for prefetch / optimistic UI / scroll behavior. The anchor's `href`
+   * still drives the actual page transition.
+   */
+  onPageChange?: (page: number) => void;
+}
+
+/**
+ * Discriminated union — exactly one of (controlled `onPageChange`) or
+ * (anchor `buildHref`) is required. TypeScript catches the mistake at
+ * compile time, preventing the rc.7 footgun where a `<PaginationFooter>`
+ * with neither rendered an inert (un-clickable) toolbar.
+ */
+export type PaginationFooterProps =
+  | PaginationFooterControlledProps
+  | PaginationFooterAnchorProps;
 
 const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
@@ -210,6 +314,8 @@ export const PaginationFooter = forwardRef<HTMLDivElement, PaginationFooterProps
       pageSize,
       pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
       onPageChange,
+      buildHref,
+      linkAs,
       onPageSizeChange,
       showPageSize,
       showTotal = true,
@@ -281,27 +387,70 @@ export const PaginationFooter = forwardRef<HTMLDivElement, PaginationFooterProps
           ) : null}
 
           <Pagination>
-            <PaginationPrev
-              disabled={safePage <= 1}
-              onClick={() => onPageChange(safePage - 1)}
-            />
-            {items.map((it, i) =>
-              it === PAGE_ELLIPSIS ? (
-                <PaginationEllipsis key={`ellipsis-${i}`} />
-              ) : (
-                <PaginationItem
-                  key={it}
-                  active={it === safePage}
-                  onClick={() => onPageChange(it)}
-                >
-                  {it}
-                </PaginationItem>
-              )
-            )}
-            <PaginationNext
-              disabled={safePage >= totalPages}
-              onClick={() => onPageChange(safePage + 1)}
-            />
+            {(() => {
+              // Render mode selector: anchor mode wins when `buildHref` is
+              // set (RSC-friendly), otherwise controlled `onClick`.
+              const LinkComp: ElementType = linkAs ?? 'a';
+              const prevPage = Math.max(1, safePage - 1);
+              const nextPage = Math.min(totalPages, safePage + 1);
+              const prevDisabled = safePage <= 1;
+              const nextDisabled = safePage >= totalPages;
+              return (
+                <>
+                  {buildHref ? (
+                    <PaginationPrev
+                      asChild={!prevDisabled}
+                      disabled={prevDisabled}
+                      onClick={onPageChange ? () => onPageChange(prevPage) : undefined}
+                    >
+                      {!prevDisabled ? <LinkComp href={buildHref(prevPage)} /> : null}
+                    </PaginationPrev>
+                  ) : (
+                    <PaginationPrev
+                      disabled={prevDisabled}
+                      onClick={onPageChange ? () => onPageChange(prevPage) : undefined}
+                    />
+                  )}
+                  {items.map((it, i) =>
+                    it === PAGE_ELLIPSIS ? (
+                      <PaginationEllipsis key={`ellipsis-${i}`} />
+                    ) : buildHref ? (
+                      <PaginationItem key={it} active={it === safePage} asChild>
+                        <LinkComp
+                          href={buildHref(it)}
+                          aria-current={it === safePage ? 'page' : undefined}
+                          onClick={onPageChange ? () => onPageChange(it) : undefined}
+                        >
+                          {it}
+                        </LinkComp>
+                      </PaginationItem>
+                    ) : (
+                      <PaginationItem
+                        key={it}
+                        active={it === safePage}
+                        onClick={onPageChange ? () => onPageChange(it) : undefined}
+                      >
+                        {it}
+                      </PaginationItem>
+                    )
+                  )}
+                  {buildHref ? (
+                    <PaginationNext
+                      asChild={!nextDisabled}
+                      disabled={nextDisabled}
+                      onClick={onPageChange ? () => onPageChange(nextPage) : undefined}
+                    >
+                      {!nextDisabled ? <LinkComp href={buildHref(nextPage)} /> : null}
+                    </PaginationNext>
+                  ) : (
+                    <PaginationNext
+                      disabled={nextDisabled}
+                      onClick={onPageChange ? () => onPageChange(nextPage) : undefined}
+                    />
+                  )}
+                </>
+              );
+            })()}
           </Pagination>
         </div>
       </div>

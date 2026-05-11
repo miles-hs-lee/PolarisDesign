@@ -285,25 +285,36 @@ v0.6/rc.0/rc.1/v0.7 거치며 누적된 deprecated alias + naming 불일치 + to
 
 ---
 
-## v0.8.x patch — 컨슈머 피드백 즉시 fix 묶음 (코드 변경 필요, 사용자 결정 대기)
+## ✅ v0.8.0-rc.8 — RSC 친화 묶음 (완료, 2026-05-11)
 
-실전 마이그레이션 프로젝트 피드백 (2026-05-11) 에서 발견된 작은 갭들 — additive 또는 1줄 fix라 v0.8.x patch 사이클에 묶이는 게 자연스러움. **사용자 결정 대기 — A 묶음으로 한 번에 진행할지 / 개별로 흩어 진행할지**.
+실전 컨슈머의 RSC 환경 친화 요구 6건을 한 사이클에 묶어 처리. additive only — controlled API는 그대로 유지되어 client SPA 컨슈머는 코드 변경 0.
+
+**처리된 항목**:
+- `@polaris/ui/utils` 신규 subpath — `pageNumberItems` / `PAGE_ELLIPSIS` / `PageNumberItem` server-safe export. RSC 페이지에서 직접 import해도 client boundary 안 끌려옴 (`"use client"` directive 미부여)
+- `<PaginationFooter>` anchor mode — `buildHref` + `linkAs` prop (client island 안에서 사용). 타입을 discriminated union으로 강제 — controlled `onPageChange` 또는 anchor `buildHref` 중 하나 필수
+- `<PaginationPrev>` / `<PaginationNext>` asChild 빌드 즉사 fix — Radix `Slottable` 패턴 + `icon` prop
+- `<TableSearchInput>` 자동 controlled/uncontrolled 감지 — `name` + `defaultValue` forward로 `<form action>` 네이티브 form submit 패턴
+- `<TableToolbar searchProps>` 주입 경로
+- `<TabsTrigger asChild>` URL-routed tabs JSDoc 예시
+- `docs/migration/rsc-patterns.md` 신규 (Server Component 직접 호출 caveat 포함)
+
+**검증**: pnpm verify 14/14 · @polaris/ui tests 267 → 279 (+12).
+
+> **Server Component 직접 호출 caveat** — `@polaris/ui` 루트 번들은 `"use client"`. 함수/컴포넌트 prop (`buildHref` / `linkAs`)을 server component에서 client component에 전달은 직렬화 불가. 두 가지 안전 패턴: (1) client island 안에서 PaginationFooter 사용 / (2) `pageNumberItems` 유틸 + raw `<Link>` 조립.
+
+---
+
+## v0.8.x patch — 남은 컨슈머 피드백 fix 묶음 (코드 변경 필요, 사용자 결정 대기)
+
+실전 마이그레이션 프로젝트 피드백 (2026-05-11) 에서 발견된 작은 갭들 중 rc.8에 *포함 안 된* 항목들. additive 또는 1줄 fix라 v0.8.x patch 사이클에 묶이는 게 자연스러움. **사용자 결정 대기**.
 
 - **`<Stat valueVariant>` prop 추가** — `deltaVariant` 와 동일 enum (`positive` / `negative` / `accent` / `neutral`). KPI 타일에서 "활성 12" 같은 직접 색 신호 표현. 컨슈머가 자체 Stat에 `tone="emerald"` 같은 식으로 쓰던 패턴이 폴라리스 도입 후 모두 흑색 numeric으로 평준화되어 시각 신호 손실. ⚠️ 디자인팀 confirm 필요 — `<Stat>` value 색 입힘이 spec 허용인지 (followup `DT-A`)
 - **v4-theme.css 에 `--font-sans` / `--font-mono` alias** — 1줄 fix. 현재 `--font-polaris` 만 노출되어 Tailwind default `--font-sans` 가 alias 안 됨. 컨슈머 globals.css에 별도 블록 유지 중인 friction
-- **`<PaginationFooter buildHref>` prop** — `(page) => string` 콜백. RSC + `<Link href>` 환경에서 controlled `onPageChange` 대신 anchor 자체 렌더. Next.js 16 App Router 사용자가 가장 자주 막히는 단일 컴포넌트
 - **`@polaris/no-shadowed-polaris-name` lint 룰** — 동일 파일 안에 `function Stat()` / `const Stat = …` 같은 로컬 정의가 폴라리스 export와 이름 충돌 시 경고. 컨슈머가 폴라리스 Stat 을 import 안 했는데도 같은 파일 419줄에 `function Stat()` 이 있어서 hoisting으로 빌드 통과했던 케이스 — code review로만 잡힘. ESLint plugin 0.5일 작업
-- **`<PaginationPrev asChild>` / `<PaginationNext asChild>` 빌드 즉사 fix** (실전 컨슈머 빌드 깨짐) — 컴포넌트 내부에서 `[ChevronIcon, children]` 두 child를 `<PaginationItem children=...>` 으로 spread하는데 `asChild` 일 때 Radix Slot 이 `React.Children.only` 를 요구하므로 폭사. fix 옵션:
-  - (A) **chevron을 children prepend 대신 className 처리** — `[data-side="prev"]:before:content-['<']` 또는 absolute-positioned chevron. asChild API 자연스럽지만 custom icon 커스터마이징은 어려워짐
-  - (B) **`prevHref` / `nextHref` 별도 prop** — `<PaginationPrev href={buildHref(p-1)}>` (asChild 대신). RSC 친화 명확하지만 API 두 갈래 (controlled vs anchor)
-  - (C) **`icon` prop + asChild** — `<PaginationPrev icon={<CustomChevron />} asChild><Link>이전</Link></PaginationPrev>`. chevron은 컴포넌트가 그리고 Slot은 children만 받음
-  - 권장: (C) — 가장 자연스러운 API. controlled / asChild / icon 커스터마이징 셋 다 살아남음. PaginationFooter `buildHref` 와 함께 묶어 한 사이클로
-- **`pageNumberItems` / 기타 순수 utility를 RSC 친화 entry point로 분리** (컨슈머 피드백) — 현재 `@polaris/ui` 루트 barrel이 `"use client"` 또는 client component 의존성을 가져서 RSC 에서 utility 한 함수 (예: `pageNumberItems(current, total)` 페이지 번호 배열 계산) 만 import해도 client 경계가 끌려옴. 해결:
-  - 별도 entry `@polaris/ui/utils` (또는 `/server-safe`) 으로 순수 함수만 모으기 — `pageNumberItems`, `formatStatValue`, 그리고 `class-variance-authority` 기반이 아닌 모든 pure utility
-  - 또는 root barrel에서 `"server-only"` 와 충돌 안 하도록 conditional export 정리 (package.json `exports` 에서 `server` / `default` 분기)
-  - 권장 패키지 구조: `@polaris/ui/utils` 신규 subpath. 컨슈머가 RSC 에서 `import { pageNumberItems } from '@polaris/ui/utils'` 로 가져와 자체 `<nav>` + `<Link>` 마크업 직접 조립 가능
 
-**근거**: `docs/component-history.md`, `docs/migration/legacy-css-patterns.md`, 실전 컨슈머 마이그레이션 피드백 (#1/#5/#7/#10 + 후속 PaginationPrev asChild / pageNumberItems RSC).
+**rc.8에서 처리된 항목** (#1 partial / `<PaginationFooter buildHref>`, `<PaginationPrev/Next>` asChild fix, `pageNumberItems` utils subpath, `<TableSearchInput>` uncontrolled, `<TableToolbar searchProps>`, `<TabsTrigger asChild>` JSDoc) — CHANGELOG v0.8.0-rc.8 참조.
+
+**근거**: `docs/component-history.md`, `docs/migration/legacy-css-patterns.md`, 실전 컨슈머 마이그레이션 피드백 (#5/#7/#10).
 
 ---
 

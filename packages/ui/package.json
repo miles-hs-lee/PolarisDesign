@@ -1,6 +1,6 @@
 {
   "name": "@polaris/ui",
-  "version": "0.8.0-rc.7",
+  "version": "0.8.0-rc.8",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -20,6 +20,11 @@
       "types": "./dist/tailwind/index.d.ts",
       "import": "./dist/tailwind/index.js",
       "require": "./dist/tailwind/index.cjs"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js",
+      "require": "./dist/utils/index.cjs"
     },
     "./form": {
       "types": "./dist/form/index.d.ts",

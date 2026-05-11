@@ -139,3 +139,78 @@ describe('TableSkeleton', () => {
     expect(region).toHaveAttribute('aria-live', 'polite');
   });
 });
+
+describe('TableSearchInput — uncontrolled / RSC form-action mode (v0.8.0-rc.8)', () => {
+  it('renders as uncontrolled when only defaultValue is given (no value prop)', () => {
+    render(<TableSearchInput defaultValue="hello" name="q" />);
+    const input = screen.getByRole('searchbox') as HTMLInputElement;
+    expect(input.value).toBe('hello');
+    expect(input.getAttribute('name')).toBe('q');
+  });
+
+  it('forwards `name` attribute for native form submission', () => {
+    render(<TableSearchInput name="q" defaultValue="" />);
+    expect(screen.getByRole('searchbox').getAttribute('name')).toBe('q');
+  });
+
+  it('user typing in uncontrolled mode updates input value without React state', async () => {
+    const user = userEvent.setup();
+    render(<TableSearchInput name="q" defaultValue="" />);
+    const input = screen.getByRole('searchbox') as HTMLInputElement;
+    await user.type(input, 'polaris');
+    expect(input.value).toBe('polaris');
+  });
+
+  it('clear button resets uncontrolled input imperatively', async () => {
+    const user = userEvent.setup();
+    render(<TableSearchInput name="q" defaultValue="initial" />);
+    const input = screen.getByRole('searchbox') as HTMLInputElement;
+    expect(input.value).toBe('initial');
+    await user.click(screen.getByLabelText('검색어 지우기'));
+    expect(input.value).toBe('');
+  });
+
+  it('optional onValueChange still fires in uncontrolled mode (analytics, debounce)', async () => {
+    const user = userEvent.setup();
+    const spy = vi.fn();
+    render(<TableSearchInput defaultValue="" onValueChange={spy} />);
+    await user.type(screen.getByRole('searchbox'), 'x');
+    expect(spy).toHaveBeenCalledWith('x');
+  });
+
+  it('controlled mode unchanged when value is provided', async () => {
+    const user = userEvent.setup();
+    const spy = vi.fn();
+    render(<TableSearchInput value="abc" onValueChange={spy} />);
+    const input = screen.getByRole('searchbox') as HTMLInputElement;
+    expect(input.value).toBe('abc');
+    await user.type(input, 'd');
+    expect(spy).toHaveBeenCalled();
+  });
+});
+
+describe('TableToolbar — searchProps mode (RSC)', () => {
+  it('renders TableSearchInput in uncontrolled mode when searchProps is set', () => {
+    render(
+      <TableToolbar
+        searchProps={{ name: 'q', defaultValue: 'init' }}
+      />
+    );
+    const input = screen.getByRole('searchbox') as HTMLInputElement;
+    expect(input.getAttribute('name')).toBe('q');
+    expect(input.value).toBe('init');
+  });
+
+  it('controlled mode (search + onSearchChange) still works', async () => {
+    const user = userEvent.setup();
+    const spy = vi.fn();
+    render(<TableToolbar search="" onSearchChange={spy} />);
+    await user.type(screen.getByRole('searchbox'), 'a');
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('hides search input when neither search nor searchProps is set', () => {
+    render(<TableToolbar />);
+    expect(screen.queryByRole('searchbox')).toBeNull();
+  });
+});

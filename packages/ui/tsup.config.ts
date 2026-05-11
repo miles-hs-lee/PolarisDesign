@@ -5,6 +5,7 @@ export default defineConfig({
     'src/index.ts',
     'src/tokens/index.ts',
     'src/tailwind/index.ts',
+    'src/utils/index.ts',
     'src/form/index.ts',
     'src/ribbon/index.ts',
     'src/icons/index.ts',
@@ -21,8 +22,9 @@ export default defineConfig({
   external: ['react', 'react-dom', 'react/jsx-runtime', 'react-hook-form'],
   // Components use React hooks / context. Prepend 'use client' to bundles
   // so Next.js / RSC consumers can import without "createContext only works
-  // in client components" errors. Tokens and Tailwind preset are pure and
-  // don't need the directive.
+  // in client components" errors. Tokens, Tailwind preset, and utils are
+  // pure and must NOT be marked — that's the whole point of `utils` (RSC
+  // consumers can import its helpers without dragging a client boundary).
   async onSuccess() {
     const fs = await import('node:fs');
     const targets = [

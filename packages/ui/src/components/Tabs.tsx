@@ -47,6 +47,38 @@ export const TabsList = forwardRef<
 ));
 TabsList.displayName = 'TabsList';
 
+/**
+ * Tab trigger button. Inherits visual variant from the surrounding
+ * `<TabsList variant>` via context.
+ *
+ * **RSC / URL-routed tabs (v0.8.0-rc.8 confirmed pattern)** — Radix's
+ * `asChild` is forwarded through props, so the trigger can render as a
+ * `<Link>` for URL-driven tabs in React Server Components:
+ *
+ * ```tsx
+ * // app/page.tsx (server component)
+ * export default async function Page({ searchParams }) {
+ *   const tab = searchParams.tab ?? 'docs';
+ *   return (
+ *     <Tabs value={tab}>
+ *       <TabsList variant="underline">
+ *         <TabsTrigger value="docs" asChild>
+ *           <Link href="?tab=docs">문서</Link>
+ *         </TabsTrigger>
+ *         <TabsTrigger value="settings" asChild>
+ *           <Link href="?tab=settings">설정</Link>
+ *         </TabsTrigger>
+ *       </TabsList>
+ *       <TabsContent value="docs">server-rendered docs</TabsContent>
+ *       <TabsContent value="settings">server-rendered settings</TabsContent>
+ *     </Tabs>
+ *   );
+ * }
+ * ```
+ *
+ * Clicking the trigger navigates via `<Link>`, the server re-renders
+ * with the new `tab` searchParam, and `<Tabs value={tab}>` reflects.
+ */
 export const TabsTrigger = forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>

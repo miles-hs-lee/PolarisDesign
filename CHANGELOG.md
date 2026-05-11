@@ -12,6 +12,39 @@
 
 ---
 
+## [0.8.0-rc.8] — 2026-05-11
+
+실전 컨슈머의 RSC 친화 요구 6건을 한 사이클에 묶어 처리. **rc.7 대비 BREAKING 변경 없음** — 모든 추가는 *opt-in additive*. controlled API는 그대로 유지되어 client SPA 컨슈머는 코드 변경 0.
+
+### 신규 — RSC 친화 (additive, 모두 opt-in)
+
+- **`@polaris/ui/utils` subpath 신규** — server-safe 순수 함수 모음. 첫 export: `pageNumberItems(current, total, siblings)` / `PAGE_ELLIPSIS` / `PageNumberItem` 타입. tsup 빌드 시 `"use client"` directive를 *붙이지 않음* (token/tailwind 와 같은 패턴). RSC 페이지에서 import해도 client boundary가 끌려오지 않음. 추가 조건: React / Radix / Tailwind 의존 없는 순수 함수만.
+- **`<PaginationFooter>` anchor mode** — 신규 prop `buildHref: (page) => string` + 선택 `linkAs: ElementType`. 설정 시 페이지 버튼이 `<a href>` 또는 `<linkAs href>` 로 렌더. controlled 모드 (`onPageChange`) 와 anchor 모드 (`buildHref`) 가 *동시 사용 가능* — anchor가 navigation 담당, `onPageChange` 가 prefetch / 옵티미스틱 / 스크롤 동작 책임. **Server Component 직접 호출은 불가** (함수/컴포넌트 prop 직렬화 못 함) — client island 안에서 사용하거나 utils 기반 raw `<Link>` 조립 패턴 사용.
+- **`<PaginationPrev>` / `<PaginationNext>` asChild 빌드 즉사 fix** — rc.7 까지는 `[ChevronIcon, children]` 을 두 sibling으로 spread 해서 `asChild={true}` 일 때 Radix Slot 의 `React.Children.only` 폭사. **Radix `Slottable` 패턴 + 신규 `icon` prop** 으로 해결: chevron은 sibling, children은 Slottable로 단일 merge target. `icon={null}` 로 chevron 제거 가능.
+- **`<TableSearchInput>` 자동 controlled/uncontrolled 감지** — 기존 required였던 `value` + `onValueChange` 가 선택으로 (`value` 없으면 uncontrolled 모드). 신규 `defaultValue` + `name` prop forward — `<form action><TableSearchInput name="q" defaultValue={q} /></form>` 으로 RSC native form submit 패턴 지원. clear 버튼은 uncontrolled 모드에서도 작동 (native input value를 imperatively reset).
+- **`<TableToolbar searchProps>` 주입 경로** — 객체 prop으로 TableSearchInput의 `name` / `defaultValue` / 선택 `onValueChange` 를 흘림. controlled (`search` + `onSearchChange`) 와 uncontrolled (`searchProps`) 둘 중 하나 선택.
+- **`<TabsTrigger asChild>` JSDoc + URL-routed tabs 패턴 명시** — Radix `asChild` 가 이미 forward 되어 있어서 코드 변경 없이 `<TabsTrigger asChild><Link href="?tab=docs">문서</Link></TabsTrigger>` 가 작동. server가 `tab` searchParam을 읽어 `<Tabs value={tab}>` controlled mode에 흘리는 패턴이 권장 — JSDoc 예시 추가.
+
+### 디자인 결정 — discriminated union 강제
+
+- **`PaginationFooterProps` 타입을 union으로 재구성** (Codex P2 catch) — `controlled` (onPageChange required) | `anchor` (buildHref required). 둘 다 없으면 *컴파일 에러*. rc.7 까지는 inert 버튼이 렌더되는 footgun 이 있었음. `@ts-expect-error` 가 정확히 트리거되는지 type-level 테스트 추가.
+
+### docs
+
+- **`docs/migration/rsc-patterns.md` 신규** — RSC 컨슈머용 사용 가이드. utils / PaginationFooter (client island vs utils raw Link 두 패턴) / PaginationPrev-Next asChild / TableSearchInput uncontrolled / TableToolbar searchProps / Tabs URL-routed 패턴 각각 코드 예시 + 안티 패턴 (Server Component에서 함수 prop 직접 호출 등) + 마이그레이션 체크리스트.
+
+### 검증
+
+- `pnpm verify` **14/14 ✓**
+- `@polaris/ui` tests: **279/279** (+12 — Pagination buildHref anchor mode 5 / asChild + icon 4 / TableSearchInput uncontrolled 6 / TableToolbar searchProps 3 / 회귀)
+- `dist/utils/index.{js,cjs}` 에 `"use client"` directive **0건** — server-safe 확인
+
+### 컨슈머 영향 한 줄
+
+기존 client SPA: **코드 변경 0** (controlled API 그대로). RSC 컨슈머: **6개 컴포넌트의 새 RSC 모드 + 1개 utils subpath** 로 페이지네이션 / 검색 / 필터 / 탭 friction이 한 사이클에 해소.
+
+---
+
 ## [0.8.0-rc.7] — 2026-05-10
 
 실전 컨슈머 마이그레이션 리뷰에서 발견된 P1 2건 + P3 1건 fix. **rc.6 대비 BREAKING 변경 없음** — codemod의 동작 모델이 "best effort + caveat"에서 "**conflict 감지 시 fail-loud**"로 전환된 게 가장 큰 의미 있는 변화. silent rewrite로 빌드 깨뜨리는 케이스 두 건이 명시적 abort + 사용자 안내로 바뀜.

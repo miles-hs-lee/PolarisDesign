@@ -69,25 +69,68 @@ import { cn } from '../lib/cn';
 /* ─── TableSearchInput ──────────────────────────────────────────── */
 
 export interface TableSearchInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'onChange'> {
-  /** Current search value (controlled). */
-  value: string;
-  /** Fires on every keystroke (or after `debounceMs` if set). */
-  onValueChange: (next: string) => void;
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'defaultValue' | 'onChange'> {
+  /**
+   * **Controlled mode** — current search value. Pairs with `onValueChange`.
+   *
+   * Leave undefined for **uncontrolled mode** (set `defaultValue` instead).
+   * Uncontrolled mode pairs with native `<form action>` submission +
+   * server-rendered `defaultValue` for React Server Components / Next.js
+   * App Router where `onChange` callbacks can't be created.
+   */
+  value?: string;
+  /**
+   * **Uncontrolled mode** — initial search value. Required for the RSC
+   * form-action pattern (server reads `?q=...` from URL and renders
+   * `<TableSearchInput name="q" defaultValue={q} />`; native form submit
+   * sends the user's new value to the server).
+   */
+  defaultValue?: string;
+  /**
+   * Fires on every keystroke (or after `debounceMs` if set). Required in
+   * controlled mode; optional in uncontrolled mode (e.g. analytics ping).
+   */
+  onValueChange?: (next: string) => void;
   /** If set, debounces `onValueChange` by N ms — typical 200-300 for live search. */
   debounceMs?: number;
   /** Show a clear (×) button when the input is non-empty. Default: `true`. */
   clearable?: boolean;
+  /**
+   * Form name. When set, the input ships its value with the surrounding
+   * `<form>` submission (works in both modes). Required for the RSC
+   * pattern `<form action="/path"><TableSearchInput name="q" ... /></form>`.
+   */
+  name?: string;
 }
 
 /**
  * Search input with leading magnifier icon + optional debounce + clear button.
- * Stand-alone export so it can be used outside `TableToolbar` (e.g. card headers).
+ *
+ * **Two modes** (v0.8.0-rc.8+):
+ *
+ * 1. **Controlled** — `value` + `onValueChange`. Use in client components
+ *    where you own the search state in React.
+ *
+ * 2. **Uncontrolled / RSC form-action** — `defaultValue` + `name`, no
+ *    `onValueChange` needed. The native form submits the value when the
+ *    user presses Enter; server reads from URL search params and re-renders.
+ *
+ *    ```tsx
+ *    // RSC pattern — Next.js App Router
+ *    <form action={`?`}>
+ *      <TableSearchInput name="q" defaultValue={searchParams.q} />
+ *      <button type="submit" hidden />
+ *    </form>
+ *    ```
+ *
+ * Mode is auto-detected: if `value` is set, controlled; else uncontrolled.
+ * Stand-alone export so it can be used outside `TableToolbar`.
  */
 export const TableSearchInput = forwardRef<HTMLInputElement, TableSearchInputProps>(
   (
     {
       value,
+      defaultValue,
       onValueChange,
       debounceMs,
       clearable = true,
@@ -95,37 +138,57 @@ export const TableSearchInput = forwardRef<HTMLInputElement, TableSearchInputPro
       placeholder = '검색',
       'aria-label': ariaLabel,
       id: providedId,
+      name,
       ...inputProps
     },
     ref
   ) => {
+    const isControlled = value !== undefined;
     const id = useId();
-    const [local, setLocal] = useState(value);
+    // `local` tracks the value for the clear button + debounce timing
+    // regardless of mode. In controlled mode it mirrors `value`; in
+    // uncontrolled mode it tracks the native input as the user types.
+    const [local, setLocal] = useState<string>(value ?? defaultValue ?? '');
     const localRef = useRef(local);
     localRef.current = local;
+    // Keep a ref to the native input so the clear button can imperatively
+    // reset it in uncontrolled mode (React won't re-render the input).
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const mergedRef = (node: HTMLInputElement | null) => {
+      inputRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = node;
+    };
 
-    // Keep local state in sync if parent value changes externally (URL, reset).
+    // Controlled mode — keep local mirror in sync if parent value changes.
     useEffect(() => {
-      setLocal(value);
-    }, [value]);
+      if (isControlled) setLocal(value);
+    }, [isControlled, value]);
 
     // Debounce the propagation of `local` → `onValueChange`.
     useEffect(() => {
-      if (!debounceMs) return;
+      if (!debounceMs || !onValueChange) return;
       const t = setTimeout(() => {
-        if (localRef.current !== value) onValueChange(localRef.current);
+        if (isControlled ? localRef.current !== value : true) {
+          onValueChange(localRef.current);
+        }
       }, debounceMs);
       return () => clearTimeout(t);
-    }, [local, debounceMs, onValueChange, value]);
+    }, [local, debounceMs, onValueChange, value, isControlled]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       setLocal(e.target.value);
-      if (!debounceMs) onValueChange(e.target.value);
+      if (!debounceMs) onValueChange?.(e.target.value);
     };
 
     const handleClear = () => {
       setLocal('');
-      onValueChange('');
+      if (!isControlled && inputRef.current) {
+        // Uncontrolled mode — reset the native input imperatively so
+        // form submission sees the cleared value.
+        inputRef.current.value = '';
+      }
+      onValueChange?.('');
     };
 
     return (
@@ -140,10 +203,11 @@ export const TableSearchInput = forwardRef<HTMLInputElement, TableSearchInputPro
           className="absolute left-3 h-4 w-4 text-label-alternative pointer-events-none"
         />
         <input
-          ref={ref}
+          ref={mergedRef}
           id={providedId ?? id}
           type="search"
-          value={local}
+          name={name}
+          {...(isControlled ? { value: local } : { defaultValue: defaultValue ?? '' })}
           onChange={handleChange}
           placeholder={placeholder}
           aria-label={ariaLabel ?? placeholder}
@@ -185,11 +249,36 @@ export interface TableFilterChip<V extends string = string> {
 
 export interface TableToolbarProps<V extends string = string>
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  /** Search input value. Pass `undefined` to hide the search input. */
+  /**
+   * Controlled search value. Pair with `onSearchChange`. For *RSC form-action*
+   * mode use `searchProps` instead (see below). Pass `undefined` AND no
+   * `searchProps` to hide the search input.
+   */
   search?: string;
   onSearchChange?: (next: string) => void;
   searchPlaceholder?: string;
   searchDebounceMs?: number;
+  /**
+   * **Uncontrolled / RSC mode (v0.8.0-rc.8+)** — pass-through props for
+   * the search input. Use this instead of `search`/`onSearchChange` when
+   * you want `<form action>` form-submission instead of React state.
+   *
+   * ```tsx
+   * // RSC pattern
+   * <form action={`?`}>
+   *   <TableToolbar
+   *     searchProps={{ name: 'q', defaultValue: searchParams.q }}
+   *     chips={...}
+   *     actions={...}
+   *   />
+   *   <button type="submit" hidden />
+   * </form>
+   * ```
+   *
+   * Either `search` (controlled) OR `searchProps` (uncontrolled) — not both.
+   * `searchPlaceholder` / `searchDebounceMs` still apply in either mode.
+   */
+  searchProps?: Pick<TableSearchInputProps, 'name' | 'defaultValue' | 'onValueChange'>;
   /** Quick filter chips. Pass `undefined`/empty to hide. */
   chips?: ReadonlyArray<TableFilterChip<V>>;
   activeChip?: V;
@@ -203,6 +292,7 @@ export function TableToolbar<V extends string = string>({
   onSearchChange,
   searchPlaceholder,
   searchDebounceMs,
+  searchProps,
   chips,
   activeChip,
   onChipChange,
@@ -210,7 +300,7 @@ export function TableToolbar<V extends string = string>({
   className,
   ...props
 }: TableToolbarProps<V>) {
-  const showSearch = search !== undefined && onSearchChange;
+  const showSearch = (search !== undefined && onSearchChange) || !!searchProps;
   const showChips = chips && chips.length > 0;
 
   return (
@@ -225,8 +315,12 @@ export function TableToolbar<V extends string = string>({
     >
       {showSearch && (
         <TableSearchInput
+          // Controlled mode: explicit value + handler
           value={search}
-          onValueChange={onSearchChange}
+          onValueChange={onSearchChange ?? searchProps?.onValueChange}
+          // Uncontrolled mode: name + defaultValue passed through searchProps
+          name={searchProps?.name}
+          defaultValue={searchProps?.defaultValue}
           debounceMs={searchDebounceMs}
           placeholder={searchPlaceholder}
           className="max-w-xs flex-1"
