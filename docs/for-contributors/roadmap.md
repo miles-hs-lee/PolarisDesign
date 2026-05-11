@@ -52,7 +52,7 @@
 - **신규 lint 룰 2개** — `state-color-with-icon` (WCAG 1.4.1) + `prefer-polaris-icon` (lucide-react 마이그레이션 유도)
 - **Tokens 페이지 자동화** — `colors` export iterate로 새 그룹 추가 시 자동 반영. figma-spec PNG 인라인.
 
-마이그레이션: [`docs/migration/v0.6-to-v0.7.md`](migration/v0.6-to-v0.7.md).
+마이그레이션: [`docs/for-consumers/migration/v0.6-to-v0.7.md`](migration/v0.6-to-v0.7.md).
 
 ---
 
@@ -273,7 +273,7 @@ v0.6/rc.0/rc.1/v0.7 거치며 누적된 deprecated alias + naming 불일치 + to
 
 **검증**: `pnpm verify` 13/13 ✓ · `@polaris/ui` tests 254 + Checkbox AI / DialogFooter / focus ring 회귀 케이스 ✓ · `@polaris/lint` 99/99 (+5 v0.8 cases) · codemod 15/15 (+4 JSX cases). 내부 self-apply: 32 occurrences in 8 files.
 
-마이그레이션: [`docs/migration/v0.7-to-v0.8.md`](migration/v0.7-to-v0.8.md).
+마이그레이션: [`docs/for-consumers/migration/v0.7-to-v0.8.md`](migration/v0.7-to-v0.8.md).
 
 > 🚧 **rc.0**: pre-release. Codex 리뷰 + 사내 파일럿 통과 후 정식 v0.8.0 태그.
 
@@ -296,7 +296,7 @@ v0.6/rc.0/rc.1/v0.7 거치며 누적된 deprecated alias + naming 불일치 + to
 - `<TableSearchInput>` 자동 controlled/uncontrolled 감지 — `name` + `defaultValue` forward로 `<form action>` 네이티브 form submit 패턴
 - `<TableToolbar searchProps>` 주입 경로
 - `<TabsTrigger asChild>` URL-routed tabs JSDoc 예시
-- `docs/migration/rsc-patterns.md` 신규 (Server Component 직접 호출 caveat 포함)
+- `docs/for-consumers/migration/rsc-patterns.md` 신규 (Server Component 직접 호출 caveat 포함)
 
 **검증**: pnpm verify 14/14 · @polaris/ui tests 267 → 279 (+12).
 
@@ -314,7 +314,7 @@ v0.6/rc.0/rc.1/v0.7 거치며 누적된 deprecated alias + naming 불일치 + to
 
 **rc.8에서 처리된 항목** (#1 partial / `<PaginationFooter buildHref>`, `<PaginationPrev/Next>` asChild fix, `pageNumberItems` utils subpath, `<TableSearchInput>` uncontrolled, `<TableToolbar searchProps>`, `<TabsTrigger asChild>` JSDoc) — CHANGELOG v0.8.0-rc.8 참조.
 
-**근거**: `docs/component-history.md`, `docs/migration/legacy-css-patterns.md`, 실전 컨슈머 마이그레이션 피드백 (#5/#7/#10).
+**근거**: `docs/for-contributors/component-history.md`, `docs/for-consumers/migration/legacy-css-patterns.md`, 실전 컨슈머 마이그레이션 피드백 (#5/#7/#10).
 
 ---
 

@@ -39,7 +39,7 @@ pnpm install
 pnpm dev
 ```
 
-상세(Tailwind preset 연결, Renovate 자동 업그레이드, 트러블슈팅): 루트의 [`docs/internal-consumer-setup.md`](../../docs/internal-consumer-setup.md).
+상세(Tailwind preset 연결, Renovate 자동 업그레이드, 트러블슈팅): 루트의 [`docs/for-consumers/install.md`](../../docs/for-consumers/install.md).
 
 ## 시작 (모노레포 내부 — 디자인 시스템 자체 데모/카탈로그용)
 

@@ -18,7 +18,7 @@
 
 ### Patch Changes
 
-- 96ad78a: 디자인팀 v0.7.2 재검수의 자동 처리 가능 항목 6건 정리. 디자인 조율이 필요한 7건은 [`docs/design-team-followup.md`](docs/design-team-followup.md)로 분리.
+- 96ad78a: 디자인팀 v0.7.2 재검수의 자동 처리 가능 항목 6건 정리. 디자인 조율이 필요한 7건은 [`docs/for-design-team/followup.md`](docs/for-design-team/followup.md)로 분리.
 
   **`variant="outline"` (deprecated) → `variant="tertiary"` 일괄 마이그레이션 (22곳)**
 
@@ -53,7 +53,7 @@
 
   **Follow-up — 디자인 조율 필요한 7건**
 
-  [`docs/design-team-followup.md`](docs/design-team-followup.md):
+  [`docs/for-design-team/followup.md`](docs/for-design-team/followup.md):
 
   1. Button Tertiary 2종 분리 (흰 배경 + 회색 배경)
   2. Modal/Dialog 풀 너비 버튼 레이아웃
@@ -92,7 +92,7 @@
 
   **시각 회귀 baseline**: components-catalog (desktop + mobile) 갱신.
 
-  **나머지 디자인팀 답이 필요한 5+1건은 docs/design-team-followup.md로 분리**:
+  **나머지 디자인팀 답이 필요한 5+1건은 docs/for-design-team/followup.md로 분리**:
 
   - Tertiary / Ghost 정합 (DESIGN.md 부분 답)
   - Modal 풀 너비 버튼 layout (DESIGN.md 미정)
@@ -303,7 +303,7 @@
 
   디자인팀의 정식 정의서에 맞춰 토큰 명명·값·컴포넌트 스펙을 재정렬한 **breaking 릴리즈**입니다.
 
-  전체 마이그레이션 가이드: [`docs/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md)
+  전체 마이그레이션 가이드: [`docs/for-consumers/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/for-consumers/migration/v0.6-to-v0.7.md)
 
   자동 codemod: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`
 
@@ -377,7 +377,7 @@
 
   rc.0 출시 후 디자인팀의 더 상세한 정의서(`DESIGN.md` + `primitive-color-palette.html`)를 받아 9단계 reconciliation 수행. 사용자 피드백 단계 전이라 alias 부담 없이 spec 완전 정렬.
 
-  마이그레이션: [`docs/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md)
+  마이그레이션: [`docs/for-consumers/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/for-consumers/migration/v0.6-to-v0.7.md)
   Codemod (v0.6 / rc.0 모두 대응): `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`
 
   ### Highlights
@@ -663,7 +663,7 @@
 
   디자인팀의 정식 정의서에 맞춰 토큰 명명·값·컴포넌트 스펙을 재정렬한 **breaking 릴리즈**입니다.
 
-  전체 마이그레이션 가이드: [`docs/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md)
+  전체 마이그레이션 가이드: [`docs/for-consumers/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/for-consumers/migration/v0.6-to-v0.7.md)
 
   자동 codemod: `pnpm dlx @polaris/lint polaris-codemod-v07 --apply src`
 

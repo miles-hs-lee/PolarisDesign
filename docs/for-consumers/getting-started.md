@@ -16,7 +16,7 @@
 소스: https://github.com/PolarisOffice/PolarisDesign
 - README.md, DESIGN.md, AGENTS.md, packages/ui/README.md를 차례로 읽어
   토큰 / 컴포넌트 / 패키지 구조 파악
-- docs/internal-consumer-setup.md의 setup 절차 따라 의존성 설정
+- docs/for-consumers/install.md의 setup 절차 따라 의존성 설정
 
 설치 (GitHub Release tarball — 인증 없이 한 번에):
 - @polaris/ui (런타임 + Tailwind preset + 토큰 + SVG 자산)

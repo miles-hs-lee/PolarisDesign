@@ -55,7 +55,7 @@ pnpm dlx @polaris/lint polaris-codemod-v08 --apply src
 - Radius (`rounded-polaris-full` → `rounded-polaris-pill`)
 - 컴포넌트 prop / 식별자 (`<Button variant="outline">` → `tertiary`, `hint` → `helperText` 폼 8종, `<Progress tone>` / `<Stat deltaTone>` → `variant` / `deltaVariant`, `<HStack>` → `<Stack direction="row">`, `<VStack>` → `<Stack>`)
 
-자세한 매핑 표 / 적용 범위 주의사항: [`docs/migration/v0.7-to-v0.8.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.7-to-v0.8.md). v0.6 → v0.7 점프가 필요한 환경이라면 `polaris-codemod-v07`도 별도로 배포되어 있지만, v0.8 codemod 한 번으로 v0.6 → v0.8 점프도 가능합니다 (모든 alias가 codemod table에 들어 있음).
+자세한 매핑 표 / 적용 범위 주의사항: [`docs/for-consumers/migration/v0.7-to-v0.8.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/for-consumers/migration/v0.7-to-v0.8.md). v0.6 → v0.7 점프가 필요한 환경이라면 `polaris-codemod-v07`도 별도로 배포되어 있지만, v0.8 codemod 한 번으로 v0.6 → v0.8 점프도 가능합니다 (모든 alias가 codemod table에 들어 있음).
 
 전체 진단 (자주 등장 hex 분석 등) 이 필요하면 `npx polaris-audit` 로 요약 리포트 확인. 페이지 단위 마이그레이션은 `/polaris-migrate`.
 

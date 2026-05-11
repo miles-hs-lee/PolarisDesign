@@ -74,7 +74,7 @@ native `<button>`, `<input>`, `<textarea>`, `<select>`, `<dialog>`은 **feature 
 
 ### 2. 색상 — v0.7 spec 토큰 우선
 
-**v0.7부터 시맨틱 토큰이 spec 명명으로 재정렬됐고, v0.8에서 v0.6/rc.0/v0.7 alias가 모두 제거됐습니다.** 새 코드는 아래 표 기준 spec 이름만 사용. 옛 alias가 남아 있는 코드는 codemod 한 번으로 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v08 --apply src` (v0.6→v0.8 점프도 한 번에 처리). 자세히 → [`docs/migration/v0.7-to-v0.8.md`](docs/migration/v0.7-to-v0.8.md).
+**v0.7부터 시맨틱 토큰이 spec 명명으로 재정렬됐고, v0.8에서 v0.6/rc.0/v0.7 alias가 모두 제거됐습니다.** 새 코드는 아래 표 기준 spec 이름만 사용. 옛 alias가 남아 있는 코드는 codemod 한 번으로 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v08 --apply src` (v0.6→v0.8 점프도 한 번에 처리). 자세히 → [`docs/for-consumers/migration/v0.7-to-v0.8.md`](docs/for-consumers/migration/v0.7-to-v0.8.md).
 
 | 역할 | Tailwind class | TS 토큰 |
 |---|---|---|
@@ -184,7 +184,7 @@ Claude Code에서:
 /polaris-init my-app
 ```
 
-이 명령이 (1) `template-next` 클론 (2) `package.json`의 `workspace:*`를 GitHub Release 타르볼 URL로 자동 치환 (3) `pnpm install` (4) `pnpm dev`까지 한 번에 수행합니다. 수동 절차는 [`docs/internal-consumer-setup.md`](docs/internal-consumer-setup.md) 참고.
+이 명령이 (1) `template-next` 클론 (2) `package.json`의 `workspace:*`를 GitHub Release 타르볼 URL로 자동 치환 (3) `pnpm install` (4) `pnpm dev`까지 한 번에 수행합니다. 수동 절차는 [`docs/for-consumers/install.md`](docs/for-consumers/install.md) 참고.
 
 > 모노레포 내부에 새 디렉토리를 추가하는 경우는 디자인 시스템 자체의 부속 페이지(데모, 토큰 viewer, 카탈로그)일 때만. 진짜 제품 코드는 별도 repo에 두고 위 흐름으로 install.
 

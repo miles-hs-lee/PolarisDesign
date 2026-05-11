@@ -273,4 +273,4 @@ Tailwind 기본 그대로.
 1. 위 🟡 confirm 항목을 디자인 팀과 30분 워크숍에서 일괄 결정
 2. 합의된 hex 값을 `packages/ui/src/tokens/colors.ts`에 반영 → `pnpm --filter @polaris/ui build:tokens`로 CSS/CSS 변수 자동 동기화
 3. 데모의 [`/#/tokens`](https://polarisoffice.github.io/PolarisDesign/#/tokens) 페이지에서 변경된 swatches 시각 확인
-4. 디자인 자산(로고·아이콘·일러스트) 요청은 [`docs/design-assets-v07.md`](docs/design-assets-v07.md) 참조
+4. 디자인 자산(로고·아이콘·일러스트) 요청은 [`docs/archive/design-assets-v07.md`](docs/archive/design-assets-v07.md) 참조

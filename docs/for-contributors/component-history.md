@@ -16,7 +16,7 @@
 
 | 변화 종류 | 개수 | 처리 방법 |
 |---|---|---|
-| 신규 컴포넌트 | 30+ | 도입 결정 — `docs/getting-started-prompt.md` 의 9~10가지 시각 자산 참조 |
+| 신규 컴포넌트 | 30+ | 도입 결정 — `docs/for-consumers/getting-started.md` 의 9~10가지 시각 자산 참조 |
 | 컴포넌트 prop rename (BREAKING) | 5건 | codemod-v08 자동 |
 | variant rename (BREAKING) | 3건 | codemod-v08 자동 |
 | `<HStack>` / `<VStack>` 제거 | 1건 | codemod-v08 자동 |
@@ -158,7 +158,7 @@ rg '<Stat[^>]*\bdeltaTone='               # → deltaVariant=
 rg '<(H|V)Stack'                          # → <Stack direction="row"|"">
 ```
 
-이외 토큰 / Tailwind 클래스 / CSS 변수 alias 제거는 codemod 한 번이면 모두 정리. 자세히: [`docs/migration/v0.7-to-v0.8.md`](migration/v0.7-to-v0.8.md).
+이외 토큰 / Tailwind 클래스 / CSS 변수 alias 제거는 codemod 한 번이면 모두 정리. 자세히: [`docs/for-consumers/migration/v0.7-to-v0.8.md`](migration/v0.7-to-v0.8.md).
 
 ---
 

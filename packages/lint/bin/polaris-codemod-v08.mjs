@@ -37,7 +37,7 @@
  * Idempotent: running twice on already-migrated v0.8 code is a no-op.
  *
  * The script is regex-based (no AST). It targets the high-volume
- * patterns documented in `docs/migration/v0.7-to-v0.8.md`. Dynamic
+ * patterns documented in `docs/for-consumers/migration/v0.7-to-v0.8.md`. Dynamic
  * class strings (`text-${tone}-primary`), prop-passed token names,
  * and JSX tags spread across many lines may need manual review.
  */

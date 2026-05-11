@@ -486,7 +486,7 @@
    - (C) 패턴 가이드만 (현재 변종 없음, 컨슈머 wrapper 권장)
 3. 결정 시 시각 spec — divider / 패딩 / 액션 정렬 / Card 와의 관계
 
-**결정 후 작업** (A/B 경로): `<PageHeader>` API 확장 또는 `<PageHeaderCard>` 신규. v0.9 minor 후보. (C 경로): docs/component-use-cases/page-header.md 패턴 가이드만 작성.
+**결정 후 작업** (A/B 경로): `<PageHeader>` API 확장 또는 `<PageHeaderCard>` 신규. v0.9 minor 후보. (C 경로): docs/for-consumers/component-use-cases/page-header.md 패턴 가이드만 작성.
 
 ## 🟢 확장 — 정의서에 추가 후보 (디자인팀 confirm 후 정합화)
 

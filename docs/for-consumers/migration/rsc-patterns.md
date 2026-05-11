@@ -360,7 +360,7 @@ export default async function Page({ searchParams }) {
 - **`<Combobox>` server-prefetch** — 옵션 server 렌더 + 클라이언트 hydrate 패턴
 - **`<DialogTrigger>` server-friendly variant** — URL `?dialog=confirm` 기반 open state
 
-이 항목들은 [`docs/roadmap.md`](../roadmap.md) v0.9 섹션에 있습니다.
+이 항목들은 [`docs/for-contributors/roadmap.md`](../roadmap.md) v0.9 섹션에 있습니다.
 
 ---
 

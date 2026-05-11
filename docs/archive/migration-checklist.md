@@ -30,7 +30,7 @@ PolarisDesign은 GitHub Release에 첨부된 `.tgz` 타르볼로 배포됩니다
 }
 ```
 
-그리고 `pnpm install`. 전체 셋업 절차는 [`docs/internal-consumer-setup.md`](internal-consumer-setup.md).
+그리고 `pnpm install`. 전체 셋업 절차는 [`docs/for-consumers/install.md`](internal-consumer-setup.md).
 
 `tailwind.config.ts`:
 ```ts

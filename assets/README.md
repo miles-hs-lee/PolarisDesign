@@ -96,7 +96,7 @@ UI 아이콘 (`svg/icons/`):
 
 `figma-spec/` 의 PNG는 다음 문서에서 참조한다:
 - [`DESIGN.md`](../DESIGN.md) — 토큰 / 컴포넌트 spec 시각 자료
-- [`docs/migration/v0.6-to-v0.7.md`](../docs/migration/v0.6-to-v0.7.md) — 컴포넌트 비교
+- [`docs/for-consumers/migration/v0.6-to-v0.7.md`](../docs/for-consumers/migration/v0.6-to-v0.7.md) — 컴포넌트 비교
 
 GitHub raw URL을 사용해 README/CHANGELOG에서도 인라인 표시 가능:
 ```

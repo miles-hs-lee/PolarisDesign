@@ -45,7 +45,7 @@ pnpm dlx @polaris/lint polaris-codemod-v08 --apply src
   - `<HStack>` → `<Stack direction="row">`, `<VStack>` → `<Stack>`
   - `@polaris/ui` import에서 `HStack`/`VStack` → `Stack`
 
-자세히 → [`docs/migration/v0.7-to-v0.8.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.7-to-v0.8.md).
+자세히 → [`docs/for-consumers/migration/v0.7-to-v0.8.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/for-consumers/migration/v0.7-to-v0.8.md).
 
 ### v0.6 → v0.7 (이전 단계만 끝내야 한다면)
 
@@ -53,7 +53,7 @@ pnpm dlx @polaris/lint polaris-codemod-v08 --apply src
 pnpm dlx @polaris/lint polaris-codemod-v07 --apply src
 ```
 
-자세히 → [`docs/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/migration/v0.6-to-v0.7.md).
+자세히 → [`docs/for-consumers/migration/v0.6-to-v0.7.md`](https://github.com/PolarisOffice/PolarisDesign/blob/main/docs/for-consumers/migration/v0.6-to-v0.7.md).
 
 > **적용 범위 주의** — codemod는 consumer 코드 (`src/`, `apps/`, `app/`)에만 돌리세요. `@polaris/ui` 자체 소스 (특히 `packages/ui/src/{tokens,styles,tailwind}`)는 마이그레이션 안내용으로 옛 alias 이름이 docstring/주석에 들어있어서 false-positive를 보입니다.
 

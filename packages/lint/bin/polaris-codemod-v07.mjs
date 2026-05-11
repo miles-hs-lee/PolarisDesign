@@ -13,7 +13,7 @@
  * never recursing into directories with names listed in IGNORED_DIRS.
  *
  * The script is regex-based (no AST). It targets the high-volume
- * patterns documented in `docs/migration/v0.6-to-v0.7.md`. Dynamic
+ * patterns documented in `docs/for-consumers/migration/v0.6-to-v0.7.md`. Dynamic
  * class strings (`text-${tone}-primary`) and prop-passed token names
  * are NOT rewritten — flag them in CR.
  */

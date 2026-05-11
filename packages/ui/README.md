@@ -21,7 +21,7 @@ PolarisDesign이 사내 npm registry에 publish되기 전 단계라, `@polaris/u
 }
 ```
 
-그리고 `pnpm install`. 전체 셋업 절차(Tailwind preset 연결, tokens.css import, Renovate 자동 업그레이드, 트러블슈팅): [`docs/internal-consumer-setup.md`](../../docs/internal-consumer-setup.md). 새 프로젝트는 `/polaris-init <name>` 슬래시커맨드 한 줄로 부트스트랩 가능.
+그리고 `pnpm install`. 전체 셋업 절차(Tailwind preset 연결, tokens.css import, Renovate 자동 업그레이드, 트러블슈팅): [`docs/for-consumers/install.md`](../../docs/for-consumers/install.md). 새 프로젝트는 `/polaris-init <name>` 슬래시커맨드 한 줄로 부트스트랩 가능.
 
 ## 토큰
 
@@ -108,7 +108,7 @@ export default {
 | Z-index | `z-polaris-{base,dropdown,sticky,dim,modal,toast}` |
 | Motion | `duration-polaris-{instant,fast,normal,slow}`, `ease-polaris-{in-out,out,in}` |
 
-v0.6 / rc.0 / v0.7 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-{canvas,raised,sunken,border}`, `bg-status-danger`, `bg-background-{normal,alternative}`, `text-polaris-display-lg` / `-h1`~`-h5` / `-body` / `-meta` / `-tiny`, `rounded-polaris-full`, `bg-blue-5` 등)는 **v0.8에서 제거됨** — 빌드 시 emit 안 되므로 dead-class. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v08 --apply src`. v0.7 → v0.8 자세히는 [`docs/migration/v0.7-to-v0.8.md`](../../docs/migration/v0.7-to-v0.8.md).
+v0.6 / rc.0 / v0.7 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-{canvas,raised,sunken,border}`, `bg-status-danger`, `bg-background-{normal,alternative}`, `text-polaris-display-lg` / `-h1`~`-h5` / `-body` / `-meta` / `-tiny`, `rounded-polaris-full`, `bg-blue-5` 등)는 **v0.8에서 제거됨** — 빌드 시 emit 안 되므로 dead-class. 자동 변환: `pnpm dlx @polaris/lint polaris-codemod-v08 --apply src`. v0.7 → v0.8 자세히는 [`docs/for-consumers/migration/v0.7-to-v0.8.md`](../../docs/for-consumers/migration/v0.7-to-v0.8.md).
 
 ## 컴포넌트 (59개)
 

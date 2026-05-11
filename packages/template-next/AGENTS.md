@@ -49,7 +49,7 @@ v0.6 / rc.0 / v0.7 alias (`bg-brand-primary`, `text-fg-primary`, `bg-surface-{ca
 ```sh
 pnpm dlx @polaris/lint polaris-codemod-v08 --apply src
 ```
-한 번에 token / Tailwind / CSS 변수 / JSX prop / `<HStack>`·`<VStack>` 까지 정리. 자세히 → [`docs/migration/v0.7-to-v0.8.md`](../../docs/migration/v0.7-to-v0.8.md).
+한 번에 token / Tailwind / CSS 변수 / JSX prop / `<HStack>`·`<VStack>` 까지 정리. 자세히 → [`docs/for-consumers/migration/v0.7-to-v0.8.md`](../../docs/for-consumers/migration/v0.7-to-v0.8.md).
 
 ### AI / NOVA 컨텍스트 (`ai.*` 보라)
 

@@ -112,7 +112,7 @@ rg 'className=.*\b(pill|tag|chip|label-pill)\b' src/
 + <PromptChip active>필터</PromptChip>
 ```
 
-> `<Badge>` 의 variant + tone 결정 가이드는 [`docs/component-use-cases/badge.md`](../component-use-cases/badge.md) 참조.
+> `<Badge>` 의 variant + tone 결정 가이드는 [`docs/for-consumers/component-use-cases/badge.md`](../component-use-cases/badge.md) 참조.
 
 ### `.data-table` / `.table-wrapper` → `<Table>` + helpers
 
