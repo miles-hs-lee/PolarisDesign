@@ -293,8 +293,17 @@ v0.6/rc.0/rc.1/v0.7 거치며 누적된 deprecated alias + naming 불일치 + to
 - **v4-theme.css 에 `--font-sans` / `--font-mono` alias** — 1줄 fix. 현재 `--font-polaris` 만 노출되어 Tailwind default `--font-sans` 가 alias 안 됨. 컨슈머 globals.css에 별도 블록 유지 중인 friction
 - **`<PaginationFooter buildHref>` prop** — `(page) => string` 콜백. RSC + `<Link href>` 환경에서 controlled `onPageChange` 대신 anchor 자체 렌더. Next.js 16 App Router 사용자가 가장 자주 막히는 단일 컴포넌트
 - **`@polaris/no-shadowed-polaris-name` lint 룰** — 동일 파일 안에 `function Stat()` / `const Stat = …` 같은 로컬 정의가 폴라리스 export와 이름 충돌 시 경고. 컨슈머가 폴라리스 Stat 을 import 안 했는데도 같은 파일 419줄에 `function Stat()` 이 있어서 hoisting으로 빌드 통과했던 케이스 — code review로만 잡힘. ESLint plugin 0.5일 작업
+- **`<PaginationPrev asChild>` / `<PaginationNext asChild>` 빌드 즉사 fix** (실전 컨슈머 빌드 깨짐) — 컴포넌트 내부에서 `[ChevronIcon, children]` 두 child를 `<PaginationItem children=...>` 으로 spread하는데 `asChild` 일 때 Radix Slot 이 `React.Children.only` 를 요구하므로 폭사. fix 옵션:
+  - (A) **chevron을 children prepend 대신 className 처리** — `[data-side="prev"]:before:content-['<']` 또는 absolute-positioned chevron. asChild API 자연스럽지만 custom icon 커스터마이징은 어려워짐
+  - (B) **`prevHref` / `nextHref` 별도 prop** — `<PaginationPrev href={buildHref(p-1)}>` (asChild 대신). RSC 친화 명확하지만 API 두 갈래 (controlled vs anchor)
+  - (C) **`icon` prop + asChild** — `<PaginationPrev icon={<CustomChevron />} asChild><Link>이전</Link></PaginationPrev>`. chevron은 컴포넌트가 그리고 Slot은 children만 받음
+  - 권장: (C) — 가장 자연스러운 API. controlled / asChild / icon 커스터마이징 셋 다 살아남음. PaginationFooter `buildHref` 와 함께 묶어 한 사이클로
+- **`pageNumberItems` / 기타 순수 utility를 RSC 친화 entry point로 분리** (컨슈머 피드백) — 현재 `@polaris/ui` 루트 barrel이 `"use client"` 또는 client component 의존성을 가져서 RSC 에서 utility 한 함수 (예: `pageNumberItems(current, total)` 페이지 번호 배열 계산) 만 import해도 client 경계가 끌려옴. 해결:
+  - 별도 entry `@polaris/ui/utils` (또는 `/server-safe`) 으로 순수 함수만 모으기 — `pageNumberItems`, `formatStatValue`, 그리고 `class-variance-authority` 기반이 아닌 모든 pure utility
+  - 또는 root barrel에서 `"server-only"` 와 충돌 안 하도록 conditional export 정리 (package.json `exports` 에서 `server` / `default` 분기)
+  - 권장 패키지 구조: `@polaris/ui/utils` 신규 subpath. 컨슈머가 RSC 에서 `import { pageNumberItems } from '@polaris/ui/utils'` 로 가져와 자체 `<nav>` + `<Link>` 마크업 직접 조립 가능
 
-**근거**: `docs/component-history.md`, `docs/migration/legacy-css-patterns.md`, 실전 컨슈머 마이그레이션 피드백 (#5/#7/#1-partial/#10).
+**근거**: `docs/component-history.md`, `docs/migration/legacy-css-patterns.md`, 실전 컨슈머 마이그레이션 피드백 (#1/#5/#7/#10 + 후속 PaginationPrev asChild / pageNumberItems RSC).
 
 ---
 
@@ -302,11 +311,13 @@ v0.6/rc.0/rc.1/v0.7 거치며 누적된 deprecated alias + naming 불일치 + to
 
 **RSC + `<Link href>` 일급 시민화 (컨슈머 피드백 #1, 가장 큰 갭)**:
 - 현재 `<PaginationFooter>` / `<TableSearchInput>` / `<TableToolbar>` / `<Combobox>` / `<Tabs>` 등이 모두 *client-side controlled* 가정 (`value + onChange` 콜백). Next.js 16 App Router 의 RSC 환경에서 검색은 `<form action="/path" method="get">`, 페이지네이션은 `<Link href={buildPageHref(n)}>`, 필터는 URL params 으로 풀려는데 콜백이 안 만들어져 컨슈머가 *모든 high-level 컴포넌트를 skip* 한 사례 있음
+- 후속 신호: raw primitive 도 같은 갭 — `<PaginationPrev asChild>` 가 `React.Children.only` 폭사 (chevron + children spread), `pageNumberItems` 같은 순수 utility도 client barrel에 잠겨 RSC 에서 import 시 client 경계 끌고 옴. v0.8.x patch 사이클에 PaginationPrev/Next + utils subpath 분리 부분 fix
 - 해결 방향: 모든 controlled 컴포넌트에 **anchor mode 일관 지원**
   - (A) controlled (value + onChange) — 현재 패턴 그대로
-  - (B) anchor mode (`asChild` + 내부 자식 `<Link/a>` 받기) 또는 `buildHref={(state) => string}` prop
-- spec 작업 필요: 어느 prop name 으로 통일할지 (`asChild` Radix Slot 호환 / `buildHref` 콜백 / `as="a"` 등), 어느 컴포넌트가 우선순위인지 (PaginationFooter > TableSearchInput > Tabs > NavbarItem 순)
-- 부분 fix는 v0.8.x patch에 (PaginationFooter `buildHref`)
+  - (B) anchor mode (`asChild` + 내부 자식 `<Link/a>` 받기, 또는 `buildHref={(state) => string}` prop)
+  - (C) icon prop + asChild — primitive 가 chevron / 아이콘 등 *고정 자식* 을 가지는 경우 (예: PaginationPrev). icon은 컴포넌트가 그리고 Slot은 children만 받음
+- spec 작업 필요: 어느 prop name 으로 통일할지 (`asChild` Radix Slot 호환 / `buildHref` 콜백 / `as="a"` 등), 어느 컴포넌트가 우선순위인지 (PaginationFooter > Pagination primitives > TableSearchInput > Tabs > NavbarItem 순), `pageNumberItems` 외 다른 utility 도 server-safe로 분리할지 (`formatStatValue`, breakpoint 매처 등)
+- 부분 fix는 v0.8.x patch에 (PaginationFooter `buildHref` / PaginationPrev/Next icon prop / utils subpath)
 
 **PageHeader card 변종 (컨슈머 피드백 #2)**:
 - 현재 `<PageHeader>` 는 page-level (Card 외부, divider 아래) 기본. 컨슈머는 "title 카드 + 컨텐츠 카드" stacked-card 레이아웃이라 자체 HeroPanel을 Card로 만들고 있었는데 PageHeader 마이그 시 divider 추가 / Card 배경 제거 / 패딩 미세 차이로 시각 변화
